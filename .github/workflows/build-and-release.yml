@@ -5,6 +5,9 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-desktop:
     strategy:
@@ -68,18 +71,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java 17 (Temurin)
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android NDK & Build Tools
+      - name: Install Android NDK & Export Android Environment
         run: |
+          yes | sdkmanager --licenses || true
           sdkmanager --install "ndk;26.1.10909125" "build-tools;34.0.0" "platforms;android-34"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125" >> $GITHUB_ENV
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -90,7 +99,11 @@ jobs:
       - name: Setup Rust stable & Android targets
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android
+
+      - name: Verify Rust Android targets
+        run: |
+          rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Install dependencies & Build Web Assets
         run: |
@@ -101,23 +114,125 @@ jobs:
           npm run build
 
       - name: Build Android APK (Tauri 2.0)
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          NDK_HOME: ${{ env.NDK_HOME }}
         run: |
-          export NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125
-          npx tauri android init
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          export NDK_HOME="${NDK_HOME:-$ANDROID_HOME/ndk/26.1.10909125}"
+          export PATH="$ANDROID_HOME/build-tools/34.0.0:$PATH"
+
+          # 1. Initialize Android project automatically if src-tauri/gen/android is missing
+          if [ ! -d "src-tauri/gen/android" ]; then
+            echo "src-tauri/gen/android is missing. Running npx tauri android init..."
+            npx tauri android init --ci
+          else
+            echo "src-tauri/gen/android already initialized."
+          fi
+
+          # Ensure gradlew executable permissions on Linux
+          if [ -f "src-tauri/gen/android/gradlew" ]; then
+            chmod +x src-tauri/gen/android/gradlew
+          fi
+
+          # 2. Build Android release APK
+          echo "Building Android release APK..."
           npx tauri android build --apk
 
       - name: Sign Android Release APK
         run: |
-          APK_DIR="src-tauri/gen/android/app/build/outputs/apk/release"
-          UNSIGNED_APK="$APK_DIR/app-release-unsigned.apk"
-          if [ -f "$UNSIGNED_APK" ]; then
-            keytool -genkey -v -keystore release.keystore -alias arctracker -keyalg RSA -keysize 2048 -validity 10000 -storepass arctracker123 -keypass arctracker123 -dname "CN=ArcTracker, OU=Mobile, O=ArcTracker, L=Global, S=State, C=US"
-            $ANDROID_HOME/build-tools/34.0.0/apksigner sign --ks release.keystore --ks-pass pass:arctracker123 --ks-key-alias arctracker --out "$APK_DIR/Arc-Tracker-release-signed.apk" "$UNSIGNED_APK"
-            echo "Successfully signed Android release APK"
+          KEYTOOL=$(which keytool || echo "$JAVA_HOME/bin/keytool")
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          if [ ! -f "$APKSIGNER" ]; then
+            APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
           fi
+          ZIPALIGN="$ANDROID_HOME/build-tools/34.0.0/zipalign"
+          if [ ! -f "$ZIPALIGN" ]; then
+            ZIPALIGN=$(find "$ANDROID_HOME/build-tools" -name zipalign | sort -V | tail -n 1)
+          fi
+
+          echo "Using apksigner: $APKSIGNER"
+          echo "Using zipalign: $ZIPALIGN"
+          echo "Using keytool: $KEYTOOL"
+
+          KEYSTORE="release.keystore"
+          ALIAS="arctracker"
+          PASSWORD="arctracker123"
+
+          if [ ! -f "$KEYSTORE" ]; then
+            echo "Generating release keystore..."
+            "$KEYTOOL" -genkey -v -keystore "$KEYSTORE" -alias "$ALIAS" -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$PASSWORD" -keypass "$PASSWORD" \
+              -dname "CN=ArcTracker, OU=Mobile, O=ArcTracker, L=Global, S=State, C=US"
+          fi
+
+          TARGET_DIR="src-tauri/gen/android/app/build/outputs/apk/release"
+          mkdir -p "$TARGET_DIR"
+
+          # Find all APKs generated by Gradle
+          FOUND_APKS=$(find src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk" ! -name "*signed*")
+          echo "Found APK files to sign:"
+          echo "$FOUND_APKS"
+
+          for apk in $FOUND_APKS; do
+            echo "Processing APK: $apk"
+            if [ -n "$ZIPALIGN" ] && [ -f "$ZIPALIGN" ]; then
+              if ! "$ZIPALIGN" -c 4 "$apk" >/dev/null 2>&1; then
+                echo "Aligning $apk..."
+                "$ZIPALIGN" -f -p 4 "$apk" "$apk.aligned"
+                mv "$apk.aligned" "$apk"
+              fi
+            fi
+
+            BASENAME=$(basename "$apk")
+            if [[ "$BASENAME" == *"unsigned"* ]]; then
+              OUT_NAME=$(echo "$BASENAME" | sed 's/-unsigned//g' | sed 's/app/Arc-Tracker/g')
+            else
+              OUT_NAME="Arc-Tracker-$BASENAME"
+            fi
+            SIGNED_OUT="$TARGET_DIR/${OUT_NAME%.apk}-signed.apk"
+
+            echo "Signing $apk -> $SIGNED_OUT ..."
+            "$APKSIGNER" sign --ks "$KEYSTORE" --ks-pass "pass:$PASSWORD" --ks-key-alias "$ALIAS" --out "$SIGNED_OUT" "$apk"
+            "$APKSIGNER" verify "$SIGNED_OUT" && echo "Verified $SIGNED_OUT successfully"
+          done
+
+          # Ensure a canonical Arc-Tracker-release-signed.apk exists
+          MAIN_SIGNED="$TARGET_DIR/Arc-Tracker-release-signed.apk"
+          if [ ! -f "$MAIN_SIGNED" ]; then
+            FIRST_SIGNED=$(find "$TARGET_DIR" -type f -name "*-signed.apk" | head -n 1)
+            if [ -n "$FIRST_SIGNED" ]; then
+              cp "$FIRST_SIGNED" "$MAIN_SIGNED"
+            fi
+          fi
+
+          echo "Final signed APKs in $TARGET_DIR:"
+          ls -la "$TARGET_DIR"
 
       - name: Upload Android APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Arc-Tracker-Android-APK
-          path: src-tauri/gen/android/app/build/outputs/apk/release/*.apk
+          path: src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk
+          if-no-files-found: warn
+
+      - name: Upload APK to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.0.0")
+          TAG="v$VERSION"
+          echo "Target Release Tag: $TAG"
+
+          # Check if release exists; create only if missing
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG not found. Creating release..."
+            gh release create "$TAG" --title "Arc Tracker $TAG" --notes "Automated release of Arc Tracker." || true
+          else
+            echo "Release $TAG already exists. Attaching APK asset..."
+          fi
+
+          # Upload signed APK(s) to the release (with --clobber so it updates cleanly without failing)
+          echo "Uploading APK assets to GitHub Release $TAG..."
+          gh release upload "$TAG" src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk --clobber
+          echo "Successfully uploaded signed APK(s) to GitHub Release $TAG."
