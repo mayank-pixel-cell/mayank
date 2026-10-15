@@ -225,23 +225,18 @@ jobs:
           path: src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk
           if-no-files-found: warn
 
-      - name: Upload APK to GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Determine Release Tag
+        id: release_tag
         run: |
           VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.0.0")
-          TAG="v$VERSION"
-          echo "Target Release Tag: $TAG"
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected tag: v$VERSION"
 
-          # Check if release exists; create only if missing
-          if ! gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG not found. Creating release..."
-            gh release create "$TAG" --title "Arc Tracker $TAG" --notes "Automated release of Arc Tracker." || true
-          else
-            echo "Release $TAG already exists. Attaching APK asset..."
-          fi
-
-          # Upload signed APK(s) to the release (with --clobber so it updates cleanly without failing)
-          echo "Uploading APK assets to GitHub Release $TAG..."
-          gh release upload "$TAG" src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk --clobber
-          echo "Successfully uploaded signed APK(s) to GitHub Release $TAG."
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          files: |
+            src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
