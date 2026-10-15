@@ -77,18 +77,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android NDK & Export Android Environment
+      - name: Setup Android SDK & NDK
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager --install "ndk;26.1.10909125" "build-tools;34.0.0" "platforms;android-34"
+          export ANDROID_HOME="/usr/local/lib/android/sdk"
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125" >> $GITHUB_ENV
           echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
           echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
+
+          # Automatically accept all Android SDK licenses headlessly
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+
+          # Install NDK 26.1.10909125, build tools 34.0.0, and Android 34 platform
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;26.1.10909125" "build-tools;34.0.0" "platforms;android-34"
+
+          # Export NDK_HOME
+          NDK_PATH="$ANDROID_HOME/ndk/26.1.10909125"
+          if [ ! -d "$NDK_PATH" ]; then
+            NDK_PATH=$(find "$ANDROID_HOME/ndk" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -V | tail -n 1)
+          fi
+          echo "NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
+          echo "Selected NDK_HOME: $NDK_PATH"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
