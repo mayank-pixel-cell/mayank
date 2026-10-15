@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Arc Tracker",
+  "version": "1.0.0",
+  "identifier": "com.arctracker.app",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Arc Tracker",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'none'; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';"
+    }
+  },
+  "plugins": {
+    "store": {}
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "publisher": "Arc Tracker",
+    "copyright": "Copyright (c) 2026 Arc Tracker",
+    "category": "Productivity",
+    "shortDescription": "Offline-First Gamified Habit & Arc Tracker",
+    "longDescription": "Arc Tracker is an offline-first gamified habit tracking desktop and mobile application with built-in data encryption and antivirus protection.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser"
+      }
+    },
+    "android": {
+      "minSdkVersion": 24
+    }
+  }
+}

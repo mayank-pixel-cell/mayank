@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Capability",
+  "description": "A capability defines a set of permissions for a set of windows and webviews in Tauri 2.",
+  "type": "object",
+  "required": [
+    "identifier",
+    "description",
+    "permissions"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string",
+      "description": "Unique identifier for this capability."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this capability provides."
+    },
+    "local": {
+      "type": "boolean"
+    },
+    "remote": {
+      "type": "object"
+    },
+    "windows": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of window labels this capability applies to."
+    },
+    "webviews": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of webview labels this capability applies to."
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of permissions enabled by this capability."
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "linux",
+          "windows",
+          "macos",
+          "android",
+          "ios"
+        ]
+      }
+    }
+  }
+}
