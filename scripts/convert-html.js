@@ -19,6 +19,54 @@ html = html.replace(
   '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; font-src \'self\' data:; img-src \'self\' data: blob:; connect-src \'none\'; media-src \'self\' data:; object-src \'none\'; form-action \'none\'; base-uri \'self\';">'
 );
 
+// 0b. Add Web App Manifest and Apple iOS Web Clip meta tags
+const iosPwaMeta = `    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00F0FF">
+    <!-- iOS Safari & Web Clip App Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Arc Tracker">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/128x128.png">`;
+
+if (!html.includes('apple-mobile-web-app-capable')) {
+  html = html.replace(/(<title>[^<]*<\/title>)/i, `$1\n${iosPwaMeta}`);
+}
+
+// 0c. Add iOS Safe Area and WebKit responsiveness styles
+const iosSafeStyles = `
+        /* iOS Safe Area & WebKit Touch Optimizations */
+        :root {
+            --sat: env(safe-area-inset-top, 0px);
+            --sar: env(safe-area-inset-right, 0px);
+            --sab: env(safe-area-inset-bottom, 0px);
+            --sal: env(safe-area-inset-left, 0px);
+        }
+        body {
+            padding-left: env(safe-area-inset-left, 0px);
+            padding-right: env(safe-area-inset-right, 0px);
+            -webkit-touch-callout: none;
+            -webkit-text-size-adjust: 100%;
+            touch-action: manipulation;
+        }
+        header.sticky {
+            padding-top: max(0.625rem, calc(0.625rem + env(safe-area-inset-top, 0px))) !important;
+        }
+        @supports (-webkit-touch-callout: none) {
+            input, select, textarea {
+                font-size: max(16px, 1rem);
+            }
+        }
+`;
+
+if (!html.includes('/* iOS Safe Area & WebKit Touch Optimizations */')) {
+  html = html.replace('<style>', `<style>${iosSafeStyles}`);
+}
+
 // 1. Replace Tailwind CDN
 html = html.replace(
   '<script src="https://cdn.tailwindcss.com"></script>',

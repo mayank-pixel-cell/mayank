@@ -168,4 +168,17 @@ fs.writeFileSync(path.join(iconsDir, 'icon.ico'), icoBuf);
 // Duplicate icon.png to icon.icns placeholder
 fs.writeFileSync(path.join(iconsDir, 'icon.icns'), png512);
 
-console.log('All icons generated in src-tauri/icons/ successfully!');
+// Copy icons and apple-touch-icon to public/icons and public/
+const publicDir = path.resolve(__dirname, '..', 'public');
+const publicIconsDir = path.join(publicDir, 'icons');
+if (!fs.existsSync(publicIconsDir)) {
+  fs.mkdirSync(publicIconsDir, { recursive: true });
+}
+fs.writeFileSync(path.join(publicIconsDir, '32x32.png'), png32);
+fs.writeFileSync(path.join(publicIconsDir, '128x128.png'), png128);
+fs.writeFileSync(path.join(publicIconsDir, '128x128@2x.png'), png256);
+fs.writeFileSync(path.join(publicIconsDir, 'icon.png'), png512);
+fs.writeFileSync(path.join(publicIconsDir, 'apple-touch-icon.png'), png256);
+fs.writeFileSync(path.join(publicDir, 'apple-touch-icon.png'), png256);
+
+console.log('All icons generated in src-tauri/icons/ and public/ successfully!');

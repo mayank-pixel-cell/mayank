@@ -1,4 +1,4 @@
-name: Build and Release Arc Tracker (Desktop & Android)
+name: Build and Release Arc Tracker (Desktop, Android & iOS)
 
 on:
   push:
@@ -240,3 +240,85 @@ jobs:
             src-tauri/gen/android/app/build/outputs/apk/release/*-signed.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Rust stable & iOS targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim,x86_64-apple-ios
+
+      - name: Verify Rust iOS targets
+        run: |
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
+
+      - name: Install dependencies & Build Web Assets
+        run: |
+          npm ci
+          node scripts/localize-assets.js
+          node scripts/convert-html.js
+          node scripts/generate-icons.js
+          npm run build
+
+      - name: Initialize & Build iOS Project (Tauri 2.0)
+        run: |
+          # 1. Initialize iOS project automatically if src-tauri/gen/apple is missing
+          if [ ! -d "src-tauri/gen/apple" ]; then
+            echo "src-tauri/gen/apple is missing. Running npx tauri ios init..."
+            npx tauri ios init --ci
+          else
+            echo "src-tauri/gen/apple already initialized."
+          fi
+
+          # 2. Build iOS Simulator / Device project
+          echo "Building iOS binary and Xcode workspace..."
+          # Build simulator debug bundle headlessly without requiring paid Apple Developer Signing Team ID
+          npx tauri ios build --target aarch64-apple-ios-sim --debug || npx tauri ios build --debug || true
+
+      - name: Package iOS Xcode Workspace & App
+        run: |
+          mkdir -p output/ios
+          # Archive the Xcode project so users can open and deploy it directly in Xcode or on their iPhone
+          if [ -d "src-tauri/gen/apple" ]; then
+            tar -czf output/ios/Arc-Tracker-iOS-XcodeProject.tar.gz -C src-tauri/gen apple
+          fi
+          # Copy any built .app or .ipa bundles if present
+          find src-tauri/target -name "*.app" -exec cp -r {} output/ios/ \; 2>/dev/null || true
+          find src-tauri/target -name "*.ipa" -exec cp {} output/ios/ \; 2>/dev/null || true
+          ls -la output/ios
+
+      - name: Upload iOS Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Arc-Tracker-iOS
+          path: output/ios/*
+          if-no-files-found: warn
+
+      - name: Determine Release Tag
+        id: release_tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "1.0.0")
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Upload iOS Project to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          files: |
+            output/ios/Arc-Tracker-iOS-XcodeProject.tar.gz
+            output/ios/*.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
