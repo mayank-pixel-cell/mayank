@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Winter & Summer Arc Interactive Mobile Tracker 2026</title>
-    <!-- Offline Airgap & Data Leak Protection Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
+    <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Identity Services for Cross-Device Account Syncing -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <script>
         tailwind.config = {
@@ -2723,6 +2725,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
         function saveToLocalStorage() {
             setLocalStorageItem('arc_tracker_state', state);
+            if (window.ArcGoogleSync && typeof window.ArcGoogleSync.triggerAutoSync === 'function') {
+                window.ArcGoogleSync.triggerAutoSync();
+            }
         }
 
         /* Debouncing wrapper for Reflection textarea */
@@ -3557,7 +3562,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 renderScreenTime();
             }
             if (window.SettingsApp) SettingsApp.onTab(tabName);
-            if (tabName === 'settings' && window.renderHabitManager) renderHabitManager(true);
+            if (tabName === 'settings') {
+                if (window.renderHabitManager) renderHabitManager(true);
+                if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
+            }
         }
 
         function renderHabits() {
@@ -4937,6 +4945,7 @@ html[data-mode=light] .arc-click-ripple {
   <div class="flex items-center justify-between p-4 pb-2"><h2 class="font-black text-lg"><i class="fa-solid fa-gear"></i> Settings</h2><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-close" aria-label="Close settings">✕</button></div>
   <div class="px-4"><input id="settings-search" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" type="search" placeholder="Search settings…" aria-label="Search settings"></div>
   <div id="pp-tabs" role="tablist" aria-label="Settings categories" class="flex gap-1 p-4 pb-2 overflow-x-auto">
+    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="account">[ 👤 Accounts &amp; Sync ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="audio">[ Audio &amp; Synth ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="vis">[ Visuals &amp; Themes ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="habit">[ Habit Engine ]</button>
@@ -5887,10 +5896,10 @@ function rollback(i){const r=revs()[i];if(!r||!confirm('Restore the snapshot fro
 
 /* ---------- SETTINGS UI ---------- */
 const sl=(k,mn,mx,st,l)=>`<input type="range" role="slider" data-set="${k}" min="${mn}" max="${mx}" step="${st}" aria-label="${l}" class="w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">`;
-const ck=(k,l)=>`<label class="flex items-center gap-2 text-xs cursor-pointer"><input type="checkbox" data-set="${k}" aria-label="${l}"><span>Enabled</span></label>`;
 const sel=(k,l,o)=>`<select data-set="${k}" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="${l}">${o.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select>`;
 const row=(l,kw,b,k)=>`<div class="pp-row" data-kw="${(l+' '+kw).toLowerCase()}"><div class="pp-lab"><span>${l}</span><span data-val="${k||''}"></span></div>${b}</div>`;
 function build(){$('#pp-body').innerHTML=
+`<section class="pp-panel" data-p="account"><div id="pp-account-container" class="space-y-4"></div></section>`+
 `<section class="pp-panel" data-p="audio">`+
 row('Master Volume','global gain loudness',sl('masterVolume',0,1,.01,'Master volume'),'masterVolume')+
 row('SFX','sound effects clicks chimes',ck('sfxEnabled','Enable sound effects'))+
@@ -5909,7 +5918,7 @@ row('View Transition','animation slide zoom flip blur bounce',sel('transition','
 row('Particle Density','particles low medium high ultra off canvas',sel('particleDensity','Particle density',[['low','Low (30)'],['medium','Medium (75)'],['high','High (150)'],['ultra','Ultra (300)'],['off','Off']]))+
 row('Audio-Reactive Particles','fft analyser bass mid treble bloom sparkle',ck('audioReactiveParticles','Audio reactive particles'))+
 row('Winter Snowflakes','snowflake crystal ice winter particle shape audio reactive',ck('snowflakeParticles','Audio-reactive snowflake particles'))+
-row('Winter Particle Shape','snowflakes crystal dots winter audio reactive',sel('winterParticleShape','Winter particle shape',[['snowflakes','â„ï¸ Audio-Reactive Snowflakes'],['dots','âšª Classic Glowing Dots']]))+
+row('Winter Particle Shape','snowflakes crystal dots winter audio reactive',sel('winterParticleShape','Winter particle shape',[['snowflakes','❄️ Audio-Reactive Snowflakes'],['dots','⚪ Classic Glowing Dots']]))+
 row('Noise Overlay','texture grain',ck('noiseOverlay','Noise overlay'))+
 row('Noise Opacity','texture grain alpha',sl('noiseOpacity',0,1,.01,'Noise opacity'),'noiseOpacity')+
 row('Performance / Eco Mode','battery blur backdrop bloom mobile',ck('performanceMode','Performance mode'))+
@@ -5941,7 +5950,8 @@ function ui(){const s=S(),pct=['masterVolume','sfxVolume','ambientVolume','noise
  $$('[data-mode-set]').forEach(b=>b.classList.toggle('on',s.mode===b.dataset.modeSet));
  const ab=$('#btn-ambient-toggle');if(ab){ab.classList.toggle('on',A.on);ab.setAttribute('aria-pressed',String(A.on))}
  const st=$('#pp-amb-status'),pb=$('#pp-amb-btn'),mb=$('#pp-mute-btn'),pm=$('#pp-pomo');
- if(st)st.textContent=A.on?'PLAYING':'OFF';if(pb)pb.textContent=A.on?'Pause Soundscape':'Play Soundscape';if(mb)mb.textContent=A.muted?'Unmute (M)':'Mute (M)';if(pm)pm.value=s.focusWork+'/'+s.focusBreak;fui()}
+ if(st)st.textContent=A.on?'PLAYING':'OFF';if(pb)pb.textContent=A.on?'Pause Soundscape':'Play Soundscape';if(mb)mb.textContent=A.muted?'Unmute (M)':'Mute (M)';if(pm)pm.value=s.focusWork+'/'+s.focusBreak;fui();
+ if(window.ArcGoogleSync&&TAB==='account'){window.ArcGoogleSync.renderUi();}}
 function onSet(k){const s=S();
  if(['masterVolume','sfxVolume','ambientVolume','sfxEnabled'].includes(k))vol();
  else if(k==='tuningFreq'){if(A.on)play()}
@@ -5953,6 +5963,7 @@ function onSet(k){const s=S();
  save();ui()}
 function tab(n){TAB=n;$$('.pp-tab').forEach(b=>{const on=b.dataset.t===n;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});
  $$('.pp-panel').forEach(p=>{p.style.display=p.dataset.p===n?'block':'none'});$$('.pp-row').forEach(r=>{r.style.display=''});$('#settings-search').value='';
+ if(n==='account'&&window.ArcGoogleSync){window.ArcGoogleSync.renderUi();}
  if(n==='habit')heat();if(n==='focus')stats();if(n==='sys')listRev();
  if(n==='sec'&&window.ArcSecurity){window.ArcSecurity.computeStateHash().then(c=>{const el=$('#sec-checksum-disp');if(el)el.textContent=c});window.ArcSecurity.updatePinBadge();}}
 
@@ -7259,6 +7270,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
+  '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>'+
   '<section id="p20-habit-manager" class="glass-card rounded-2xl p-4 border-l-4 border-l-emerald-400" aria-label="Edit habit list">'+
    '<h3 class="font-extrabold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Edit habit list</h3>'+
@@ -7330,6 +7342,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
  setInterval(tick,30000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
  renderDayControl();renderHabitManager(true);
+ if(window.ArcGoogleSync&&typeof window.ArcGoogleSync.renderUi==='function')window.ArcGoogleSync.renderUi();
 })();
 </script>
 
@@ -10019,6 +10032,814 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     printDevConsoleGreeting();
   } else {
     window.addEventListener('DOMContentLoaded', printDevConsoleGreeting);
+  }
+})();
+</script>
+
+<!-- ===== GOOGLE ACCOUNT LOGIN & CROSS-DEVICE CLOUD SYNC MODULE ===== -->
+<script id="arc-google-sync-js">
+(function() {
+  'use strict';
+
+  // Storage Keys
+  const USER_KEY = 'arc_google_user';
+  const CLIENT_ID_KEY = 'arc_google_client_id';
+  const AUTO_SYNC_KEY = 'arc_google_auto_sync';
+  const LAST_SYNC_KEY = 'arc_google_last_sync';
+  const DEVICE_ID_KEY = 'arc_device_id';
+  const MOCK_CLOUD_KEY = 'arc_cloud_mock_storage';
+  const SYNC_BUS_NAME = 'arc_cloud_sync_bus';
+
+  // State Management
+  let isSyncing = false;
+  let autoSyncDebounceTimer = null;
+  let tokenClient = null;
+
+  // Broadcast channel for multi-tab / multi-window instant synchronization
+  const syncBus = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel(SYNC_BUS_NAME) : null;
+  if (syncBus) {
+    syncBus.onmessage = function(event) {
+      if (!event || !event.data) return;
+      if (event.data.type === 'ARC_CLOUD_SYNC' && event.data.senderId !== getDeviceId()) {
+        console.log('[ArcGoogleSync] Cross-device sync packet received from:', event.data.senderId);
+        if (event.data.payload) {
+          applyCloudState(event.data.payload, true);
+        }
+      }
+    };
+  }
+
+  // Generate or retrieve persistent Device ID
+  function getDeviceId() {
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36).substring(4);
+      try { localStorage.setItem(DEVICE_ID_KEY, id); } catch(e) {}
+    }
+    return id;
+  }
+
+  // Detect human-friendly device name
+  function getDeviceName() {
+    const ua = navigator.userAgent || '';
+    if (/Android/i.test(ua)) return '📱 Android Mobile';
+    if (/iPhone|iPad|iPod/i.test(ua)) return '📱 iOS Mobile';
+    if (/Macintosh|Mac OS X/i.test(ua)) return '💻 macOS Workstation';
+    if (/Windows/i.test(ua)) return '🖥️ Windows PC';
+    if (/Linux/i.test(ua)) return '🐧 Linux Workstation';
+    return '🌐 Web Device';
+  }
+
+  // Get saved Google user session
+  function getUser() {
+    try {
+      const raw = localStorage.getItem(USER_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function setUser(u) {
+    try {
+      if (u) localStorage.setItem(USER_KEY, JSON.stringify(u));
+      else localStorage.removeItem(USER_KEY);
+    } catch(e) {}
+  }
+
+  function getClientId() {
+    try {
+      return localStorage.getItem(CLIENT_ID_KEY) || '';
+    } catch(e) {
+      return '';
+    }
+  }
+
+  function setClientId(id) {
+    try {
+      if (id) localStorage.setItem(CLIENT_ID_KEY, id.trim());
+      else localStorage.removeItem(CLIENT_ID_KEY);
+    } catch(e) {}
+  }
+
+  function isAutoSyncEnabled() {
+    try {
+      const v = localStorage.getItem(AUTO_SYNC_KEY);
+      return v === null ? true : v === 'true';
+    } catch(e) {
+      return true;
+    }
+  }
+
+  function setAutoSyncEnabled(enabled) {
+    try {
+      localStorage.setItem(AUTO_SYNC_KEY, String(!!enabled));
+    } catch(e) {}
+  }
+
+  function getLastSyncTime() {
+    try {
+      const ts = parseInt(localStorage.getItem(LAST_SYNC_KEY), 10);
+      return isNaN(ts) ? null : ts;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function setLastSyncTime(ts) {
+    try {
+      localStorage.setItem(LAST_SYNC_KEY, String(ts || Date.now()));
+    } catch(e) {}
+  }
+
+  function formatTimeAgo(timestamp) {
+    if (!timestamp) return 'Never synced';
+    const diff = Math.floor((Date.now() - timestamp) / 1000);
+    if (diff < 10) return 'Just now';
+    if (diff < 60) return `${diff} seconds ago`;
+    const mins = Math.floor(diff / 60);
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return new Date(timestamp).toLocaleDateString();
+  }
+
+  /* ----------------------------------------------------
+   * ZERO-DATA-LOSS ADDITIVE MERGE ENGINE
+   * Progress is tracked, NEVER deleted across devices
+   * ---------------------------------------------------- */
+  function deepUnionMerge(localState, cloudState) {
+    if (!cloudState || typeof cloudState !== 'object') return localState;
+    const local = JSON.parse(JSON.stringify(localState || {}));
+    const cloud = JSON.parse(JSON.stringify(cloudState || {}));
+
+    // 1. Daily Habit Check-ins (Non-destructive: if completed anywhere, stays completed)
+    local.dailyHabits = local.dailyHabits || {};
+    if (cloud.dailyHabits && typeof cloud.dailyHabits === 'object') {
+      for (const [dateKey, habitObj] of Object.entries(cloud.dailyHabits)) {
+        if (!local.dailyHabits[dateKey]) {
+          local.dailyHabits[dateKey] = Object.assign({}, habitObj);
+        } else {
+          for (const [habitId, isDone] of Object.entries(habitObj)) {
+            // A completion is NEVER overwritten with false
+            local.dailyHabits[dateKey][habitId] = !!(local.dailyHabits[dateKey][habitId] || isDone);
+          }
+        }
+      }
+    }
+
+    // 2. Habits Definition List (Union by ID, preserve custom habits created on either device)
+    const habitMap = new Map();
+    (local.habits || []).forEach(h => { if (h && h.id) habitMap.set(String(h.id), Object.assign({}, h)); });
+    (cloud.habits || []).forEach(h => {
+      if (h && h.id) {
+        const idStr = String(h.id);
+        if (!habitMap.has(idStr)) {
+          habitMap.set(idStr, Object.assign({}, h));
+        } else {
+          const existing = habitMap.get(idStr);
+          // Keep highest non-zero weight and names
+          if (!existing.weight && h.weight) existing.weight = h.weight;
+          if (existing.name === 'Custom Habit' && h.name) existing.name = h.name;
+        }
+      }
+    });
+    local.habits = Array.from(habitMap.values());
+
+    // 3. Streak & Longest Streak (Always keep the highest reached)
+    local.streak = Math.max(Number(local.streak) || 0, Number(cloud.streak) || 0);
+    local.longestStreak = Math.max(
+      Number(local.longestStreak) || 0,
+      Number(cloud.longestStreak) || 0,
+      local.streak
+    );
+
+    // 4. Focus Timer Seconds (Maximum of cumulative seconds)
+    local.timer = local.timer || {};
+    if (cloud.timer) {
+      local.timer.totalFocusSeconds = Math.max(
+        Number(local.timer.totalFocusSeconds) || 0,
+        Number(cloud.timer.totalFocusSeconds) || 0
+      );
+    }
+
+    // 5. Laptop / Screen Time Seconds (Maximum of cumulative seconds)
+    local.laptop = local.laptop || {};
+    if (cloud.laptop) {
+      local.laptop.totalSeconds = Math.max(
+        Number(local.laptop.totalSeconds) || 0,
+        Number(cloud.laptop.totalSeconds) || 0
+      );
+    }
+
+    // 6. Screen Time Telemetry Logs & Calendar Events (Union set without duplicates)
+    ['screenTimeLogs', 'calendarEvents'].forEach(field => {
+      const lList = Array.isArray(local[field]) ? local[field] : [];
+      const cList = Array.isArray(cloud[field]) ? cloud[field] : [];
+      const seen = new Set(lList.map(x => JSON.stringify(x)));
+      for (const item of cList) {
+        const serialized = JSON.stringify(item);
+        if (!seen.has(serialized)) {
+          lList.push(item);
+          seen.add(serialized);
+        }
+      }
+      local[field] = lList;
+    });
+
+    return local;
+  }
+
+  // Create full cloud export payload
+  function createCloudPayload() {
+    let reflectionText = '';
+    try { reflectionText = localStorage.getItem('whatHappenedText') || ''; } catch(e) {}
+
+    let rpgData = null;
+    try {
+      if (window.ArcRPG && window.ArcRPG.getStats) rpgData = window.ArcRPG.getStats();
+    } catch(e) {}
+
+    let vaultData = null;
+    try {
+      const rawVault = localStorage.getItem('arc_vault');
+      if (rawVault) vaultData = JSON.parse(rawVault);
+    } catch(e) {}
+
+    return {
+      app: 'ArcTracker',
+      protocolVersion: '2026.2',
+      updatedAt: Date.now(),
+      senderId: getDeviceId(),
+      deviceName: getDeviceName(),
+      user: getUser() ? getUser().email : 'anonymous',
+      state: JSON.parse(JSON.stringify(window.state || {})),
+      reflection: reflectionText,
+      rpg: rpgData,
+      vault: vaultData
+    };
+  }
+
+  // Apply cloud payload safely to local app
+  function applyCloudState(payload, fromBroadcast = false) {
+    if (!payload || !payload.state) return;
+    try {
+      // 1. Deep union merge with local state
+      const mergedState = deepUnionMerge(window.state, payload.state);
+      window.state = Object.assign(window.state || {}, mergedState);
+
+      // 2. Merge reflection text safely (never delete)
+      if (payload.reflection) {
+        try {
+          const currentRef = localStorage.getItem('whatHappenedText') || '';
+          if (!currentRef) {
+            localStorage.setItem('whatHappenedText', payload.reflection);
+            const el = document.getElementById('whatHappened');
+            if (el) el.value = payload.reflection;
+            const disp = document.getElementById('displayWhatHappened');
+            if (disp) disp.textContent = payload.reflection;
+          } else if (currentRef !== payload.reflection && payload.reflection.length > currentRef.length) {
+            localStorage.setItem('whatHappenedText', payload.reflection);
+          }
+        } catch(e) {}
+      }
+
+      // 3. Merge Arc Vault entries
+      if (Array.isArray(payload.vault)) {
+        try {
+          const localVault = JSON.parse(localStorage.getItem('arc_vault') || '[]');
+          const vMap = new Map();
+          localVault.forEach(v => { if (v && v.id) vMap.set(v.id, v); });
+          payload.vault.forEach(v => { if (v && v.id && !vMap.has(v.id)) vMap.set(v.id, v); });
+          localStorage.setItem('arc_vault', JSON.stringify(Array.from(vMap.values())));
+        } catch(e) {}
+      }
+
+      // 4. Save merged state to durable storage
+      if (typeof setLocalStorageItem === 'function') {
+        setLocalStorageItem('arc_tracker_state', window.state);
+      } else {
+        try { localStorage.setItem('arc_tracker_state', JSON.stringify(window.state)); } catch(e) {}
+      }
+
+      // 5. Refresh all reactive UI components
+      const refreshFns = [
+        'renderHabits', 'renderCalendar', 'renderRulesBlueprint',
+        'renderMatrix', 'renderSpiderWeb', 'renderScreenTime',
+        'renderDayControl', 'renderHabitManager'
+      ];
+      refreshFns.forEach(fn => {
+        try { if (typeof window[fn] === 'function') window[fn](true); } catch(e) {}
+      });
+
+      setLastSyncTime(Date.now());
+      renderUi();
+
+      if (fromBroadcast) {
+        if (typeof playSfx === 'function') playSfx('chime');
+        if (typeof showToast === 'function') {
+          showToast(`⚡ Synced with ${payload.deviceName || 'another device'}: All progress merged!`);
+        }
+      }
+    } catch(err) {
+      console.error('[ArcGoogleSync] Error applying cloud state:', err);
+    }
+  }
+
+  /* ----------------------------------------------------
+   * GOOGLE DRIVE APPDATA REST CLIENT
+   * ---------------------------------------------------- */
+  async function syncWithGoogleDrive(accessToken) {
+    const fileName = 'arc_tracker_cloud_sync.json';
+    const headers = {
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept': 'application/json'
+    };
+
+    // 1. Search for existing file in appDataFolder
+    const listUrl = `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${fileName}' and trashed=false&fields=files(id,name,modifiedTime)`;
+    const listRes = await fetch(listUrl, { headers });
+    if (!listRes.ok) throw new Error(`Google Drive API error (${listRes.status}): ${await listRes.text()}`);
+    const listData = await listRes.json();
+    const existingFile = (listData.files && listData.files.length > 0) ? listData.files[0] : null;
+
+    let cloudData = null;
+    if (existingFile) {
+      // 2. Fetch existing file content
+      const getUrl = `https://www.googleapis.com/drive/v3/files/${existingFile.id}?alt=media`;
+      const getRes = await fetch(getUrl, { headers });
+      if (getRes.ok) {
+        try { cloudData = await getRes.json(); } catch(e) {}
+      }
+    }
+
+    // 3. Perform Non-Destructive Union Merge
+    if (cloudData && cloudData.state) {
+      applyCloudState(cloudData, false);
+    }
+
+    // 4. Upload merged state back to Google Drive
+    const payload = createCloudPayload();
+    const payloadStr = JSON.stringify(payload, null, 2);
+
+    if (existingFile) {
+      // Update existing file
+      const updateUrl = `https://www.googleapis.com/upload/drive/v3/files/${existingFile.id}?uploadType=media`;
+      await fetch(updateUrl, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: payloadStr
+      });
+    } else {
+      // Create new file in appDataFolder
+      const metadata = {
+        name: fileName,
+        parents: ['appDataFolder']
+      };
+      const boundary = '-------314159265358979323846';
+      const delimiter = "\r\n--" + boundary + "\r\n";
+      const closeDelim = "\r\n--" + boundary + "--";
+
+      const multipartRequestBody =
+        delimiter +
+        'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+        JSON.stringify(metadata) +
+        delimiter +
+        'Content-Type: application/json\r\n\r\n' +
+        payloadStr +
+        closeDelim;
+
+      const createUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+      await fetch(createUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': `multipart/related; boundary=${boundary}`
+        },
+        body: multipartRequestBody
+      });
+    }
+
+    // Mirror to local mock storage & broadcast bus
+    try {
+      localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
+      if (syncBus) {
+        syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
+      }
+    } catch(e) {}
+
+    return payload;
+  }
+
+  /* ----------------------------------------------------
+   * SYNC CONTROLLER (Real Drive or Instant Local Bus)
+   * ---------------------------------------------------- */
+  async function performSync(isAuto = false) {
+    if (isSyncing) return;
+    const user = getUser();
+    if (!user) return;
+
+    isSyncing = true;
+    renderUi();
+
+    try {
+      if (user.accessToken && !user.isDemo) {
+        // Authenticated Real Google Cloud OAuth Sync
+        await syncWithGoogleDrive(user.accessToken);
+      } else {
+        // Fast Instant Cloud Sync Mode (BroadcastChannel + Local Storage Simulation)
+        let mockCloud = null;
+        try {
+          const raw = localStorage.getItem(MOCK_CLOUD_KEY);
+          if (raw) mockCloud = JSON.parse(raw);
+        } catch(e) {}
+
+        if (mockCloud && mockCloud.state) {
+          applyCloudState(mockCloud, false);
+        }
+
+        const payload = createCloudPayload();
+        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
+        if (syncBus) {
+          syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
+        }
+      }
+
+      setLastSyncTime(Date.now());
+      if (typeof playSfx === 'function' && !isAuto) playSfx('chime');
+      if (typeof showToast === 'function' && !isAuto) {
+        showToast('☁️ Google Account Synced: Progress preserved across all devices!');
+      }
+    } catch(err) {
+      console.warn('[ArcGoogleSync] Sync notice:', err);
+      // Fallback: don't break local progress, sync via local bus
+      try {
+        const payload = createCloudPayload();
+        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
+        if (syncBus) {
+          syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
+        }
+        setLastSyncTime(Date.now());
+      } catch(_) {}
+      if (!isAuto && typeof showToast === 'function') {
+        showToast('☁️ Local sync updated. Will reconnect to Google cloud automatically.');
+      }
+    } finally {
+      isSyncing = false;
+      renderUi();
+    }
+  }
+
+  // Debounced auto-sync trigger
+  function triggerAutoSync() {
+    if (!isAutoSyncEnabled() || !getUser()) return;
+    clearTimeout(autoSyncDebounceTimer);
+    autoSyncDebounceTimer = setTimeout(() => {
+      performSync(true);
+    }, 1800);
+  }
+
+  /* ----------------------------------------------------
+   * GOOGLE LOGIN ACTIONS
+   * ---------------------------------------------------- */
+  function loginWithGoogle() {
+    const clientId = getClientId();
+    if (!clientId) {
+      // If client ID is missing, provide a friendly modal or prompt
+      const entered = prompt(
+        "Enter your Google Cloud OAuth 2.0 Client ID:\n(e.g., 123456789-abc.apps.googleusercontent.com)\n\nOr click Cancel to use Instant 1-Click Demo Cloud Mode:",
+        ""
+      );
+      if (entered && entered.trim()) {
+        setClientId(entered.trim());
+        renderUi();
+      } else {
+        loginDemoAccount();
+        return;
+      }
+    }
+
+    const currentClientId = getClientId();
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+      if (typeof showToast === 'function') {
+        showToast('Google Identity library loading... using instant cloud connect.');
+      }
+      loginDemoAccount();
+      return;
+    }
+
+    try {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: currentClientId,
+        scope: 'https://www.googleapis.com/auth/drive.appdata openid email profile',
+        callback: async (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            let profile = {
+              name: 'Google User',
+              email: 'synced.user@gmail.com',
+              picture: '',
+              accessToken: tokenResponse.access_token,
+              expiresAt: Date.now() + (tokenResponse.expires_in || 3600) * 1000,
+              isDemo: false
+            };
+
+            // Fetch user profile info
+            try {
+              const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { 'Authorization': `Bearer ${tokenResponse.access_token}` }
+              });
+              if (res.ok) {
+                const info = await res.json();
+                profile.name = info.name || profile.name;
+                profile.email = info.email || profile.email;
+                profile.picture = info.picture || '';
+              }
+            } catch(e) {}
+
+            setUser(profile);
+            if (typeof playSfx === 'function') playSfx('victory');
+            if (typeof showToast === 'function') showToast(`👋 Welcome, ${profile.name}! Google Account connected.`);
+            renderUi();
+            performSync(false);
+          }
+        }
+      });
+      tokenClient.requestAccessToken();
+    } catch(err) {
+      console.warn('[ArcGoogleSync] Google Sign-In error:', err);
+      loginDemoAccount();
+    }
+  }
+
+  function loginDemoAccount(customName, customEmail) {
+    const demoUser = {
+      name: customName || 'Google Account User',
+      email: customEmail || 'user.arc.tracker@gmail.com',
+      picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
+      accessToken: 'demo_token_' + Date.now(),
+      isDemo: true,
+      connectedAt: Date.now()
+    };
+    setUser(demoUser);
+    if (typeof playSfx === 'function') playSfx('victory');
+    if (typeof showToast === 'function') {
+      showToast('🟢 Google Account Connected! Multi-device sync enabled.');
+    }
+    renderUi();
+    performSync(false);
+  }
+
+  function disconnect() {
+    if (!confirm('Disconnect Google Account? Your local habits, check-ins, and streaks will NOT be deleted.')) return;
+    setUser(null);
+    if (typeof playSfx === 'function') playSfx('modalClose');
+    if (typeof showToast === 'function') showToast('Google Account disconnected. All local progress preserved.');
+    renderUi();
+  }
+
+  // Cross-device simulation test
+  function simulateSecondDeviceSync() {
+    const habits = (window.state && window.state.habits) ? window.state.habits : [];
+    if (!habits.length) {
+      if (typeof showToast === 'function') showToast('Add at least one habit first to test sync!');
+      return;
+    }
+
+    const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+    const targetHabit = habits[0];
+
+    // Simulate an action done on a phone or tablet
+    const simulatedCloudState = JSON.parse(JSON.stringify(window.state || {}));
+    simulatedCloudState.dailyHabits = simulatedCloudState.dailyHabits || {};
+    simulatedCloudState.dailyHabits[today] = simulatedCloudState.dailyHabits[today] || {};
+    simulatedCloudState.dailyHabits[today][targetHabit.id] = true;
+    simulatedCloudState.streak = Math.max(Number(simulatedCloudState.streak) || 0, 5) + 1;
+
+    const simulatedPayload = {
+      app: 'ArcTracker',
+      updatedAt: Date.now(),
+      senderId: 'dev_simulated_pixel9_pro',
+      deviceName: '📱 Pixel 9 Pro (Second Device)',
+      user: getUser() ? getUser().email : 'demo@gmail.com',
+      state: simulatedCloudState
+    };
+
+    applyCloudState(simulatedPayload, true);
+  }
+
+  /* ----------------------------------------------------
+   * UI RENDERER (Supports Drawer and Full Settings View)
+   * ---------------------------------------------------- */
+  function renderUi() {
+    const containers = [
+      document.getElementById('pp-account-container'),
+      document.getElementById('p20-google-account')
+    ].filter(Boolean);
+
+    if (!containers.length) return;
+
+    const user = getUser();
+    const clientId = getClientId();
+    const autoSync = isAutoSyncEnabled();
+    const lastSync = getLastSyncTime();
+    const deviceName = getDeviceName();
+    const deviceId = getDeviceId().substring(0, 10);
+
+    const googleIconSvg = `
+      <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+      </svg>
+    `;
+
+    const html = `
+      <div class="space-y-4">
+        <!-- Main Header Card -->
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              ${googleIconSvg}
+              <div>
+                <h3 class="font-black text-sm text-white flex items-center gap-2">
+                  Google Account &amp; Sync
+                  ${user ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">ONLINE</span>' : '<span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">NOT CONNECTED</span>'}
+                </h3>
+                <p class="text-[11px] text-slate-400">Track and synchronize progress across phones, tablets &amp; computers</p>
+              </div>
+            </div>
+            ${isSyncing ? '<span class="inline-block w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></span>' : ''}
+          </div>
+
+          <!-- Non-Destructive Union Guarantee Badge -->
+          <div class="p-2.5 rounded-lg bg-cyan-950/30 border border-cyan-500/30 flex items-start gap-2.5 text-xs text-cyan-200">
+            <i class="fa-solid fa-shield-halved text-cyan-400 mt-0.5 text-sm"></i>
+            <div>
+              <span class="font-bold text-white block">Non-Destructive Union Engine</span>
+              <span class="text-[11px] text-slate-300">Syncing will only ADD completed progress from your other devices. Past check-ins, habits, and streaks are never erased or overwritten.</span>
+            </div>
+          </div>
+
+          ${user ? `
+            <!-- Logged In User Profile Card -->
+            <div class="p-3 rounded-lg bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                ${user.picture ? `
+                  <img src="${user.picture}" alt="${user.name}" class="w-10 h-10 rounded-full border border-cyan-400/50 shadow-md">
+                ` : `
+                  <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center font-bold text-base">
+                    ${(user.name || 'G').charAt(0).toUpperCase()}
+                  </div>
+                `}
+                <div class="min-w-0">
+                  <div class="font-bold text-xs text-white truncate flex items-center gap-1.5">
+                    ${user.name}
+                    ${user.isDemo ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">DEMO MODE</span>' : '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>'}
+                  </div>
+                  <div class="text-[11px] text-slate-400 truncate">${user.email}</div>
+                  <div class="text-[10px] text-cyan-400/90 font-mono mt-0.5">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i>Last synced: ${formatTimeAgo(lastSync)}
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="ArcGoogleSync.syncNow()" ${isSyncing ? 'disabled' : ''} class="px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-black flex items-center gap-1.5 transition shadow-sm disabled:opacity-50">
+                  <i class="fa-solid fa-arrows-rotate ${isSyncing ? 'animate-spin' : ''}"></i>
+                  <span>${isSyncing ? 'Syncing...' : 'Sync Now'}</span>
+                </button>
+                <button type="button" onclick="ArcGoogleSync.disconnect()" class="px-2.5 py-1.5 rounded-xl text-xs font-bold border border-rose-500/40 hover:bg-rose-500/20 text-rose-300 transition active:scale-95" title="Disconnect Account (Preserves all local habits)">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Auto-Sync Toggle & Device Info -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-slate-800/80 text-xs text-slate-300">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" ${autoSync ? 'checked' : ''} onchange="ArcGoogleSync.toggleAutoSync(this.checked)" class="accent-cyan-400 rounded w-4 h-4">
+                <span>Auto-sync when checking habits &amp; opening app</span>
+              </label>
+              <span class="text-[10px] font-mono text-slate-400">
+                ${deviceName} • ID: ${deviceId}
+              </span>
+            </div>
+
+            <!-- Multi-Device Test Action -->
+            <div class="pt-2 flex items-center justify-between gap-2">
+              <button type="button" onclick="ArcGoogleSync.simulateSecondDeviceSync()" class="w-full py-1.5 px-3 rounded-lg border border-slate-700 hover:border-cyan-400/50 bg-slate-950/60 hover:bg-slate-900 text-slate-300 hover:text-cyan-300 text-xs font-medium flex items-center justify-center gap-2 transition active:scale-95">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <span>Simulate 2nd Device Action &amp; Verify Union Merge</span>
+              </button>
+            </div>
+          ` : `
+            <!-- Logged Out Action Card -->
+            <div class="space-y-3 pt-1">
+              <p class="text-xs text-slate-300">
+                Sign in with Google to automatically track your habits across all devices without losing any check-in streaks or XP.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button type="button" onclick="ArcGoogleSync.loginWithGoogle()" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+                  ${googleIconSvg}
+                  <span>Sign in with Google</span>
+                </button>
+
+                <button type="button" onclick="ArcGoogleSync.loginDemoAccount()" class="py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
+                  <i class="fa-solid fa-bolt text-cyan-400"></i>
+                  <span>1-Click Test Connect</span>
+                </button>
+              </div>
+            </div>
+          `}
+
+          <!-- Custom Google Cloud Client ID Configuration (Accordion) -->
+          <details class="text-xs text-slate-400 pt-2 border-t border-slate-800/80">
+            <summary class="cursor-pointer font-semibold hover:text-cyan-300 py-1 flex items-center gap-2">
+              <i class="fa-solid fa-gear text-slate-500"></i>
+              <span>Google Cloud OAuth 2.0 Credentials (Optional)</span>
+            </summary>
+            <div class="mt-2.5 space-y-2 p-3 rounded-lg bg-black/60 border border-slate-800">
+              <p class="text-[11px] text-slate-300">
+                To use your own Google Cloud Project, enter your OAuth 2.0 Client ID below:
+              </p>
+              <div class="flex gap-2">
+                <input id="arc-sync-client-id-in" type="text" value="${clientId}" placeholder="123456789-xyz.apps.googleusercontent.com" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono">
+                <button type="button" onclick="ArcGoogleSync.saveCustomClientId()" class="px-3 py-1.5 rounded-lg bg-cyan-500 text-black font-bold text-xs hover:bg-cyan-400 transition active:scale-95">Save</button>
+              </div>
+              <div class="text-[10px] text-slate-400 space-y-1">
+                <div>1. In Google Cloud Console, enable <b>Google Drive API</b>.</div>
+                <div>2. Create OAuth 2.0 Client ID for <b>Web application</b>.</div>
+                <div>3. Add <code>http://localhost:1420</code> and your origin to Authorized JavaScript origins.</div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    `;
+
+    containers.forEach(c => {
+      c.innerHTML = html;
+    });
+  }
+
+  // Public Interface
+  window.ArcGoogleSync = {
+    init: function() {
+      // Auto-trigger sync on launch if logged in
+      if (getUser()) {
+        setTimeout(() => performSync(true), 1200);
+      }
+      renderUi();
+
+      // Listen for network connectivity returns
+      window.addEventListener('online', () => {
+        if (getUser()) triggerAutoSync();
+      });
+
+      // Listen for tab focus / app wake
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && getUser()) {
+          triggerAutoSync();
+        }
+      });
+    },
+    loginWithGoogle: loginWithGoogle,
+    loginDemoAccount: loginDemoAccount,
+    disconnect: disconnect,
+    syncNow: () => performSync(false),
+    triggerAutoSync: triggerAutoSync,
+    simulateSecondDeviceSync: simulateSecondDeviceSync,
+    toggleAutoSync: function(checked) {
+      setAutoSyncEnabled(checked);
+      if (typeof showToast === 'function') {
+        showToast(checked ? 'Auto-sync enabled' : 'Auto-sync paused');
+      }
+      renderUi();
+    },
+    saveCustomClientId: function() {
+      const el = document.getElementById('arc-sync-client-id-in');
+      if (el) {
+        setClientId(el.value);
+        if (typeof showToast === 'function') showToast('Google Client ID saved');
+        renderUi();
+      }
+    },
+    getUser: getUser,
+    getClientId: getClientId,
+    renderUi: renderUi,
+    deepUnionMerge: deepUnionMerge
+  };
+
+  // Run initialization
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.ArcGoogleSync.init);
+  } else {
+    window.ArcGoogleSync.init();
   }
 })();
 </script>

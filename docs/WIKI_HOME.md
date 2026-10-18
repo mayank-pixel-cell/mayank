@@ -106,10 +106,18 @@ Arc Tracker features a background screen time and focus telemetry system:
 - Enable your 4-digit PIN via the Settings Drawer (`⚙️`).
 - Supports emergency device wipe, vibration haptic feedback, and instant screen locking.
 
+### Google Account & Cross-Device Cloud Syncing
+
+- **Location:** Open **Settings** (either via the header/nav or the Settings Drawer) ➔ **`[ 👤 Accounts & Sync ]`**.
+- **Non-Destructive Union Engine:** Progress from multiple devices logged into the same account is merged additively. A completed habit on one device is never overwritten with false on another, and streaks take the highest value achieved.
+- **Google Drive AppData Isolation:** User data is saved in Google Drive's isolated private `appDataFolder` (`arc_tracker_cloud_sync.json`), maintaining complete user ownership with zero 3rd-party server reliance.
+- **Auto-Sync:** Progress automatically synchronizes on app launch, habit completion, and focus timer sessions.
+
 ### Data Backup & Migration
 
-- **Export:** In Settings, click **"Export Backup (JSON)"** to download an encrypted snapshot of all habits, logs, and calendar grades.
-- **Import:** Click **"Import Backup"** and select your JSON file to seamlessly restore your data on any other phone, tablet, or PC.
+- **Cloud Sync:** Sign into your Google account in Settings ➔ **`[ 👤 Accounts & Sync ]`** on your phone, tablet, and PC.
+- **Manual Export:** In Settings, click **"Export Backup (JSON)"** to download an encrypted snapshot of all habits, logs, and calendar grades.
+- **Manual Import:** Click **"Import Backup"** and select your JSON file to seamlessly restore your data.
 
 ---
 
@@ -120,9 +128,14 @@ graph TD
     A[UI Layer: pro22.html / index.html] --> B[Dual Theme & Glassmorphic CSS]
     A --> C[Storage Engine: src/storage.js]
     A --> D[Screen Time Engine: src/screentime.js]
+    A --> O[Google Cloud Sync Engine: ArcGoogleSync]
     
     C --> E[(Tauri Plugin Store: Binary)]
     C --> F[(IndexedDB: arc_tracker_db)]
+    
+    O --> P[(Google Drive AppData: Private Cloud)]
+    O --> Q[Cross-Window BroadcastChannel Bus]
+    O --> R[Non-Destructive Union Merger]
     
     D --> G[Web Worker Background Loop]
     D --> H[Hardware Sleep Watchdog]
@@ -153,9 +166,9 @@ graph TD
 
 No. The background screen time listener uses low-overhead timer ticks and immediately suspends execution when device idle or sleep states are detected.
 
-### Q: How do I transfer my data from my computer to my phone?
+### Q: How do I sync my progress between my phone and computer?
 
-Go to **Settings** on your computer ➔ tap **Export Backup (JSON)**. Send the `.json` file to your phone, open Arc Tracker on your phone, open **Settings** ➔ tap **Import Backup**.
+Go to **Settings** ➔ **`[ 👤 Accounts & Sync ]`** on both devices and sign in to the same Google Account. Arc Tracker's **Non-Destructive Union Engine** will automatically synchronize all habits, streaks, focus timer records, and XP so your progress is never lost or deleted!
 
 ---
 

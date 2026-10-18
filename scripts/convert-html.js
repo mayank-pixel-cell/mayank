@@ -13,10 +13,10 @@ let html = fs.readFileSync(srcHtmlPath, 'utf8');
 
 console.log('--- Converting pro22.html to standalone offline index.html ---');
 
-// 0. Airgap Content Security Policy for offline bundle
+// 0. Airgap Content Security Policy for offline bundle with Google Cloud Sync
 html = html.replace(
   /<meta http-equiv="Content-Security-Policy"[^>]*>/i,
-  '<meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; font-src \'self\' data:; img-src \'self\' data: blob:; connect-src \'none\'; media-src \'self\' data:; object-src \'none\'; form-action \'none\'; base-uri \'self\';">'
+  '<meta http-equiv="Content-Security-Policy" content="default-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src \'self\' \'unsafe-inline\' https://accounts.google.com https://apis.google.com; style-src \'self\' \'unsafe-inline\' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src \'self\' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src \'self\' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src \'self\' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src \'self\' https://accounts.google.com; media-src \'self\' data:; object-src \'none\'; form-action \'none\'; base-uri \'self\';">'
 );
 
 // 0b. Add Web App Manifest and Apple iOS Web Clip meta tags
