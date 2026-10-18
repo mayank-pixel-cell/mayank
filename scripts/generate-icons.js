@@ -153,11 +153,13 @@ const png32 = makePng(32, 32);
 const png128 = makePng(128, 128);
 const png256 = makePng(256, 256);
 const png512 = makePng(512, 512);
+const png1024 = makePng(1024, 1024);
 
 fs.writeFileSync(path.join(iconsDir, '32x32.png'), png32);
 fs.writeFileSync(path.join(iconsDir, '128x128.png'), png128);
 fs.writeFileSync(path.join(iconsDir, '128x128@2x.png'), png256);
 fs.writeFileSync(path.join(iconsDir, 'icon.png'), png512);
+fs.writeFileSync(path.join(iconsDir, 'icon-1024.png'), png1024);
 
 const icoBuf = makeIco([
   { width: 32, height: 32, buf: png32 },
@@ -178,7 +180,9 @@ fs.writeFileSync(path.join(publicIconsDir, '32x32.png'), png32);
 fs.writeFileSync(path.join(publicIconsDir, '128x128.png'), png128);
 fs.writeFileSync(path.join(publicIconsDir, '128x128@2x.png'), png256);
 fs.writeFileSync(path.join(publicIconsDir, 'icon.png'), png512);
+fs.writeFileSync(path.join(publicIconsDir, 'app-store-1024.png'), png1024);
 fs.writeFileSync(path.join(publicIconsDir, 'apple-touch-icon.png'), png256);
 fs.writeFileSync(path.join(publicDir, 'apple-touch-icon.png'), png256);
+fs.writeFileSync(path.join(publicDir, 'app-store-1024.png'), png1024);
 
-console.log('All icons generated in src-tauri/icons/ and public/ successfully!');
+console.log('All icons generated including 1024x1024 Apple App Store icon!');

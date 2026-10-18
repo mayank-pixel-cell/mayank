@@ -1,14 +1,38 @@
-# PowerShell script to sign Android APK for 1-tap installation without "App not installed" errors
+# PowerShell script to sign Android APK and Google Play AAB
 param(
     [string]$ApkPath = "",
-    [string]$OutputPath = ""
+    [string]$OutputPath = "",
+    [switch]$SignAab
 )
 
 $ErrorActionPreference = "Continue"
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "  Arc Tracker Android APK Auto-Signer" -ForegroundColor Cyan
+Write-Host "  Arc Tracker Android Package Auto-Signer" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
+
+# If signing AAB bundle for Google Play Store
+if ($SignAab) {
+    $aabPaths = @(
+        "src-tauri\gen\android\app\build\outputs\bundle\universalRelease\app-universal-release.aab",
+        "src-tauri\gen\android\app\build\outputs\bundle\release\app-release.aab"
+    )
+    $FoundAab = ""
+    foreach ($p in $aabPaths) {
+        if (Test-Path $p) { $FoundAab = $p; break }
+    }
+    if (-not $FoundAab) {
+        $candidate = Get-ChildItem "src-tauri\gen\android\app\build\outputs\bundle" -Filter "*.aab" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($candidate) { $FoundAab = $candidate.FullName }
+    }
+    if ($FoundAab) {
+        $ApkPath = $FoundAab
+        $OutputPath = Join-Path (Split-Path $FoundAab) "Arc-Tracker-GooglePlay.aab"
+    } else {
+        Write-Host "[Notice] No .aab bundle found. Run 'npm run tauri -- android build --aab' first." -ForegroundColor Yellow
+        exit 0
+    }
+}
 
 # Locate input APK if not provided
 if (-not $ApkPath) {
@@ -26,15 +50,16 @@ if (-not $ApkPath) {
 }
 
 if (-not $ApkPath -or -not (Test-Path $ApkPath)) {
-    Write-Host "[Info] No unsigned APK found at standard paths. Run 'npm run tauri -- android build --apk' first." -ForegroundColor Yellow
+    Write-Host "[Info] No target binary found at standard paths." -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "Found source APK: $ApkPath" -ForegroundColor Green
+Write-Host "Found source package: $ApkPath" -ForegroundColor Green
 
 if (-not $OutputPath) {
     $dir = Split-Path $ApkPath
-    $OutputPath = Join-Path $dir "Arc-Tracker-release-signed.apk"
+    $ext = [System.IO.Path]::GetExtension($ApkPath)
+    $OutputPath = Join-Path $dir "Arc-Tracker-release-signed$ext"
 }
 
 $keystorePath = "release.keystore"
@@ -75,18 +100,20 @@ if (-not $jarsigner -and $env:JAVA_HOME) {
     if (Test-Path $candidate) { $jarsigner = $candidate }
 }
 
-# 3. Sign the APK
-Write-Host "`n[3/3] Signing APK with v2/v3 signature schemes..." -ForegroundColor Yellow
-if ($apksigner -and (Test-Path $keystorePath)) {
+# 3. Sign the package
+Write-Host "`n[3/3] Signing package with release signature..." -ForegroundColor Yellow
+$isAab = $ApkPath.EndsWith(".aab")
+
+if (-not $isAab -and $apksigner -and (Test-Path $keystorePath)) {
     & $apksigner sign --ks $keystorePath --ks-pass "pass:$keystorePass" --ks-key-alias $keyAlias --out $OutputPath $ApkPath
     Write-Host "✔ APK signed successfully with apksigner!" -ForegroundColor Green
     Write-Host "Signed APK: $OutputPath" -ForegroundColor Green
 } elseif ($jarsigner -and (Test-Path $keystorePath)) {
     Copy-Item $ApkPath $OutputPath -Force
     & $jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $keystorePath -storepass $keystorePass -keypass $keystorePass $OutputPath $keyAlias
-    Write-Host "✔ APK signed successfully with jarsigner!" -ForegroundColor Green
-    Write-Host "Signed APK: $OutputPath" -ForegroundColor Green
+    Write-Host "✔ Package signed successfully with jarsigner!" -ForegroundColor Green
+    Write-Host "Signed Package: $OutputPath" -ForegroundColor Green
 } else {
     Write-Host "[Notice] To sign locally on Windows, ensure JDK and Android SDK build-tools are in your PATH." -ForegroundColor Yellow
-    Write-Host "GitHub Actions automatically signs release APKs on push." -ForegroundColor Yellow
+    Write-Host "GitHub Actions automatically signs release binaries on push." -ForegroundColor Yellow
 }

@@ -203,6 +203,70 @@ if (html.includes(oldStorageSection)) {
 // Strip invalid C1 control characters (0x80 - 0x9F) that trigger parse5 control-character-in-input-stream errors
 html = html.replace(/[\u0080-\u009F]/g, '');
 
+// 6. Add Screen Time Hub Button to Header
+const screenTimeHeaderBtn = `<button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix (Phones, Macs & Laptops)">
+                    <i class="fa-solid fa-clock text-cyan-400"></i>
+                    <span class="hidden lg:inline ml-1.5">Screen Time</span>
+                </button>\n                `;
+
+if (!html.includes('title="Screen Time Matrix (Phones, Macs & Laptops)"')) {
+  html = html.replace('<button role="button" onclick="openArcModal();', `${screenTimeHeaderBtn}<button role="button" onclick="openArcModal();`);
+}
+
+// 7. Upgrade Screen Time Widget to Universal Multi-Platform Design
+const oldWidget = `<!-- SCREEN TIME TRACKER WIDGET -->
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 space-y-3 sm:space-y-4 border-l-4 border-l-blue-400">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-xs sm:text-sm text-white flex items-center gap-2">
+                                <i class="fa-solid fa-laptop text-blue-400"></i> Laptop Screen Time
+                            </h3>
+                            <span class="text-[9px] sm:text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono animate-pulse" id="laptop-status-badge">AUTO-TRACKING</span>
+                        </div>
+
+                        <div class="text-center py-1">
+                            <div class="text-2xl sm:text-4xl font-black font-mono tracking-wider text-white" id="laptop-timer-display">00h 00m 00s</div>
+                            <p class="text-[10px] sm:text-xs text-slate-400 mt-1" id="laptop-status-desc">Automatically tracking active session time in tab</p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button role="button" id="btn-toggle-laptop" onclick="toggleLaptopTracker()" class="w-full py-2 sm:py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider transition border border-slate-700 shadow-sm hover:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                                <i class="fa-solid fa-pause mr-1"></i> Pause Tracker
+                            </button>
+                        </div>
+                    </div>`;
+
+const upgradedWidget = `<!-- SCREEN TIME TRACKER WIDGET (MULTI-PLATFORM) -->
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 space-y-3 sm:space-y-4 border-l-4 border-l-cyan-400 relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <h3 id="screen-time-widget-title" class="font-bold text-xs sm:text-sm text-white flex items-center gap-2">
+                                <i id="screen-time-device-icon" class="fa-solid fa-laptop text-cyan-400"></i>
+                                <span id="screen-time-device-label">Device Screen Time</span>
+                            </h3>
+                            <span class="text-[9px] sm:text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono animate-pulse flex items-center gap-1" id="laptop-status-badge">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> AUTO-TRACKING
+                            </span>
+                        </div>
+
+                        <div class="text-center py-2 bg-slate-950/50 rounded-xl border border-slate-800/80">
+                            <div class="text-2xl sm:text-4xl font-black font-mono tracking-wider bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent" id="laptop-timer-display">00h 00m 00s</div>
+                            <p class="text-[10px] sm:text-xs text-slate-400 mt-1" id="laptop-status-desc">Auto-tracking on Phones, Macs &amp; Laptops • Zero input required</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button role="button" id="btn-toggle-laptop" onclick="toggleLaptopTracker()" class="py-2 sm:py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider transition border border-slate-700 shadow-sm hover:border-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                                <i class="fa-solid fa-pause mr-1"></i> Pause
+                            </button>
+                            <button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-chart-pie text-cyan-400"></i> Matrix
+                            </button>
+                        </div>
+                    </div>`;
+
+if (html.includes(oldWidget)) {
+  html = html.replace(oldWidget, upgradedWidget);
+  console.log('Successfully upgraded Screen Time widget to multi-platform architecture!');
+}
+
 fs.writeFileSync(destHtmlPath, html, 'utf8');
 console.log(`Generated offline index.html (${html.length} bytes)!`);
 

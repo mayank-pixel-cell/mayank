@@ -1,8 +1,13 @@
-# PowerShell script to build Arc Tracker Android Package (.apk)
+# PowerShell script to build Arc Tracker Android Package (.apk) and Google Play Bundle (.aab)
+param(
+    [ValidateSet("all", "apk", "aab")]
+    [string]$Target = "all"
+)
+
 $ErrorActionPreference = "Stop"
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "  Arc Tracker Android APK Build Automation" -ForegroundColor Cyan
+Write-Host "  Arc Tracker Android & Google Play Builder" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # Check Environment Variables for Android
@@ -31,14 +36,24 @@ try {
     Write-Host "Tauri android init notice: $_" -ForegroundColor Yellow
 }
 
-# Build Android APK
-Write-Host "`n[4/4] Building release APK..." -ForegroundColor Yellow
+# Build Android Targets
+Write-Host "`n[4/4] Compiling requested targets ($Target)..." -ForegroundColor Yellow
 try {
-    & npm run tauri -- android build --apk
-    Write-Host "`n✔ Android APK built successfully!" -ForegroundColor Green
-    Write-Host "Signing APK with release certificate..." -ForegroundColor Cyan
-    & powershell -ExecutionPolicy Bypass -File scripts/sign-apk.ps1
+    if ($Target -eq "apk" -or $Target -eq "all") {
+        Write-Host "Building Release APK..." -ForegroundColor Cyan
+        & npm run tauri -- android build --apk
+        Write-Host "Signing APK with release certificate..." -ForegroundColor Cyan
+        & powershell -ExecutionPolicy Bypass -File scripts/sign-apk.ps1
+    }
+
+    if ($Target -eq "aab" -or $Target -eq "all") {
+        Write-Host "Building Google Play Store Android App Bundle (.aab)..." -ForegroundColor Cyan
+        & npm run tauri -- android build --aab
+        Write-Host "Signing Google Play AAB with release certificate..." -ForegroundColor Cyan
+        & powershell -ExecutionPolicy Bypass -File scripts/sign-apk.ps1 -SignAab
+    }
+    Write-Host "`n✔ Android builds completed successfully!" -ForegroundColor Green
 } catch {
     Write-Host "`n[Notice] Android compilation requires Android Studio / NDK and JDK 17: $_" -ForegroundColor Red
-    Write-Host "Use the provided .github/workflows/build-and-release.yml to build the APK in GitHub Actions automatically." -ForegroundColor Yellow
+    Write-Host "Use the automated .github/workflows/build-and-release.yml workflow to build both APK & Google Play AAB in GitHub Actions." -ForegroundColor Yellow
 }

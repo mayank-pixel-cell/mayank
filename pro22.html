@@ -938,6 +938,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <!-- ACTION BUTTONS -->
             <div class="flex items-center space-x-1.5 sm:space-x-2">
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>
+                <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode(); playSfx('click')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-300 border border-slate-700/80 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:border-cyan-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
+                    <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400"></i>
+                    <span class="hidden xl:inline ml-1.5" id="header-mode-toggle-label">Light Mode</span>
+                </button>
                 <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
                     <i id="header-arc-switch-icon" class="fa-solid fa-sun text-amber-400"></i>
                     <span class="hidden md:inline ml-1.5" id="arc-switch-btn-text">Start Summer Arc</span>
@@ -3813,8 +3817,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const radius = 0.85;
 
             const isSummerArc = state.currentArc === 'summer';
-            const primaryColor = isSummerArc ? '#F59E0B' : '#00F0FF';
-            const secondaryColor = isSummerArc ? '#EF4444' : '#8B5CF6';
+            const isLightMode = document.documentElement.getAttribute('data-mode') === 'light';
+            const primaryColor = isSummerArc ? (isLightMode ? '#d97706' : '#F59E0B') : (isLightMode ? '#0284c7' : '#00F0FF');
+            const secondaryColor = isSummerArc ? (isLightMode ? '#dc2626' : '#EF4444') : (isLightMode ? '#7c3aed' : '#8B5CF6');
 
             let webPaths = `
             <defs>
@@ -3929,7 +3934,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const lx = Math.cos(angle) * labelRadius;
                 const ly = Math.sin(angle) * labelRadius;
                 const textAnchor = Math.abs(lx) < 0.05 ? "middle" : (lx > 0 ? "start" : "end");
-                webPaths += `<text x="${lx}" y="${ly + 0.03}" text-anchor="${textAnchor}" fill="${catColor}" font-size="0.075" font-weight="700" font-family="'Inter', sans-serif" class="select-none opacity-90 hover:opacity-100 transition">${cat} <tspan fill="#94A3B8" font-size="0.06" font-weight="500">${Math.round(pct * 100)}%</tspan></text>`;
+                webPaths += `<text x="${lx}" y="${ly + 0.03}" text-anchor="${textAnchor}" fill="${catColor}" font-size="0.075" font-weight="700" font-family="'Inter', sans-serif" class="select-none opacity-90 hover:opacity-100 transition">${cat} <tspan fill="${isLightMode ? '#475569' : '#94A3B8'}" font-size="0.06" font-weight="500">${Math.round(pct * 100)}%</tspan></text>`;
             });
 
             svg.innerHTML = webPaths;
@@ -4087,11 +4092,508 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 <!-- ===== PP12 UPGRADE MODULE (additive: all Pro 11 code above is untouched) ===== -->
 <style id="pp12-css">
 :root{--pp-accent:#00f0ff;--pp-accent2:#d946ef;--pp-bg:#060913;--pp-panel:rgba(9,13,26,.92);--pp-fg:#e2e8f0;--pp-mut:#94a3b8;--pp-line:rgba(255,255,255,.12);--pp-noise-op:.15}
-html[data-mode=light]{--pp-panel:rgba(255,255,255,.94);--pp-fg:#0f172a;--pp-mut:#475569;--pp-line:rgba(15,23,42,.16)}
-html[data-mode=light] body{background:#eef2f7!important;color:#0f172a}
-html[data-mode=light] .glass-card{background:rgba(255,255,255,.8)!important;border-color:#cbd5e1!important}
-html[data-mode=light] .text-white{color:#0f172a!important}
-html[data-mode=light] .text-slate-300,html[data-mode=light] .text-slate-400{color:#475569!important}
+/* ==========================================================================
+   ENHANCED LIGHT MODE DESIGN SYSTEM (Pristine, High-Contrast, Ergonomic)
+   ========================================================================== */
+html[data-mode=light]{
+    color-scheme: light;
+    --pp-panel: rgba(255, 255, 255, 0.94);
+    --pp-fg: #0f172a;
+    --pp-mut: #64748b;
+    --pp-line: rgba(15, 23, 42, 0.08);
+    --pp-accent: #0284c7;
+    --pp-accent2: #9333ea;
+    --pp-bg: #f8fafc;
+    --pp-noise-op: 0.02;
+    --a: #0284c7;
+    --a2: #6366f1;
+    --ar: 2, 132, 199;
+}
+html[data-mode=light] body[data-arc=summer]{
+    --a: #d97706;
+    --a2: #ea580c;
+    --ar: 217, 119, 6;
+}
+
+/* 1. Global Page Surface, Scrollbars & Atmospheric Lighting */
+html[data-mode=light] body{
+    background-color: #f8fafc !important;
+    background-image: radial-gradient(120% 55% at 50% -8%, rgba(2, 132, 199, 0.07), transparent 62%), radial-gradient(90% 50% at 100% 100%, rgba(147, 51, 234, 0.04), transparent 60%) !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] body[data-arc=summer]{
+    background-color: #faf8f5 !important;
+    background-image: radial-gradient(120% 55% at 50% -8%, rgba(251, 191, 36, 0.12), transparent 62%), radial-gradient(90% 50% at 100% 100%, rgba(244, 114, 182, 0.05), transparent 60%) !important;
+}
+html[data-mode=light] #bg-glow-1{
+    background: rgba(14, 165, 233, 0.08) !important;
+}
+html[data-mode=light] #bg-glow-2{
+    background: rgba(168, 85, 247, 0.06) !important;
+}
+html[data-mode=light] .bg-noise{
+    opacity: 0.02 !important;
+}
+html[data-mode=light] ::-webkit-scrollbar-track{
+    background: #f1f5f9 !important;
+}
+html[data-mode=light] ::-webkit-scrollbar-thumb{
+    background: #cbd5e1 !important;
+    border: 2px solid #f1f5f9;
+    border-radius: 9999px;
+}
+html[data-mode=light] ::-webkit-scrollbar-thumb:hover{
+    background: #94a3b8 !important;
+}
+@supports (scrollbar-color: auto) {
+    html[data-mode=light] {
+        scrollbar-color: #cbd5e1 #f1f5f9;
+    }
+}
+
+/* 2. Glass Cards & Elevated Panels */
+html[data-mode=light] .glass-card{
+    background: rgba(255, 255, 255, 0.88) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+html[data-mode=light] .glass-card-hover:hover{
+    border-color: rgba(2, 132, 199, 0.45) !important;
+    box-shadow: 0 12px 32px -4px rgba(2, 132, 199, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05) !important;
+    transform: translateY(-2px);
+}
+
+/* 3. Typography & High-Contrast Hierarchy */
+html[data-mode=light] .text-white{
+    color: #0f172a !important;
+}
+html[data-mode=light] .text-slate-100,
+html[data-mode=light] .text-slate-200{
+    color: #1e293b !important;
+}
+html[data-mode=light] .text-slate-300{
+    color: #334155 !important;
+}
+html[data-mode=light] .text-slate-400{
+    color: #475569 !important;
+}
+html[data-mode=light] .text-slate-500{
+    color: #64748b !important;
+}
+html[data-mode=light] .text-slate-600{
+    color: #94a3b8 !important;
+}
+
+/* High-Contrast Brand Accents */
+html[data-mode=light] .text-cyan-400,
+html[data-mode=light] .text-cyan-300,
+html[data-mode=light] .text-cyan-200{
+    color: #0284c7 !important;
+}
+html[data-mode=light] .text-amber-400,
+html[data-mode=light] .text-amber-300{
+    color: #b45309 !important;
+}
+html[data-mode=light] .text-emerald-400,
+html[data-mode=light] .text-emerald-300{
+    color: #047857 !important;
+}
+html[data-mode=light] .text-purple-400,
+html[data-mode=light] .text-purple-300{
+    color: #7c3aed !important;
+}
+html[data-mode=light] .text-blue-400,
+html[data-mode=light] .text-blue-300{
+    color: #1d4ed8 !important;
+}
+
+/* Clipped Gradient Headings & Numeric Displays */
+html[data-mode=light] #arc-main-title{
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 65%, #0284c7 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+html[data-mode=light] #laptop-timer-display{
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 70%, #0284c7 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+html[data-mode=light] #arc-completion-banner{
+    background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(238, 242, 255, 0.95) 100%) !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 12px 35px -5px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* 4. Elimination of Murky Dark Wells & Inner Boxes */
+html[data-mode=light] .bg-slate-900\/90,
+html[data-mode=light] .bg-slate-900\/80,
+html[data-mode=light] .bg-slate-900\/70,
+html[data-mode=light] .bg-slate-900\/60,
+html[data-mode=light] .bg-slate-900\/40,
+html[data-mode=light] .bg-slate-900,
+html[data-mode=light] .bg-slate-950\/95,
+html[data-mode=light] .bg-slate-950\/90,
+html[data-mode=light] .bg-slate-950\/80,
+html[data-mode=light] .bg-slate-950\/60,
+html[data-mode=light] .bg-slate-950\/50,
+html[data-mode=light] .bg-slate-950\/40,
+html[data-mode=light] .bg-slate-950{
+    background-color: rgba(241, 245, 249, 0.75) !important;
+    border-color: rgba(203, 213, 225, 0.75) !important;
+}
+html[data-mode=light] .border-slate-800\/80,
+html[data-mode=light] .border-slate-800\/60,
+html[data-mode=light] .border-slate-800,
+html[data-mode=light] .border-slate-700\/80,
+html[data-mode=light] .border-slate-700,
+html[data-mode=light] .border-slate-600{
+    border-color: rgba(203, 213, 225, 0.8) !important;
+}
+html[data-mode=light] .bg-slate-800{
+    background-color: #e2e8f0 !important;
+}
+
+/* 5. Clean Tactile Buttons & Badges */
+html[data-mode=light] button.bg-slate-800,
+html[data-mode=light] button.bg-slate-900,
+html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red),
+html[data-mode=light] .pp-btn:not(.on),
+html[data-mode=light] .pp-tab:not(.on){
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] button.bg-slate-800:hover,
+html[data-mode=light] button.bg-slate-900:hover,
+html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red):hover,
+html[data-mode=light] .pp-btn:not(.on):hover,
+html[data-mode=light] .pp-tab:not(.on):hover{
+    background-color: #f8fafc !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] button.bg-slate-800:active,
+html[data-mode=light] button.bg-slate-900:active{
+    background-color: #f1f5f9 !important;
+}
+html[data-mode=light] .bg-cyan-500,
+html[data-mode=light] button.bg-cyan-500{
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] .bg-cyan-500:hover,
+html[data-mode=light] button.bg-cyan-500:hover{
+    background-color: #0369a1 !important;
+}
+html[data-mode=light] .bg-cyan-500\/10,
+html[data-mode=light] .bg-cyan-500\/15,
+html[data-mode=light] .bg-cyan-500\/20{
+    background-color: rgba(2, 132, 199, 0.1) !important;
+    color: #0369a1 !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+}
+html[data-mode=light] .bg-amber-500\/10,
+html[data-mode=light] .bg-amber-500\/20,
+html[data-mode=light] .bg-amber-500\/30{
+    background-color: rgba(217, 119, 6, 0.1) !important;
+    color: #b45309 !important;
+    border-color: rgba(217, 119, 6, 0.3) !important;
+}
+html[data-mode=light] .bg-emerald-500\/10,
+html[data-mode=light] .bg-emerald-500\/20{
+    background-color: rgba(5, 150, 105, 0.1) !important;
+    color: #047857 !important;
+    border-color: rgba(5, 150, 105, 0.3) !important;
+}
+html[data-mode=light] .bg-purple-500\/10,
+html[data-mode=light] .bg-purple-500\/20{
+    background-color: rgba(124, 58, 237, 0.1) !important;
+    color: #6d28d9 !important;
+    border-color: rgba(124, 58, 237, 0.3) !important;
+}
+html[data-mode=light] .bg-blue-500\/10,
+html[data-mode=light] .bg-blue-500\/20{
+    background-color: rgba(29, 78, 216, 0.1) !important;
+    color: #1d4ed8 !important;
+    border-color: rgba(29, 78, 216, 0.3) !important;
+}
+
+/* 6. Form Inputs, Selects & Textareas */
+html[data-mode=light] input:not([type="checkbox"]):not([type="range"]):not([type="color"]),
+html[data-mode=light] select,
+html[data-mode=light] textarea,
+html[data-mode=light] .pp-in,
+html[data-mode=light] .sx-in,
+html[data-mode=light] .p13-in{
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] input::placeholder,
+html[data-mode=light] textarea::placeholder{
+    color: #94a3b8 !important;
+}
+html[data-mode=light] input:focus,
+html[data-mode=light] select:focus,
+html[data-mode=light] textarea:focus,
+html[data-mode=light] .pp-in:focus,
+html[data-mode=light] .sx-in:focus{
+    border-color: #0284c7 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] select option{
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* 7. Navigation (Header, Desktop Top Nav, Mobile Bottom Nav) */
+html[data-mode=light] header.glass-card{
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"]{
+    background: rgba(241, 245, 249, 0.9) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="true"]{
+    background: #ffffff !important;
+    color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+    border: 1px solid rgba(203, 213, 225, 0.7) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="false"]{
+    color: #475569 !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="false"]:hover{
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"]{
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"] button[aria-selected="true"]{
+    color: #0284c7 !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"] button[aria-selected="false"]{
+    color: #64748b !important;
+}
+
+/* 8. Calendar Days & Tiered Badges */
+html[data-mode=light] .calendar-day-card{
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] .calendar-grade-none{
+    background: rgba(241, 245, 249, 0.85) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    color: #475569 !important;
+}
+html[data-mode=light] .calendar-grade-none .grade-letter{
+    color: #94a3b8 !important;
+}
+html[data-mode=light] .calendar-grade-s{
+    background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%) !important;
+    border: 1.5px solid #10b981 !important;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.22) !important;
+    color: #065f46 !important;
+}
+html[data-mode=light] .calendar-grade-s .grade-letter{
+    color: #047857 !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-a{
+    background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+    border: 1.5px solid #0284c7 !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.18) !important;
+    color: #075985 !important;
+}
+html[data-mode=light] .calendar-grade-a .grade-letter{
+    color: #0284c7 !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-b{
+    background: linear-gradient(145deg, #faf5ff 0%, #f3e8ff 100%) !important;
+    border: 1.5px solid #a855f7 !important;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.16) !important;
+    color: #6b21a8 !important;
+}
+html[data-mode=light] .calendar-grade-b .grade-letter{
+    color: #7c3aed !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-c{
+    background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%) !important;
+    border: 1.5px solid #f59e0b !important;
+    color: #92400e !important;
+}
+html[data-mode=light] .calendar-grade-c .grade-letter{
+    color: #b45309 !important;
+}
+html[data-mode=light] .calendar-grade-f{
+    background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%) !important;
+    border: 1.5px solid #f43f5e !important;
+    color: #9f1239 !important;
+}
+html[data-mode=light] .calendar-grade-f .grade-letter{
+    color: #e11d48 !important;
+}
+html[data-mode=light] .pulse-today-ring{
+    outline: 2px solid #0284c7 !important;
+    box-shadow: 0 0 16px rgba(2, 132, 199, 0.35) !important;
+}
+html[data-mode=light] .calendar-day-selected{
+    outline: 2px solid #0f172a !important;
+}
+
+/* 9. Habits Rows & Checkboxes */
+html[data-mode=light] .habit-checkbox{
+    border-color: #cbd5e1 !important;
+    background-color: #ffffff !important;
+}
+html[data-mode=light] .habit-checkbox:checked{
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+}
+html[data-mode=light] .habit-row{
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+html[data-mode=light] .habit-row.border-l-slate-700{
+    border-left-color: #cbd5e1 !important;
+}
+html[data-mode=light] .habit-row.bg-emerald-950\/20{
+    background: rgba(236, 253, 245, 0.9) !important;
+    border-left-color: #10b981 !important;
+}
+
+/* 10. Modals, Drawers, Overlays & PIN Keypad */
+html[data-mode=light] .pp-modal,
+html[data-mode=light] #p13-m,
+html[data-mode=light] #arc-modal,
+html[data-mode=light] #pp12-back,
+html[data-mode=light] #arc-pin-overlay,
+html[data-mode=light] #screen-time-hub-modal,
+html[data-mode=light] #cyberdeck-terminal-modal,
+html[data-mode=light] #mandala-easter-egg-modal,
+html[data-mode=light] #summer-showcase-overlay,
+html[data-mode=light] #rpg-levelup-overlay,
+html[data-mode=light] #rpg-victory-cert-modal{
+    background: rgba(15, 23, 42, 0.45) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+}
+html[data-mode=light] .pp-box,
+html[data-mode=light] #p13-m .bx,
+html[data-mode=light] #arc-modal > div > div,
+html[data-mode=light] #screen-time-hub-modal > div > div,
+html[data-mode=light] #cyberdeck-terminal-modal > div > div{
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+}
+html[data-mode=light] #pp12-drawer{
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #0f172a !important;
+    border-left: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: -10px 0 35px rgba(15, 23, 42, 0.1) !important;
+}
+html[data-mode=light] .pp-tab,
+html[data-mode=light] .pp-btn{
+    background: rgba(241, 245, 249, 0.8) !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] .pp-tab.on,
+html[data-mode=light] .pp-btn.on,
+html[data-mode=light] #btn-ambient-toggle.on{
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+    background: rgba(2, 132, 199, 0.12) !important;
+}
+html[data-mode=light] .pp-row{
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] .pp-lab{
+    color: #64748b !important;
+}
+html[data-mode=light] .arc-pad-btn{
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] .arc-pad-btn:hover{
+    background: rgba(2, 132, 199, 0.1) !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #pp12-hud{
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+html[data-mode=light] #toast{
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    border: 1px solid #0284c7 !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15) !important;
+}
+html[data-mode=light] #toast #toast-icon{
+    color: #0284c7 !important;
+}
+
+/* 11. Spider Web Radar & Graphics */
+html[data-mode=light] .spider-web-outer-rim{
+    stroke: rgba(2, 132, 199, 0.4) !important;
+    filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.25)) !important;
+}
+html[data-mode=light] .spider-web-grid{
+    stroke: rgba(148, 163, 184, 0.4) !important;
+}
+html[data-mode=light] .spider-radar-beam-line{
+    stroke: #0284c7 !important;
+}
+html[data-mode=light] .p13-bar{
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] .pq0{
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] .pq1{
+    background: #94a3b8 !important;
+}
+html[data-mode=light] .p13-hm .td{
+    outline-color: #0f172a !important;
+}
+html[data-mode=light] .sx-sw span{
+    background: #cbd5e1 !important;
+}
+html[data-mode=light] .sx-seg{
+    border-color: #cbd5e1 !important;
+    background: #f1f5f9 !important;
+}
+html[data-mode=light] .sx-seg button{
+    color: #475569 !important;
+}
+html[data-mode=light] .sx-seg button[aria-pressed="true"]{
+    background: #ffffff !important;
+    color: #0284c7 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+}
 html[data-mode=night] body{background:#000!important}
 html[data-mode=night] .glass-card{background:rgba(0,0,0,.92)!important}
 html.pp-themed body{background:var(--pp-bg)}
@@ -5044,12 +5546,16 @@ function density(){if(typeof fxParticles==='undefined')return;const n=DN[S().par
  while(fxParticles.length>n)fxParticles.pop();while(fxParticles.length<n)fxParticles.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,radius:Math.random()*2.8+.5,vx:(Math.random()-.5)*.5,vy:Math.random()*.8+.3,alpha:Math.random()*.5+.2});if(window.__fxStart)window.__fxStart()}
 
 /* ---------- THEMES ---------- */
-function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.documentElement,acc=s.customAccentOn?s.customAccentHex:t[2];
- r.style.setProperty('--pp-accent',acc);r.style.setProperty('--pp-accent2',t[3]);r.style.setProperty('--pp-bg',t[4]);r.style.setProperty('--pp-noise-op',s.noiseOpacity);R.col=rgb(acc);
+function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.documentElement,isLight=s.mode==='light',acc=s.customAccentOn?s.customAccentHex:(isLight?'#0284c7':t[2]);
+ r.style.setProperty('--pp-accent',acc);r.style.setProperty('--pp-accent2',t[3]);r.style.setProperty('--pp-bg',isLight?'#f8fafc':t[4]);r.style.setProperty('--pp-noise-op',isLight?0.02:s.noiseOpacity);R.col=rgb(acc);
+ if(window.__fxRGB!==undefined&&isLight)window.__fxRGB='2, 132, 199';
  r.setAttribute('data-theme',s.theme);r.setAttribute('data-mode',s.mode);r.setAttribute('data-transition',s.transition);
  r.classList.toggle('pp-themed',s.theme!=='deep-nebula'||!!s.customAccentOn);r.classList.toggle('pp-eco',!!s.performanceMode);
  const n=$('.bg-noise');if(n)n.style.display=s.noiseOverlay?'':'none';
- try{localStorage.setItem('arc_app_theme',s.theme);localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}}
+ try{localStorage.setItem('arc_app_theme',s.theme);localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}
+ const mb=$('#header-mode-toggle-btn'),mi=$('#header-mode-toggle-icon'),ml=$('#header-mode-toggle-label');
+ if(mb&&mi){mi.className=isLight?'fa-solid fa-moon text-indigo-400':'fa-solid fa-sun text-amber-400';if(ml)ml.textContent=isLight?'Dark Mode':'Light Mode';mb.title=isLight?'Switch to Dark Mode':'Switch to Light Mode';mb.setAttribute('aria-label',isLight?'Switch to Dark Mode':'Switch to Light Mode')}
+ try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){}}
 
 /* ---------- FOCUS / POMODORO + SCREEN TIME ---------- */
 const fset=()=>{F.left=(F.mode==='work'?S().focusWork:S().focusBreak)*60};
@@ -5251,6 +5757,7 @@ const _tm=window.toggleAudioMute;window.toggleAudioMute=function(){const r=_tm.a
 /* Pro 12 API compatibility */
 window.setAppTheme=t=>{S().theme=t==='cosmic'?'deep-nebula':t;S().customAccentOn=false;applyTheme();save();ui()};
 window.setAppMode=m=>{S().mode=m;applyTheme();save();ui()};window.setAppTransition=t=>{S().transition=t;applyTheme();save();ui()};
+window.toggleLightDarkMode=()=>{const cur=S().mode||document.documentElement.getAttribute('data-mode')||'dark';window.setAppMode(cur==='light'?'dark':'light')};
 window.toggleCelestialAudio=toggleAmb;window.setCelestialVolume=v=>{S().ambientVolume=v/100;vol();save();ui()};
 window.PP12={settings:S,play,stop:stopAmb,openSettings:openDrawer,closeAll,exportJSON:expJSON,exportCSV:expCSV};
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
