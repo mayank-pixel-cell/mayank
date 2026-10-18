@@ -25,11 +25,13 @@
 ## 🌟 Core Philosophy & Features
 
 ### 🛡️ 100% Offline-First & Air-Gapped Privacy
+
 - **Zero Cloud Reliance:** No logins, no remote database servers, no third-party trackers, and no advertising beacons.
 - **Client-Side Encryption:** All habits, logs, streaks, and journal entries are encrypted and stored locally via IndexedDB and the Tauri Plugin Store.
 - **Airgap Content Security Policy (CSP):** All fonts, Tailwind styles, and FontAwesome icons are strictly bundled offline inside `/public/assets/`.
 
 ### 🎮 RPG Habit Gamification
+
 - **Daily Rank System:** Dynamic grading from **Rank S** (100% perfection), **Rank A**, **Rank B**, **Rank C**, down to **Rank F**.
 - **Radar & Spider Chart:** Real-time multi-dimensional visualizer displaying balance across physical, mental, focus, and lifestyle disciplines.
 - **Interactive Heatmap:** 365-day calendar visualization tracking consistency and momentum over time.
@@ -62,7 +64,8 @@ Downloads are available under [Releases](https://github.com/mayank-pixel-cell/ma
 
 ### iOS (iPhone & iPad)
 
-#### Zero-Install Standalone Web App (PWA):
+#### Zero-Install Standalone Web App (PWA)
+
 1. Serve the app over your local Wi-Fi via `npm run dev -- --host` or host the static `dist/` directory.
 2. Open Safari on your iPhone/iPad and navigate to your host address.
 3. Tap the **Share** icon at the bottom of Safari.
@@ -86,6 +89,7 @@ Downloads are available under [Releases](https://github.com/mayank-pixel-cell/ma
 ### Multi-Device Screen Time Engine
 
 Arc Tracker features a background screen time and focus telemetry system:
+
 - **Background Tracking Worker:** Keeps recording elapsed focus time accurately even when minimized.
 - **Hardware Sleep & Lid Watchdog:** Automatically pauses tracking when the computer goes into deep sleep or the laptop lid is shut.
 - **System Uptime Bridge:** Uses native hardware counters (`GetTickCount64` on Windows) to verify true device uptime.
@@ -139,15 +143,18 @@ graph TD
 
 ## ❓ Frequently Asked Questions (FAQ)
 
-#### Q: Why did Android say "App can't be installed"?
+### Q: Why did Android say "App can't be installed"?
+
 - **Conflicting signature:** If you previously installed a test or debug build, Android will refuse to overwrite it. Simply **uninstall the old Arc Tracker app** from your phone first, then tap the new `.apk`.
 - **Downloaded a `.zip`:** GitHub Actions bundles downloads in a ZIP. Ensure you extract the `.zip` in your phone's file manager and tap `Arc-Tracker-release-signed.apk`.
 - **Do not install `.aab`:** Android devices cannot directly install Google Play Store bundles (`.aab`). Always install the `.apk` file.
 
-#### Q: Does Arc Tracker drain battery in the background?
+### Q: Does Arc Tracker drain battery in the background?
+
 No. The background screen time listener uses low-overhead timer ticks and immediately suspends execution when device idle or sleep states are detected.
 
-#### Q: How do I transfer my data from my computer to my phone?
+### Q: How do I transfer my data from my computer to my phone?
+
 Go to **Settings** on your computer ➔ tap **Export Backup (JSON)**. Send the `.json` file to your phone, open Arc Tracker on your phone, open **Settings** ➔ tap **Import Backup**.
 
 ---
