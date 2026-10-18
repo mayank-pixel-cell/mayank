@@ -16,6 +16,7 @@
   - [Multi-Device Screen Time Engine](#multi-device-screen-time-engine)
   - [Dual Theme System (Light & Dark OLED)](#dual-theme-system-light--dark-oled)
   - [Security PIN Keypad](#security-pin-keypad)
+  - [Google Account & Cross-Device Cloud Syncing](#google-account--cross-device-cloud-syncing)
   - [Data Backup & Migration](#data-backup--migration)
 - [4. Technical Architecture](#-technical-architecture)
 - [5. Frequently Asked Questions (FAQ)](#-frequently-asked-questions-faq)
@@ -121,7 +122,7 @@ Arc Tracker features a background screen time and focus telemetry system:
 
 ---
 
-## 🏗️ Technical Architecture
+## 🏗 Technical Architecture
 
 ```mermaid
 graph TD
