@@ -206,7 +206,7 @@ html = html.replace(/[\u0080-\u009F]/g, '');
 // 6. Add Screen Time Hub Button to Header
 const screenTimeHeaderBtn = `<button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix (Phones, Macs & Laptops)">
                     <i class="fa-solid fa-clock text-cyan-400"></i>
-                    <span class="hidden lg:inline ml-1.5">Screen Time</span>
+                    <span class="hidden 2xl:inline ml-1.5">Screen Time</span>
                 </button>\n                `;
 
 if (!html.includes('title="Screen Time Matrix (Phones, Macs & Laptops)"')) {

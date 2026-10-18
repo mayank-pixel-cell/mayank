@@ -933,45 +933,45 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <h1 id="arc-main-title" class="font-black text-sm sm:text-lg tracking-wide bg-gradient-to-r from-white via-cyan-100 to-cyan-400 bg-clip-text text-transparent flex items-center">
                         WINTER ARC <span id="arc-year-badge" class="text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 ml-1 font-semibold">2026</span>
                     </h1>
-                    <p id="arc-subtitle" class="text-[10px] sm:text-xs text-slate-400">Oct 1 - Dec 31 • Transform in Silence</p>
+                    <p id="arc-subtitle" class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Oct 1 - Dec 31 • Transform in Silence</p>
                 </div>
             </div>
 
+            <!-- DESKTOP TOP NAV (PRIMARY NAVIGATION - ALWAYS VISIBLE, NEVER CUT OFF) -->
+            <nav role="tablist" aria-label="Desktop Navigation" class="hidden md:flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 shadow-inner shrink-0">
+                <button id="tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onmouseenter="playSfx('hover')" onclick="switchTab('tracker')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Tracker</span>
+                </button>
+                <button id="tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onmouseenter="playSfx('hover')" onclick="switchTab('rules')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Rules</span>
+                </button>
+                <button id="tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onmouseenter="playSfx('hover')" onclick="switchTab('progression')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-crown text-amber-400"></i>
+                    <span>Level/KB</span>
+                </button>
+                <button id="tab-results" role="tab" aria-selected="false" aria-controls="view-results" onmouseenter="playSfx('hover')" onclick="switchTab('results')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    <span>Results</span>
+                </button>
+                <button id="tab-settings" title="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onmouseenter="playSfx('hover')" onclick="switchTab('settings')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
             <!-- ACTION BUTTONS -->
-            <div class="flex items-center space-x-1.5 sm:space-x-2">
+            <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>
                 <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode(); playSfx('click')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-300 border border-slate-700/80 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:border-cyan-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
                     <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400"></i>
-                    <span class="hidden xl:inline ml-1.5" id="header-mode-toggle-label">Light Mode</span>
+                    <span class="hidden 2xl:inline ml-1.5" id="header-mode-toggle-label">Light Mode</span>
                 </button>
                 <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
                     <i id="header-arc-switch-icon" class="fa-solid fa-sun text-amber-400"></i>
-                    <span class="hidden md:inline ml-1.5" id="arc-switch-btn-text">Start Summer Arc</span>
+                    <span class="hidden xl:inline ml-1.5" id="arc-switch-btn-text">Start Summer Arc</span>
                 </button>
-
-                <!-- DESKTOP TOP NAV -->
-                <nav role="tablist" aria-label="Desktop Navigation" class="hidden md:flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800 ml-2">
-                    <button id="tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onmouseenter="playSfx('hover')" onclick="switchTab('tracker')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-list-check"></i>
-                        <span>Daily Tracker</span>
-                    </button>
-                    <button id="tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onmouseenter="playSfx('hover')" onclick="switchTab('rules')" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <span>Non-Negotiables</span>
-                    </button>
-                    <button id="tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onmouseenter="playSfx('hover')" onclick="switchTab('progression')" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-crown text-amber-400"></i>
-                        <span>Level &amp; KB</span>
-                    </button>
-                    <button id="tab-results" role="tab" aria-selected="false" aria-controls="view-results" onmouseenter="playSfx('hover')" onclick="switchTab('results')" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-diagram-project"></i>
-                        <span>Results</span>
-                    </button>
-                    <button id="tab-settings" title="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onmouseenter="playSfx('hover')" onclick="switchTab('settings')" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Settings &amp; Controls</span>
-                    </button>
-                </nav>
             </div>
         </div>
     </header>
@@ -1504,7 +1504,30 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         
         <!-- SETTINGS VIEW -->
         <section id="view-settings" class="hidden pb-24 md:pb-8" aria-label="Settings &amp; Controls">
-            <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-gear text-cyan-400"></i><h2 class="text-base sm:text-lg font-black text-white">Settings &amp; Controls</h2></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-gear text-base"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-black text-white">Settings &amp; Controls</h2>
+                        <p class="text-[11px] text-slate-400">Configure habits, day cycle, audio/visual theme engines, and cloud sync</p>
+                    </div>
+                </div>
+
+                <!-- SETTINGS CATEGORY TABS -->
+                <div id="settings-view-subtabs" class="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs shrink-0 self-start sm:self-auto">
+                    <button type="button" id="settings-subtab-all" onclick="filterSettingsView('all')" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition">
+                        <i class="fa-solid fa-sliders mr-1"></i> All Settings
+                    </button>
+                    <button type="button" id="settings-subtab-habits" onclick="filterSettingsView('habits')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-list-check mr-1"></i> Habits &amp; Day
+                    </button>
+                    <button type="button" id="settings-subtab-account" onclick="filterSettingsView('account')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-user-shield mr-1"></i> Accounts &amp; Sync
+                    </button>
+                </div>
+            </div>
             <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
             <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
         </section>
@@ -3541,9 +3564,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (desktopTab) {
                     desktopTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
                     if (t === tabName) {
-                        desktopTab.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
+                        desktopTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
                     } else {
-                        desktopTab.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
+                        desktopTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
                     }
                 }
 
@@ -3567,6 +3590,47 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
             }
         }
+
+        function filterSettingsView(category) {
+            playSfx('click');
+            const allBtn = document.getElementById('settings-subtab-all');
+            const habitsBtn = document.getElementById('settings-subtab-habits');
+            const accountBtn = document.getElementById('settings-subtab-account');
+            
+            [allBtn, habitsBtn, accountBtn].forEach(b => {
+                if (!b) return;
+                b.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
+            });
+            
+            const activeBtn = document.getElementById(`settings-subtab-${category}`);
+            if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
+
+            const p20Account = document.getElementById('p20-google-account');
+            const p20Day = document.getElementById('p20-day');
+            const p20Habit = document.getElementById('p20-habit-manager');
+            const sxRoot = document.getElementById('sx-root');
+
+            if (category === 'all') {
+                if (p20Account) p20Account.style.display = '';
+                if (p20Day) p20Day.style.display = '';
+                if (p20Habit) p20Habit.style.display = '';
+                if (sxRoot) sxRoot.style.display = '';
+            } else if (category === 'habits') {
+                if (p20Account) p20Account.style.display = 'none';
+                if (p20Day) p20Day.style.display = '';
+                if (p20Habit) p20Habit.style.display = '';
+                if (sxRoot) sxRoot.style.display = '';
+            } else if (category === 'account') {
+                if (p20Account) p20Account.style.display = '';
+                if (p20Day) p20Day.style.display = 'none';
+                if (p20Habit) p20Habit.style.display = 'none';
+                if (sxRoot) sxRoot.style.display = 'none';
+                if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
+                    window.ArcGoogleSync.renderUi();
+                }
+            }
+        }
+        window.filterSettingsView = filterSettingsView;
 
         function renderHabits() {
             const container = document.getElementById('habits-container');
@@ -4945,11 +5009,11 @@ html[data-mode=light] .arc-click-ripple {
   <div class="flex items-center justify-between p-4 pb-2"><h2 class="font-black text-lg"><i class="fa-solid fa-gear"></i> Settings</h2><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-close" aria-label="Close settings">✕</button></div>
   <div class="px-4"><input id="settings-search" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" type="search" placeholder="Search settings…" aria-label="Search settings"></div>
   <div id="pp-tabs" role="tablist" aria-label="Settings categories" class="flex gap-1 p-4 pb-2 overflow-x-auto">
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="account">[ 👤 Accounts &amp; Sync ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="audio">[ Audio &amp; Synth ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="vis">[ Visuals &amp; Themes ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="habit">[ Habit Engine ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="focus">[ Focus &amp; Time ]</button>
+    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="account">[ 👤 Accounts &amp; Sync ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sys">[ System &amp; Data ]</button>
     <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sec">[ 🛡️ Security Sentinel ]</button>
   </div>
@@ -9239,9 +9303,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       if (dTab) {
         dTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
         if (t === tabName) {
-          dTab.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
+          dTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
         } else {
-          dTab.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
+          dTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
         }
       }
       if (mTab) {
