@@ -1824,41 +1824,83 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const now = audioCtx.currentTime;
 
                 if (type === 'check') {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, now);
-                    osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.14);
-                    gain.gain.setValueAtTime(0.1875, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-                    osc.connect(gain);
-                    gain.connect(sfxOut());
-                    osc.start(now);
-                    osc.stop(now + 0.25);
+                    // 1. Transient tactile attack click
+                    const pop = audioCtx.createOscillator();
+                    const popG = audioCtx.createGain();
+                    pop.type = 'triangle';
+                    pop.frequency.setValueAtTime(920, now);
+                    pop.frequency.exponentialRampToValueAtTime(280, now + 0.035);
+                    popG.gain.setValueAtTime(0.12, now);
+                    popG.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    pop.connect(popG); popG.connect(sfxOut());
+                    pop.start(now); pop.stop(now + 0.045);
+
+                    // 2. Shimmering celestial major chord arpeggio (C5 -> E5 -> G5 -> C6)
+                    const chord = [523.25, 659.25, 783.99, 1046.50];
+                    chord.forEach((f, i) => {
+                        const t = now + i * 0.032;
+                        const o1 = audioCtx.createOscillator();
+                        const o2 = audioCtx.createOscillator(); // detuned for lush sparkle
+                        const g = audioCtx.createGain();
+                        o1.type = 'sine';
+                        o2.type = 'triangle';
+                        o1.frequency.setValueAtTime(f, t);
+                        o2.frequency.setValueAtTime(f * 1.004, t);
+                        g.gain.setValueAtTime(0.0001, t);
+                        g.gain.exponentialRampToValueAtTime(0.15, t + 0.015);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+                        o1.connect(g); o2.connect(g);
+                        g.connect(sfxOut());
+                        o1.start(t); o2.start(t);
+                        o1.stop(t + 0.44); o2.stop(t + 0.44);
+                    });
+
+                    // 3. Warm sub-harmonic bass foundation (82.4Hz)
+                    const sub = audioCtx.createOscillator();
+                    const subG = audioCtx.createGain();
+                    sub.type = 'sine';
+                    sub.frequency.setValueAtTime(82.4, now);
+                    sub.frequency.exponentialRampToValueAtTime(41.2, now + 0.18);
+                    subG.gain.setValueAtTime(0.14, now);
+                    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    sub.connect(subG); subG.connect(sfxOut());
+                    sub.start(now); sub.stop(now + 0.22);
                 } else if (type === 'uncheck') {
+                    // Organic soft descending lowpass bubble drop
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(850, now);
+                    filter.frequency.exponentialRampToValueAtTime(180, now + 0.11);
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(320, now);
-                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
-                    gain.gain.setValueAtTime(0.135, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-                    osc.connect(gain);
-                    gain.connect(sfxOut());
-                    osc.start(now);
-                    osc.stop(now + 0.12);
+                    osc.frequency.setValueAtTime(360, now);
+                    osc.frequency.exponentialRampToValueAtTime(120, now + 0.11);
+                    gain.gain.setValueAtTime(0.13, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+                    osc.connect(gain); gain.connect(filter); filter.connect(sfxOut());
+                    osc.start(now); osc.stop(now + 0.12);
                 } else if (type === 'click') {
-                    const osc = audioCtx.createOscillator();
+                    // Silky organic mechanical bubble pop
+                    const osc1 = audioCtx.createOscillator();
+                    const osc2 = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(750, now);
-                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
-                    gain.gain.setValueAtTime(0.09, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                    osc.connect(gain);
-                    gain.connect(sfxOut());
-                    osc.start(now);
-                    osc.stop(now + 0.05);
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(2600, now);
+                    filter.frequency.exponentialRampToValueAtTime(500, now + 0.03);
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(820, now);
+                    osc1.frequency.exponentialRampToValueAtTime(260, now + 0.03);
+                    osc2.type = 'triangle';
+                    osc2.frequency.setValueAtTime(1400, now);
+                    osc2.frequency.exponentialRampToValueAtTime(340, now + 0.02);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+                    osc1.connect(gain); osc2.connect(gain);
+                    gain.connect(filter); filter.connect(sfxOut());
+                    osc1.start(now); osc2.start(now);
+                    osc1.stop(now + 0.04); osc2.stop(now + 0.04);
                 } else if (type === 'hover') {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
@@ -1871,35 +1913,70 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     osc.start(now);
                     osc.stop(now + 0.03);
                 } else if (type === 'tab') {
+                    // Glass marimba glissando + soft air filter swoosh
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.exponentialRampToValueAtTime(660, now + 0.08);
-                    gain.gain.setValueAtTime(0.075, now);
+                    osc.frequency.setValueAtTime(587.33, now); // D5
+                    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.06); // A5
+                    gain.gain.setValueAtTime(0.07, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc.connect(gain);
-                    gain.connect(sfxOut());
-                    osc.start(now);
-                    osc.stop(now + 0.08);
+                    osc.connect(gain); gain.connect(sfxOut());
+                    osc.start(now); osc.stop(now + 0.085);
+                } else if (type === 'themeShift') {
+                    const isLight = document.documentElement.getAttribute('data-mode') === 'light';
+                    if (isLight) {
+                        // Crystal sunburst chime cascade
+                        [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
+                            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                            o.type = 'sine'; o.frequency.setValueAtTime(f, now + i * 0.035);
+                            g.gain.setValueAtTime(0.08, now + i * 0.035);
+                            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.035 + 0.28);
+                            o.connect(g); g.connect(sfxOut());
+                            o.start(now + i * 0.035); o.stop(now + i * 0.035 + 0.3);
+                        });
+                    } else {
+                        // Deep cyberpunk warp resonance drop
+                        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.setValueAtTime(440, now);
+                        o.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+                        g.gain.setValueAtTime(0.12, now);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+                        o.connect(g); g.connect(sfxOut());
+                        o.start(now); o.stop(now + 0.25);
+                    }
+                } else if (type === 'zenBell') {
+                    // Authentic singing bowl harmonic bell
+                    [432.0, 864.0, 1296.0].forEach((freq, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now);
+                        gain.gain.setValueAtTime(0.0001, now);
+                        gain.gain.exponentialRampToValueAtTime(0.18 / (idx + 1), now + 0.04);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.4);
+                        osc.connect(gain); gain.connect(sfxOut());
+                        osc.start(now); osc.stop(now + 2.5);
+                    });
                 } else if (type === 'modalOpen') {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(220, now);
-                    osc.frequency.exponentialRampToValueAtTime(440, now + 0.18);
-                    gain.gain.setValueAtTime(0.1125, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.frequency.setValueAtTime(240, now);
+                    osc.frequency.exponentialRampToValueAtTime(480, now + 0.16);
+                    gain.gain.setValueAtTime(0.11, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
                     osc.connect(gain);
                     gain.connect(sfxOut());
                     osc.start(now);
-                    osc.stop(now + 0.2);
+                    osc.stop(now + 0.18);
                 } else if (type === 'modalClose') {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+                    osc.frequency.setValueAtTime(480, now);
+                    osc.frequency.exponentialRampToValueAtTime(240, now + 0.12);
                     gain.gain.setValueAtTime(0.09, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
                     osc.connect(gain);
@@ -1931,19 +2008,38 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     pg.gain.setValueAtTime(0.0001, now); pg.gain.exponentialRampToValueAtTime(0.1, now + 0.5); pg.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
                     pad.connect(pg); pg.connect(lp); pad.start(now); pad.stop(now + 1.85);
                 } else if (type === 'fanfare') {
-                    const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51];
-                    freqs.forEach((f, idx) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(f, now + idx * 0.06);
-                        gain.gain.setValueAtTime(0.15, now + idx * 0.06);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.4);
-                        osc.connect(gain);
-                        gain.connect(sfxOut());
-                        osc.start(now + idx * 0.06);
-                        osc.stop(now + idx * 0.06 + 0.4);
+                    // Royal celebratory victory fanfare
+                    const chord = [
+                        { f: 523.25, t: 0.00 }, // C5
+                        { f: 659.25, t: 0.05 }, // E5
+                        { f: 783.99, t: 0.10 }, // G5
+                        { f: 1046.50, t: 0.15 }, // C6
+                        { f: 1318.51, t: 0.22 }, // E6
+                        { f: 1567.98, t: 0.28 }, // G6
+                        { f: 2093.00, t: 0.35 }  // C7 Shimmer
+                    ];
+                    chord.forEach(({ f, t }) => {
+                        const o1 = audioCtx.createOscillator();
+                        const o2 = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o1.type = 'triangle';
+                        o2.type = 'sine';
+                        o1.frequency.setValueAtTime(f, now + t);
+                        o2.frequency.setValueAtTime(f * 1.003, now + t);
+                        g.gain.setValueAtTime(0.0001, now + t);
+                        g.gain.exponentialRampToValueAtTime(0.18, now + t + 0.02);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + t + 0.65);
+                        o1.connect(g); o2.connect(g);
+                        g.connect(sfxOut());
+                        o1.start(now + t); o2.start(now + t);
+                        o1.stop(now + t + 0.7); o2.stop(now + t + 0.7);
                     });
+                    const sub = audioCtx.createOscillator(), subG = audioCtx.createGain();
+                    sub.type = 'sine'; sub.frequency.setValueAtTime(130.81, now);
+                    subG.gain.setValueAtTime(0.18, now);
+                    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+                    sub.connect(subG); subG.connect(sfxOut());
+                    sub.start(now); sub.stop(now + 0.9);
                 } else if (type === 'gradeS' || type === 'gradeA' || type === 'gradeB') {
                     playGradeSfx(type.replace('grade', ''));
                 } else if (type === 'secretUnlocked') {
@@ -2129,6 +2225,69 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
         }
         window.playGradeSfx = playGradeSfx;
+
+        function playKeypadNote(digit) {
+            if (isMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+                const d = parseInt(digit, 10);
+                const freq = scale[isNaN(d) ? 0 : (d % scale.length)];
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.12, now + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                osc.connect(gain); gain.connect(sfxOut());
+                osc.start(now); osc.stop(now + 0.24);
+            } catch(e) {}
+        }
+        window.playKeypadNote = playKeypadNote;
+
+        function createClickRipple(e, targetEl) {
+            try {
+                const target = targetEl || (e && e.target && e.target.closest('button, [role="button"], [role="tab"], .calendar-day-card, .arc-pad-btn, .pp-btn, .pp-tab, .habit-row, .glass-card-hover'));
+                if (!target) return;
+                const rect = target.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height) * 1.6;
+                const clickX = (e && e.clientX ? e.clientX : (rect.left + rect.width / 2));
+                const clickY = (e && e.clientY ? e.clientY : (rect.top + rect.height / 2));
+                const x = clickX - rect.left - size / 2;
+                const y = clickY - rect.top - size / 2;
+
+                ripple.className = 'arc-click-ripple';
+                ripple.style.width = `${size}px`;
+                ripple.style.height = `${size}px`;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+
+                const computedPos = window.getComputedStyle(target).position;
+                if (computedPos === 'static') target.style.position = 'relative';
+                target.style.overflow = 'hidden';
+
+                target.appendChild(ripple);
+                setTimeout(() => { if (ripple.parentNode) ripple.remove(); }, 550);
+            } catch(err) {}
+        }
+        window.createClickRipple = createClickRipple;
+
+        // Global Tactile Feedback & Touch Ripple
+        let _lastSfxTime = 0;
+        document.addEventListener('click', (e) => {
+            const clickable = e.target.closest('button, [role="button"], [role="tab"], .calendar-day-card, .arc-pad-btn, .pp-btn, .pp-tab');
+            if (!clickable) return;
+            createClickRipple(e, clickable);
+            const now = Date.now();
+            if (now - _lastSfxTime > 50 && !clickable.closest('.habit-checkbox') && !clickable.hasAttribute('onclick')) {
+                _lastSfxTime = now;
+                playSfx('click');
+            }
+        }, { passive: true });
 
         /* ==========================================================================
            2. CANVAS VISUAL EFFECTS MODULE (OPTIMIZED WITH PAGE VISIBILITY API)
@@ -3425,7 +3584,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const desktopTab = document.getElementById(`tab-${t}`);
                 const mobileTab = document.getElementById(`mobile-tab-${t}`);
 
-                if (view) view.classList.toggle('hidden', t !== tabName);
+                if (view) {
+                    const isTarget = (t === tabName);
+                    view.classList.toggle('hidden', !isTarget);
+                    if (isTarget) {
+                        view.classList.remove('tab-view-enter');
+                        void view.offsetWidth;
+                        view.classList.add('tab-view-enter');
+                    }
+                }
 
                 if (desktopTab) {
                     desktopTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
@@ -4703,11 +4870,125 @@ html[data-transition=bounce] .tab-view-enter{animation:pp-bounce .5s ease both}
 #pp-heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:11px;gap:3px;width:max-content}
 .pp-cell{width:11px;height:11px;border-radius:2px;background:rgba(127,127,127,.2)}
 #pp12-hud{position:fixed;left:50%;bottom:4.5rem;transform:translateX(-50%);z-index:45;display:none;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:999px;background:var(--pp-panel);color:var(--pp-fg);border:1px solid var(--pp-accent);font:800 .9rem monospace;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-body.pp-focus #habits-container,body.pp-focus #stat-today-completion,body.pp-focus #stat-streak,body.pp-focus #stat-overall-score,body.pp-focus #quote-card-container{visibility:hidden}
-.arc-pad-btn{display:flex;align-items:center;justify-content:center;height:2.85rem;border-radius:.75rem;background:rgba(30,41,59,.7);border:1px solid rgba(51,65,85,.7);color:#f1f5f9;font-weight:700;font-size:1.15rem;cursor:pointer;transition:all .15s}
-.arc-pad-btn:hover{background:rgba(0,240,255,.15);border-color:var(--pp-accent,#00f0ff);color:var(--pp-accent,#00f0ff)}
-.arc-pad-btn:active{transform:scale(.95)}
-#arc-pin-overlay{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+/* 12. Fluid Spring Dynamics, Visual Shimmers & Touch Ripples */
+.tab-view-enter {
+    animation: arcTabEnter 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes arcTabEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Tactile Spring Presses on Interactive Elements */
+button:not(:disabled), [role="button"], [role="tab"], .arc-pad-btn, .pp-btn, .pp-tab, .sx-btn {
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease !important;
+}
+button:not(:disabled):active, [role="button"]:active, [role="tab"]:active, .arc-pad-btn:active, .pp-btn:active, .pp-tab:active, .sx-btn:active {
+    transform: scale(0.94) translateY(1px) !important;
+}
+
+/* Bouncy Elastic Habit Checkboxes */
+.habit-checkbox {
+    transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+    cursor: pointer;
+}
+.habit-checkbox:checked {
+    animation: arcCheckboxPop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.55) !important;
+}
+html[data-mode=light] .habit-checkbox:checked {
+    box-shadow: 0 0 14px rgba(2, 132, 199, 0.45) !important;
+}
+@keyframes arcCheckboxPop {
+    0% { transform: scale(0.68); }
+    55% { transform: scale(1.32); }
+    100% { transform: scale(1); }
+}
+
+/* Glowing Habit Row Pulse on Completion */
+.rpg-task-pulse {
+    animation: arcHabitPulse 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+@keyframes arcHabitPulse {
+    0% { transform: scale(0.985); filter: brightness(1.25); }
+    50% { transform: scale(1.025); filter: brightness(1.45); box-shadow: 0 0 28px rgba(0, 240, 255, 0.4); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Liquid Specular Highlights on Progress Bars */
+#progress-today-bar, #overall-progress-bar, .xp-progress-bar-fill, #today-progress-bar, #header-score-bar-fill {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#progress-today-bar::after, #overall-progress-bar::after, .xp-progress-bar-fill::after, #today-progress-bar::after, #header-score-bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: arcProgressHighlight 2.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+@keyframes arcProgressHighlight {
+    0% { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(200%); }
+}
+
+/* Calendar Day Card Magnetic Hover & Selection */
+.calendar-day-card {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.2s ease !important;
+    cursor: pointer;
+}
+.calendar-day-card:hover {
+    transform: translateY(-3px) scale(1.08) !important;
+    z-index: 20;
+    box-shadow: 0 10px 22px rgba(0, 240, 255, 0.25) !important;
+}
+html[data-mode=light] .calendar-day-card:hover {
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.22) !important;
+}
+.calendar-day-card:active {
+    transform: scale(0.92) !important;
+}
+
+/* Interactive Soft Glow Touch Ripple */
+.arc-click-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.42) 0%, rgba(0, 240, 255, 0.12) 50%, transparent 70%);
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 1;
+    animation: arcRippleKeyframe 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 50;
+}
+html[data-mode=light] .arc-click-ripple {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.32) 0%, rgba(2, 132, 199, 0.08) 50%, transparent 70%);
+}
+@keyframes arcRippleKeyframe {
+    0% { transform: scale(0.08); opacity: 0.9; }
+    100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Floating XP & Combat Sparkle Rise */
+.floating-xp-anim {
+    animation: floatingXpRise 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    pointer-events: none;
+}
+@keyframes floatingXpRise {
+    0% { transform: translateY(0) scale(0.7); opacity: 0; filter: drop-shadow(0 0 6px rgba(0,240,255,0.8)); }
+    22% { transform: translateY(-18px) scale(1.15); opacity: 1; }
+    100% { transform: translateY(-60px) scale(0.95); opacity: 0; filter: drop-shadow(0 0 14px rgba(0,240,255,0)); }
+}
 </style>
 
 <div id="pp12-live" class="pp-sr" aria-live="polite" role="status"></div>
@@ -5164,12 +5445,14 @@ window.ArcSecurity = (function() {
       return;
     }
     if (/^\d$/.test(val) && _pinBuffer.length < 6) {
+      if (window.playKeypadNote) window.playKeypadNote(val);
       _pinBuffer += val;
       _updatePinDots();
       if (_pinBuffer.length >= 4) {
         const ok = await verifyPin(_pinBuffer);
         if (ok) {
           hideLockScreen();
+          if (window.playSfx) window.playSfx('fanfare');
           if (typeof showToast === 'function') showToast('Security PIN Verified');
         } else if (_pinBuffer.length === 6) {
           if (err) err.textContent = 'Incorrect PIN. Try again.';
@@ -5818,7 +6101,7 @@ const _tm=window.toggleAudioMute;window.toggleAudioMute=function(){const r=_tm.a
 /* Pro 12 API compatibility */
 window.setAppTheme=t=>{S().theme=t==='cosmic'?'deep-nebula':t;S().customAccentOn=false;applyTheme();save();ui()};
 window.setAppMode=m=>{S().mode=m;applyTheme();save();ui()};window.setAppTransition=t=>{S().transition=t;applyTheme();save();ui()};
-window.toggleLightDarkMode=()=>{const cur=S().mode||document.documentElement.getAttribute('data-mode')||'dark';window.setAppMode(cur==='light'?'dark':'light')};
+window.toggleLightDarkMode=()=>{const cur=S().mode||document.documentElement.getAttribute('data-mode')||'dark';const next=cur==='light'?'dark':'light';window.setAppMode(next);if(typeof playSfx==='function')playSfx('themeShift');if(typeof showToast==='function')showToast(next==='light'?'☀️ Elevated Light Mode Activated':'🌙 Cyberpunk Dark Mode Activated');};
 window.toggleCelestialAudio=toggleAmb;window.setCelestialVolume=v=>{S().ambientVolume=v/100;vol();save();ui()};
 window.PP12={settings:S,play,stop:stopAmb,openSettings:openDrawer,closeAll,exportJSON:expJSON,exportCSV:expCSV};
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
@@ -8762,6 +9045,8 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           }, 180);
         });
       }
+    } else if (habit && wasCompleted && !habit.completed) {
+      if (typeof playSfx === 'function') playSfx('uncheck');
     }
 
     updateRpgLevelUI();
@@ -8813,6 +9098,8 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           }, 180);
         });
       }
+    } else if (wasDone && !nowDone && habit) {
+      if (typeof playSfx === 'function') playSfx('uncheck');
     }
 
     updateRpgLevelUI();
