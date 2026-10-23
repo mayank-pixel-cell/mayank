@@ -20,7 +20,7 @@ html = html.replace(
 );
 
 // 0b. Add Web App Manifest and Apple iOS Web Clip meta tags
-const iosPwaMeta = `    <link rel="manifest" href="/manifest.json">
+const iosPwaMeta = `    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#00F0FF">
     <!-- iOS Safari & Web Clip App Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,10 +28,10 @@ const iosPwaMeta = `    <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-title" content="Arc Tracker">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/icons/128x128.png">`;
+    <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./icons/128x128.png">`;
 
 if (!html.includes('apple-mobile-web-app-capable')) {
   html = html.replace(/(<title>[^<]*<\/title>)/i, `$1\n${iosPwaMeta}`);
@@ -70,28 +70,28 @@ if (!html.includes('/* iOS Safe Area & WebKit Touch Optimizations */')) {
 // 1. Replace Tailwind CDN
 html = html.replace(
   '<script src="https://cdn.tailwindcss.com"></script>',
-  '<script src="/assets/tailwind.js"></script>'
+  '<script src="./assets/tailwind.js"></script>'
 );
 
 // 2. Replace FontAwesome CDN
 html = html.replace(
   '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">',
-  '<link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">'
+  '<link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">'
 );
 
 // 3. Replace Inter Font CDN
 html = html.replace(
   '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">',
-  '<link rel="stylesheet" href="/assets/fonts/inter.css">\n    <script type="module" src="/src/main.js"></script>'
+  '<link rel="stylesheet" href="./assets/fonts/inter.css">\n    <script type="module" src="./src/main.js"></script>'
 );
 
 // 4. Replace external mock favicons with local copies
-html = html.replaceAll('https://ssl.gstatic.com/chrome/webstore/images/icon_48px.png', '/assets/favicons/chrome-webstore.png');
-html = html.replaceAll('https://www.pw.live/study-v2/pw.ico', '/assets/favicons/pw.ico');
-html = html.replaceAll('https://www.chess.com/bundles/web/favicons/favicon.46041f2d.ico', '/assets/favicons/chess.ico');
-html = html.replaceAll('https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico', '/assets/favicons/google.ico');
-html = html.replaceAll('https://www.youtube.com/s/desktop/e6aecce7/img/favicon.ico', '/assets/favicons/youtube.ico');
-html = html.replaceAll('https://www.gstatic.com/lamda/images/gemini_sparkle_4g_512_lt_f94943af3be039176192d.png', '/assets/favicons/gemini.png');
+html = html.replaceAll('https://ssl.gstatic.com/chrome/webstore/images/icon_48px.png', './assets/favicons/chrome-webstore.png');
+html = html.replaceAll('https://www.pw.live/study-v2/pw.ico', './assets/favicons/pw.ico');
+html = html.replaceAll('https://www.chess.com/bundles/web/favicons/favicon.46041f2d.ico', './assets/favicons/chess.ico');
+html = html.replaceAll('https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico', './assets/favicons/google.ico');
+html = html.replaceAll('https://www.youtube.com/s/desktop/e6aecce7/img/favicon.ico', './assets/favicons/youtube.ico');
+html = html.replaceAll('https://www.gstatic.com/lamda/images/gemini_sparkle_4g_512_lt_f94943af3be039176192d.png', './assets/favicons/gemini.png');
 
 // 5. Upgrade storage wrapper functions
 // Target lsGetRaw, getLocalStorageItem, setLocalStorageItem

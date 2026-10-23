@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Winter & Summer Arc Interactive Mobile Tracker 2026</title>
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#00F0FF">
     <!-- iOS Safari & Web Clip App Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,19 +12,19 @@
     <meta name="apple-mobile-web-app-title" content="Arc Tracker">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/icons/128x128.png">
+    <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icons/128x128@2x.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./icons/128x128.png">
     <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
     <!-- Tailwind CSS -->
-    <script src="/assets/tailwind.js"></script>
+    <script src="./assets/tailwind.js"></script>
     <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
     <!-- Inter Font -->
-    <link rel="stylesheet" href="/assets/fonts/inter.css">
-    <script type="module" src="/src/main.js"></script>
+    <link rel="stylesheet" href="./assets/fonts/inter.css">
+    <script type="module" src="./src/main.js"></script>
     <!-- Google Identity Services for Cross-Device Account Syncing -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -1128,7 +1128,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <h3 class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-calendar-days text-cyan-400 text-base sm:text-lg"></i> October 2026 Lock-In Calendar
                         </h3>
-                        <p class="text-[11px] sm:text-xs text-slate-300">Tap any day to view or mark habits completed</p>
+                        <p class="text-[11px] sm:text-xs text-slate-300">Tap any day or press <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">◀</kbd> <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">▶</kbd> to switch days</p>
                     </div>
                     <div class="flex items-center justify-between sm:justify-start gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start sm:self-auto w-full sm:w-auto">
                         <button role="button" onclick="changeCalendarMonth(-1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Previous Month"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1148,7 +1148,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <div class="lg:col-span-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selected Day Details</span>
-                            <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">October Progress</span>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="stepCalendarDay(-1); playSfx('slideNext')" title="Previous Day (Left Arrow)" aria-label="Previous Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" onclick="stepCalendarDay(1); playSfx('slideNext')" title="Next Day (Right Arrow)" aria-label="Next Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-right"></i></button>
+                                <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 ml-1">Daily Log</span>
+                            </div>
                         </div>
                         <div id="tracker-calendar-selected-date-title" class="text-xs sm:text-sm font-extrabold text-white">Sunday, October 4, 2026</div>
                         
@@ -1268,6 +1272,16 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </h2>
                 <p class="text-xs text-slate-400">Manage the pillars that define your transformation over these 90 days.</p>
             </div>
+
+            <!-- EDIT HABIT LIST & CUSTOM HABIT CREATOR -->
+            <section id="p20-habit-manager" class="glass-card rounded-2xl p-4 border-l-4 border-l-emerald-400" aria-label="Edit habit list">
+                <h3 class="font-extrabold text-sm text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-emerald-400"></i> Edit habit list
+                </h3>
+                <p class="text-[11px] text-slate-400 mt-1 mb-3">Add, rename, reorder, reweight or delete at any time. Past check-ins are never erased; past scores use the current weights.</p>
+                <div id="p20-hm" class="space-y-2"></div>
+            </section>
+
             <div id="rules-pillar-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
         </section>
 
@@ -1438,7 +1452,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-calendar-days text-cyan-400"></i> Detailed Habit Completion Calendar
                         </h3>
-                        <p class="text-xs text-slate-400">Tap any day to view, check off, or edit habits</p>
+                        <p class="text-xs text-slate-400">Tap any day or press <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">◀</kbd> <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">▶</kbd> to switch days</p>
                     </div>
                     <div class="flex items-center justify-between sm:justify-start gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start sm:self-auto w-full sm:w-auto">
                         <button role="button" onclick="changeCalendarMonth(-1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Previous Month Results Calendar"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1467,7 +1481,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <div class="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
                         <div class="flex items-center justify-between">
                             <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selected Day Progress</span>
-                            <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">Edit Below</span>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="stepCalendarDay(-1); playSfx('slideNext')" title="Previous Day (Left Arrow)" aria-label="Previous Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" onclick="stepCalendarDay(1); playSfx('slideNext')" title="Next Day (Right Arrow)" aria-label="Next Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-right"></i></button>
+                                <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 ml-1">Edit Below</span>
+                            </div>
                         </div>
                         <div id="calendar-selected-date-title" class="text-sm sm:text-base font-extrabold text-white">Sunday, October 4, 2026</div>
                         
@@ -1557,7 +1575,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
                     <div>
                         <h2 class="text-base sm:text-lg font-black text-white">Settings &amp; Controls</h2>
-                        <p class="text-[11px] text-slate-400">Configure habits, day cycle, audio/visual theme engines, and cloud sync</p>
+                        <p class="text-[11px] text-slate-400">Configure day cycle, audio/visual theme engines, and cloud sync</p>
                     </div>
                 </div>
 
@@ -1567,7 +1585,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <i class="fa-solid fa-sliders mr-1"></i> All Settings
                     </button>
                     <button type="button" id="settings-subtab-habits" onclick="filterSettingsView('habits')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
-                        <i class="fa-solid fa-list-check mr-1"></i> Habits &amp; Day
+                        <i class="fa-solid fa-calendar-day mr-1"></i> Day &amp; Preferences
                     </button>
                     <button type="button" id="settings-subtab-account" onclick="filterSettingsView('account')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
                         <i class="fa-solid fa-user-shield mr-1"></i> Accounts &amp; Sync
@@ -2688,12 +2706,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
         let screenTimeData = [
             {"url":"support.google.com","favicon":"https://support.google.com/favicon.png","summaryTime":39,"counter":4,"days":[{"counter":4,"date":"9/20/2026","summary":39}]},
-            {"url":"chromewebstore.google.com","favicon":"/assets/favicons/chrome-webstore.png","summaryTime":797,"counter":43,"days":[{"counter":11,"date":"9/20/2026","summary":468},{"counter":26,"date":"9/27/2026","summary":292},{"counter":5,"date":"10/1/2026","summary":29},{"counter":1,"date":"10/2/2026","summary":8}]},
-            {"url":"www.pw.live","favicon":"/assets/favicons/pw.ico","summaryTime":86313,"counter":940,"days":[{"counter":117,"date":"9/20/2026","summary":16809},{"counter":82,"date":"9/21/2026","summary":10672},{"counter":41,"date":"9/22/2026","summary":4679},{"counter":86,"date":"9/23/2026","summary":7099},{"counter":46,"date":"9/24/2026","summary":3926},{"counter":196,"date":"9/25/2026","summary":16206},{"counter":21,"date":"9/26/2026","summary":1098},{"counter":62,"date":"9/27/2026","summary":3862},{"counter":56,"date":"9/28/2026","summary":6477},{"counter":37,"date":"9/29/2026","summary":1856},{"counter":12,"date":"9/30/2026","summary":229},{"counter":22,"date":"10/1/2026","summary":713},{"counter":127,"date":"10/2/2026","summary":9947},{"counter":19,"date":"10/3/2026","summary":1368},{"counter":16,"date":"10/4/2026","summary":1372}]},
-            {"url":"www.chess.com","favicon":"/assets/favicons/chess.ico","summaryTime":8341,"counter":21,"days":[{"counter":6,"date":"9/20/2026","summary":1912},{"counter":1,"date":"9/21/2026","summary":13},{"counter":4,"date":"10/1/2026","summary":1622},{"counter":10,"date":"10/3/2026","summary":4794}]},
-            {"url":"www.google.com","favicon":"/assets/favicons/google.ico","summaryTime":3000,"counter":111,"days":[{"counter":4,"date":"9/20/2026","summary":51},{"counter":1,"date":"9/21/2026","summary":30},{"counter":3,"date":"9/22/2026","summary":40},{"counter":15,"date":"9/23/2026","summary":249},{"counter":1,"date":"10/1/2026","summary":442},{"counter":1,"date":"10/2/2026","summary":140}]},
-            {"url":"www.youtube.com","favicon":"/assets/favicons/youtube.ico","summaryTime":60176,"counter":374,"days":[{"counter":13,"date":"9/20/2026","summary":2709},{"counter":28,"date":"9/21/2026","summary":4990},{"counter":67,"date":"10/1/2026","summary":8667},{"counter":49,"date":"10/2/2026","summary":5155},{"counter":10,"date":"10/3/2026","summary":1868},{"counter":9,"date":"10/4/2026","summary":1930}]},
-            {"url":"gemini.google.com","favicon":"/assets/favicons/gemini.png","summaryTime":8629,"counter":214,"days":[{"counter":25,"date":"9/29/2026","summary":2179},{"counter":65,"date":"9/30/2026","summary":2709},{"counter":19,"date":"10/1/2026","summary":815},{"counter":90,"date":"10/2/2026","summary":2543},{"counter":15,"date":"10/4/2026","summary":383}]}
+            {"url":"chromewebstore.google.com","favicon":"./assets/favicons/chrome-webstore.png","summaryTime":797,"counter":43,"days":[{"counter":11,"date":"9/20/2026","summary":468},{"counter":26,"date":"9/27/2026","summary":292},{"counter":5,"date":"10/1/2026","summary":29},{"counter":1,"date":"10/2/2026","summary":8}]},
+            {"url":"www.pw.live","favicon":"./assets/favicons/pw.ico","summaryTime":86313,"counter":940,"days":[{"counter":117,"date":"9/20/2026","summary":16809},{"counter":82,"date":"9/21/2026","summary":10672},{"counter":41,"date":"9/22/2026","summary":4679},{"counter":86,"date":"9/23/2026","summary":7099},{"counter":46,"date":"9/24/2026","summary":3926},{"counter":196,"date":"9/25/2026","summary":16206},{"counter":21,"date":"9/26/2026","summary":1098},{"counter":62,"date":"9/27/2026","summary":3862},{"counter":56,"date":"9/28/2026","summary":6477},{"counter":37,"date":"9/29/2026","summary":1856},{"counter":12,"date":"9/30/2026","summary":229},{"counter":22,"date":"10/1/2026","summary":713},{"counter":127,"date":"10/2/2026","summary":9947},{"counter":19,"date":"10/3/2026","summary":1368},{"counter":16,"date":"10/4/2026","summary":1372}]},
+            {"url":"www.chess.com","favicon":"./assets/favicons/chess.ico","summaryTime":8341,"counter":21,"days":[{"counter":6,"date":"9/20/2026","summary":1912},{"counter":1,"date":"9/21/2026","summary":13},{"counter":4,"date":"10/1/2026","summary":1622},{"counter":10,"date":"10/3/2026","summary":4794}]},
+            {"url":"www.google.com","favicon":"./assets/favicons/google.ico","summaryTime":3000,"counter":111,"days":[{"counter":4,"date":"9/20/2026","summary":51},{"counter":1,"date":"9/21/2026","summary":30},{"counter":3,"date":"9/22/2026","summary":40},{"counter":15,"date":"9/23/2026","summary":249},{"counter":1,"date":"10/1/2026","summary":442},{"counter":1,"date":"10/2/2026","summary":140}]},
+            {"url":"www.youtube.com","favicon":"./assets/favicons/youtube.ico","summaryTime":60176,"counter":374,"days":[{"counter":13,"date":"9/20/2026","summary":2709},{"counter":28,"date":"9/21/2026","summary":4990},{"counter":67,"date":"10/1/2026","summary":8667},{"counter":49,"date":"10/2/2026","summary":5155},{"counter":10,"date":"10/3/2026","summary":1868},{"counter":9,"date":"10/4/2026","summary":1930}]},
+            {"url":"gemini.google.com","favicon":"./assets/favicons/gemini.png","summaryTime":8629,"counter":214,"days":[{"counter":25,"date":"9/29/2026","summary":2179},{"counter":65,"date":"9/30/2026","summary":2709},{"counter":19,"date":"10/1/2026","summary":815},{"counter":90,"date":"10/2/2026","summary":2543},{"counter":15,"date":"10/4/2026","summary":383}]}
         ];
 
         const CATEGORIES = {
@@ -3156,12 +3174,13 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const totalScreenTimeEl = document.getElementById('displayTotalScreenTime');
             if (totalScreenTimeEl) totalScreenTimeEl.textContent = formatDuration(totalTimeSec);
 
+            const defaultFavicon = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2300F0FF%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22/%3E%3C/svg%3E";
             const listElem = document.getElementById('displayTopWebsites');
             if (listElem) {
                 listElem.innerHTML = topSites.map(site => `
                     <li class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
                         <div class="flex items-center gap-2 truncate max-w-[180px] sm:max-w-[220px]">
-                            <img src="${site.favicon || 'https://www.google.com/s2/favicons?domain=' + site.url}" class="w-3.5 h-3.5 rounded" onerror="this.src='https://www.google.com/s2/favicons?domain=google.com'">
+                            <img src="${site.favicon || defaultFavicon}" class="w-3.5 h-3.5 rounded" onerror="this.onerror=null; this.src='${defaultFavicon}'">
                             <span class="font-medium text-slate-200 truncate text-[11px] sm:text-xs">${site.url}</span>
                         </div>
                         <span class="font-mono text-blue-400 font-bold text-[11px] sm:text-xs">${formatDuration(site.summaryTime)}</span>
@@ -3645,6 +3664,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 renderSpiderWeb();
                 renderScreenTime();
             }
+            if (tabName === 'rules') {
+                renderRulesBlueprint();
+                if (window.renderHabitManager) renderHabitManager(true);
+            }
             if (window.SettingsApp) SettingsApp.onTab(tabName);
             if (tabName === 'settings') {
                 if (window.renderHabitManager) renderHabitManager(true);
@@ -3668,23 +3691,19 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             const p20Account = document.getElementById('p20-google-account');
             const p20Day = document.getElementById('p20-day');
-            const p20Habit = document.getElementById('p20-habit-manager');
             const sxRoot = document.getElementById('sx-root');
 
             if (category === 'all') {
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
-                if (p20Habit) p20Habit.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'habits') {
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
-                if (p20Habit) p20Habit.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'account') {
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
-                if (p20Habit) p20Habit.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
@@ -3752,9 +3771,14 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 }
             });
             state.dailyHabits[today][id] = habit.completed;
+            state.habitTimestamps = state.habitTimestamps || {};
+            state.habitTimestamps[`${today}:${id}`] = Date.now();
 
             saveToLocalStorage();
             renderHabits();
+            if (typeof renderCalendarDayDetail === 'function' && selectedCalendarDateStr === today) {
+                renderCalendarDayDetail(today);
+            }
         }
 
         /* Any past or current day can be edited; only that date's entry in state.dailyHabits changes. */
@@ -3765,9 +3789,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (!h) return;
             const day = state.dailyHabits[dateKey] || (state.dailyHabits[dateKey] = {});
             day[id] = !day[id];
+            state.habitTimestamps = state.habitTimestamps || {};
+            state.habitTimestamps[`${dateKey}:${id}`] = Date.now();
             playSfx(day[id] ? 'check' : 'uncheck');
             saveToLocalStorage();
             renderHabits();
+            renderCalendar();
+            if (typeof renderCalendarDayDetail === 'function') {
+                renderCalendarDayDetail(dateKey);
+            }
         }
 
         function addCustomHabit() {
@@ -3794,6 +3824,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             saveToLocalStorage();
             renderHabits();
             renderRulesBlueprint();
+            if (window.renderHabitManager) renderHabitManager(true);
             showToast("Added new habit to ruleset!");
         }
 
@@ -3803,16 +3834,27 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             saveToLocalStorage();
             renderHabits();
             renderRulesBlueprint();
+            if (window.renderHabitManager) renderHabitManager(true);
             showToast("Habit removed.");
         }
 
         function resetTodayHabits() {
             playSfx('click');
-            state.habits.forEach(h => h.completed = false);
+            const now = Date.now();
             const today = getTodayKey();
-            state.dailyHabits[today] = {};
+            state.dailyHabits[today] = state.dailyHabits[today] || {};
+            state.habitTimestamps = state.habitTimestamps || {};
+            state.habits.forEach(h => {
+                h.completed = false;
+                state.dailyHabits[today][h.id] = false;
+                state.habitTimestamps[`${today}:${h.id}`] = now;
+            });
             saveToLocalStorage();
             renderHabits();
+            renderCalendar();
+            if (typeof renderCalendarDayDetail === 'function' && selectedCalendarDateStr === today) {
+                renderCalendarDayDetail(today);
+            }
             showToast("Today's progress reset.");
         }
 
@@ -3920,6 +3962,105 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             renderCalendar();
         }
 
+        function stepCalendarDay(delta) {
+            const calYear = calendarCurrentDate.getFullYear();
+            const calMonth = calendarCurrentDate.getMonth();
+
+            let targetDate;
+            if (selectedCalendarDateStr) {
+                const parts = selectedCalendarDateStr.split('-').map(Number);
+                const selYear = parts[0];
+                const selMonth = parts[1] - 1;
+                const selDay = parts[2];
+
+                // If currently selected date is in the viewed month, step by delta from it
+                if (selYear === calYear && selMonth === calMonth) {
+                    targetDate = new Date(selYear, selMonth, selDay + delta);
+                } else {
+                    // If looking at a different month than currently selected, start from that month's edge
+                    if (delta > 0) {
+                        targetDate = new Date(calYear, calMonth, 1);
+                    } else {
+                        targetDate = new Date(calYear, calMonth + 1, 0);
+                    }
+                }
+            } else {
+                const t = (typeof getEffectiveToday === 'function') ? getEffectiveToday() : new Date();
+                targetDate = new Date(t.getFullYear(), t.getMonth(), t.getDate() + delta);
+            }
+
+            const nextDateKey = formatDateKey(targetDate);
+
+            // If stepping changes the month, update calendarCurrentDate and re-render grid
+            if (targetDate.getFullYear() !== calendarCurrentDate.getFullYear() || targetDate.getMonth() !== calendarCurrentDate.getMonth()) {
+                calendarCurrentDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1);
+                renderCalendar();
+            }
+
+            // Select the new calendar date
+            selectCalendarDate(nextDateKey);
+
+            // Move focus to the visible selected day button for keyboard accessibility
+            const dayCards = document.querySelectorAll(`.calendar-day-card[data-date="${nextDateKey}"]`);
+            for (const c of dayCards) {
+                if (c.offsetParent !== null) {
+                    try { c.focus({ preventScroll: true }); } catch (e) {}
+                    break;
+                }
+            }
+        }
+        window.stepCalendarDay = stepCalendarDay;
+
+        // Global arrow key navigation to switch days on the calendar
+        window.addEventListener('keydown', function(e) {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            // Ignore when typing in inputs, textareas, selects, or editable elements
+            const t = e.target;
+            if (t) {
+                if (t.isContentEditable) return;
+                const tag = (t.tagName || '').toUpperCase();
+                if (tag === 'TEXTAREA' || tag === 'SELECT') return;
+                if (tag === 'INPUT') {
+                    const inputType = (t.type || 'text').toLowerCase();
+                    if (!['checkbox', 'radio', 'button', 'submit', 'reset'].includes(inputType)) {
+                        return;
+                    }
+                }
+            }
+
+            // Ignore if any modal, overlay, drawer, or terminal is open
+            if (document.querySelector('.pp-modal.open')) return;
+            const overlays = [
+                'pp12-drawer',
+                'arc-pin-overlay',
+                'summer-showcase-overlay',
+                'arc-modal',
+                'rpg-victory-cert-modal',
+                'sa-vault',
+                'matrix-rain-overlay',
+                'cyberdeck-terminal-modal',
+                'mandala-easter-egg-modal'
+            ];
+            for (const id of overlays) {
+                const el = document.getElementById(id);
+                if (el && (!el.classList.contains('hidden') || el.classList.contains('open'))) {
+                    if (id === 'pp12-drawer' && !el.classList.contains('open')) continue;
+                    return;
+                }
+            }
+
+            // Only switch calendar day if user is on a tab where the calendar is relevant
+            if (window.state && window.state.activeTab && window.state.activeTab !== 'tracker' && window.state.activeTab !== 'results') {
+                return;
+            }
+
+            // Prevent default arrow navigation (horizontal scrolling) and step calendar day
+            e.preventDefault();
+            stepCalendarDay(e.key === 'ArrowLeft' ? -1 : 1);
+        });
+
         function selectCalendarDate(dateKey, evt) {
             selectedCalendarDateStr = dateKey;
 
@@ -3944,15 +4085,24 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (evt && evt.currentTarget) {
                 targetEl = evt.currentTarget;
             } else {
-                targetEl = document.querySelector(`.calendar-day-card[data-date="${dateKey}"]`);
+                const dayCards = document.querySelectorAll(`.calendar-day-card[data-date="${dateKey}"]`);
+                for (const c of dayCards) {
+                    if (c.offsetParent !== null) {
+                        targetEl = c;
+                        break;
+                    }
+                }
+                if (!targetEl && dayCards.length > 0) targetEl = dayCards[0];
             }
 
             let cx = window.innerWidth / 2;
             let cy = window.innerHeight / 2;
-            if (targetEl) {
+            if (targetEl && targetEl.offsetParent !== null) {
                 const rect = targetEl.getBoundingClientRect();
-                cx = rect.left + rect.width / 2;
-                cy = rect.top + rect.height / 2;
+                if (rect.width > 0 && rect.height > 0) {
+                    cx = rect.left + rect.width / 2;
+                    cy = rect.top + rect.height / 2;
+                }
             }
 
             // Trigger card impact pulse / shockwave on all matching date cards
@@ -5082,7 +5232,7 @@ html[data-mode=light] .arc-click-ripple {
 </aside>
 <button class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="button" id="pp12-hud" aria-label="Pause or resume focus timer"><i class="fa-solid fa-bullseye"></i><span id="pp-hud-t">25:00</span><small id="pp-hud-m">FOCUS</small></button>
 <div id="pp-keys" class="pp-modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts"><div class="pp-box"><h3>Keyboard Shortcuts</h3>
-  <div class="space-y-2"><div><kbd>S</kbd> Open / close settings</div><div><kbd>M</kbd> Toggle global mute</div><div><kbd>A</kbd> Cycle heavenly body soundscapes</div><div><kbd>P</kbd> Play / pause focus timer</div><div><kbd>?</kbd> This shortcut guide</div><div><kbd>Esc</kbd> Close all modals, overlays and drawers</div></div>
+  <div class="space-y-2"><div><kbd>S</kbd> Open / close settings</div><div><kbd>M</kbd> Toggle global mute</div><div><kbd>A</kbd> Cycle heavenly body soundscapes</div><div><kbd>P</kbd> Play / pause focus timer</div><div><kbd>◀</kbd> / <kbd>▶</kbd> Switch day on calendar</div><div><kbd>?</kbd> This shortcut guide</div><div><kbd>Esc</kbd> Close all modals, overlays and drawers</div></div>
   <button role="button" class="pp-btn mt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-close>Close</button></div></div>
 <div id="pp-imp" class="pp-modal" role="dialog" aria-modal="true" aria-label="Import backup"><div class="pp-box"><h3>Import Backup</h3><p id="pp-imp-info" class="mb-3"></p>
   <div class="grid grid-cols-2 gap-2"><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-imp-merge">Merge Data</button><button role="button" class="pp-btn text-rose-400 border-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-imp-over">Overwrite Current State</button><button role="button" class="pp-btn col-span-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-close>Cancel</button></div></div></div>
@@ -6022,6 +6172,7 @@ function rollback(i){const r=revs()[i];if(!r||!confirm('Restore the snapshot fro
 /* ---------- SETTINGS UI ---------- */
 const sl=(k,mn,mx,st,l)=>`<input type="range" role="slider" data-set="${k}" min="${mn}" max="${mx}" step="${st}" aria-label="${l}" class="w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">`;
 const sel=(k,l,o)=>`<select data-set="${k}" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="${l}">${o.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select>`;
+const ck=(k,l)=>`<input type="checkbox" data-set="${k}" aria-label="${l}" class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">`;
 const row=(l,kw,b,k)=>`<div class="pp-row" data-kw="${(l+' '+kw).toLowerCase()}"><div class="pp-lab"><span>${l}</span><span data-val="${k||''}"></span></div>${b}</div>`;
 function build(){$('#pp-body').innerHTML=
 `<section class="pp-panel" data-p="account"><div id="pp-account-container" class="space-y-4"></div></section>`+
@@ -7390,18 +7541,14 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
  const IN='bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400';
  const catOpts=sel=>Object.keys(CATEGORIES).map(c=>'<option'+(c===sel?' selected':'')+'>'+c+'</option>').join('');
  const wOpts=w=>[...new Set([1,2,3,w])].sort((a,b)=>a-b).map(n=>'<option value="'+n+'"'+(n==w?' selected':'')+'>'+n+'x</option>').join('');
- const commit=msg=>{saveToLocalStorage();renderHabits();renderRulesBlueprint();if(msg)showToast(msg)};
+ const commit=msg=>{saveToLocalStorage();renderHabits();renderRulesBlueprint();if(window.renderHabitManager)renderHabitManager();if(msg)showToast(msg)};
  let lastKey=getTodayKey();
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
   '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
-  '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>'+
-  '<section id="p20-habit-manager" class="glass-card rounded-2xl p-4 border-l-4 border-l-emerald-400" aria-label="Edit habit list">'+
-   '<h3 class="font-extrabold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Edit habit list</h3>'+
-   '<p class="text-[11px] text-slate-400 mt-1 mb-3">Add, rename, reorder, reweight or delete at any time. Past check-ins are never erased; past scores use the current weights.</p>'+
-   '<div id="p20-hm" class="space-y-2"></div></section>';
- /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Settings & Controls */
+  '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
+ /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
  {const cn=$('custom-habit-name'),cb=cn&&cn.closest('.glass-card'),mgr=$('p20-habit-manager');
   if(cb&&mgr){cb.className='mt-4 pt-4 border-t border-slate-800 space-y-3';mgr.appendChild(cb);cn.addEventListener('keydown',e=>{if(e.key==='Enter')addCustomHabit()})}}
 
@@ -7439,7 +7586,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   rn(id,v){const h=this.find(id);v=v.trim();if(!h)return;if(!v){showToast('Habit name cannot be empty');renderHabitManager(true);return}h.name=v;commit('Habit renamed')},
   ct(id,v){const h=this.find(id);if(h){h.category=v;commit()}},
   wt(id,v){const h=this.find(id);if(h){h.weight=parseInt(v,10)||1;commit('Weight updated')}},
-  rm(id){const h=this.find(id);if(!h||!confirm('Delete "'+h.name+'"? Past check-ins stay saved, but this habit stops counting toward scores.'))return;state.habits=state.habits.filter(x=>x.id!==id);playSfx('click');commit('Habit removed')}
+  rm(id){const h=this.find(id);if(!h||!confirm('Delete "'+h.name+'"? Past check-ins stay saved, but this habit stops counting toward scores.'))return;state.habits=state.habits.filter(x=>x.id!==id);playSfx('click');commit('Habit removed');if(window.renderHabitManager)renderHabitManager(true)}
  };
 
  function rollover(){
@@ -7458,7 +7605,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   playSfx('click');rollover();showToast('Following today\u2019s date');
  };
  window.openHabitManager=function(){
-  switchTab('settings');
+  switchTab('rules');
   setTimeout(()=>{const e=$('p20-habit-manager');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60);
  };
 
@@ -10298,16 +10445,33 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     const local = JSON.parse(JSON.stringify(localState || {}));
     const cloud = JSON.parse(JSON.stringify(cloudState || {}));
 
-    // 1. Daily Habit Check-ins (Non-destructive: if completed anywhere, stays completed)
+    local.habitTimestamps = local.habitTimestamps || {};
+    const cloudTimestamps = cloud.habitTimestamps || {};
+
+    // 1. Daily Habit Check-ins: Last-Write-Wins (LWW) conflict resolution per habit/date
     local.dailyHabits = local.dailyHabits || {};
     if (cloud.dailyHabits && typeof cloud.dailyHabits === 'object') {
       for (const [dateKey, habitObj] of Object.entries(cloud.dailyHabits)) {
         if (!local.dailyHabits[dateKey]) {
           local.dailyHabits[dateKey] = Object.assign({}, habitObj);
+          for (const habitId of Object.keys(habitObj)) {
+            const tsKey = `${dateKey}:${habitId}`;
+            if (cloudTimestamps[tsKey]) local.habitTimestamps[tsKey] = cloudTimestamps[tsKey];
+          }
         } else {
           for (const [habitId, isDone] of Object.entries(habitObj)) {
-            // A completion is NEVER overwritten with false
-            local.dailyHabits[dateKey][habitId] = !!(local.dailyHabits[dateKey][habitId] || isDone);
+            const tsKey = `${dateKey}:${habitId}`;
+            const cloudTs = cloudTimestamps[tsKey] || (cloud.updatedAt || 0);
+            const localTs = local.habitTimestamps[tsKey] || 0;
+
+            if (local.dailyHabits[dateKey][habitId] === undefined) {
+              local.dailyHabits[dateKey][habitId] = isDone;
+              if (cloudTs) local.habitTimestamps[tsKey] = cloudTs;
+            } else if (cloudTs > localTs) {
+              local.dailyHabits[dateKey][habitId] = isDone;
+              local.habitTimestamps[tsKey] = cloudTs;
+            }
+            // If localTs >= cloudTs, local device's intent (completed or unchecked) is preserved
           }
         }
       }
@@ -10412,6 +10576,17 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       // 1. Deep union merge with local state
       const mergedState = deepUnionMerge(window.state, payload.state);
       window.state = Object.assign(window.state || {}, mergedState);
+
+      // Keep today's habit.completed synchronized with dailyHabits[today]
+      const todayKey = getTodayKey();
+      if (window.state.dailyHabits && window.state.dailyHabits[todayKey]) {
+        const todayLog = window.state.dailyHabits[todayKey];
+        (window.state.habits || []).forEach(h => {
+          if (todayLog[h.id] !== undefined) {
+            h.completed = !!todayLog[h.id];
+          }
+        });
+      }
 
       // 2. Merge reflection text safely (never delete)
       if (payload.reflection) {
@@ -10582,8 +10757,12 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           if (raw) mockCloud = JSON.parse(raw);
         } catch(e) {}
 
-        if (mockCloud && mockCloud.state) {
-          applyCloudState(mockCloud, false);
+        // Only merge mockCloud if it originated from a different sender/tab and has newer changes
+        if (mockCloud && mockCloud.state && mockCloud.senderId && mockCloud.senderId !== getDeviceId()) {
+          const lastSync = getLastSyncTime();
+          if ((mockCloud.updatedAt || 0) > lastSync) {
+            applyCloudState(mockCloud, false);
+          }
         }
 
         const payload = createCloudPayload();
