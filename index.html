@@ -1633,30 +1633,49 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
                 <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden">
             <!-- TOP HERO BANNER & STATS -->
-            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
-                                LIVE SCREEN TIME MATRIX
-                            </span>
-                            <span id="st-focus-badge-top" class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold flex items-center gap-1">
-                                <i class="fa-solid fa-moon"></i> Focus Blocker Ready
-                            </span>
-                            <span id="st-perm-badge-top" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Accessibility Setup Available
-                            </span>
+            <div class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <!-- HOLOGRAPHIC DOPAMINE SHIELD RADAR GAUGE -->
+                        <div class="st-radar-dial shrink-0 shadow-lg cursor-pointer" onclick="playSfx('quantumHum'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'S');}" title="Focus Shield Integrity & Dopamine Hygiene Radar (Click to Scan)">
+                            <div class="st-radar-ring-outer"></div>
+                            <div class="st-radar-ring-inner"></div>
+                            <div class="st-radar-crosshair"></div>
+                            <div class="st-radar-sweep"></div>
+                            <div class="st-radar-blip st-radar-blip-1"></div>
+                            <div class="st-radar-blip st-radar-blip-2"></div>
+                            <div class="st-radar-blip st-radar-blip-3"></div>
+                            <!-- Center Digital Readout -->
+                            <div class="relative z-10 flex flex-col items-center justify-center text-center select-none">
+                                <i class="fa-solid fa-shield-halved text-cyan-400 text-xs mb-0.5 drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]"></i>
+                                <span id="st-radar-shield-score" class="text-sm font-black font-mono tracking-tight text-white drop-shadow">100%</span>
+                                <span class="text-[8px] font-mono text-cyan-300 font-bold uppercase tracking-tighter">SHIELD</span>
+                            </div>
                         </div>
-                        <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Screen Time &amp; Lockout Shield
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-300">
-                            Automatic per-application usage tracking, Focus Mode app blocklists, and YouTube channel filtering.
-                        </p>
+
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                    LIVE SCREEN TIME MATRIX
+                                </span>
+                                <span id="st-focus-badge-top" class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-moon"></i> Focus Blocker Ready
+                                </span>
+                                <span id="st-perm-badge-top" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Accessibility Setup Available
+                                </span>
+                            </div>
+                            <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
+                                <i class="fa-solid fa-hourglass-half text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.6)]"></i> App Screen Time &amp; Lockout Shield
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-300">
+                                Automatic per-application usage tracking, Focus Mode app blocklists, and YouTube channel filtering.
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-2 flex-wrap self-stretch sm:self-auto">
+                    <div class="flex items-center gap-2 flex-wrap self-stretch lg:self-auto">
                         <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 border border-purple-500/40 text-purple-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Configure which apps are blocked during Focus and Pomodoro">
                             <i class="fa-solid fa-shield-halved text-purple-400"></i> Focus Blocklist (<span id="st-header-focus-block-count">8</span>)
                         </button>
@@ -1680,25 +1699,29 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
                 <!-- 4 OVERVIEW KPI CARDS -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 hover:border-cyan-500/40 transition-all duration-200 relative overflow-hidden group shadow-sm">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Today's App Screen Time</span>
                         <div class="text-xl sm:text-2xl font-black font-mono text-cyan-400 mt-0.5" id="st-kpi-total-time">0m 00s</div>
                         <span class="text-[9px] text-slate-500 block">Total active monitored time</span>
                     </div>
 
-                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 hover:border-purple-500/40 transition-all duration-200 relative overflow-hidden group shadow-sm">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-purple-500/10 rounded-full blur-xl pointer-events-none"></div>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Focus Blocklist</span>
                         <div class="text-xl sm:text-2xl font-black font-mono text-purple-400 mt-0.5" id="st-kpi-focus-count">8 Apps</div>
                         <span class="text-[9px] text-slate-500 block">Locked during Focus &amp; Pomodoro</span>
                     </div>
 
-                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800" id="st-kpi-blocked-card">
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 hover:border-emerald-500/40 transition-all duration-200 relative overflow-hidden group shadow-sm" id="st-kpi-blocked-card">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Apps Blocked Today</span>
                         <div class="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-0.5" id="st-kpi-blocked-count">0 Locked</div>
                         <span class="text-[9px] text-slate-500 block" id="st-kpi-blocked-sub">All apps within quota</span>
                     </div>
 
-                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 hover:border-red-500/40 transition-all duration-200 relative overflow-hidden group shadow-sm">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-red-500/10 rounded-full blur-xl pointer-events-none"></div>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">YouTube Filter</span>
                         <div class="text-sm sm:text-base font-extrabold text-red-400 mt-1 flex items-center gap-1.5" id="st-kpi-yt-status">
                             <i class="fa-brands fa-youtube"></i> Active (Shorts Blocked)
@@ -1709,7 +1732,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
 
             <!-- CROSS-DEVICE LINKED SCREEN TIME MATRIX (DESKTOP + MOBILE) -->
-            <div id="st-cross-device-ecosystem" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-indigo-400 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
+            <div id="st-cross-device-ecosystem" class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-indigo-400 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
                 <!-- TOP HEADER & ACCOUNT STATUS BAR -->
                 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
                     <div class="space-y-1">
@@ -1718,12 +1741,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <i class="fa-solid fa-link text-indigo-400"></i>
                                 DUAL-DEVICE LINKED ECOSYSTEM
                             </span>
-                            <span id="st-ecosystem-live-badge" class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono font-semibold flex items-center gap-1">
+                            <span id="st-ecosystem-live-badge" class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono font-semibold flex items-center gap-1 shadow-sm">
                                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span> Live Unified Sync
                             </span>
                         </div>
                         <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-tower-broadcast text-indigo-400"></i> Linked Screen Time Tracker
+                            <i class="fa-solid fa-tower-broadcast text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.6)]"></i> Linked Screen Time Tracker
                         </h3>
                         <p class="text-xs sm:text-sm text-slate-300">
                             Automatic screen time synchronization between your Mobile App Tracker and Desktop PC under your linked account.
@@ -1736,10 +1759,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <span class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i>Checking account...</span>
                         </div>
 
-                        <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Sync latest screen time across devices">
+                        <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('quantumHum'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'A');}" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Sync latest screen time across devices">
                             <i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Sync Now
                         </button>
-                        <button role="button" onclick="if(window.ArcGoogleSync&&ArcGoogleSync.simulateMobileTrackerSync){ArcGoogleSync.simulateMobileTrackerSync(225);}else{simulateMobileTime(225);}; playSfx('click')" class="px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/70 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Simulate 3h 45m screen time from Mobile App Tracker">
+                        <button role="button" onclick="if(window.ArcGoogleSync&&ArcGoogleSync.simulateMobileTrackerSync){ArcGoogleSync.simulateMobileTrackerSync(225);}else{simulateMobileTime(225);}; playSfx('fanfare'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'S');}" class="px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/70 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Simulate 3h 45m screen time from Mobile App Tracker">
                             <i class="fa-solid fa-mobile-screen text-indigo-400"></i> Simulate Mobile Data
                         </button>
                         <button role="button" onclick="promptSetMobileTime(); playSfx('click')" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition" title="Manually adjust mobile screen time minutes">
@@ -1751,10 +1774,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 <!-- 3 KEY CARDS: DESKTOP + SEPARATELY MADE MOBILE SECTION + COMBINED SCREEN TIME -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 pt-1">
                     <!-- 1. DESKTOP SCREEN TIME CARD -->
-                    <div class="bg-slate-950/80 rounded-2xl p-4 sm:p-5 border border-slate-800 hover:border-cyan-500/40 transition-all duration-200 space-y-3 relative overflow-hidden group">
+                    <div class="st-synapse-stream bg-slate-950/80 rounded-2xl p-4 sm:p-5 border border-slate-800 hover:border-cyan-500/50 transition-all duration-200 space-y-3 relative overflow-hidden group shadow-lg">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-base">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-base shadow-sm">
                                     <i class="fa-solid fa-laptop"></i>
                                 </div>
                                 <div>
@@ -1768,7 +1791,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         </div>
 
                         <div class="py-1">
-                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-cyan-400" id="st-desktop-time-val">00h 00m 00s</div>
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-cyan-400 drop-shadow-[0_0_12px_rgba(6,182,212,0.3)]" id="st-desktop-time-val">00h 00m 00s</div>
                             <div class="flex items-center gap-1.5 text-[10px] text-slate-400 mt-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                 <span id="st-desktop-status-sub">Active desktop session running</span>
@@ -1777,7 +1800,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
 
                     <!-- 2. MOBILE SCREEN TIME CARD (SEPARATELY MADE SECTION) -->
-                    <div id="st-mobile-separate-card" class="bg-gradient-to-b from-purple-950/30 via-slate-950/90 to-purple-950/20 rounded-2xl p-4 sm:p-5 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:border-purple-400 transition-all duration-200 space-y-3 relative overflow-hidden group">
+                    <div id="st-mobile-separate-card" class="st-synapse-stream bg-gradient-to-b from-purple-950/30 via-slate-950/90 to-purple-950/20 rounded-2xl p-4 sm:p-5 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(168,85,247,0.18)] hover:border-purple-400 transition-all duration-200 space-y-3 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 bg-purple-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
                             <i class="fa-solid fa-mobile-screen text-[8px]"></i> MOBILE SECTION
                         </div>
@@ -1797,7 +1820,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         </div>
 
                         <div class="py-1">
-                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-purple-300" id="st-mobile-time-val">00h 00m 00s</div>
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-purple-300 drop-shadow-[0_0_12px_rgba(168,85,247,0.3)]" id="st-mobile-time-val">00h 00m 00s</div>
                             <div class="flex items-center gap-1.5 text-[10px] mt-1" id="st-mobile-sync-status">
                                 <span class="text-slate-400"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Waiting for mobile sync</span>
                             </div>
@@ -1805,14 +1828,14 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
 
                     <!-- 3. COMBINED SCREEN TIME CARD (BOTH DEVICES COMBINED) -->
-                    <div class="bg-gradient-to-br from-cyan-950/40 via-slate-900 to-indigo-950/40 rounded-2xl p-4 sm:p-5 border-2 border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.22)] space-y-3 relative overflow-hidden">
+                    <div class="st-specular-sweep bg-gradient-to-br from-cyan-950/40 via-slate-900 to-indigo-950/40 rounded-2xl p-4 sm:p-5 border-2 border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.25)] space-y-3 relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
                             <i class="fa-solid fa-layer-group text-[8px]"></i> COMBINED TOTAL
                         </div>
 
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-base">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-base shadow-sm">
                                     <i class="fa-solid fa-layer-group"></i>
                                 </div>
                                 <div>
@@ -1823,7 +1846,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         </div>
 
                         <div class="py-1">
-                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent" id="st-combined-time-val">00h 00m 00s</div>
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(6,182,212,0.4)]" id="st-combined-time-val">00h 00m 00s</div>
                             <div class="text-[10px] text-cyan-300/90 font-mono mt-1 truncate" id="st-combined-split-pill">
                                 💻 Desktop: 0h 0m • 📱 Mobile: 0h 0m
                             </div>
@@ -3026,6 +3049,44 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.4);
                         osc.connect(gain); gain.connect(sfxOut());
                         osc.start(now); osc.stop(now + 2.5);
+                    });
+                } else if (type === 'quantumHum') {
+                    // Cybernetic quantum activation warp hum
+                    const osc1 = audioCtx.createOscillator();
+                    const osc2 = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.setValueAtTime(440, now);
+                    filter.frequency.exponentialRampToValueAtTime(1760, now + 0.12);
+                    filter.frequency.exponentialRampToValueAtTime(880, now + 0.28);
+                    filter.Q.setValueAtTime(4, now);
+                    osc1.type = 'sawtooth';
+                    osc2.type = 'sine';
+                    osc1.frequency.setValueAtTime(140, now);
+                    osc1.frequency.exponentialRampToValueAtTime(440, now + 0.12);
+                    osc1.frequency.exponentialRampToValueAtTime(220, now + 0.28);
+                    osc2.frequency.setValueAtTime(280, now);
+                    osc2.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+                    gain.gain.setValueAtTime(0.0001, now);
+                    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                    osc1.connect(gain); osc2.connect(gain);
+                    gain.connect(filter); filter.connect(sfxOut());
+                    osc1.start(now); osc2.start(now);
+                    osc1.stop(now + 0.35); osc2.stop(now + 0.35);
+                } else if (type === 'fanfare') {
+                    // Ascending digital victory fanfare
+                    [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => {
+                        const t = now + i * 0.045;
+                        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.setValueAtTime(f, t);
+                        g.gain.setValueAtTime(0.0001, t);
+                        g.gain.exponentialRampToValueAtTime(0.12, t + 0.015);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+                        o.connect(g); g.connect(sfxOut());
+                        o.start(t); o.stop(t + 0.5);
                     });
                 } else if (type === 'modalOpen') {
                     const osc = audioCtx.createOscillator();
@@ -5851,7 +5912,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             return false;
         }
 
-        function setActiveApp(appId) {
+        function setActiveApp(appId, evt) {
             const app = appTrackerState.apps.find(a => a.id === appId);
             if (!app) return;
 
@@ -5875,7 +5936,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
 
             appTrackerState.activeAppId = appId;
-            playSfx('check');
+            playSfx('quantumHum');
+
+            // Interactive visual particle burst and floating combat feedback
+            const clientX = evt && evt.clientX ? evt.clientX : window.innerWidth / 2;
+            const clientY = evt && evt.clientY ? evt.clientY : window.innerHeight / 2;
+            if (typeof triggerGradeParticleBurst === 'function') {
+                triggerGradeParticleBurst(clientX, clientY, 'A');
+            }
+            if (typeof spawnFloatingCombatText === 'function') {
+                spawnFloatingCombatText(`🚀 TRACKING: ${app.name.toUpperCase()}`, clientX, clientY);
+            }
+
             renderScreenTimeView();
         }
 
@@ -6751,15 +6823,33 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             let totalUsage = 0;
             let dailyBlockedCount = 0;
             let focusBlockedCount = 0;
+            let nearLimitCount = 0;
 
             appTrackerState.apps.forEach(app => {
                 const used = appTrackerState.usage[app.id] || 0;
                 totalUsage += used;
-                if (app.blockEnabled && used >= app.dailyLimitSecs) dailyBlockedCount++;
+                const limit = app.dailyLimitSecs;
+                const pct = Math.min(100, Math.round((used / limit) * 100));
+                if (app.blockEnabled && used >= limit) dailyBlockedCount++;
+                else if (pct >= 80 && !app.blockInFocus) nearLimitCount++;
                 if (app.blockInFocus) focusBlockedCount++;
             });
 
             const focusRunning = isFocusActive();
+
+            // Holographic Radar Shield Score Calculation & Display
+            const shieldScore = Math.max(0, 100 - (dailyBlockedCount * 25) - (nearLimitCount * 8));
+            const radarScoreEl = document.getElementById('st-radar-shield-score');
+            if (radarScoreEl) {
+                radarScoreEl.textContent = `${shieldScore}%`;
+                if (shieldScore >= 80) {
+                    radarScoreEl.className = "text-sm font-black font-mono tracking-tight text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]";
+                } else if (shieldScore >= 50) {
+                    radarScoreEl.className = "text-sm font-black font-mono tracking-tight text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]";
+                } else {
+                    radarScoreEl.className = "text-sm font-black font-mono tracking-tight text-rose-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse";
+                }
+            }
 
             // Update top KPIs
             const totalEl = document.getElementById('st-kpi-total-time');
@@ -6895,26 +6985,35 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const focusTab = document.getElementById('st-filter-focus-tab');
             if (focusTab) focusTab.textContent = `Focus Blocked (${focusBlockedCount})`;
 
-            // Active App Status Bar
+            // Active App Status Bar with Frequency Equalizer
             const activeStatusContainer = document.getElementById('st-active-app-status-container');
             const currentActiveApp = appTrackerState.apps.find(a => a.id === appTrackerState.activeAppId);
             if (activeStatusContainer) {
                 if (currentActiveApp) {
                     activeStatusContainer.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-mono text-xs flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                                Monitored: <strong class="text-white">${currentActiveApp.name}</strong>
-                            </span>
-                            <button role="button" onclick="pauseActiveApp()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition">
-                                Pause
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-950/70 border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+                                <div class="st-equalizer" title="Live audio & telemetry frequency stream">
+                                    <div class="st-eq-bar"></div>
+                                    <div class="st-eq-bar"></div>
+                                    <div class="st-eq-bar"></div>
+                                    <div class="st-eq-bar"></div>
+                                    <div class="st-eq-bar"></div>
+                                </div>
+                                <span class="font-mono text-xs text-cyan-300 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                                    TRACKING: <strong class="text-white drop-shadow">${currentActiveApp.name}</strong>
+                                </span>
+                            </div>
+                            <button role="button" onclick="pauseActiveApp()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1 shadow-sm active:scale-95">
+                                <i class="fa-solid fa-pause text-amber-400"></i> Pause
                             </button>
                         </div>
                     `;
                 } else {
                     activeStatusContainer.innerHTML = `
-                        <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-mono text-xs flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Standby / Standalone
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 font-mono text-xs flex items-center gap-2 shadow-inner">
+                            <span class="w-2 h-2 rounded-full bg-slate-500 animate-pulse"></span> Standby / Standalone
                         </span>
                     `;
                 }
@@ -6927,10 +7026,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     const isBlocked = isAppBlocked(app.id);
                     const isActive = appTrackerState.activeAppId === app.id;
                     return `
-                        <button role="button" onclick="setActiveApp('${app.id}')" class="px-3 py-1.5 rounded-xl border text-xs font-semibold shrink-0 transition flex items-center gap-1.5 ${isActive ? 'bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/25' : (isBlocked ? 'bg-rose-950/40 text-rose-300 border-rose-500/40 hover:bg-rose-900/40' : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white')}">
+                        <button role="button" onclick="setActiveApp('${app.id}', event)" class="px-3 py-1.5 rounded-xl border text-xs font-semibold shrink-0 transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${isActive ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] font-bold' : (isBlocked ? 'bg-rose-950/40 text-rose-300 border-rose-500/40 hover:bg-rose-900/40' : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white')}">
                             <i class="${app.icon} text-[11px] ${isActive ? 'text-black' : (isBlocked ? 'text-rose-400' : app.colorClass)}"></i>
                             <span>${app.name}</span>
-                            ${isBlocked ? '<i class="fa-solid fa-lock text-[9px] text-rose-400 ml-0.5"></i>' : ''}
+                            ${isActive ? '<span class="w-1.5 h-1.5 rounded-full bg-black animate-ping ml-0.5"></span>' : (isBlocked ? '<i class="fa-solid fa-lock text-[9px] text-rose-400 ml-0.5"></i>' : '')}
                         </button>
                     `;
                 }).join('');
@@ -6979,12 +7078,25 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         const isNearLimit = pct >= 80 && !isBlocked;
                         const isActive = appTrackerState.activeAppId === app.id;
 
-                        let barColor = 'bg-cyan-400';
-                        if (isBlocked) barColor = 'bg-rose-500 shadow-md shadow-rose-500/50';
-                        else if (isNearLimit) barColor = 'bg-amber-400';
+                        // Dynamic Category Aura Class
+                        let categoryAuraClass = 'st-card-productivity';
+                        if (app.category === 'Social Media') categoryAuraClass = 'st-card-social';
+                        else if (app.category === 'Entertainment') categoryAuraClass = 'st-card-entertainment';
+                        else if (app.category === 'Gaming') categoryAuraClass = 'st-card-gaming';
+
+                        // Dynamic Card State Class
+                        let cardStateClass = '';
+                        if (isActive) cardStateClass = 'st-app-card-active';
+                        else if (isDailyLocked) cardStateClass = 'st-app-card-locked';
+                        else if (isNearLimit) cardStateClass = 'st-app-card-warning';
+
+                        // Progress fill styling
+                        let fillClass = 'st-progress-fill-normal';
+                        if (isBlocked) fillClass = 'st-progress-fill-locked';
+                        else if (isNearLimit) fillClass = 'st-progress-fill-warning';
 
                         return `
-                            <div class="bg-slate-950/80 rounded-2xl p-4 border ${isFocusLocked ? 'border-purple-500/70 shadow-lg shadow-purple-950/40' : (isDailyLocked ? 'border-rose-500/60 shadow-lg shadow-rose-950/40' : (isActive ? 'border-cyan-400/80 shadow-lg shadow-cyan-950/40' : 'border-slate-800/90'))} space-y-3 relative overflow-hidden transition-all duration-200 hover:border-slate-700">
+                            <div class="bg-slate-950/85 rounded-2xl p-4 sm:p-5 border ${isFocusLocked ? 'border-purple-500/70 shadow-lg shadow-purple-950/40' : (isDailyLocked ? 'border-rose-500/60 shadow-lg shadow-rose-950/40' : (isActive ? 'border-cyan-400/80 shadow-lg shadow-cyan-950/40' : 'border-slate-800/90'))} ${categoryAuraClass} ${cardStateClass} space-y-3.5 relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5">
                                 ${isFocusLocked ? `
                                     <div class="absolute top-0 right-0 bg-purple-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
                                         <i class="fa-solid fa-moon text-[8px]"></i> FOCUS BLOCKED
@@ -6994,7 +7106,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                         <i class="fa-solid fa-lock text-[8px]"></i> DAILY BLOCKED
                                     </div>
                                 ` : (isActive ? `
-                                    <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                                    <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1 font-bold">
                                         <span class="w-1.5 h-1.5 rounded-full bg-black animate-ping"></span> ACTIVE
                                     </div>
                                 ` : ''))}
@@ -7002,7 +7114,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <!-- APP HEADER -->
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-11 h-11 rounded-2xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-xl shrink-0 shadow-md">
+                                        <div class="w-11 h-11 rounded-2xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-xl shrink-0 shadow-md ${isActive ? 'ring-2 ring-cyan-400/60 ring-offset-2 ring-offset-slate-950' : ''}">
                                             <i class="${app.icon} ${app.colorClass}"></i>
                                         </div>
                                         <div class="truncate">
@@ -7021,18 +7133,23 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                     </button>
                                 </div>
 
-                                <!-- USAGE PROGRESS BAR -->
-                                <div class="space-y-1.5">
+                                <!-- LIQUID STRIPED PROGRESS BAR WITH GLOWING SPARK HEAD -->
+                                <div class="space-y-1.5 pt-0.5">
                                     <div class="flex justify-between items-center text-xs">
-                                        <span class="font-mono font-bold text-white" id="st-active-counter-${app.id}">${formatDuration(used)}</span>
+                                        <span class="font-mono font-bold text-white flex items-center gap-1.5" id="st-active-counter-${app.id}">
+                                            ${isActive ? '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>' : ''}
+                                            ${formatDuration(used)}
+                                        </span>
                                         <span class="text-slate-400 text-[11px] font-mono">Daily Limit: <strong class="text-slate-200">${formatDuration(limit)}</strong></span>
                                     </div>
 
-                                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800/80">
-                                        <div class="h-full rounded-full transition-all duration-300 ${barColor}" style="width: ${pct}%"></div>
+                                    <div class="st-progress-track">
+                                        <div class="st-progress-fill ${fillClass}" style="width: ${pct}%">
+                                            ${pct > 3 ? '<span class="st-spark-head"></span>' : ''}
+                                        </div>
                                     </div>
 
-                                    <div class="flex justify-between items-center text-[10px] font-mono">
+                                    <div class="flex justify-between items-center text-[10px] font-mono pt-0.5">
                                         <span class="${isDailyLocked ? 'text-rose-400 font-bold' : (isNearLimit ? 'text-amber-400 font-semibold' : 'text-slate-400')}">
                                             ${isDailyLocked ? '100% DAILY LIMIT REACHED' : (isNearLimit ? `${pct}% • Quota warning` : `${pct}% consumed`)}
                                         </span>
@@ -7068,24 +7185,24 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
                                 <!-- ACTION BUTTONS -->
                                 <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
-                                    <button role="button" onclick="openLimitModal('${app.id}'); playSfx('click')" class="py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition flex items-center justify-center gap-1">
+                                    <button role="button" onclick="openLimitModal('${app.id}'); playSfx('click')" class="py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition flex items-center justify-center gap-1 active:scale-95">
                                         <i class="fa-solid fa-sliders text-cyan-400 text-[11px]"></i> Limit
                                     </button>
 
                                     ${isFocusLocked ? `
-                                        <button role="button" onclick="showFocusBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-purple-600/30">
+                                        <button role="button" onclick="showFocusBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-purple-600/30 active:scale-95">
                                             <i class="fa-solid fa-moon text-[11px]"></i> Focus Lock
                                         </button>
                                     ` : (isDailyLocked ? `
-                                        <button role="button" onclick="showBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-rose-600/30">
+                                        <button role="button" onclick="showBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-rose-600/30 active:scale-95">
                                             <i class="fa-solid fa-lock text-[11px]"></i> Locked
                                         </button>
                                     ` : (isActive ? `
-                                        <button role="button" onclick="pauseActiveApp()" class="py-1.5 px-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1">
+                                        <button role="button" onclick="pauseActiveApp()" class="py-1.5 px-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm active:scale-95">
                                             <i class="fa-solid fa-pause text-[11px]"></i> In Use
                                         </button>
                                     ` : `
-                                        <button role="button" onclick="setActiveApp('${app.id}')" class="py-1.5 px-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold transition flex items-center justify-center gap-1">
+                                        <button role="button" onclick="setActiveApp('${app.id}', event)" class="py-1.5 px-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm active:scale-95">
                                             <i class="fa-solid fa-play text-[11px]"></i> Launch
                                         </button>
                                     `))}
@@ -7298,7 +7415,13 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 } catch(e) {}
                 updateCrossDeviceScreenTimeUI();
                 renderScreenTime();
-                if (typeof playSfx === 'function') playSfx('victory');
+                if (typeof playSfx === 'function') playSfx('fanfare');
+                if (typeof triggerGradeParticleBurst === 'function') {
+                    triggerGradeParticleBurst(window.innerWidth / 2, window.innerHeight / 2, 'S');
+                }
+                if (typeof spawnFloatingCombatText === 'function') {
+                    spawnFloatingCombatText(`📱 SYNCED: +${formatDuration(simulatedSecs)} MOBILE TRACKER`, window.innerWidth / 2 - 100, window.innerHeight / 2);
+                }
                 if (typeof showToast === 'function') {
                     showToast(`📱 Mobile Screen Time simulated: ${formatDuration(simulatedSecs)}`);
                 }
@@ -8922,6 +9045,412 @@ html[data-mode=light] #arc-ambient-cursor-glow {
 /* Global Smooth Color & Theme Transition */
 html, body, .glass-card, header, nav, button, input, select, textarea, #pp12-drawer {
     transition: background-color 0.35s ease, border-color 0.35s ease, color 0.25s ease, box-shadow 0.35s ease !important;
+}
+
+/* ==========================================================================
+   SCREEN TIME CYBERNETIC VISUAL EFFECTS & HOLOGRAPHIC SUITE
+   ========================================================================== */
+
+/* 1. Cyber Ambient Atmosphere */
+.st-cyber-ambient {
+    position: relative;
+}
+.st-cyber-ambient::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.4), rgba(168,85,247,0.2), rgba(6,182,212,0.05));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* 2. Holographic Radar Shield Dial */
+.st-radar-dial {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(13,19,34,0.9) 70%);
+    border: 1px solid rgba(6,182,212,0.35);
+    box-shadow: 0 0 24px rgba(6,182,212,0.22), inset 0 0 16px rgba(6,182,212,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.st-radar-ring-outer {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(6,182,212,0.5);
+    animation: stRotateCW 18s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-ring-inner {
+    position: absolute;
+    inset: 13px;
+    border-radius: 50%;
+    border: 1px dashed rgba(168,85,247,0.45);
+    animation: stRotateCCW 11s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-crosshair {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.st-radar-crosshair::before, .st-radar-crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(6,182,212,0.25);
+}
+.st-radar-crosshair::before {
+    top: 50%; left: 5px; right: 5px; height: 1px;
+    transform: translateY(-50%);
+}
+.st-radar-crosshair::after {
+    left: 50%; top: 5px; bottom: 5px; width: 1px;
+    transform: translateX(-50%);
+}
+
+.st-radar-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(6,182,212,0.08) 310deg, rgba(6,182,212,0.5) 360deg);
+    animation: stRotateCW 3.2s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-blip {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #00F0FF;
+    box-shadow: 0 0 8px #00F0FF;
+    animation: stBlipPulse 2.4s infinite ease-out;
+}
+.st-radar-blip-1 { top: 26%; left: 30%; animation-delay: 0.2s; }
+.st-radar-blip-2 { top: 66%; left: 66%; animation-delay: 1.1s; background: #A855F7; box-shadow: 0 0 8px #A855F7; }
+.st-radar-blip-3 { top: 35%; left: 72%; animation-delay: 1.8s; background: #10B981; box-shadow: 0 0 8px #10B981; }
+
+@keyframes stRotateCW {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes stRotateCCW {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+@keyframes stBlipPulse {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* 3. Synapse Data Stream Highway */
+.st-synapse-stream {
+    position: relative;
+    overflow: hidden;
+}
+.st-synapse-stream::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.85), rgba(168,85,247,0.95), transparent);
+    background-size: 200% 100%;
+    animation: stSynapseFlow 2.6s linear infinite;
+}
+@keyframes stSynapseFlow {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Specular Light Sweep for Combined Card */
+.st-specular-sweep {
+    position: relative;
+    overflow: hidden;
+}
+.st-specular-sweep::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 60%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), rgba(6,182,212,0.22), transparent);
+    transform: rotate(25deg);
+    animation: stSpecularSweep 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+@keyframes stSpecularSweep {
+    0% { left: -120%; }
+    40%, 100% { left: 220%; }
+}
+
+/* 4. Active App Cyber Equalizer */
+.st-equalizer {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 18px;
+    padding: 0 4px;
+}
+.st-eq-bar {
+    width: 3.5px;
+    border-radius: 9999px;
+    background: linear-gradient(to top, #06B6D4, #A855F7);
+    box-shadow: 0 0 6px rgba(6,182,212,0.6);
+    animation: stEqBounce 1.2s infinite ease-in-out;
+}
+.st-eq-bar:nth-child(1) { height: 45%; animation-delay: 0.1s; }
+.st-eq-bar:nth-child(2) { height: 85%; animation-delay: 0.35s; }
+.st-eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+.st-eq-bar:nth-child(4) { height: 100%; animation-delay: 0.45s; }
+.st-eq-bar:nth-child(5) { height: 50%; animation-delay: 0.15s; }
+
+@keyframes stEqBounce {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.6; }
+    50% { transform: scaleY(1); opacity: 1; filter: brightness(1.25); }
+}
+
+/* 5. Liquid Striped Progress Bars with Glowing Spark Head */
+.st-progress-track {
+    position: relative;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    height: 9px;
+    overflow: visible;
+}
+
+.st-progress-fill {
+    position: relative;
+    height: 100%;
+    border-radius: 9999px;
+    background-size: 24px 24px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 12px rgba(6,182,212,0.4);
+}
+
+.st-progress-fill-normal {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.18) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.18) 50%,
+        rgba(255,255,255,0.18) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #06B6D4, #3B82F6);
+    animation: stStripes 1.8s linear infinite;
+}
+
+.st-progress-fill-warning {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0.2) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #F59E0B, #EF4444);
+    animation: stStripes 1.2s linear infinite;
+    box-shadow: 0 0 14px rgba(245,158,11,0.6);
+}
+
+.st-progress-fill-locked {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.25) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.25) 50%,
+        rgba(255,255,255,0.25) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #EF4444, #991B1B);
+    animation: stStripes 0.9s linear infinite;
+    box-shadow: 0 0 16px rgba(239,68,68,0.7);
+}
+
+@keyframes stStripes {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 24px 0, 0 0; }
+}
+
+.st-spark-head {
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 0 8px #00F0FF, 0 0 16px #00F0FF, 0 0 24px #38BDF8;
+    animation: stSparkGlow 1.4s infinite alternate;
+}
+@keyframes stSparkGlow {
+    from { transform: translateY(-50%) scale(0.85); box-shadow: 0 0 6px #00F0FF, 0 0 12px #00F0FF; }
+    to { transform: translateY(-50%) scale(1.2); box-shadow: 0 0 12px #FFFFFF, 0 0 22px #00F0FF, 0 0 30px #38BDF8; }
+}
+
+/* 6. Dynamic Category Edge Auras */
+.st-card-social {
+    box-shadow: 0 8px 24px -4px rgba(236,72,153,0.18), inset 0 0 0 1px rgba(236,72,153,0.22);
+}
+.st-card-social:hover {
+    box-shadow: 0 12px 32px -4px rgba(236,72,153,0.32), inset 0 0 0 1px rgba(236,72,153,0.45);
+    border-color: rgba(236,72,153,0.5) !important;
+}
+
+.st-card-entertainment {
+    box-shadow: 0 8px 24px -4px rgba(244,63,94,0.18), inset 0 0 0 1px rgba(244,63,94,0.22);
+}
+.st-card-entertainment:hover {
+    box-shadow: 0 12px 32px -4px rgba(244,63,94,0.32), inset 0 0 0 1px rgba(244,63,94,0.45);
+    border-color: rgba(244,63,94,0.5) !important;
+}
+
+.st-card-productivity {
+    box-shadow: 0 8px 24px -4px rgba(6,182,212,0.18), inset 0 0 0 1px rgba(6,182,212,0.22);
+}
+.st-card-productivity:hover {
+    box-shadow: 0 12px 32px -4px rgba(6,182,212,0.32), inset 0 0 0 1px rgba(6,182,212,0.45);
+    border-color: rgba(6,182,212,0.5) !important;
+}
+
+.st-card-gaming {
+    box-shadow: 0 8px 24px -4px rgba(168,85,247,0.18), inset 0 0 0 1px rgba(168,85,247,0.22);
+}
+.st-card-gaming:hover {
+    box-shadow: 0 12px 32px -4px rgba(168,85,247,0.32), inset 0 0 0 1px rgba(168,85,247,0.45);
+    border-color: rgba(168,85,247,0.5) !important;
+}
+
+/* Card States: Active, Warning, Locked */
+.st-app-card-active {
+    border-color: rgba(6,182,212,0.85) !important;
+    box-shadow: 0 0 28px rgba(6,182,212,0.3), inset 0 0 16px rgba(6,182,212,0.12) !important;
+    animation: stActiveCardGlow 2.5s infinite ease-in-out;
+}
+@keyframes stActiveCardGlow {
+    0%, 100% { box-shadow: 0 0 18px rgba(6,182,212,0.25), inset 0 0 10px rgba(6,182,212,0.08); }
+    50% { box-shadow: 0 0 32px rgba(6,182,212,0.45), inset 0 0 20px rgba(6,182,212,0.2); }
+}
+
+.st-app-card-warning {
+    border-color: rgba(245,158,11,0.8) !important;
+    box-shadow: 0 0 24px rgba(245,158,11,0.3), inset 0 0 12px rgba(245,158,11,0.1) !important;
+}
+
+.st-app-card-locked {
+    border-color: rgba(239,68,68,0.85) !important;
+    box-shadow: 0 0 28px rgba(239,68,68,0.35), inset 0 0 16px rgba(239,68,68,0.15) !important;
+    animation: stLockedPulse 2s infinite ease-in-out;
+}
+@keyframes stLockedPulse {
+    0%, 100% { border-color: rgba(239,68,68,0.6); }
+    50% { border-color: rgba(239,68,68,1); }
+}
+
+/* 7. Light Mode Overrides */
+html[data-mode=light] .st-radar-dial {
+    background: radial-gradient(circle, rgba(2,132,199,0.1) 0%, rgba(248,250,252,0.95) 70%) !important;
+    border-color: rgba(2,132,199,0.35) !important;
+    box-shadow: 0 4px 18px rgba(2,132,199,0.18), inset 0 0 12px rgba(2,132,199,0.1) !important;
+}
+html[data-mode=light] .st-radar-ring-outer {
+    border-color: rgba(2,132,199,0.5) !important;
+}
+html[data-mode=light] .st-radar-ring-inner {
+    border-color: rgba(124,58,237,0.45) !important;
+}
+html[data-mode=light] .st-radar-sweep {
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(2,132,199,0.08) 310deg, rgba(2,132,199,0.35) 360deg) !important;
+}
+html[data-mode=light] .st-progress-track {
+    background: #E2E8F0 !important;
+    border-color: #CBD5E1 !important;
+}
+html[data-mode=light] .st-spark-head {
+    box-shadow: 0 0 8px #0284C7, 0 0 16px #0284C7 !important;
+}
+html[data-mode=light] .st-card-social {
+    box-shadow: 0 4px 16px -2px rgba(236,72,153,0.15), inset 0 0 0 1px rgba(236,72,153,0.25) !important;
+}
+html[data-mode=light] .st-card-entertainment {
+    box-shadow: 0 4px 16px -2px rgba(244,63,94,0.15), inset 0 0 0 1px rgba(244,63,94,0.25) !important;
+}
+html[data-mode=light] .st-card-productivity {
+    box-shadow: 0 4px 16px -2px rgba(2,132,199,0.15), inset 0 0 0 1px rgba(2,132,199,0.25) !important;
+}
+html[data-mode=light] .st-card-gaming {
+    box-shadow: 0 4px 16px -2px rgba(124,58,237,0.15), inset 0 0 0 1px rgba(124,58,237,0.25) !important;
+}
+
+/* Light mode app cards & text clarity */
+html[data-mode=light] #st-apps-grid > div {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: rgba(203, 213, 225, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+html[data-mode=light] #st-apps-grid h4,
+html[data-mode=light] #st-apps-grid [id^="st-active-counter-"] {
+    color: #0F172A !important;
+}
+html[data-mode=light] #st-active-app-status-container .bg-cyan-950\/70 {
+    background: rgba(224, 242, 254, 0.9) !important;
+    border-color: rgba(2, 132, 199, 0.45) !important;
+    box-shadow: 0 2px 12px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] #st-active-app-status-container strong {
+    color: #0369A1 !important;
+}
+html[data-mode=light] #st-active-app-status-container .st-equalizer .st-eq-bar {
+    background: #0284C7 !important;
+    box-shadow: 0 0 6px rgba(2, 132, 199, 0.6) !important;
+}
+html[data-mode=light] #view-screentime .bg-slate-950\/70,
+html[data-mode=light] #view-screentime .bg-slate-950\/80 {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+html[data-mode=light] #st-app-launcher-pills button:not(.bg-cyan-500) {
+    background: rgba(241, 245, 249, 0.95) !important;
+    color: #334155 !important;
+    border-color: #CBD5E1 !important;
+}
+html[data-mode=light] #st-app-launcher-pills button.bg-cyan-500 {
+    background: #0284C7 !important;
+    color: #FFFFFF !important;
+    border-color: #0284C7 !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+html[data-mode=light] #st-combined-time-val {
+    background: linear-gradient(90deg, #0284C7, #4F46E5) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+html[data-mode=light] #st-radar-shield-score {
+    color: #0369A1 !important;
 }
 </style>
 
