@@ -1181,6 +1181,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <i class="fa-solid fa-pause mr-1"></i> Pause Tracker
                             </button>
                         </div>
+
+                        <!-- CROSS-DEVICE QUICK SYNC STRIP -->
+                        <div id="cross-device-quick-pill" class="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[10px]">
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-purple-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Separately Made Mobile Screen Time Section">
+                                <span class="text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-mobile-screen"></i> Mobile:</span>
+                                <span id="sidebar-mobile-time" class="font-mono font-bold text-white">0h 0m</span>
+                            </div>
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-cyan-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Combined Screen Time Matrix">
+                                <span class="text-cyan-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Combined:</span>
+                                <span id="sidebar-combined-time" class="font-mono font-bold text-cyan-400">0h 0m</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- CUSTOM HABIT CREATOR -->
@@ -1652,6 +1664,148 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <i class="fa-brands fa-youtube"></i> Active (Shorts Blocked)
                         </div>
                         <span class="text-[9px] text-slate-500 block">Restricts distracting channels</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CROSS-DEVICE LINKED SCREEN TIME MATRIX (DESKTOP + MOBILE) -->
+            <div id="st-cross-device-ecosystem" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-indigo-400 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
+                <!-- TOP HEADER & ACCOUNT STATUS BAR -->
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-link text-indigo-400"></i>
+                                DUAL-DEVICE LINKED ECOSYSTEM
+                            </span>
+                            <span id="st-ecosystem-live-badge" class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span> Live Unified Sync
+                            </span>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-tower-broadcast text-indigo-400"></i> Linked Screen Time Tracker
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300">
+                            Automatic screen time synchronization between your Mobile App Tracker and Desktop PC under your linked account.
+                        </p>
+                    </div>
+
+                    <!-- ACCOUNT STATUS & CONTROLS -->
+                    <div class="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
+                        <div id="st-cross-device-account-pill" class="p-1 px-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2 shadow-inner">
+                            <span class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i>Checking account...</span>
+                        </div>
+
+                        <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Sync latest screen time across devices">
+                            <i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Sync Now
+                        </button>
+                        <button role="button" onclick="if(window.ArcGoogleSync&&ArcGoogleSync.simulateMobileTrackerSync){ArcGoogleSync.simulateMobileTrackerSync(225);}else{simulateMobileTime(225);}; playSfx('click')" class="px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/70 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Simulate 3h 45m screen time from Mobile App Tracker">
+                            <i class="fa-solid fa-mobile-screen text-indigo-400"></i> Simulate Mobile Data
+                        </button>
+                        <button role="button" onclick="promptSetMobileTime(); playSfx('click')" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition" title="Manually adjust mobile screen time minutes">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 KEY CARDS: DESKTOP + SEPARATELY MADE MOBILE SECTION + COMBINED SCREEN TIME -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 pt-1">
+                    <!-- 1. DESKTOP SCREEN TIME CARD -->
+                    <div class="bg-slate-950/80 rounded-2xl p-4 sm:p-5 border border-slate-800 hover:border-cyan-500/40 transition-all duration-200 space-y-3 relative overflow-hidden group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-base">
+                                    <i class="fa-solid fa-laptop"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-white">Desktop Screen Time</h4>
+                                    <span class="text-[10px] text-slate-400 block" id="st-desktop-device-name">💻 Desktop PC / Workstation</span>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-400/30 text-[9px] font-mono font-bold uppercase tracking-wider">
+                                THIS PC
+                            </span>
+                        </div>
+
+                        <div class="py-1">
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-cyan-400" id="st-desktop-time-val">00h 00m 00s</div>
+                            <div class="flex items-center gap-1.5 text-[10px] text-slate-400 mt-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span id="st-desktop-status-sub">Active desktop session running</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. MOBILE SCREEN TIME CARD (SEPARATELY MADE SECTION) -->
+                    <div id="st-mobile-separate-card" class="bg-gradient-to-b from-purple-950/30 via-slate-950/90 to-purple-950/20 rounded-2xl p-4 sm:p-5 border-2 border-purple-500/50 shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:border-purple-400 transition-all duration-200 space-y-3 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 bg-purple-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                            <i class="fa-solid fa-mobile-screen text-[8px]"></i> MOBILE SECTION
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-base shadow-sm">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                                        Mobile Screen Time
+                                    </h4>
+                                    <span class="text-[10px] text-purple-300/80 block truncate max-w-[170px]" id="st-mobile-device-name">📱 Mobile App Tracker</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="py-1">
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-purple-300" id="st-mobile-time-val">00h 00m 00s</div>
+                            <div class="flex items-center gap-1.5 text-[10px] mt-1" id="st-mobile-sync-status">
+                                <span class="text-slate-400"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Waiting for mobile sync</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. COMBINED SCREEN TIME CARD (BOTH DEVICES COMBINED) -->
+                    <div class="bg-gradient-to-br from-cyan-950/40 via-slate-900 to-indigo-950/40 rounded-2xl p-4 sm:p-5 border-2 border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.22)] space-y-3 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                            <i class="fa-solid fa-layer-group text-[8px]"></i> COMBINED TOTAL
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-base">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-white">Combined Screen Time</h4>
+                                    <span class="text-[10px] text-cyan-200/80 block">Desktop + Mobile Devices</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="py-1">
+                            <div class="text-2xl sm:text-3xl font-black font-mono tracking-wider bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent" id="st-combined-time-val">00h 00m 00s</div>
+                            <div class="text-[10px] text-cyan-300/90 font-mono mt-1 truncate" id="st-combined-split-pill">
+                                💻 Desktop: 0h 0m • 📱 Mobile: 0h 0m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROPORTIONAL SPLIT PROGRESS BAR (DESKTOP VS MOBILE) -->
+                <div class="bg-slate-950/70 p-3 sm:p-3.5 rounded-xl border border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between text-[11px] font-mono">
+                        <span id="st-combined-desktop-pct" class="text-cyan-400 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-laptop"></i> Desktop 50%
+                        </span>
+                        <span class="text-slate-400 text-[10px] font-sans">DUAL-DEVICE RATIO</span>
+                        <span id="st-combined-mobile-pct" class="text-purple-400 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-mobile-screen"></i> Mobile 50%
+                        </span>
+                    </div>
+
+                    <div class="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden flex p-0.5">
+                        <div id="st-combined-bar-desktop" class="h-full rounded-l-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 shadow-sm w-1/2"></div>
+                        <div id="st-combined-bar-mobile" class="h-full rounded-r-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 shadow-sm w-1/2"></div>
                     </div>
                 </div>
             </div>
@@ -3955,23 +4109,53 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const resGrand = document.getElementById('res-grand-total-time');
             const resGrandDetail = document.getElementById('res-grand-total-detail');
 
+            // Factor in cross-device mobile screen time if present
+            let mobileSecs = 0;
+            if (state.deviceScreenTime && state.deviceScreenTime.mobile && state.deviceScreenTime.mobile.seconds) {
+                mobileSecs = Number(state.deviceScreenTime.mobile.seconds) || 0;
+            } else {
+                try {
+                    const devRaw = localStorage.getItem('arc_cross_device_screentime');
+                    if (devRaw) {
+                        const parsed = JSON.parse(devRaw);
+                        if (parsed && parsed.mobile && parsed.mobile.seconds) mobileSecs = Number(parsed.mobile.seconds) || 0;
+                    }
+                } catch(_) {}
+            }
+
             const focusSecs = state.timer.totalFocusSeconds || 0;
             const laptopSecs = state.laptop.totalSeconds + totalTimeSec;
-            const grandTotalSecs = focusSecs + laptopSecs;
+            const combinedScreenSecs = laptopSecs + mobileSecs;
+            const grandTotalSecs = focusSecs + combinedScreenSecs;
 
-            if (resLaptop) resLaptop.innerText = formatDuration(laptopSecs);
-            if (resLaptopSec) resLaptopSec.innerText = `${laptopSecs} logged sec`;
+            if (resLaptop) {
+                resLaptop.innerText = mobileSecs > 0 ? formatDuration(combinedScreenSecs) : formatDuration(laptopSecs);
+            }
+            if (resLaptopSec) {
+                resLaptopSec.innerText = mobileSecs > 0 
+                    ? `PC: ${formatDuration(laptopSecs)} + Mobile: ${formatDuration(mobileSecs)}` 
+                    : `${laptopSecs} logged sec`;
+            }
             if (resFocus) resFocus.innerText = formatDuration(focusSecs);
             if (resFocusSec) resFocusSec.innerText = `${focusSecs} logged sec`;
             if (resGrand) resGrand.innerText = formatDuration(grandTotalSecs);
-            if (resGrandDetail) resGrandDetail.innerText = `Focus: ${formatDuration(focusSecs)} + Screen: ${formatDuration(laptopSecs)}`;
+            if (resGrandDetail) {
+                resGrandDetail.innerText = mobileSecs > 0
+                    ? `Focus: ${formatDuration(focusSecs)} + Combined Screen: ${formatDuration(combinedScreenSecs)}`
+                    : `Focus: ${formatDuration(focusSecs)} + Screen: ${formatDuration(laptopSecs)}`;
+            }
 
             const bannerTotal = document.getElementById('arc-end-total-time');
             const bannerFocus = document.getElementById('arc-end-focus-time');
             const bannerLaptop = document.getElementById('arc-end-laptop-time');
             if (bannerTotal) bannerTotal.innerText = formatDuration(grandTotalSecs);
             if (bannerFocus) bannerFocus.innerText = formatDuration(focusSecs);
-            if (bannerLaptop) bannerLaptop.innerText = formatDuration(laptopSecs);
+            if (bannerLaptop) bannerLaptop.innerText = formatDuration(combinedScreenSecs);
+
+            const sideMob = document.getElementById('sidebar-mobile-time');
+            const sideComb = document.getElementById('sidebar-combined-time');
+            if (sideMob) sideMob.textContent = formatDurationShort ? formatDurationShort(mobileSecs) : `${Math.floor(mobileSecs/60)}m`;
+            if (sideComb) sideComb.textContent = formatDurationShort ? formatDurationShort(combinedScreenSecs) : `${Math.floor(combinedScreenSecs/60)}m`;
 
             const resHabitsCount = document.getElementById('res-completed-habits-count');
             const resHabitsPct = document.getElementById('res-completed-habits-pct');
@@ -6811,12 +6995,216 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     }).join('');
                 }
             }
+
+            // Synchronize and update cross-device screen time matrix (Desktop, Separately Made Mobile, and Combined)
+            updateCrossDeviceScreenTimeUI();
+        }
+
+        /* ==========================================================================
+           CROSS-DEVICE LINKED SCREEN TIME LOGIC (DESKTOP + MOBILE)
+           ========================================================================== */
+        function formatDurationShort(totalSecs) {
+            const h = Math.floor(totalSecs / 3600);
+            const m = Math.floor((totalSecs % 3600) / 60);
+            if (h > 0) return `${h}h ${m}m`;
+            return `${m}m`;
+        }
+
+        function updateCrossDeviceScreenTimeUI() {
+            const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            // 1. Get current linked account
+            const user = (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') 
+                ? window.ArcGoogleSync.getUser() 
+                : (function(){ try { return JSON.parse(localStorage.getItem('arc_google_user')); } catch(e){ return null; } })();
+
+            // 2. Retrieve persistent cross-device dataset
+            let deviceData = null;
+            try {
+                const raw = localStorage.getItem('arc_cross_device_screentime');
+                if (raw) deviceData = JSON.parse(raw);
+            } catch(e) {}
+            
+            const todayKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+
+            if (!deviceData || typeof deviceData !== 'object') {
+                deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : {
+                    desktop: { seconds: 0, deviceName: 'Desktop PC', lastUpdated: 0, todayKey: todayKey },
+                    mobile: { seconds: 0, deviceName: 'Mobile Tracker', lastUpdated: 0, todayKey: todayKey }
+                };
+            }
+            
+            // 3. Obtain local device active screen time
+            let currentLocalSecs = 0;
+            if (window.ArcScreenTime && typeof window.ArcScreenTime.activeSeconds === 'number') {
+                currentLocalSecs = window.ArcScreenTime.activeSeconds;
+            } else if (window.state && window.state.laptop && typeof window.state.laptop.totalSeconds === 'number') {
+                currentLocalSecs = window.state.laptop.totalSeconds;
+            }
+
+            if (isMobileDevice) {
+                deviceData.mobile = deviceData.mobile || {};
+                deviceData.mobile.seconds = Math.max(Number(deviceData.mobile.seconds) || 0, currentLocalSecs);
+                deviceData.mobile.deviceName = '📱 ' + (/Android/i.test(navigator.userAgent) ? 'Android Mobile App Tracker' : 'iOS Mobile App Tracker');
+                deviceData.mobile.lastUpdated = Date.now();
+                deviceData.mobile.todayKey = todayKey;
+            } else {
+                deviceData.desktop = deviceData.desktop || {};
+                deviceData.desktop.seconds = Math.max(Number(deviceData.desktop.seconds) || 0, currentLocalSecs);
+                deviceData.desktop.deviceName = '💻 ' + (/Mac/i.test(navigator.userAgent) ? 'macOS Workstation' : 'Windows PC / Desktop');
+                deviceData.desktop.lastUpdated = Date.now();
+                deviceData.desktop.todayKey = todayKey;
+            }
+
+            const desktopSecs = Number(deviceData.desktop?.seconds) || 0;
+            const mobileSecs = Number(deviceData.mobile?.seconds) || 0;
+            const combinedSecs = desktopSecs + mobileSecs;
+
+            // 4. Update Desktop Counter
+            const deskEl = document.getElementById('st-desktop-time-val');
+            if (deskEl) deskEl.textContent = formatDuration(desktopSecs);
+
+            const deskNameEl = document.getElementById('st-desktop-device-name');
+            if (deskNameEl) {
+                deskNameEl.textContent = deviceData.desktop?.deviceName || '💻 Desktop PC / Workstation';
+            }
+
+            // 5. Update Mobile Counter (Separately Made Section)
+            const mobEl = document.getElementById('st-mobile-time-val');
+            if (mobEl) mobEl.textContent = formatDuration(mobileSecs);
+
+            const mobNameEl = document.getElementById('st-mobile-device-name');
+            if (mobNameEl) {
+                mobNameEl.textContent = deviceData.mobile?.deviceName || '📱 Mobile App Tracker';
+            }
+
+            const mobStatusEl = document.getElementById('st-mobile-sync-status');
+            if (mobStatusEl) {
+                if (!user) {
+                    mobStatusEl.innerHTML = `<span class="text-amber-300 font-semibold"><i class="fa-solid fa-link-slash mr-1"></i>Link Google account to sync mobile</span>`;
+                } else if (mobileSecs > 0) {
+                    const timeAgo = (window.ArcGoogleSync && typeof window.ArcGoogleSync.formatTimeAgo === 'function')
+                        ? window.ArcGoogleSync.formatTimeAgo(deviceData.mobile?.lastUpdated)
+                        : (deviceData.mobile?.lastUpdated ? 'Live Synced' : 'Synced via Account');
+                    mobStatusEl.innerHTML = `<span class="text-emerald-400 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Synced via Account (${timeAgo})</span>`;
+                } else {
+                    mobStatusEl.innerHTML = `<span class="text-slate-400"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Awaiting mobile check-in • Tap 'Simulate Mobile Data' to test</span>`;
+                }
+            }
+
+            // 6. Update Combined Counter (Both Devices Combined)
+            const combEl = document.getElementById('st-combined-time-val');
+            if (combEl) combEl.textContent = formatDuration(combinedSecs);
+
+            // 7. Update Proportional Dual-Device Ratio Bar
+            const deskBar = document.getElementById('st-combined-bar-desktop');
+            const mobBar = document.getElementById('st-combined-bar-mobile');
+            const deskPctLabel = document.getElementById('st-combined-desktop-pct');
+            const mobPctLabel = document.getElementById('st-combined-mobile-pct');
+            const splitPill = document.getElementById('st-combined-split-pill');
+
+            let deskPct = 50;
+            let mobPct = 50;
+            if (combinedSecs > 0) {
+                deskPct = Math.round((desktopSecs / combinedSecs) * 100);
+                mobPct = 100 - deskPct;
+            }
+
+            if (deskBar) deskBar.style.width = `${deskPct}%`;
+            if (mobBar) mobBar.style.width = `${mobPct}%`;
+            if (deskPctLabel) deskPctLabel.innerHTML = `<i class="fa-solid fa-laptop text-cyan-400 mr-1"></i> Desktop ${deskPct}% (${formatDurationShort(desktopSecs)})`;
+            if (mobPctLabel) mobPctLabel.innerHTML = `<i class="fa-solid fa-mobile-screen text-purple-400 mr-1"></i> Mobile ${mobPct}% (${formatDurationShort(mobileSecs)})`;
+            if (splitPill) {
+                splitPill.textContent = `💻 Desktop: ${formatDurationShort(desktopSecs)} (${deskPct}%) • 📱 Mobile: ${formatDurationShort(mobileSecs)} (${mobPct}%)`;
+            }
+
+            // 8. Update Account Status Pill in Header
+            const acctPill = document.getElementById('st-cross-device-account-pill');
+            if (acctPill) {
+                if (user) {
+                    acctPill.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            ${user.picture ? `<img src="${user.picture}" class="w-5 h-5 rounded-full border border-cyan-400">` : `<div class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-[10px] flex items-center justify-center">${(user.name||'G').charAt(0).toUpperCase()}</div>`}
+                            <span class="text-xs font-bold text-white truncate max-w-[140px] sm:max-w-[200px]" title="${user.email}">${user.email}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] font-mono font-bold">LINKED</span>
+                        </div>
+                    `;
+                } else {
+                    acctPill.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] text-amber-300 font-medium"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Not Linked</span>
+                            <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginWithGoogle();}else{alert('Google sync ready');}; playSfx('click')" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] uppercase tracking-wider transition">
+                                Link Account
+                            </button>
+                            <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginDemoAccount();}else{alert('Demo sync ready');}; playSfx('click')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-[10px] transition" title="1-Click Demo Account">
+                                Demo
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+
+            // 9. Update Sidebar Screen Time Widget Quick Indicators
+            const sideMob = document.getElementById('sidebar-mobile-time');
+            const sideComb = document.getElementById('sidebar-combined-time');
+            if (sideMob) sideMob.textContent = formatDurationShort(mobileSecs);
+            if (sideComb) sideComb.textContent = formatDurationShort(combinedSecs);
+
+            // 10. Persist to storage & state
+            window.state = window.state || {};
+            window.state.deviceScreenTime = deviceData;
+            try {
+                localStorage.setItem('arc_cross_device_screentime', JSON.stringify(deviceData));
+                if (typeof setLocalStorageItem === 'function') {
+                    setLocalStorageItem('arc_cross_device_screentime', deviceData);
+                }
+            } catch(e) {}
+        }
+
+        function simulateMobileTime(extraMins = 225) {
+            if (window.ArcGoogleSync && typeof window.ArcGoogleSync.simulateMobileTrackerSync === 'function') {
+                window.ArcGoogleSync.simulateMobileTrackerSync(extraMins);
+            } else {
+                const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+                const simulatedSecs = Math.max(60, Number(extraMins || 225) * 60);
+                window.state = window.state || {};
+                window.state.deviceScreenTime = window.state.deviceScreenTime || {};
+                window.state.deviceScreenTime.mobile = {
+                    seconds: simulatedSecs,
+                    deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
+                    lastUpdated: Date.now(),
+                    todayKey: today,
+                    isLinked: true
+                };
+                try {
+                    localStorage.setItem('arc_cross_device_screentime', JSON.stringify(window.state.deviceScreenTime));
+                } catch(e) {}
+                updateCrossDeviceScreenTimeUI();
+                renderScreenTime();
+                if (typeof playSfx === 'function') playSfx('victory');
+                if (typeof showToast === 'function') {
+                    showToast(`📱 Mobile Screen Time simulated: ${formatDuration(simulatedSecs)}`);
+                }
+            }
+        }
+
+        function promptSetMobileTime() {
+            const entered = prompt("Enter Mobile App Tracker screen time in minutes:\n(e.g., 225 for 3h 45m)", "225");
+            if (entered !== null) {
+                const num = parseInt(entered, 10);
+                if (!isNaN(num) && num >= 0) {
+                    simulateMobileTime(num);
+                }
+            }
         }
 
         // Expose to window for global access
         window.ArcAppTracker = {
             init: initAppTracker,
             renderScreenTimeView,
+            updateCrossDeviceScreenTimeUI,
+            simulateMobileTime,
+            promptSetMobileTime,
             setActiveApp,
             pauseActiveApp,
             isAppBlocked,
@@ -13597,6 +13985,55 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       );
     }
 
+    // 5b. Cross-Device Linked Screen Time Matrix (Desktop + Mobile)
+    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+    const isLocalMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    local.deviceScreenTime = local.deviceScreenTime || {
+      desktop: { seconds: 0, deviceName: 'Desktop PC', lastUpdated: 0, todayKey: todayDateKey },
+      mobile: { seconds: 0, deviceName: 'Mobile Tracker', lastUpdated: 0, todayKey: todayDateKey }
+    };
+
+    if (cloud.deviceScreenTime && typeof cloud.deviceScreenTime === 'object') {
+      const cDesk = cloud.deviceScreenTime.desktop;
+      const cMob = cloud.deviceScreenTime.mobile;
+
+      // Handle Mobile Sync
+      if (cMob && typeof cMob === 'object') {
+        if (!isLocalMobile) {
+          // Local device is Desktop: adopt mobile screen time from cloud
+          local.deviceScreenTime.mobile = Object.assign({}, local.deviceScreenTime.mobile, cMob);
+        } else {
+          // Local device is Mobile: keep highest or newest
+          if (Number(cMob.seconds) > Number(local.deviceScreenTime.mobile.seconds || 0)) {
+            local.deviceScreenTime.mobile = Object.assign({}, local.deviceScreenTime.mobile, cMob);
+          }
+        }
+      }
+
+      // Handle Desktop Sync
+      if (cDesk && typeof cDesk === 'object') {
+        if (isLocalMobile) {
+          // Local device is Mobile: adopt desktop screen time from cloud
+          local.deviceScreenTime.desktop = Object.assign({}, local.deviceScreenTime.desktop, cDesk);
+        } else {
+          // Local device is Desktop: keep highest or newest
+          if (Number(cDesk.seconds) > Number(local.deviceScreenTime.desktop.seconds || 0)) {
+            local.deviceScreenTime.desktop = Object.assign({}, local.deviceScreenTime.desktop, cDesk);
+          }
+        }
+      }
+    }
+
+    // Direct support for packets sent with deviceRole
+    if (cloud.deviceRole === 'mobile' && cloud.todayScreenTimeSecs) {
+      local.deviceScreenTime.mobile = local.deviceScreenTime.mobile || {};
+      local.deviceScreenTime.mobile.seconds = Math.max(Number(local.deviceScreenTime.mobile.seconds) || 0, Number(cloud.todayScreenTimeSecs) || 0);
+      local.deviceScreenTime.mobile.deviceName = cloud.deviceName || '📱 Mobile App Tracker';
+      local.deviceScreenTime.mobile.lastUpdated = cloud.updatedAt || Date.now();
+      local.deviceScreenTime.mobile.todayKey = todayDateKey;
+    }
+
     // 6. Screen Time Telemetry Logs & Calendar Events (Union set without duplicates)
     ['screenTimeLogs', 'calendarEvents'].forEach(field => {
       const lList = Array.isArray(local[field]) ? local[field] : [];
@@ -13631,12 +14068,44 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       if (rawVault) vaultData = JSON.parse(rawVault);
     } catch(e) {}
 
+    const isLocalMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+    const activeSecs = (window.ArcScreenTime ? window.ArcScreenTime.activeSeconds : (window.state?.laptop?.totalSeconds || 0));
+
+    window.state = window.state || {};
+    window.state.deviceScreenTime = window.state.deviceScreenTime || {
+      desktop: { seconds: 0, deviceName: 'Desktop PC', lastUpdated: 0, todayKey: todayDateKey },
+      mobile: { seconds: 0, deviceName: 'Mobile Tracker', lastUpdated: 0, todayKey: todayDateKey }
+    };
+
+    if (isLocalMobile) {
+      window.state.deviceScreenTime.mobile = {
+        seconds: activeSecs,
+        deviceName: getDeviceName(),
+        lastUpdated: Date.now(),
+        todayKey: todayDateKey
+      };
+    } else {
+      window.state.deviceScreenTime.desktop = {
+        seconds: activeSecs,
+        deviceName: getDeviceName(),
+        lastUpdated: Date.now(),
+        todayKey: todayDateKey
+      };
+    }
+
+    try {
+      localStorage.setItem('arc_cross_device_screentime', JSON.stringify(window.state.deviceScreenTime));
+    } catch(e) {}
+
     return {
       app: 'ArcTracker',
       protocolVersion: '2026.2',
       updatedAt: Date.now(),
       senderId: getDeviceId(),
       deviceName: getDeviceName(),
+      deviceRole: isLocalMobile ? 'mobile' : 'desktop',
+      todayScreenTimeSecs: activeSecs,
       user: getUser() ? getUser().email : 'anonymous',
       state: JSON.parse(JSON.stringify(window.state || {})),
       reflection: reflectionText,
@@ -13652,6 +14121,13 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       // 1. Deep union merge with local state
       const mergedState = deepUnionMerge(window.state, payload.state);
       window.state = Object.assign(window.state || {}, mergedState);
+
+      // Save device screen time to localStorage
+      if (mergedState.deviceScreenTime) {
+        try {
+          localStorage.setItem('arc_cross_device_screentime', JSON.stringify(mergedState.deviceScreenTime));
+        } catch(e) {}
+      }
 
       // Keep today's habit.completed synchronized with dailyHabits[today]
       const todayKey = getTodayKey();
@@ -13702,7 +14178,8 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       const refreshFns = [
         'renderHabits', 'renderCalendar', 'renderRulesBlueprint',
         'renderMatrix', 'renderSpiderWeb', 'renderScreenTime',
-        'renderDayControl', 'renderHabitManager'
+        'renderDayControl', 'renderHabitManager', 'renderScreenTimeView',
+        'updateCrossDeviceScreenTimeUI'
       ];
       refreshFns.forEach(fn => {
         try { if (typeof window[fn] === 'function') window[fn](true); } catch(e) {}
@@ -14010,6 +14487,39 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     applyCloudState(simulatedPayload, true);
   }
 
+  // Mobile App Tracker dedicated sync simulation
+  function simulateMobileTrackerSync(customMinutes = 225) {
+    const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+    const simulatedSecs = Math.max(60, Number(customMinutes || 225) * 60);
+
+    const simulatedCloudState = JSON.parse(JSON.stringify(window.state || {}));
+    simulatedCloudState.deviceScreenTime = simulatedCloudState.deviceScreenTime || {};
+    simulatedCloudState.deviceScreenTime.mobile = {
+      seconds: simulatedSecs,
+      deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
+      lastUpdated: Date.now(),
+      todayKey: today,
+      isLinked: true
+    };
+
+    const simulatedPayload = {
+      app: 'ArcTracker',
+      updatedAt: Date.now(),
+      senderId: 'dev_mobile_app_tracker_sim',
+      deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
+      deviceRole: 'mobile',
+      todayScreenTimeSecs: simulatedSecs,
+      user: getUser() ? getUser().email : 'demo@gmail.com',
+      state: simulatedCloudState
+    };
+
+    applyCloudState(simulatedPayload, true);
+    if (typeof playSfx === 'function') playSfx('victory');
+    if (typeof showToast === 'function') {
+      showToast(`📱 Mobile App Tracker linked: Synced ${formatDuration(simulatedSecs)} screen time!`);
+    }
+  }
+
   /* ----------------------------------------------------
    * UI RENDERER (Supports Drawer and Full Settings View)
    * ---------------------------------------------------- */
@@ -14165,6 +14675,10 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     containers.forEach(c => {
       c.innerHTML = html;
     });
+
+    if (typeof updateCrossDeviceScreenTimeUI === 'function') {
+      updateCrossDeviceScreenTimeUI();
+    }
   }
 
   // Public Interface
@@ -14194,6 +14708,8 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     syncNow: () => performSync(false),
     triggerAutoSync: triggerAutoSync,
     simulateSecondDeviceSync: simulateSecondDeviceSync,
+    simulateMobileTrackerSync: simulateMobileTrackerSync,
+    formatTimeAgo: formatTimeAgo,
     toggleAutoSync: function(checked) {
       setAutoSyncEnabled(checked);
       if (typeof showToast === 'function') {

@@ -21,17 +21,13 @@ html = html.replace(
 
 // 0b. Add Web App Manifest and Apple iOS Web Clip meta tags
 const iosPwaMeta = `    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#00F0FF">
     <!-- iOS Safari & Web Clip App Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Arc Tracker">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="./icons/128x128@2x.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="./icons/128x128.png">`;
+    <link rel="apple-touch-icon" href="./icons/128x128@2x.png">`;
 
 if (!html.includes('apple-mobile-web-app-capable')) {
   html = html.replace(/(<title>[^<]*<\/title>)/i, `$1\n${iosPwaMeta}`);
@@ -51,6 +47,7 @@ const iosSafeStyles = `
             padding-right: env(safe-area-inset-right, 0px);
             -webkit-touch-callout: none;
             -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             touch-action: manipulation;
         }
         header.sticky {
@@ -213,7 +210,7 @@ html = html.replace(/[\u0080-\u009F]/g, '');
 // 6. Screen Time tab is permanently available in desktop and mobile navigation
 // Header controls (Light Mode & Arc Switcher) relocated to Settings view to keep header clean & spacious.
 
-// 7. Upgrade Screen Time Widget to Universal Multi-Platform Design
+// 7. Upgrade Screen Time Widget to Universal Multi-Platform Design with Cross-Device Sync Strip
 const oldWidget = `<!-- SCREEN TIME TRACKER WIDGET -->
                     <div class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 space-y-3 sm:space-y-4 border-l-4 border-l-blue-400">
                         <div class="flex items-center justify-between">
@@ -232,6 +229,18 @@ const oldWidget = `<!-- SCREEN TIME TRACKER WIDGET -->
                             <button role="button" id="btn-toggle-laptop" onclick="toggleLaptopTracker()" class="w-full py-2 sm:py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider transition border border-slate-700 shadow-sm hover:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                                 <i class="fa-solid fa-pause mr-1"></i> Pause Tracker
                             </button>
+                        </div>
+
+                        <!-- CROSS-DEVICE QUICK SYNC STRIP -->
+                        <div id="cross-device-quick-pill" class="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[10px]">
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-purple-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Separately Made Mobile Screen Time Section">
+                                <span class="text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-mobile-screen"></i> Mobile:</span>
+                                <span id="sidebar-mobile-time" class="font-mono font-bold text-white">0h 0m</span>
+                            </div>
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-cyan-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Combined Screen Time Matrix">
+                                <span class="text-cyan-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Combined:</span>
+                                <span id="sidebar-combined-time" class="font-mono font-bold text-cyan-400">0h 0m</span>
+                            </div>
                         </div>
                     </div>`;
 
@@ -259,6 +268,18 @@ const upgradedWidget = `<!-- SCREEN TIME TRACKER WIDGET (MULTI-PLATFORM) -->
                             <button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1" title="App Screen Time, Usage Limits &amp; Blocker">
                                 <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Limits
                             </button>
+                        </div>
+
+                        <!-- CROSS-DEVICE QUICK SYNC STRIP -->
+                        <div id="cross-device-quick-pill" class="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[10px]">
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-purple-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Separately Made Mobile Screen Time Section">
+                                <span class="text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-mobile-screen"></i> Mobile:</span>
+                                <span id="sidebar-mobile-time" class="font-mono font-bold text-white">0h 0m</span>
+                            </div>
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex items-center justify-between cursor-pointer hover:border-cyan-500/40 transition" onclick="switchTab('screentime'); playSfx('click')" title="View Combined Screen Time Matrix">
+                                <span class="text-cyan-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Combined:</span>
+                                <span id="sidebar-combined-time" class="font-mono font-bold text-cyan-400">0h 0m</span>
+                            </div>
                         </div>
                     </div>`;
 

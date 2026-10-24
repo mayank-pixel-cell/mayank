@@ -37,6 +37,10 @@ class ArcScreenTimeEngine {
     };
     this.history = {};
     this.reconciledTodaySeconds = 0;
+    this.deviceScreenTime = {
+      desktop: { seconds: 0, deviceName: 'Desktop PC', lastUpdated: 0 },
+      mobile: { seconds: 0, deviceName: 'Mobile Tracker', lastUpdated: 0 }
+    };
   }
 
   getTodayDateString() {
@@ -152,9 +156,18 @@ class ArcScreenTimeEngine {
         }
       }
 
+      // Load cross-device screen time data
+      const crossDevRaw = await arcStorage.getItem('arc_cross_device_screentime');
+      if (crossDevRaw) {
+        try {
+          this.deviceScreenTime = JSON.parse(crossDevRaw);
+        } catch (_) {}
+      }
+
       // Sync with legacy window.state
       if (typeof window !== 'undefined' && window.state && window.state.laptop) {
         window.state.laptop.totalSeconds = this.activeSeconds;
+        window.state.deviceScreenTime = this.deviceScreenTime;
       }
     } catch (e) {
       console.warn('[ArcScreenTime] Error loading stored screen time:', e);
@@ -437,9 +450,11 @@ class ArcScreenTimeEngine {
 
       this.history[this.todayKey] = this.activeSeconds;
       await arcStorage.setItem('arc_screentime_history', JSON.stringify(this.history));
+      await arcStorage.setItem('arc_cross_device_screentime', JSON.stringify(this.deviceScreenTime));
 
       if (typeof window !== 'undefined' && window.setLocalStorageItem) {
         window.setLocalStorageItem(storageKey, this.activeSeconds);
+        window.setLocalStorageItem('arc_cross_device_screentime', this.deviceScreenTime);
       }
     } catch (e) {
       console.warn('[ArcScreenTime] Save warning:', e);
@@ -488,6 +503,72 @@ class ArcScreenTimeEngine {
     if (bannerLaptop) {
       bannerLaptop.innerText = this.formatShort(this.activeSeconds);
     }
+
+    // Synchronize cross-device screen time matrix (Desktop, Separately Made Mobile, and Combined)
+    const isMobile = this.platform.isMobile;
+    this.deviceScreenTime = this.deviceScreenTime || {
+      desktop: { seconds: 0, deviceName: 'Desktop PC', lastUpdated: 0 },
+      mobile: { seconds: 0, deviceName: 'Mobile Tracker', lastUpdated: 0 }
+    };
+
+    if (isMobile) {
+      this.deviceScreenTime.mobile.seconds = Math.max(Number(this.deviceScreenTime.mobile.seconds) || 0, this.activeSeconds);
+      this.deviceScreenTime.mobile.deviceName = this.platform.category;
+      this.deviceScreenTime.mobile.lastUpdated = Date.now();
+    } else {
+      this.deviceScreenTime.desktop.seconds = Math.max(Number(this.deviceScreenTime.desktop.seconds) || 0, this.activeSeconds);
+      this.deviceScreenTime.desktop.deviceName = this.platform.category;
+      this.deviceScreenTime.desktop.lastUpdated = Date.now();
+    }
+
+    const desktopSecs = Number(this.deviceScreenTime.desktop?.seconds) || 0;
+    const mobileSecs = Number(this.deviceScreenTime.mobile?.seconds) || 0;
+    const combinedSecs = desktopSecs + mobileSecs;
+
+    const deskEl = document.getElementById('st-desktop-time-val');
+    if (deskEl) deskEl.textContent = this.formatTime(desktopSecs);
+
+    const mobEl = document.getElementById('st-mobile-time-val');
+    if (mobEl) mobEl.textContent = this.formatTime(mobileSecs);
+
+    const mobNameEl = document.getElementById('st-mobile-device-name');
+    if (mobNameEl) mobNameEl.textContent = this.deviceScreenTime.mobile?.deviceName || '📱 Mobile App Tracker';
+
+    const combEl = document.getElementById('st-combined-time-val');
+    if (combEl) combEl.textContent = this.formatTime(combinedSecs);
+
+    const deskBar = document.getElementById('st-combined-bar-desktop');
+    const mobBar = document.getElementById('st-combined-bar-mobile');
+    const deskPctLabel = document.getElementById('st-combined-desktop-pct');
+    const mobPctLabel = document.getElementById('st-combined-mobile-pct');
+    const splitPill = document.getElementById('st-combined-split-pill');
+
+    let deskPct = 50;
+    let mobPct = 50;
+    if (combinedSecs > 0) {
+      deskPct = Math.round((desktopSecs / combinedSecs) * 100);
+      mobPct = 100 - deskPct;
+    }
+
+    if (deskBar) deskBar.style.width = `${deskPct}%`;
+    if (mobBar) mobBar.style.width = `${mobPct}%`;
+    if (deskPctLabel) deskPctLabel.innerHTML = `<i class="fa-solid fa-laptop text-cyan-400 mr-1"></i> Desktop ${deskPct}% (${this.formatShort(desktopSecs)})`;
+    if (mobPctLabel) mobPctLabel.innerHTML = `<i class="fa-solid fa-mobile-screen text-purple-400 mr-1"></i> Mobile ${mobPct}% (${this.formatShort(mobileSecs)})`;
+    if (splitPill) {
+      splitPill.textContent = `💻 Desktop: ${this.formatShort(desktopSecs)} (${deskPct}%) • 📱 Mobile: ${this.formatShort(mobileSecs)} (${mobPct}%)`;
+    }
+
+    const sideMob = document.getElementById('sidebar-mobile-time');
+    const sideComb = document.getElementById('sidebar-combined-time');
+    if (sideMob) sideMob.textContent = this.formatShort(mobileSecs);
+    if (sideComb) sideComb.textContent = this.formatShort(combinedSecs);
+
+    const modalDesk = document.getElementById('st-modal-desktop-time');
+    if (modalDesk) modalDesk.textContent = this.formatShort(desktopSecs);
+    const modalMob = document.getElementById('st-modal-mobile-time');
+    if (modalMob) modalMob.textContent = this.formatShort(mobileSecs);
+    const modalComb = document.getElementById('st-modal-combined-time');
+    if (modalComb) modalComb.textContent = this.formatShort(combinedSecs);
   }
 
   updateStatusBadge() {
@@ -668,6 +749,33 @@ class ArcScreenTimeEngine {
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sleep Time Filtered</span>
             <div class="text-lg font-mono font-black text-amber-400" id="st-modal-filtered">0m</div>
             <span class="text-[9px] text-slate-500 block">Screen-off / lid-closed excluded</span>
+          </div>
+        </div>
+
+        <!-- CROSS-DEVICE LINKED SCREEN TIME (DESKTOP + SEPARATELY MADE MOBILE + COMBINED) -->
+        <div class="bg-gradient-to-r from-slate-950 via-indigo-950/30 to-slate-950 border border-indigo-500/40 rounded-2xl p-3.5 sm:p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-link text-indigo-400"></i> LINKED DEVICE ECOSYSTEM SCREEN TIME
+            </span>
+            <span class="text-[10px] font-mono text-cyan-400 font-semibold">Desktop + Mobile Unified</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2.5 text-center">
+            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-0.5">
+              <span class="text-[9px] uppercase font-bold text-slate-400 block"><i class="fa-solid fa-laptop text-cyan-400 mr-1"></i> Desktop</span>
+              <div class="text-base font-mono font-black text-cyan-400" id="st-modal-desktop-time">0h 0m</div>
+              <span class="text-[9px] text-slate-500 block">PC / Workstation</span>
+            </div>
+            <div class="bg-purple-950/40 p-2.5 rounded-xl border border-purple-500/40 space-y-0.5">
+              <span class="text-[9px] uppercase font-bold text-purple-300 block"><i class="fa-solid fa-mobile-screen text-purple-400 mr-1"></i> Mobile</span>
+              <div class="text-base font-mono font-black text-purple-300" id="st-modal-mobile-time">0h 0m</div>
+              <span class="text-[9px] text-purple-300/70 block">App Tracker</span>
+            </div>
+            <div class="bg-cyan-950/40 p-2.5 rounded-xl border border-cyan-400/50 space-y-0.5">
+              <span class="text-[9px] uppercase font-bold text-cyan-300 block"><i class="fa-solid fa-layer-group text-cyan-400 mr-1"></i> Combined</span>
+              <div class="text-base font-mono font-black text-cyan-300" id="st-modal-combined-time">0h 0m</div>
+              <span class="text-[9px] text-cyan-300/70 block">Both Devices</span>
+            </div>
           </div>
         </div>
 
