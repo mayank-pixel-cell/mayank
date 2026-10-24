@@ -966,17 +966,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </button>
             </nav>
 
-            <!-- ACTION BUTTONS -->
+            <!-- ACTION BUTTONS (Header Cleaned - Controls relocated to Settings) -->
             <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>
-                <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode(); playSfx('click')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-300 border border-slate-700/80 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:border-cyan-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
-                    <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400"></i>
-                    <span class="hidden 2xl:inline ml-1.5" id="header-mode-toggle-label">Light Mode</span>
-                </button>
-                <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
-                    <i id="header-arc-switch-icon" class="fa-solid fa-sun text-amber-400"></i>
-                    <span class="hidden xl:inline ml-1.5" id="arc-switch-btn-text">Start Summer Arc</span>
-                </button>
             </div>
         </div>
     </header>
@@ -1549,6 +1541,36 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <button type="button" id="settings-subtab-account" onclick="filterSettingsView('account')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
                         <i class="fa-solid fa-user-shield mr-1"></i> Accounts &amp; Sync
                     </button>
+                </div>
+            </div>
+                        <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+            <div id="settings-theme-arc-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-palette"></i> THEME &amp; ARC CONTROLS
+                            </span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                            Display Mode &amp; Active Season
+                        </h3>
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                            Toggle between Light Mode and Dark Mode interface styles, or transition between Winter Arc and Summer Arc seasons.
+                        </p>
+                    </div>
+
+                    <!-- THE ACTION BUTTONS RELOCATED FROM HEADER -->
+                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                        <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode(); playSfx('click')" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-cyan-400 hover:text-cyan-300 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
+                            <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400 mr-2 text-sm"></i>
+                            <span id="header-mode-toggle-label">Light Mode</span>
+                        </button>
+                        <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition hover:bg-amber-500/30 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
+                            <i id="header-arc-switch-icon" class="fa-solid fa-snowflake text-cyan-400 mr-2 text-sm"></i>
+                            <span id="arc-switch-btn-text">Switch to Winter Arc</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
@@ -4433,15 +4455,19 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
 
+            const themeArcCard = document.getElementById('settings-theme-arc-card');
             if (category === 'all') {
+                if (themeArcCard) themeArcCard.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'habits') {
+                if (themeArcCard) themeArcCard.style.display = '';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'account') {
+                if (themeArcCard) themeArcCard.style.display = 'none';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';

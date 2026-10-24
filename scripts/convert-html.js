@@ -210,15 +210,8 @@ if (html.includes(oldStorageSection)) {
 // Strip invalid C1 control characters (0x80 - 0x9F) that trigger parse5 control-character-in-input-stream errors
 html = html.replace(/[\u0080-\u009F]/g, '');
 
-// 6. Add Screen Time Hub Button to Header
-const screenTimeHeaderBtn = `<button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix & App Limits">
-                    <i class="fa-solid fa-hourglass-half text-cyan-400"></i>
-                    <span class="hidden 2xl:inline ml-1.5">Screen Time</span>
-                </button>\n                `;
-
-if (!html.includes('title="Screen Time Matrix & App Limits"')) {
-  html = html.replace('<button role="button" onclick="openArcModal();', `${screenTimeHeaderBtn}<button role="button" onclick="openArcModal();`);
-}
+// 6. Screen Time tab is permanently available in desktop and mobile navigation
+// Header controls (Light Mode & Arc Switcher) relocated to Settings view to keep header clean & spacious.
 
 // 7. Upgrade Screen Time Widget to Universal Multi-Platform Design
 const oldWidget = `<!-- SCREEN TIME TRACKER WIDGET -->
