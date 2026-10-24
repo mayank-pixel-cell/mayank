@@ -67,13 +67,27 @@ Replaced basic browser `localStorage` with a **Dual-Layer High-Durability Engine
 
 
 
-### 7. Application Configuration (`src-tauri/tauri.conf.json`)
+### 7. Hardware Profiler, Device Gatekeeper & Smoothness Engine (`src/hardware.js`)
+
+- **Incompatible Device Barrier (Extremely Lower-End Hardware):**
+  - **App Store & Download Gatekeeper:** Packaged with minimum Android SDK 26 (Android 8.0 Oreo+), 64-bit ABI restrictions (`arm64-v8a`, `x86_64`), OpenGL ES 3.0 requirement (`0x00030000`), and `android.hardware.ram.normal` requirement so obsolete or low-spec devices (< 2GB RAM) are marked incompatible to download at store level.
+  - **Runtime Barrier Screen (`#arc-incompatible-device-screen`):** If opened on hardware with `< 2GB RAM`, single-core CPUs, or lacking WebGL 2.0 graphics acceleration, an unclosable cyber-barrier halts execution and displays a real-time hardware audit checklist, preventing system freezes and battery degradation.
+- **Lower-End Device 60 FPS Smoothness Engine:**
+  - **Moving Particles Automatically Disabled:** Suspends the `fx-canvas` particle simulation loop (`window.__fxOff = true`, stops `requestAnimationFrame`, clears snowflake/ember particle arrays, disables cursor click ripple trails) to eliminate GPU fill rate load.
+  - **Celestial Bodies Sound Automatically Disabled:** Multi-oscillator ambient soundscapes (`HeavenlyBodies` Sun, Jupiter, Saturn, Neptune, Deep Space drone synthesizers) are disabled and suppressed to eliminate audio DSP thread competition.
+  - **Floating Smooth Mode Pill:** Subtle indicator pill shows active 60 FPS optimization status.
+  - **Settings Hardware Profiler Card (`#settings-hardware-profiler-card`):**
+    - Live specs audit: Detected RAM, CPU Cores, GPU Pipeline, Active Tier.
+    - Interactive controls: *Force Smooth Performance Mode*, *Moving Particles* toggle, *Celestial Bodies Sound* toggle.
+    - Real-Time 60 FPS Benchmark Tool: Measures live frametimes over 60 frames and reports average FPS and frame stability.
+
+### 8. Application Configuration (`src-tauri/tauri.conf.json`)
 
 - **Product Name:** `Arc Tracker`
 - **Identifier:** `com.arctracker.app`
 - **Default Desktop Dimensions:** `1280x800` (min: `800x600`, resizable, centered)
 - **Tauri 2.0 Permissions:** Configured in `src-tauri/capabilities/default.json` (`core:default`, `store:default`).
-- **Mobile Targets:** Android SDK 24+ and iOS 14.0+.
+- **Mobile Targets:** Android SDK 26+ (64-bit OpenGL ES 3.0) and iOS 15.0+.
 
 ---
 

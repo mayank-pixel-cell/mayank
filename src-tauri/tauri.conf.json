@@ -55,7 +55,7 @@
       }
     },
     "android": {
-      "minSdkVersion": 24
+      "minSdkVersion": 26
     },
     "iOS": {
       "minimumSystemVersion": "15.0"
