@@ -80,10 +80,17 @@ html = html.replace(
 );
 
 // 3. Replace Inter Font CDN
-html = html.replace(
-  '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">',
-  '<link rel="stylesheet" href="./assets/fonts/inter.css">\n    <script type="module" src="./src/main.js"></script>'
-);
+if (html.includes('<script type="module" src="./src/main.js"></script>')) {
+  html = html.replace(
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">',
+    '<link rel="stylesheet" href="./assets/fonts/inter.css">'
+  );
+} else {
+  html = html.replace(
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">',
+    '<link rel="stylesheet" href="./assets/fonts/inter.css">\n    <script type="module" src="./src/main.js"></script>'
+  );
+}
 
 // 4. Replace external mock favicons with local copies
 html = html.replaceAll('https://ssl.gstatic.com/chrome/webstore/images/icon_48px.png', './assets/favicons/chrome-webstore.png');
@@ -204,12 +211,12 @@ if (html.includes(oldStorageSection)) {
 html = html.replace(/[\u0080-\u009F]/g, '');
 
 // 6. Add Screen Time Hub Button to Header
-const screenTimeHeaderBtn = `<button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix (Phones, Macs & Laptops)">
-                    <i class="fa-solid fa-clock text-cyan-400"></i>
+const screenTimeHeaderBtn = `<button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix & App Limits">
+                    <i class="fa-solid fa-hourglass-half text-cyan-400"></i>
                     <span class="hidden 2xl:inline ml-1.5">Screen Time</span>
                 </button>\n                `;
 
-if (!html.includes('title="Screen Time Matrix (Phones, Macs & Laptops)"')) {
+if (!html.includes('title="Screen Time Matrix & App Limits"')) {
   html = html.replace('<button role="button" onclick="openArcModal();', `${screenTimeHeaderBtn}<button role="button" onclick="openArcModal();`);
 }
 
@@ -256,8 +263,8 @@ const upgradedWidget = `<!-- SCREEN TIME TRACKER WIDGET (MULTI-PLATFORM) -->
                             <button role="button" id="btn-toggle-laptop" onclick="toggleLaptopTracker()" class="py-2 sm:py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider transition border border-slate-700 shadow-sm hover:border-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                                 <i class="fa-solid fa-pause mr-1"></i> Pause
                             </button>
-                            <button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-chart-pie text-cyan-400"></i> Matrix
+                            <button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1" title="App Screen Time, Usage Limits &amp; Blocker">
+                                <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Limits
                             </button>
                         </div>
                     </div>`;

@@ -979,6 +979,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <i class="fa-solid fa-list-check"></i>
                     <span>Tracker</span>
                 </button>
+                <button id="tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onmouseenter="playSfx('hover')" onclick="switchTab('screentime')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-hourglass-half text-cyan-400"></i>
+                    <span>Screen Time</span>
+                </button>
                 <button id="tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onmouseenter="playSfx('hover')" onclick="switchTab('rules')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                     <i class="fa-solid fa-shield-halved"></i>
                     <span>Rules</span>
@@ -1004,8 +1008,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400"></i>
                     <span class="hidden 2xl:inline ml-1.5" id="header-mode-toggle-label">Light Mode</span>
                 </button>
-                <button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix (Phones, Macs & Laptops)">
-                    <i class="fa-solid fa-clock text-cyan-400"></i>
+                <button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-cyan-500/15 active:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-cyan-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shadow-sm" aria-label="Open Screen Time Telemetry Hub" title="Screen Time Matrix & App Limits">
+                    <i class="fa-solid fa-hourglass-half text-cyan-400"></i>
                     <span class="hidden 2xl:inline ml-1.5">Screen Time</span>
                 </button>
                 <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition h-8 sm:h-auto hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
@@ -1226,8 +1230,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <button role="button" id="btn-toggle-laptop" onclick="toggleLaptopTracker()" class="py-2 sm:py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider transition border border-slate-700 shadow-sm hover:border-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                                 <i class="fa-solid fa-pause mr-1"></i> Pause
                             </button>
-                            <button role="button" onclick="window.ArcScreenTime ? window.ArcScreenTime.openHubModal() : null; playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-chart-pie text-cyan-400"></i> Matrix
+                            <button role="button" onclick="switchTab('screentime'); playSfx('modalOpen')" class="py-2 sm:py-2.5 rounded-xl bg-cyan-500/20 active:bg-cyan-500/30 text-cyan-300 font-bold text-xs uppercase tracking-wider transition border border-cyan-500/40 shadow-sm hover:bg-cyan-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex items-center justify-center gap-1" title="App Screen Time, Usage Limits &amp; Blocker">
+                                <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Limits
                             </button>
                         </div>
                     </div>
@@ -1595,6 +1599,393 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
             <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
         </section>
+
+        <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
+                <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
+        <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden">
+            <!-- TOP HERO BANNER & STATS -->
+            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                LIVE SCREEN TIME MATRIX
+                            </span>
+                            <span id="st-perm-badge-top" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                                Accessibility Setup Available
+                            </span>
+                        </div>
+                        <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Screen Time &amp; Lockout Shield
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300">
+                            Automatic per-application usage tracking with strict lockout barriers. Reclaim your focus during the Winter Arc.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-wrap self-stretch sm:self-auto">
+                        <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 hover:border-cyan-400 border border-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-universal-access text-cyan-400"></i> Permissions
+                        </button>
+                        <button role="button" id="st-strict-mode-btn" onclick="toggleStrictMode(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-shield-halved"></i> <span id="st-strict-btn-text">Strict Mode</span>
+                        </button>
+                        <button role="button" onclick="openAddCustomAppModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-cyan-500 active:bg-cyan-400 text-black text-xs font-extrabold uppercase tracking-wider transition shadow-lg shadow-cyan-500/20 hover:scale-105 flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Add App
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 OVERVIEW KPI CARDS -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Today's App Screen Time</span>
+                        <div class="text-xl sm:text-2xl font-black font-mono text-cyan-400 mt-0.5" id="st-kpi-total-time">0m 00s</div>
+                        <span class="text-[9px] text-slate-500 block">Total active monitored time</span>
+                    </div>
+
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Apps Tracked</span>
+                        <div class="text-xl sm:text-2xl font-black font-mono text-white mt-0.5" id="st-kpi-tracked-count">10 Apps</div>
+                        <span class="text-[9px] text-slate-500 block">Configurable daily quotas</span>
+                    </div>
+
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800" id="st-kpi-blocked-card">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Apps Blocked Today</span>
+                        <div class="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-0.5" id="st-kpi-blocked-count">0 Locked</div>
+                        <span class="text-[9px] text-slate-500 block" id="st-kpi-blocked-sub">All apps within quota</span>
+                    </div>
+
+                    <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Lockout Shield Status</span>
+                        <div class="text-sm sm:text-base font-extrabold text-cyan-300 mt-1 flex items-center gap-1.5" id="st-kpi-shield-status">
+                            <i class="fa-solid fa-lock text-xs"></i> Active With Override
+                        </div>
+                        <span class="text-[9px] text-slate-500 block">Resets daily at midnight</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCESSIBILITY PERMISSION NOTICE BANNER -->
+            <div id="st-permission-banner" class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div class="flex items-start space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-base shrink-0 mt-0.5">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-bold text-white">Accessibility &amp; App Tracking Permissions</h4>
+                        <p class="text-[11px] sm:text-xs text-amber-200/80">
+                            Granting accessibility enables active window monitoring across apps and triggers the lockout shield the moment an app's daily quota expires.
+                        </p>
+                    </div>
+                </div>
+                <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition shrink-0 shadow-md">
+                    Enable Permissions
+                </button>
+            </div>
+
+            <!-- ACTIVE APP FOCUS TRACKER & QUICK LAUNCH BAR -->
+            <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-crosshairs text-cyan-400"></i> Active App Live Monitor
+                        </h3>
+                        <p class="text-[11px] text-slate-400">Select an application below to track time on it or simulate running it. If a blocked app is chosen, the Lockout Shield triggers instantly.</p>
+                    </div>
+
+                    <div id="st-active-app-status-container" class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-mono text-xs flex items-center gap-1.5 self-start sm:self-auto">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Standby / Standalone
+                        </span>
+                    </div>
+                </div>
+
+                <div id="st-app-launcher-pills" class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- TRACKED APPS DIRECTORY & LIMITS -->
+            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-800 space-y-4">
+                <!-- FILTER & SEARCH BAR -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <!-- CATEGORY TABS -->
+                    <div id="st-category-tabs" class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 overflow-x-auto text-xs font-semibold">
+                        <button role="button" onclick="setAppFilter('all'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 bg-cyan-500 text-black font-bold shadow-sm" data-filter="all">All Apps</button>
+                        <button role="button" onclick="setAppFilter('social'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="social">Social</button>
+                        <button role="button" onclick="setAppFilter('entertainment'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="entertainment">Entertainment</button>
+                        <button role="button" onclick="setAppFilter('productivity'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="productivity">Productivity</button>
+                        <button role="button" onclick="setAppFilter('gaming'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="gaming">Gaming</button>
+                        <button role="button" onclick="setAppFilter('blocked'); playSfx('click')" id="st-filter-blocked-tab" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="blocked">Blocked (0)</button>
+                    </div>
+
+                    <!-- SEARCH INPUT -->
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="st-app-search-input" placeholder="Search applications..." oninput="setAppSearch(this.value)" class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                </div>
+
+                <!-- APP CARDS GRID -->
+                <div id="st-apps-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
+                    <!-- Populated dynamically by renderScreenTimeView -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FULLSCREEN BLOCKER SHIELD OVERLAY -->
+        <div id="arc-app-blocker-overlay" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-slate-900 to-black border-2 border-rose-500/80 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(244,63,94,0.35)] space-y-6 text-center animate-zoom-in my-auto">
+                <!-- PULSING LOCK ICON -->
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center shadow-lg shadow-rose-500/30">
+                    <span class="absolute inset-0 rounded-3xl border border-rose-400 animate-ping opacity-30"></span>
+                    <i id="blocker-app-icon" class="fa-solid fa-lock text-3xl sm:text-4xl text-rose-500"></i>
+                </div>
+
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-mono font-black uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span>
+                        DAILY APP LIMIT EXCEEDED
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        <span id="blocker-app-name">Application</span> is Blocked
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300">
+                        You have used your allocated daily time limit. Arc Tracker has blocked this application to safeguard your discipline.
+                    </p>
+                </div>
+
+                <!-- STATS BREAKDOWN -->
+                <div class="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Used Today</span>
+                        <div id="blocker-time-used" class="text-lg font-black font-mono text-rose-400">0m 00s</div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Daily Limit Chosen</span>
+                        <div id="blocker-time-limit" class="text-lg font-black font-mono text-slate-200">0m 00s</div>
+                    </div>
+                </div>
+
+                <!-- RESET TIMER -->
+                <div class="p-3 rounded-2xl bg-rose-950/30 border border-rose-500/20 space-y-1">
+                    <span class="text-[10px] font-bold text-rose-300 uppercase tracking-wider block">Automatic Lockout Resets In:</span>
+                    <div id="blocker-reset-countdown" class="text-2xl sm:text-3xl font-black font-mono text-rose-400">00h 00m 00s</div>
+                    <span class="text-[9px] text-slate-400 block">Unlocks automatically at midnight (00:00:00)</span>
+                </div>
+
+                <!-- MOTIVATIONAL QUOTE -->
+                <blockquote class="text-xs italic text-slate-400 border-l-2 border-rose-500/40 pl-3 text-left">
+                    "Discipline is choosing between what you want now and what you want most. Stay locked in."
+                </blockquote>
+
+                <!-- ANTI-IMPULSE EMERGENCY EXTENSION -->
+                <div id="blocker-challenge-box" class="space-y-2 p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-left">
+                    <label class="text-[11px] font-bold text-slate-300 flex items-center justify-between">
+                        <span>Emergency 5-Minute Extension</span>
+                        <span class="text-[9px] text-rose-400 font-mono">Requires Pledge</span>
+                    </label>
+                    <p class="text-[10px] text-slate-400">To prevent impulsive overrides, type <strong class="text-rose-400 font-mono">UNBREAKABLE</strong> below:</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="blocker-challenge-input" placeholder="Type UNBREAKABLE" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white uppercase font-mono tracking-wider focus:outline-none focus:border-rose-400 flex-1">
+                        <button role="button" onclick="submitEmergencyExtension()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/40 font-bold text-xs transition">
+                            Override
+                        </button>
+                    </div>
+                    <div id="blocker-challenge-error" class="text-[10px] text-rose-400 font-semibold hidden"></div>
+                </div>
+
+                <!-- RETURN TO ARC TRACKER -->
+                <button role="button" onclick="closeBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-black font-black text-sm uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 hover:scale-[1.02]">
+                    Return to Focus Dashboard
+                </button>
+            </div>
+        </div>
+
+        <!-- ACCESSIBILITY PERMISSIONS MODAL -->
+        <div id="arc-accessibility-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-xl bg-slate-900 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-lg">
+                            <i class="fa-solid fa-universal-access"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white">Accessibility &amp; App Tracking Permissions</h3>
+                            <p class="text-xs text-slate-400">Enables automated active window telemetry and lockout shield</p>
+                        </div>
+                    </div>
+                    <button role="button" onclick="closeAccessibilityModal()" aria-label="Close Accessibility Modal" title="Close Accessibility Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3 text-xs text-slate-300">
+                    <div class="p-3.5 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 space-y-1.5">
+                        <h4 class="font-bold text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-lock text-cyan-400"></i> Why is this permission required?
+                        </h4>
+                        <p class="text-slate-300 text-[11px] leading-relaxed">
+                            Operating systems isolate applications for privacy. To accurately track how many minutes you spend inside specific applications (like YouTube, Instagram, Games, or Browsers) and block them when your limit is reached, Arc Tracker requests local on-device Accessibility &amp; Usage Access.
+                        </p>
+                        <div class="text-[10px] text-cyan-300 font-mono pt-1">
+                            ✓ 100% Offline &amp; Private • Zero cloud telemetry • Data never leaves your device
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-white uppercase text-[11px] tracking-wider">Device Instructions:</h4>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <span class="font-bold text-cyan-300 flex items-center gap-1">
+                                    <i class="fa-brands fa-android"></i> Android Phones / Tablets
+                                </span>
+                                <p class="text-slate-400 text-[10px]">Enable Accessibility Service &amp; Usage Access in Settings so Arc Tracker can monitor other apps.</p>
+                                <div class="flex gap-1.5 pt-1">
+                                    <button role="button" onclick="openAndroidAccessibilitySettings()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold">
+                                        Accessibility
+                                    </button>
+                                    <button role="button" onclick="openAndroidUsageSettings()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold">
+                                        Usage Access
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <span class="font-bold text-cyan-300 flex items-center gap-1">
+                                    <i class="fa-brands fa-windows"></i> Windows &amp; Laptops
+                                </span>
+                                <p class="text-slate-400 text-[10px]">Permit Background Window Monitoring &amp; Notifications so Arc Tracker can enforce boundaries.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                    <button role="button" onclick="closeAccessibilityModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition">
+                        Cancel
+                    </button>
+                    <button role="button" onclick="confirmAccessibilityGranted()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/20">
+                        Grant &amp; Confirm Permission
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP LIMIT PICKER MODAL -->
+        <div id="arc-limit-config-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-md bg-slate-900 border border-cyan-500/40 rounded-3xl p-6 shadow-2xl space-y-5 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 id="limit-modal-title" class="text-base font-black text-white">Set Daily App Limit</h3>
+                    <button role="button" onclick="closeLimitModal()" aria-label="Close Limit Modal" title="Close Limit Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- QUICK PRESET BUTTONS -->
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Quick Presets</label>
+                        <div class="grid grid-cols-4 gap-2 text-xs font-semibold">
+                            <button role="button" onclick="setPresetLimit(15)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">15m</button>
+                            <button role="button" onclick="setPresetLimit(30)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">30m</button>
+                            <button role="button" onclick="setPresetLimit(45)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">45m</button>
+                            <button role="button" onclick="setPresetLimit(60)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">1h</button>
+                            <button role="button" onclick="setPresetLimit(90)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">1.5h</button>
+                            <button role="button" onclick="setPresetLimit(120)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">2h</button>
+                            <button role="button" onclick="setPresetLimit(180)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">3h</button>
+                            <button role="button" onclick="setPresetLimit(240)" class="py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-black transition">4h</button>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM MINUTES INPUT -->
+                    <div class="space-y-1.5">
+                        <label for="limit-modal-mins-input" class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Custom Limit (Minutes)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="limit-modal-mins-input" min="1" max="1440" value="30" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm font-mono text-cyan-400 font-bold focus:outline-none focus:border-cyan-400">
+                            <span class="text-xs text-slate-400 font-bold">Minutes</span>
+                        </div>
+                    </div>
+
+                    <!-- HARD BLOCK TOGGLE -->
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800">
+                        <div>
+                            <span class="text-xs font-bold text-white block">Enforce Hard Lockout</span>
+                            <span class="text-[10px] text-slate-400 block">Blocks app when limit is reached</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="limit-modal-block-toggle" aria-label="Enforce Hard Lockout" title="Enforce Hard Lockout" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-500"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button role="button" onclick="closeLimitModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition">
+                        Cancel
+                    </button>
+                    <button role="button" onclick="saveAppLimitFromModal()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-md shadow-cyan-500/20">
+                        Save Limit
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD CUSTOM APP MODAL -->
+        <div id="arc-add-app-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-md bg-slate-900 border border-cyan-500/40 rounded-3xl p-6 shadow-2xl space-y-4 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-base font-black text-white">Add Custom App to Track</h3>
+                    <button role="button" onclick="closeAddCustomAppModal()" aria-label="Close Add Custom App Modal" title="Close Add Custom App Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="space-y-1">
+                        <label for="add-app-name" class="font-bold text-slate-300">App Name</label>
+                        <input type="text" id="add-app-name" placeholder="e.g. Minecraft, Telegram, Roblox, Spotify" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-1">
+                            <label for="add-app-category" class="font-bold text-slate-300">Category</label>
+                            <select id="add-app-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-2 text-slate-300 focus:outline-none focus:border-cyan-400">
+                                <option value="Social Media">Social Media</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Productivity">Productivity</option>
+                                <option value="Messaging">Messaging</option>
+                                <option value="Browsing">Browsing</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="add-app-limit" class="font-bold text-slate-300">Daily Limit (Mins)</label>
+                            <input type="number" id="add-app-limit" value="30" min="1" max="1440" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-cyan-400 font-mono font-bold focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label for="add-app-proc" class="font-bold text-slate-300">Process Name or Domain (Optional)</label>
+                        <input type="text" id="add-app-proc" placeholder="e.g. spotify.exe or telegram.org" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] focus:outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button role="button" onclick="closeAddCustomAppModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition">
+                        Cancel
+                    </button>
+                    <button role="button" onclick="saveCustomApp()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-md shadow-cyan-500/20">
+                        Add App
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
@@ -1602,6 +1993,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-cyan-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
             <i class="fa-solid fa-list-check text-lg"></i>
             <span class="text-[10px] font-semibold mt-0.5">Tracker</span>
+        </button>
+        <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+            <i class="fa-solid fa-hourglass-half text-lg text-cyan-400"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Screen Time</span>
         </button>
         <button id="mobile-tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onclick="switchTab('rules')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
             <i class="fa-solid fa-shield-halved text-lg"></i>
@@ -3626,7 +4021,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             playSfx('tab');
             state.activeTab = tabName;
 
-            ['tracker', 'rules', 'results', 'progression', 'settings'].forEach(t => {
+            ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const desktopTab = document.getElementById(`tab-${t}`);
                 const mobileTab = document.getElementById(`mobile-tab-${t}`);
@@ -3659,6 +4054,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     }
                 }
             });
+
+            if (tabName === 'screentime' && window.ArcAppTracker) {
+                window.ArcAppTracker.renderScreenTimeView();
+            }
 
             if (tabName === 'results') {
                 renderSpiderWeb();
@@ -4489,6 +4888,761 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         /* ==========================================================================
            6. INITIALIZATION ENTRY POINT
            ========================================================================== */
+        
+        /* ==========================================================================
+           7. AUTOMATED APP SCREEN TIME & APP BLOCKER SHIELD ENGINE
+           Self-contained, 100% offline, zero-CORS browser compatible
+           ========================================================================== */
+        const DEFAULT_TRACKED_APPS = [
+            { id: 'youtube', name: 'YouTube', category: 'Entertainment', icon: 'fa-brands fa-youtube', colorClass: 'text-red-500', bgClass: 'bg-red-500/10', borderClass: 'border-red-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true },
+            { id: 'instagram', name: 'Instagram', category: 'Social Media', icon: 'fa-brands fa-instagram', colorClass: 'text-pink-500', bgClass: 'bg-pink-500/10', borderClass: 'border-pink-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
+            { id: 'twitter', name: 'X / Twitter', category: 'Social Media', icon: 'fa-brands fa-x-twitter', colorClass: 'text-slate-200', bgClass: 'bg-slate-700/20', borderClass: 'border-slate-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
+            { id: 'reddit', name: 'Reddit', category: 'Social Media', icon: 'fa-brands fa-reddit-alien', colorClass: 'text-orange-500', bgClass: 'bg-orange-500/10', borderClass: 'border-orange-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
+            { id: 'tiktok', name: 'TikTok', category: 'Social Media', icon: 'fa-brands fa-tiktok', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 20 * 60, blockEnabled: true },
+            { id: 'netflix', name: 'Netflix', category: 'Entertainment', icon: 'fa-solid fa-film', colorClass: 'text-red-600', bgClass: 'bg-red-600/10', borderClass: 'border-red-600/30', dailyLimitSecs: 60 * 60, blockEnabled: true },
+            { id: 'discord', name: 'Discord', category: 'Messaging', icon: 'fa-brands fa-discord', colorClass: 'text-indigo-400', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30', dailyLimitSecs: 60 * 60, blockEnabled: true },
+            { id: 'chrome', name: 'Browser / Surfing', category: 'Browsing', icon: 'fa-brands fa-chrome', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 90 * 60, blockEnabled: false },
+            { id: 'gaming', name: 'Steam / Gaming', category: 'Gaming', icon: 'fa-solid fa-gamepad', colorClass: 'text-purple-400', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true },
+            { id: 'vscode', name: 'VS Code / Coding', category: 'Productivity', icon: 'fa-solid fa-code', colorClass: 'text-blue-400', bgClass: 'bg-blue-500/10', borderClass: 'border-blue-500/30', dailyLimitSecs: 240 * 60, blockEnabled: false }
+        ];
+
+        let appTrackerState = {
+            apps: [],
+            usage: {},
+            activeAppId: null,
+            activeFilter: 'all',
+            searchQuery: '',
+            strictMode: false,
+            permissionGranted: false,
+            blockedShieldAppId: null,
+            timer: null
+        };
+
+        function initAppTracker() {
+            try {
+                // Load tracked apps catalog
+                const savedApps = getLocalStorageItem('arc_tracked_apps_catalog');
+                if (Array.isArray(savedApps) && savedApps.length > 0) {
+                    const map = new Map();
+                    DEFAULT_TRACKED_APPS.forEach(a => map.set(a.id, { ...a }));
+                    savedApps.forEach(sa => {
+                        if (map.has(sa.id)) map.set(sa.id, { ...map.get(sa.id), ...sa });
+                        else map.set(sa.id, sa);
+                    });
+                    appTrackerState.apps = Array.from(map.values());
+                } else {
+                    appTrackerState.apps = JSON.parse(JSON.stringify(DEFAULT_TRACKED_APPS));
+                }
+
+                // Load today's per-app usage
+                const todayKey = getTodayKey();
+                const savedUsage = getLocalStorageItem(`arc_app_usage_${todayKey}`);
+                appTrackerState.usage = (savedUsage && typeof savedUsage === 'object') ? savedUsage : {};
+
+                // Load permissions & strict mode
+                appTrackerState.permissionGranted = lsGetRaw('arc_app_accessibility_perm') === 'granted';
+                appTrackerState.strictMode = lsGetRaw('arc_app_strict_mode') === 'true';
+
+                // Initial render
+                renderScreenTimeView();
+
+                // Start 1-second live ticker
+                if (appTrackerState.timer) clearInterval(appTrackerState.timer);
+                appTrackerState.timer = setInterval(tickAppTracker, 1000);
+
+            } catch (err) {
+                console.warn('[ArcAppTracker] Init error:', err);
+            }
+        }
+
+        function saveAppTrackerData() {
+            try {
+                const todayKey = getTodayKey();
+                setLocalStorageItem(`arc_app_usage_${todayKey}`, appTrackerState.usage);
+                setLocalStorageItem('arc_tracked_apps_catalog', appTrackerState.apps);
+                setLocalStorageItem('arc_app_accessibility_perm', appTrackerState.permissionGranted ? 'granted' : 'pending');
+                setLocalStorageItem('arc_app_strict_mode', appTrackerState.strictMode ? 'true' : 'false');
+            } catch (_) {}
+        }
+
+        function tickAppTracker() {
+            // Check midnight rollover
+            const todayKey = getTodayKey();
+            if (!appTrackerState.usage || appTrackerState.currentDayKey !== todayKey) {
+                appTrackerState.currentDayKey = todayKey;
+            }
+
+            // If an app is active in foreground
+            if (appTrackerState.activeAppId) {
+                const appId = appTrackerState.activeAppId;
+                const app = appTrackerState.apps.find(a => a.id === appId);
+                if (app) {
+                    appTrackerState.usage[appId] = (appTrackerState.usage[appId] || 0) + 1;
+                    const used = appTrackerState.usage[appId];
+
+                    // Check if daily limit reached
+                    if (app.blockEnabled && used >= app.dailyLimitSecs) {
+                        triggerAppLockout(appId);
+                        return;
+                    }
+
+                    // Live update active app timer in DOM
+                    const activePill = document.getElementById(`st-active-counter-${appId}`);
+                    if (activePill) activePill.textContent = formatDuration(used);
+
+                    const totalTimeEl = document.getElementById('st-kpi-total-time');
+                    if (totalTimeEl) {
+                        let total = 0;
+                        Object.values(appTrackerState.usage).forEach(v => total += (v || 0));
+                        totalTimeEl.textContent = formatDuration(total);
+                    }
+                }
+            }
+
+            // Update blocker countdown if overlay is visible
+            if (appTrackerState.blockedShieldAppId) {
+                updateBlockerCountdown();
+            }
+        }
+
+        function isAppBlocked(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app || !app.blockEnabled) return false;
+            const used = appTrackerState.usage[appId] || 0;
+            return used >= app.dailyLimitSecs;
+        }
+
+        function setActiveApp(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            if (isAppBlocked(appId)) {
+                triggerAppLockout(appId);
+                return;
+            }
+
+            appTrackerState.activeAppId = appId;
+            playSfx('check');
+            showToast(`Tracking active on ${app.name}`);
+            renderScreenTimeView();
+        }
+
+        function pauseActiveApp() {
+            appTrackerState.activeAppId = null;
+            playSfx('click');
+            renderScreenTimeView();
+        }
+
+        function triggerAppLockout(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            if (appTrackerState.activeAppId === appId) {
+                appTrackerState.activeAppId = null;
+            }
+
+            playBlockerAlarmSfx();
+            showBlockerShield(appId);
+            renderScreenTimeView();
+        }
+
+        function showBlockerShield(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            appTrackerState.blockedShieldAppId = appId;
+            const overlay = document.getElementById('arc-app-blocker-overlay');
+            if (!overlay) return;
+
+            const used = appTrackerState.usage[appId] || 0;
+            const limit = app.dailyLimitSecs;
+
+            const nameEl = document.getElementById('blocker-app-name');
+            const iconEl = document.getElementById('blocker-app-icon');
+            const usedEl = document.getElementById('blocker-time-used');
+            const limitEl = document.getElementById('blocker-time-limit');
+            const challengeInput = document.getElementById('blocker-challenge-input');
+            const challengeBox = document.getElementById('blocker-challenge-box');
+            const errorEl = document.getElementById('blocker-challenge-error');
+
+            if (nameEl) nameEl.textContent = app.name;
+            if (iconEl) iconEl.className = `${app.icon} text-3xl sm:text-4xl text-rose-500`;
+            if (usedEl) usedEl.textContent = formatDuration(used);
+            if (limitEl) limitEl.textContent = formatDuration(limit);
+            if (challengeInput) challengeInput.value = '';
+            if (errorEl) errorEl.classList.add('hidden');
+
+            if (challengeBox) {
+                if (appTrackerState.strictMode) {
+                    challengeBox.innerHTML = `<div class="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs text-center font-bold"><i class="fa-solid fa-lock mr-1.5"></i> Strict Mode Active — No Emergency Extensions Permitted Today.</div>`;
+                }
+            }
+
+            updateBlockerCountdown();
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function closeBlockerShield() {
+            appTrackerState.blockedShieldAppId = null;
+            const overlay = document.getElementById('arc-app-blocker-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+        }
+
+        function updateBlockerCountdown() {
+            const el = document.getElementById('blocker-reset-countdown');
+            if (!el) return;
+
+            const now = new Date();
+            const midnight = new Date(now);
+            midnight.setHours(24, 0, 0, 0);
+            const diffSecs = Math.max(0, Math.floor((midnight - now) / 1000));
+
+            const hrs = Math.floor(diffSecs / 3600);
+            const mins = Math.floor((diffSecs % 3600) / 60);
+            const secs = diffSecs % 60;
+
+            el.textContent = `${String(hrs).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}s`;
+        }
+
+        function submitEmergencyExtension() {
+            if (appTrackerState.strictMode) {
+                alert("Strict Mode is turned on. Emergency extensions are disabled to protect your discipline.");
+                return;
+            }
+
+            const input = document.getElementById('blocker-challenge-input');
+            const errorEl = document.getElementById('blocker-challenge-error');
+            if (!input || !appTrackerState.blockedShieldAppId) return;
+
+            const val = input.value.trim().toUpperCase();
+            if (val !== 'UNBREAKABLE') {
+                if (errorEl) {
+                    errorEl.textContent = 'Phrase incorrect. You must type UNBREAKABLE in all caps.';
+                    errorEl.classList.remove('hidden');
+                }
+                playSfx('click');
+                return;
+            }
+
+            // Grant 5 extra minutes (300 seconds)
+            const app = appTrackerState.apps.find(a => a.id === appTrackerState.blockedShieldAppId);
+            if (app) {
+                app.dailyLimitSecs += 300;
+                saveAppTrackerData();
+            }
+
+            closeBlockerShield();
+            playSfx('fanfare');
+            showToast("+5 Minutes Emergency Extension granted. Use wisely.");
+            renderScreenTimeView();
+        }
+
+        function openAccessibilityModal() {
+            const modal = document.getElementById('arc-accessibility-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeAccessibilityModal() {
+            const modal = document.getElementById('arc-accessibility-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function confirmAccessibilityGranted() {
+            appTrackerState.permissionGranted = true;
+            saveAppTrackerData();
+            playSfx('fanfare');
+            closeAccessibilityModal();
+            showToast("Accessibility & Screen Time Tracking enabled!");
+            renderScreenTimeView();
+        }
+
+        function openAndroidAccessibilitySettings() {
+            if (/Android/i.test(navigator.userAgent)) {
+                window.location.href = "intent:#Intent;action=android.settings.ACCESSIBILITY_SETTINGS;end";
+            } else {
+                alert("Android Accessibility Settings:\\n\\n1. Open Settings ➔ Accessibility.\\n2. Enable Arc Tracker Service.\\n3. Return here to confirm.");
+            }
+        }
+
+        function openAndroidUsageSettings() {
+            if (/Android/i.test(navigator.userAgent)) {
+                window.location.href = "intent:#Intent;action=android.settings.USAGE_ACCESS_SETTINGS;end";
+            } else {
+                alert("Android Usage Access Settings:\\n\\n1. Open Settings ➔ Apps ➔ Special App Access ➔ Usage Access.\\n2. Enable Arc Tracker.\\n3. Return here to confirm.");
+            }
+        }
+
+        function openLimitModal(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            const modal = document.getElementById('arc-limit-config-modal');
+            if (!modal) return;
+
+            modal.dataset.appId = appId;
+            const titleEl = document.getElementById('limit-modal-title');
+            const inputEl = document.getElementById('limit-modal-mins-input');
+            const toggleEl = document.getElementById('limit-modal-block-toggle');
+
+            if (titleEl) titleEl.textContent = `Set Daily Limit for ${app.name}`;
+            if (inputEl) inputEl.value = Math.round(app.dailyLimitSecs / 60);
+            if (toggleEl) toggleEl.checked = app.blockEnabled;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLimitModal() {
+            const modal = document.getElementById('arc-limit-config-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function setPresetLimit(mins) {
+            const inputEl = document.getElementById('limit-modal-mins-input');
+            if (inputEl) inputEl.value = mins;
+        }
+
+        function saveAppLimitFromModal() {
+            const modal = document.getElementById('arc-limit-config-modal');
+            if (!modal || !modal.dataset.appId) return;
+
+            const appId = modal.dataset.appId;
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            const inputEl = document.getElementById('limit-modal-mins-input');
+            const toggleEl = document.getElementById('limit-modal-block-toggle');
+
+            const mins = parseInt(inputEl?.value || '30', 10);
+            if (isNaN(mins) || mins < 1) {
+                alert("Please enter a valid time limit in minutes (at least 1 minute).");
+                return;
+            }
+
+            app.dailyLimitSecs = mins * 60;
+            app.blockEnabled = toggleEl ? toggleEl.checked : true;
+
+            saveAppTrackerData();
+            closeLimitModal();
+            playSfx('click');
+            showToast(`Daily limit for ${app.name} set to ${formatDuration(app.dailyLimitSecs)}.`);
+
+            if (app.blockEnabled && (appTrackerState.usage[appId] || 0) >= app.dailyLimitSecs) {
+                triggerAppLockout(appId);
+            } else {
+                renderScreenTimeView();
+            }
+        }
+
+        function openAddCustomAppModal() {
+            const modal = document.getElementById('arc-add-app-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeAddCustomAppModal() {
+            const modal = document.getElementById('arc-add-app-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function saveCustomApp() {
+            const nameInput = document.getElementById('add-app-name');
+            const catInput = document.getElementById('add-app-category');
+            const limitInput = document.getElementById('add-app-limit');
+
+            const name = nameInput?.value.trim();
+            if (!name) {
+                alert("Please enter an application name.");
+                return;
+            }
+
+            const category = catInput?.value || 'Productivity';
+            const mins = parseInt(limitInput?.value || '30', 10);
+
+            const id = 'custom_' + Date.now();
+            const newApp = {
+                id,
+                name,
+                category,
+                icon: 'fa-solid fa-shapes',
+                colorClass: 'text-cyan-400',
+                bgClass: 'bg-cyan-500/10',
+                borderClass: 'border-cyan-500/30',
+                dailyLimitSecs: Math.max(1, mins) * 60,
+                blockEnabled: true,
+                isCustom: true
+            };
+
+            appTrackerState.apps.unshift(newApp);
+            saveAppTrackerData();
+            closeAddCustomAppModal();
+            playSfx('fanfare');
+            showToast(`Custom app "${name}" added to screen time tracker!`);
+            renderScreenTimeView();
+        }
+
+        function deleteCustomApp(appId) {
+            if (!confirm("Are you sure you want to stop tracking this app?")) return;
+            appTrackerState.apps = appTrackerState.apps.filter(a => a.id !== appId);
+            delete appTrackerState.usage[appId];
+            saveAppTrackerData();
+            renderScreenTimeView();
+        }
+
+        function simulateAddUsage(appId, secs = 600) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            appTrackerState.usage[appId] = (appTrackerState.usage[appId] || 0) + secs;
+            saveAppTrackerData();
+            playSfx('click');
+
+            if (app.blockEnabled && appTrackerState.usage[appId] >= app.dailyLimitSecs) {
+                triggerAppLockout(appId);
+            } else {
+                showToast(`Added ${formatDuration(secs)} testing time to ${app.name}`);
+                renderScreenTimeView();
+            }
+        }
+
+        function resetAppUsage(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            appTrackerState.usage[appId] = 0;
+            saveAppTrackerData();
+            if (appTrackerState.blockedShieldAppId === appId) {
+                closeBlockerShield();
+            }
+            renderScreenTimeView();
+            showToast(`Reset today's usage for ${app.name}.`);
+        }
+
+        function toggleStrictMode() {
+            appTrackerState.strictMode = !appTrackerState.strictMode;
+            saveAppTrackerData();
+            renderScreenTimeView();
+            showToast(appTrackerState.strictMode ? "Strict Mode Enabled (Emergency extensions disabled)." : "Strict Mode Disabled.");
+        }
+
+        function setAppFilter(filterId) {
+            appTrackerState.activeFilter = filterId;
+            renderScreenTimeView();
+        }
+
+        function setAppSearch(q) {
+            appTrackerState.searchQuery = q || '';
+            renderScreenTimeView();
+        }
+
+        function playBlockerAlarmSfx() {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                [0, 0.12, 0.24, 0.36].forEach(offset => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(offset % 0.24 === 0 ? 880 : 440, now + offset);
+                    gain.gain.setValueAtTime(0.2, now + offset);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.1);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + offset);
+                    osc.stop(now + offset + 0.1);
+                });
+            } catch (_) {}
+        }
+
+        function renderScreenTimeView() {
+            const view = document.getElementById('view-screentime');
+            if (!view) return;
+
+            let totalUsage = 0;
+            let blockedCount = 0;
+
+            appTrackerState.apps.forEach(app => {
+                const used = appTrackerState.usage[app.id] || 0;
+                totalUsage += used;
+                if (isAppBlocked(app.id)) blockedCount++;
+            });
+
+            // Update top KPIs
+            const totalEl = document.getElementById('st-kpi-total-time');
+            if (totalEl) totalEl.textContent = formatDuration(totalUsage);
+
+            const countEl = document.getElementById('st-kpi-tracked-count');
+            if (countEl) countEl.textContent = `${appTrackerState.apps.length} Apps`;
+
+            const blockedEl = document.getElementById('st-kpi-blocked-count');
+            const blockedCard = document.getElementById('st-kpi-blocked-card');
+            const blockedSub = document.getElementById('st-kpi-blocked-sub');
+            if (blockedEl) {
+                blockedEl.textContent = `${blockedCount} Locked`;
+                if (blockedCount > 0) {
+                    blockedEl.className = "text-xl sm:text-2xl font-black font-mono text-rose-400 animate-pulse mt-0.5";
+                    if (blockedCard) blockedCard.className = "bg-slate-950/70 p-3.5 rounded-xl border border-rose-500/40 bg-rose-950/20";
+                    if (blockedSub) blockedSub.textContent = "Limit exceeded • Access locked";
+                } else {
+                    blockedEl.className = "text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-0.5";
+                    if (blockedCard) blockedCard.className = "bg-slate-950/70 p-3.5 rounded-xl border border-slate-800";
+                    if (blockedSub) blockedSub.textContent = "All apps within quota";
+                }
+            }
+
+            const shieldStatus = document.getElementById('st-kpi-shield-status');
+            const strictBtn = document.getElementById('st-strict-mode-btn');
+            const strictBtnText = document.getElementById('st-strict-btn-text');
+            if (shieldStatus) {
+                shieldStatus.innerHTML = appTrackerState.strictMode ? '<i class="fa-solid fa-lock text-xs text-rose-400"></i> Zero Tolerance (Strict)' : '<i class="fa-solid fa-shield text-xs text-cyan-300"></i> Active With Override';
+            }
+            if (strictBtn) {
+                strictBtn.className = appTrackerState.strictMode ? "px-3 py-2 rounded-xl bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm" : "px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
+            }
+            if (strictBtnText) {
+                strictBtnText.textContent = appTrackerState.strictMode ? "Strict: ON" : "Strict Mode";
+            }
+
+            // Permissions banner
+            const permBanner = document.getElementById('st-permission-banner');
+            const permBadgeTop = document.getElementById('st-perm-badge-top');
+            if (appTrackerState.permissionGranted) {
+                if (permBanner) permBanner.classList.add('hidden');
+                if (permBadgeTop) {
+                    permBadgeTop.className = "px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold";
+                    permBadgeTop.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Accessibility Active';
+                }
+            } else {
+                if (permBanner) permBanner.classList.remove('hidden');
+                if (permBadgeTop) {
+                    permBadgeTop.className = "px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold";
+                    permBadgeTop.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Accessibility Setup Available';
+                }
+            }
+
+            // Filter Tabs styling
+            const filterBtns = document.querySelectorAll('.st-filter-btn');
+            filterBtns.forEach(btn => {
+                const f = btn.getAttribute('data-filter');
+                if (f === appTrackerState.activeFilter) {
+                    btn.className = "st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 bg-cyan-500 text-black font-bold shadow-sm";
+                } else {
+                    btn.className = "st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white";
+                }
+            });
+            const blockedTab = document.getElementById('st-filter-blocked-tab');
+            if (blockedTab) blockedTab.textContent = `Blocked (${blockedCount})`;
+
+            // Active App Status Bar
+            const activeStatusContainer = document.getElementById('st-active-app-status-container');
+            const currentActiveApp = appTrackerState.apps.find(a => a.id === appTrackerState.activeAppId);
+            if (activeStatusContainer) {
+                if (currentActiveApp) {
+                    activeStatusContainer.innerHTML = `
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold flex items-center gap-1.5 animate-pulse">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Tracking: ${currentActiveApp.name}
+                        </span>
+                        <button role="button" onclick="pauseActiveApp()" class="px-3 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition">
+                            <i class="fa-solid fa-pause mr-1"></i> Pause
+                        </button>
+                    `;
+                } else {
+                    activeStatusContainer.innerHTML = `
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-mono text-xs flex items-center gap-1.5 self-start sm:self-auto">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span> Standby / Standalone
+                        </span>
+                    `;
+                }
+            }
+
+            // Launcher Pills
+            const pillsContainer = document.getElementById('st-app-launcher-pills');
+            if (pillsContainer) {
+                pillsContainer.innerHTML = appTrackerState.apps.map(app => {
+                    const isBlocked = isAppBlocked(app.id);
+                    const isCurrent = appTrackerState.activeAppId === app.id;
+                    return `
+                        <button role="button" onclick="setActiveApp('${app.id}')" class="px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-2 shrink-0 transition ${isCurrent ? 'bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/30' : (isBlocked ? 'bg-rose-950/40 text-rose-300 border-rose-500/40 hover:bg-rose-900/40' : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700')}">
+                            <i class="${app.icon}"></i>
+                            <span>${app.name}</span>
+                            ${isBlocked ? '<i class="fa-solid fa-lock text-[10px] text-rose-400"></i>' : ''}
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            // Filter apps for grid
+            let filtered = appTrackerState.apps.filter(app => {
+                if (appTrackerState.activeFilter === 'social') return app.category === 'Social Media' || app.category === 'Messaging';
+                if (appTrackerState.activeFilter === 'entertainment') return app.category === 'Entertainment';
+                if (appTrackerState.activeFilter === 'productivity') return app.category === 'Productivity' || app.category === 'Browsing';
+                if (appTrackerState.activeFilter === 'gaming') return app.category === 'Gaming';
+                if (appTrackerState.activeFilter === 'blocked') return isAppBlocked(app.id);
+                return true;
+            });
+
+            if (appTrackerState.searchQuery) {
+                const q = appTrackerState.searchQuery.toLowerCase();
+                filtered = filtered.filter(a => a.name.toLowerCase().includes(q) || a.category.toLowerCase().includes(q));
+            }
+
+            // App Cards Grid
+            const grid = document.getElementById('st-apps-grid');
+            if (grid) {
+                if (filtered.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 text-xs font-mono">No applications match the current filter or search criteria.</div>`;
+                } else {
+                    grid.innerHTML = filtered.map(app => {
+                        const used = appTrackerState.usage[app.id] || 0;
+                        const limit = app.dailyLimitSecs;
+                        const pct = Math.min(100, Math.round((used / limit) * 100));
+                        const isBlocked = isAppBlocked(app.id);
+                        const isNearLimit = pct >= 80 && !isBlocked;
+                        const isActive = appTrackerState.activeAppId === app.id;
+
+                        let barColor = 'bg-cyan-400';
+                        if (isBlocked) barColor = 'bg-rose-500 shadow-md shadow-rose-500/50';
+                        else if (isNearLimit) barColor = 'bg-amber-400';
+
+                        return `
+                            <div class="bg-slate-950/80 rounded-2xl p-4 border ${isBlocked ? 'border-rose-500/60 shadow-lg shadow-rose-950/40' : (isActive ? 'border-cyan-400/80 shadow-lg shadow-cyan-950/40' : 'border-slate-800/90')} space-y-3 relative overflow-hidden transition-all duration-200 hover:border-slate-700">
+                                ${isBlocked ? `
+                                    <div class="absolute top-0 right-0 bg-rose-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                                        <i class="fa-solid fa-lock text-[8px]"></i> BLOCKED
+                                    </div>
+                                ` : (isActive ? `
+                                    <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-black animate-ping"></span> ACTIVE
+                                    </div>
+                                ` : '')}
+
+                                <!-- APP HEADER -->
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-11 h-11 rounded-2xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-xl shrink-0 shadow-md">
+                                        <i class="${app.icon} ${app.colorClass}"></i>
+                                    </div>
+                                    <div class="truncate flex-1">
+                                        <h4 class="text-sm font-bold text-white truncate flex items-center gap-1.5">
+                                            <span>${app.name}</span>
+                                            ${app.isCustom ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">Custom</span>' : ''}
+                                        </h4>
+                                        <span class="text-[10px] text-slate-400 font-medium">${app.category}</span>
+                                    </div>
+                                </div>
+
+                                <!-- USAGE PROGRESS BAR -->
+                                <div class="space-y-1.5">
+                                    <div class="flex justify-between items-center text-xs">
+                                        <span class="font-mono font-bold text-white" id="st-active-counter-${app.id}">${formatDuration(used)}</span>
+                                        <span class="text-slate-400 text-[11px] font-mono">Limit: <strong class="text-slate-200">${formatDuration(limit)}</strong></span>
+                                    </div>
+
+                                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800/80">
+                                        <div class="h-full rounded-full transition-all duration-300 ${barColor}" style="width: ${pct}%"></div>
+                                    </div>
+
+                                    <div class="flex justify-between items-center text-[10px] font-mono">
+                                        <span class="${isBlocked ? 'text-rose-400 font-bold' : (isNearLimit ? 'text-amber-400 font-semibold' : 'text-slate-400')}">
+                                            ${isBlocked ? '100% QUOTA EXHAUSTED' : (isNearLimit ? `${pct}% • Quota warning` : `${pct}% consumed`)}
+                                        </span>
+                                        <span class="text-slate-500">
+                                            ${app.blockEnabled ? '<i class="fa-solid fa-shield text-cyan-400"></i> Shield Enabled' : 'Monitoring only'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- ACTION BUTTONS -->
+                                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
+                                    <button role="button" onclick="openLimitModal('${app.id}'); playSfx('click')" class="py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-sliders text-cyan-400 text-[11px]"></i> Limit
+                                    </button>
+
+                                    ${isBlocked ? `
+                                        <button role="button" onclick="showBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-rose-600/30">
+                                            <i class="fa-solid fa-lock text-[11px]"></i> Locked
+                                        </button>
+                                    ` : (isActive ? `
+                                        <button role="button" onclick="pauseActiveApp()" class="py-1.5 px-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1">
+                                            <i class="fa-solid fa-pause text-[11px]"></i> In Use
+                                        </button>
+                                    ` : `
+                                        <button role="button" onclick="setActiveApp('${app.id}')" class="py-1.5 px-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold transition flex items-center justify-center gap-1">
+                                            <i class="fa-solid fa-play text-[11px]"></i> Launch
+                                        </button>
+                                    `)}
+                                </div>
+
+                                <!-- EXTRA QUICK CONTROLS (TEST +10M & RESET) -->
+                                <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
+                                    <button role="button" onclick="simulateAddUsage('${app.id}', 600)" title="Add 10 mins testing usage" class="hover:text-cyan-400 transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-forward-step"></i> +10m Test
+                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <button role="button" onclick="resetAppUsage('${app.id}')" title="Reset today's time" class="hover:text-amber-400 transition">
+                                            <i class="fa-solid fa-rotate-left"></i> Reset
+                                        </button>
+                                        ${app.isCustom ? `
+                                            <button role="button" onclick="deleteCustomApp('${app.id}')" title="Delete custom app" class="hover:text-rose-400 transition">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Expose to window for global access
+        window.ArcAppTracker = {
+            init: initAppTracker,
+            renderScreenTimeView,
+            setActiveApp,
+            pauseActiveApp,
+            isAppBlocked,
+            showBlockerShield,
+            closeBlockerShield,
+            submitEmergencyExtension,
+            openAccessibilityModal,
+            closeAccessibilityModal,
+            confirmAccessibilityGranted,
+            openLimitModal,
+            closeLimitModal,
+            setPresetLimit,
+            saveAppLimitFromModal,
+            openAddCustomAppModal,
+            closeAddCustomAppModal,
+            saveCustomApp,
+            deleteCustomApp,
+            simulateAddUsage,
+            resetAppUsage,
+            toggleStrictMode,
+            setFilter: setAppFilter,
+            setSearch: setAppSearch
+        };
+
+
         function initApp() {
             verifyDataSchema();
 
@@ -4535,6 +5689,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             renderScreenTime();
             startLaptopTimer();
             initFxCanvas();
+            initAppTracker();
         }
 
         document.addEventListener('DOMContentLoaded', initApp);

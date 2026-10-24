@@ -46,7 +46,16 @@ Replaced basic browser `localStorage` with a **Dual-Layer High-Durability Engine
 - **Interactive Screen Time Hub:** Real-time animated ticker, 7-day rolling trend chart, hardware telemetry status, and daily active vs idle breakdown.
 - **Persistent Synchronization:** Automatically records daily usage in IndexedDB and Tauri store (`arc_screentime_YYYY-MM-DD`).
 
-### 6. Application Configuration (`src-tauri/tauri.conf.json`)
+### 6. Automated App Screen Time & App Lockout Engine (`src/apptracker.js`)
+
+- **Per-App Automatic Tracking:** Monitors active screen time for popular applications (YouTube, Instagram, Reddit, X/Twitter, TikTok, Netflix, Discord, Browsers, VS Code, Steam/Gaming) and custom user-added apps.
+- **User-Defined Daily Time Quotas:** Easily configure daily usage limits (15m, 30m, 45m, 1h, 2h, or custom minutes) with real-time visual progress indicators.
+- **Accessibility & Usage Permission Workflow:** Prompts for system-level Accessibility and Usage Access permissions (`PACKAGE_USAGE_STATS` / OS Window Watchdog) with diagnostic check and guidance for Android, Windows, and macOS.
+- **Inescapable Blocker Shield:** Automatically locks out and blocks applications when their daily limit is reached. Displays glowing crimson cyber-shield, countdown to midnight reset, time breakdown, and Winter Arc motivational discipline pledge.
+- **Strict Mode & Anti-Impulse Override:** Optional Strict Mode eliminates all overrides. Normal mode requires entering a commitment phrase (`UNBREAKABLE`) to earn a limited 5-minute emergency extension.
+- **Midnight Auto-Reset:** Daily usage quotas and lockout barriers reset automatically at midnight (`00:00:00`).
+
+### 7. Application Configuration (`src-tauri/tauri.conf.json`)
 
 - **Product Name:** `Arc Tracker`
 - **Identifier:** `com.arctracker.app`
