@@ -51,13 +51,20 @@ Replaced basic browser `localStorage` with a **Dual-Layer High-Durability Engine
 - **Per-App Automatic Tracking:** Monitors active screen time for popular applications (YouTube, Instagram, Reddit, X/Twitter, TikTok, Netflix, Discord, Browsers, VS Code, Steam/Gaming) and custom user-added apps.
 - **Focus Time & Pomodoro App Lockouts:** Automatically blocks distracting apps (YouTube, Instagram, X/Twitter, Reddit, TikTok, Netflix, Discord, Gaming) during active Focus and Pomodoro work sprints.
 - **Customizable Focus Blocklist:** Dedicated modal and quick card controls to choose exactly which apps are blocked during focus, with one-click presets: *Block All Distractions*, *Block All Apps*, or *Allow All*.
-- **YouTube Channel Distraction Filter:** Filters and restricts distracting YouTube channels (pre-loaded with `@MrBeast`, `@Sidemen`, `@IShowSpeed`, `@PewDiePie`, `@LoganPaul`, `@TSeries`, `@DudePerfect`, and YouTube Shorts) while allowing educational and productivity creators (`@freecodecamp`, `@hubermanlab`, `@lexfridman`, `@3blue1brown`, `@fireship`, `@veritasium`, `@mitocw`) to remain accessible.
-- **Dedicated Focus & YouTube Blocker Overlays:** Fullscreen shields trigger instantly if a blocked app or restricted YouTube creator is opened during deep work sprints, displaying live countdowns and curated educational alternative recommendations.
+- **YouTube Channel Distraction Filter (India & Global):**
+  - **Pre-Configured Blocked Creators (20+):** Blocks high-dopamine Indian entertainment, gaming, vlogs, and roasts (`@CarryMinati`, `@TotalGaming`, `@TechnoGamerzOfficial`, `@ashishchanchlanivines`, `@BBKiVines`, `@Round2hell`, `@triggeredinsaan`, `@souravjoshivlogs7028`, `@Mythpat`, `@HarshBeniwal`, `@ElvishYadavVlogs`, `@TanmayBhatYT`, `@TSeries`) plus global creators (`@MrBeast`, `@Sidemen`, `@IShowSpeed`, `@PewDiePie`, `@LoganPaul`, `@DudePerfect`, and YouTube Shorts feed).
+  - **Approved Educational Whitelist (20+):** Keeps premier Indian learning and coding channels open (`@chaiaurcode`, `@CodeWithHarry`, `@ApnaCollegeOfficial`, `@PhysicsWallah`, `@KhanGSRecentre`, `@ThinkSchool`, `@mohak_mangal`, `@NitishRajput`, `@GateSmashers`, `@lovebabbar`, `@takeUforward`, `@NPTELIITM`, `@GeekyShows`) alongside global leaders (`@freecodecamp`, `@hubermanlab`, `@lexfridman`, `@3blue1brown`, `@fireship`, `@veritasium`, `@mitocw`).
+- **Chrome & Browser Website Blocker in Focus:**
+  - Blocks distracting websites inside Chrome and browsers during Focus Mode (e.g. `youtube.com`, `instagram.com`, `reddit.com`, `x.com`, `twitter.com`, `facebook.com`, `netflix.com`, `hotstar.com`, `primevideo.com`, `twitch.tv`, `cricbuzz.com`, `quora.com`, `tiktok.com`).
+  - Whitelists productive work, coding, and research sites (`github.com`, `stackoverflow.com`, `google.com`, `notion.so`, `leetcode.com`, `geeksforgeeks.org`, `wikipedia.org`, `developer.mozilla.org`, `chatgpt.com`).
+  - Interactive URL Access Sandbox allows testing any website URL to preview access barriers in real-time.
+- **Dedicated Focus, YouTube & Website Blocker Overlays:** Fullscreen cyber-shields trigger instantly if a blocked app, restricted creator, or distracting website is opened during deep work sprints, displaying live countdowns and curated educational alternative recommendations.
 - **User-Defined Daily Time Quotas:** Easily configure daily usage limits (15m, 30m, 45m, 1h, 2h, or custom minutes) with real-time visual progress indicators.
 - **Accessibility & Usage Permission Workflow:** Prompts for system-level Accessibility and Usage Access permissions (`PACKAGE_USAGE_STATS` / OS Window Watchdog) with diagnostic check and guidance for Android, Windows, and macOS.
 - **Inescapable Blocker Shield:** Automatically locks out and blocks applications when their daily limit is reached. Displays glowing crimson cyber-shield, countdown to midnight reset, time breakdown, and Winter Arc motivational discipline pledge.
 - **Strict Mode & Anti-Impulse Override:** Optional Strict Mode eliminates all overrides. Normal mode requires entering a commitment phrase (`UNBREAKABLE`) to earn a limited 5-minute emergency extension.
 - **Midnight Auto-Reset:** Daily usage quotas and lockout barriers reset automatically at midnight (`00:00:00`).
+
 
 
 ### 7. Application Configuration (`src-tauri/tauri.conf.json`)

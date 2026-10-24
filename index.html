@@ -1631,8 +1631,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 border border-purple-500/40 text-purple-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Configure which apps are blocked during Focus and Pomodoro">
                             <i class="fa-solid fa-shield-halved text-purple-400"></i> Focus Blocklist (<span id="st-header-focus-block-count">8</span>)
                         </button>
-                        <button role="button" onclick="openYouTubeFilterModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/60 border border-red-500/40 text-red-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Filter and block distracting YouTube channels">
-                            <i class="fa-brands fa-youtube text-red-500"></i> YouTube Filter (<span id="st-header-yt-filter-count">8</span>)
+                        <button role="button" onclick="openYouTubeFilterModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/60 border border-red-500/40 text-red-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Filter and block distracting YouTube channels (Indian & Global)">
+                            <i class="fa-brands fa-youtube text-red-500"></i> YouTube Filter (<span id="st-header-yt-filter-count">20</span>)
+                        </button>
+                        <button role="button" onclick="openWebsiteFilterModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Filter and block distracting websites in Chrome during Focus">
+                            <i class="fa-brands fa-chrome text-cyan-400"></i> Website Filter (<span id="st-header-web-filter-count">13</span>)
                         </button>
                         <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 hover:border-cyan-400 border border-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-universal-access text-cyan-400"></i> Permissions
@@ -2251,6 +2254,133 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
                     <span class="text-[11px] text-slate-400">Educational creators remain open</span>
                     <button role="button" onclick="closeYouTubeFilterModal()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-red-600/20">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CHROME & BROWSER WEBSITE BLOCKER OVERLAY -->
+        <div id="arc-website-blocker-overlay" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-cyan-950/60 to-black border-2 border-cyan-500/80 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(6,182,212,0.35)] space-y-6 text-center animate-zoom-in my-auto">
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <span class="absolute inset-0 rounded-3xl border border-cyan-400 animate-ping opacity-30"></span>
+                    <i class="fa-brands fa-chrome text-3xl sm:text-4xl text-cyan-400"></i>
+                </div>
+
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-mono font-black uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                        WEBSITE RESTRICTED IN BROWSER
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        <span id="web-blocker-domain-name">youtube.com</span> is Blocked
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" id="web-blocker-reason-text">
+                        This website is restricted inside Chrome during active Focus / Pomodoro sprints to prevent browsing rabbit holes.
+                    </p>
+                </div>
+
+                <!-- FOCUS TIMER STATUS -->
+                <div class="p-3.5 rounded-2xl bg-slate-950 border border-cyan-500/30 space-y-1">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Focus Time Remaining</span>
+                    <div id="web-blocker-time-left" class="text-2xl sm:text-3xl font-black font-mono text-cyan-300">25:00</div>
+                    <span class="text-[10px] text-cyan-400/80 font-medium block">Stay in the zone. Finish the sprint first.</span>
+                </div>
+
+                <!-- RECOMMENDED PRODUCTIVE WEBSITES -->
+                <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-left space-y-2">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Permitted Work &amp; Research Sites:</span>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">github.com</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">stackoverflow.com</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">developer.mozilla.org</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">leetcode.com</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">notion.so</span>
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="space-y-2 pt-1">
+                    <button role="button" onclick="closeWebsiteBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-black text-sm uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 hover:scale-[1.02]">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Return to Focus Session
+                    </button>
+                    <button role="button" onclick="closeWebsiteBlockerShield(); openWebsiteFilterModal();" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
+                        <i class="fa-solid fa-sliders mr-1.5"></i> Manage Blocked Websites
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHROME & BROWSER WEBSITE FILTER MODAL -->
+        <div id="arc-website-filter-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-xl bg-slate-900 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-lg">
+                            <i class="fa-brands fa-chrome"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white">Chrome &amp; Browser Website Filter</h3>
+                            <p class="text-xs text-slate-400">Block distracting websites (YouTube, Instagram, Hotstar, etc.) inside Chrome during Focus</p>
+                        </div>
+                    </div>
+                    <button role="button" onclick="closeWebsiteFilterModal()" aria-label="Close Website Filter Modal" title="Close Website Filter Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- MASTER TOGGLE & QUICK STATS -->
+                <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-white block">Website Filter during Focus</span>
+                        <span class="text-[10px] text-slate-400 block">Restricts selected websites in Chrome when Focus/Pomodoro is active</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="web-filter-master-toggle" onchange="toggleWebsiteFilterEnabled()" aria-label="Enable Website Filter during Focus" title="Enable Website Filter during Focus" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-500"></div>
+                    </label>
+                </div>
+
+                <!-- ADD WEBSITE FORM -->
+                <div class="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Add Distracting Website</span>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="web-add-domain-input" placeholder="Domain or URL (e.g. cricbuzz.com, hotstar.com)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono">
+                        <input type="text" id="web-add-reason-input" placeholder="Reason (e.g. Cricket / Social)" class="sm:w-40 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+                        <button role="button" onclick="submitAddBlockedWebsite()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs uppercase tracking-wider transition shrink-0 shadow-md shadow-cyan-500/20">
+                            + Block
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BLOCKED WEBSITES LIST -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Restricted Websites (<span id="web-blocked-count-badge">13</span>)</span>
+                        <span class="text-cyan-400">Blocked in Chrome</span>
+                    </div>
+                    <div id="web-modal-blocked-list" class="max-h-44 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE WEBSITE ACCESS TESTER -->
+                <div class="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Test Browser Website Barrier</span>
+                    <div class="flex gap-2">
+                        <input type="text" id="web-test-domain-input" placeholder="Type youtube.com, hotstar.com, or github.com..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono">
+                        <button role="button" onclick="runWebsiteAccessTest()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition border border-cyan-500/30">
+                            Test URL
+                        </button>
+                    </div>
+                    <div id="web-test-feedback-box" class="text-[11px] font-mono hidden pt-1"></div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                    <span class="text-[11px] text-slate-400">GitHub, StackOverflow &amp; Docs remain accessible</span>
+                    <button role="button" onclick="closeWebsiteFilterModal()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/20">
                         Close
                     </button>
                 </div>
@@ -5161,7 +5291,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
            ========================================================================== */
         
         /* ==========================================================================
-           7. AUTOMATED APP SCREEN TIME, FOCUS BLOCKLIST & YOUTUBE FILTER ENGINE
+           7. AUTOMATED APP SCREEN TIME, FOCUS BLOCKLIST, YOUTUBE & CHROME WEBSITE FILTER
            Self-contained, 100% offline, zero-CORS browser compatible
            ========================================================================== */
         const DEFAULT_TRACKED_APPS = [
@@ -5178,24 +5308,83 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         ];
 
         const DEFAULT_BLOCKED_YOUTUBE_CHANNELS = [
-            { handle: '@MrBeast', name: 'MrBeast', reason: 'High sensory distraction' },
-            { handle: '@Sidemen', name: 'Sidemen', reason: 'Entertainment / Challenges' },
-            { handle: '@IShowSpeed', name: 'IShowSpeed', reason: 'Streaming / Noise' },
-            { handle: '@PewDiePie', name: 'PewDiePie', reason: 'Gaming / Entertainment' },
-            { handle: '@LoganPaul', name: 'Logan Paul', reason: 'Entertainment / Vlogs' },
-            { handle: '@TSeries', name: 'T-Series', reason: 'Music videos / Distraction' },
-            { handle: '@DudePerfect', name: 'Dude Perfect', reason: 'Entertainment / Tricks' },
-            { handle: 'Shorts', name: 'YouTube Shorts Feed', reason: 'Infinite scrolling short-form loop' }
+            // Global High-Distraction Channels
+            { handle: '@MrBeast', name: 'MrBeast', country: 'Global', reason: 'High sensory distraction & challenges' },
+            { handle: '@Sidemen', name: 'Sidemen', country: 'Global', reason: 'Entertainment & challenges' },
+            { handle: '@IShowSpeed', name: 'IShowSpeed', country: 'Global', reason: 'Streaming & high noise' },
+            { handle: '@PewDiePie', name: 'PewDiePie', country: 'Global', reason: 'Gaming & entertainment' },
+            { handle: '@LoganPaul', name: 'Logan Paul', country: 'Global', reason: 'Entertainment & vlogs' },
+            { handle: '@TSeries', name: 'T-Series', country: 'India', reason: 'Music videos & trailers distraction' },
+            { handle: '@DudePerfect', name: 'Dude Perfect', country: 'Global', reason: 'Trick shots & entertainment' },
+            { handle: 'Shorts', name: 'YouTube Shorts Feed', country: 'Global', reason: 'Infinite scrolling short-form loop' },
+
+            // India High-Distraction Entertainment, Roasts, Vlogs & Gaming
+            { handle: '@CarryMinati', name: 'CarryMinati (Ajey Nagar)', country: 'India', reason: 'Roasts, gaming & comedy distraction' },
+            { handle: '@TotalGaming', name: 'Total Gaming (Ajjubhai)', country: 'India', reason: 'High-volume Free Fire & gaming streams' },
+            { handle: '@TechnoGamerzOfficial', name: 'Techno Gamerz (Ujjwal)', country: 'India', reason: 'GTA & marathon gaming streams' },
+            { handle: '@ashishchanchlanivines', name: 'Ashish Chanchlani', country: 'India', reason: 'Comedy skits & entertainment' },
+            { handle: '@BBKiVines', name: 'BB Ki Vines (Bhuvan Bam)', country: 'India', reason: 'Comedy skits & web entertainment' },
+            { handle: '@Round2hell', name: 'Round2hell', country: 'India', reason: 'High-energy comedy skits' },
+            { handle: '@triggeredinsaan', name: 'Triggered Insaan (Nischay)', country: 'India', reason: 'Reaction videos, roasts & memes' },
+            { handle: '@souravjoshivlogs7028', name: 'Sourav Joshi Vlogs', country: 'India', reason: 'Daily high-frequency vlog binges' },
+            { handle: '@Mythpat', name: 'Mythpat (Mithilesh)', country: 'India', reason: 'Gaming & comedy entertainment' },
+            { handle: '@HarshBeniwal', name: 'Harsh Beniwal', country: 'India', reason: 'Comedy sketches & drama' },
+            { handle: '@ElvishYadavVlogs', name: 'Elvish Yadav', country: 'India', reason: 'Vlogs, lifestyle & drama' },
+            { handle: '@TanmayBhatYT', name: 'Tanmay Bhat', country: 'India', reason: 'Meme reviews & reaction streams' }
         ];
 
         const DEFAULT_ALLOWED_YOUTUBE_CHANNELS = [
-            { handle: '@freecodecamp', name: 'freeCodeCamp.org', category: 'Programming' },
-            { handle: '@hubermanlab', name: 'Andrew Huberman', category: 'Neuroscience & Health' },
-            { handle: '@lexfridman', name: 'Lex Fridman', category: 'Deep Conversations & AI' },
-            { handle: '@3blue1brown', name: '3Blue1Brown', category: 'Mathematics & Science' },
-            { handle: '@fireship', name: 'Fireship', category: 'High-Velocity Tech' },
-            { handle: '@veritasium', name: 'Veritasium', category: 'Science Education' },
-            { handle: '@mitocw', name: 'MIT OpenCourseWare', category: 'Academic Lectures' }
+            // India Premier Educational & Technical Channels
+            { handle: '@chaiaurcode', name: 'Chai aur Code (Hitesh Choudhary)', country: 'India', category: 'Software Engineering & JavaScript' },
+            { handle: '@CodeWithHarry', name: 'CodeWithHarry (Haris Khan)', country: 'India', category: 'Python, C++, Web Development' },
+            { handle: '@ApnaCollegeOfficial', name: 'Apna College (Shradha Khapra)', country: 'India', category: 'DSA, Java, Web Development' },
+            { handle: '@PhysicsWallah', name: 'Physics Wallah (Alakh Pandey)', country: 'India', category: 'Physics, Science & Academics' },
+            { handle: '@KhanGSRecentre', name: 'Khan GS Research Centre (Khan Sir)', country: 'India', category: 'General Science, Geopolitics & UPSC' },
+            { handle: '@ThinkSchool', name: 'Think School (Parth Verma)', country: 'India', category: 'Business Case Studies & Strategy' },
+            { handle: '@mohak_mangal', name: 'Soch by Mohak Mangal', country: 'India', category: 'Indian Policy, Economics & Analysis' },
+            { handle: '@NitishRajput', name: 'Nitish Rajput', country: 'India', category: 'Investigative Research & Current Affairs' },
+            { handle: '@GateSmashers', name: 'Gate Smashers (Varun Singla)', country: 'India', category: 'Computer Science Core, OS & GATE' },
+            { handle: '@lovebabbar', name: 'Love Babbar (CodeHelp)', country: 'India', category: 'DSA in C++, System Design & Placement' },
+            { handle: '@takeUforward', name: 'take U forward (Striver)', country: 'India', category: 'SDE Sheet, Algorithms & LeetCode' },
+            { handle: '@NPTELIITM', name: 'NPTEL India (IIT Lectures)', country: 'India', category: 'Premier Indian University Lectures' },
+            { handle: '@GeekyShows', name: 'Geeky Shows', country: 'India', category: 'Core Programming & Web Frameworks' },
+
+            // Global Premier Educational Channels
+            { handle: '@freecodecamp', name: 'freeCodeCamp.org', country: 'Global', category: 'Full-Stack Software Engineering' },
+            { handle: '@hubermanlab', name: 'Andrew Huberman', country: 'Global', category: 'Neuroscience & Deep Focus' },
+            { handle: '@lexfridman', name: 'Lex Fridman', country: 'Global', category: 'Deep Conversations, AI & Robotics' },
+            { handle: '@3blue1brown', name: '3Blue1Brown (Grant Sanderson)', country: 'Global', category: 'Mathematics & Neural Networks' },
+            { handle: '@fireship', name: 'Fireship (Jeff Delaney)', country: 'Global', category: 'High-Velocity Tech & Code in 100s' },
+            { handle: '@veritasium', name: 'Veritasium (Derek Muller)', country: 'Global', category: 'Physics & Scientific Reasoning' },
+            { handle: '@mitocw', name: 'MIT OpenCourseWare', country: 'Global', category: 'Undergraduate & Graduate Lectures' }
+        ];
+
+        const DEFAULT_BLOCKED_WEBSITES = [
+            { domain: 'youtube.com', name: 'YouTube', category: 'Video / Streaming', reason: 'Infinite autoplay & video rabbit holes' },
+            { domain: 'instagram.com', name: 'Instagram', category: 'Social Media', reason: 'Reels doomscrolling & endless stories' },
+            { domain: 'reddit.com', name: 'Reddit', category: 'Social Media', reason: 'Meme rabbit holes & infinite comment threads' },
+            { domain: 'x.com', name: 'X / Twitter', category: 'Social Media', reason: 'Timeline arguments & continuous refreshing' },
+            { domain: 'twitter.com', name: 'Twitter', category: 'Social Media', reason: 'Social feed distraction' },
+            { domain: 'facebook.com', name: 'Facebook', category: 'Social Media', reason: 'Social feed & marketplace distraction' },
+            { domain: 'netflix.com', name: 'Netflix', category: 'Streaming', reason: 'Binge-watching shows & movies during work' },
+            { domain: 'hotstar.com', name: 'JioCinema / Disney+ Hotstar', category: 'Streaming & Cricket', reason: 'Cricket livestreams & movies' },
+            { domain: 'primevideo.com', name: 'Amazon Prime Video', category: 'Streaming', reason: 'Entertainment movies & drama series' },
+            { domain: 'twitch.tv', name: 'Twitch', category: 'Live Streaming', reason: 'Gaming livestreams & chat distraction' },
+            { domain: 'cricbuzz.com', name: 'Cricbuzz', category: 'Live Scores', reason: 'Compulsive cricket score-checking' },
+            { domain: 'quora.com', name: 'Quora', category: 'Forums', reason: 'Unfocused reading rabbit holes' },
+            { domain: 'tiktok.com', name: 'TikTok', category: 'Short Video', reason: 'Short-form dopamine loop' }
+        ];
+
+        const DEFAULT_ALLOWED_WEBSITES = [
+            { domain: 'github.com', name: 'GitHub', category: 'Developer Repositories' },
+            { domain: 'stackoverflow.com', name: 'Stack Overflow', category: 'Programming Q&A' },
+            { domain: 'google.com', name: 'Google Search', category: 'Academic & Technical Research' },
+            { domain: 'notion.so', name: 'Notion', category: 'Workspace & Notes' },
+            { domain: 'leetcode.com', name: 'LeetCode', category: 'Algorithm Practice' },
+            { domain: 'geeksforgeeks.org', name: 'GeeksforGeeks', category: 'Computer Science Documentation' },
+            { domain: 'wikipedia.org', name: 'Wikipedia', category: 'Factual Reference' },
+            { domain: 'developer.mozilla.org', name: 'MDN Web Docs', category: 'Web Documentation' },
+            { domain: 'chatgpt.com', name: 'ChatGPT', category: 'AI Coding Assistant' }
         ];
 
         let appTrackerState = {
@@ -5215,6 +5404,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 enabled: true,
                 blockShorts: true,
                 blockedChannels: JSON.parse(JSON.stringify(DEFAULT_BLOCKED_YOUTUBE_CHANNELS))
+            },
+            websiteFilter: {
+                enabled: true,
+                blockedWebsites: JSON.parse(JSON.stringify(DEFAULT_BLOCKED_WEBSITES))
             },
             timer: null
         };
@@ -5239,6 +5432,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const savedYt = getLocalStorageItem('arc_youtube_channel_filter');
                 if (savedYt && typeof savedYt === 'object') {
                     appTrackerState.youtubeFilter = { ...appTrackerState.youtubeFilter, ...savedYt };
+                }
+
+                // Load Website filter config
+                const savedWeb = getLocalStorageItem('arc_website_filter');
+                if (savedWeb && typeof savedWeb === 'object') {
+                    appTrackerState.websiteFilter = { ...appTrackerState.websiteFilter, ...savedWeb };
                 }
 
                 // Load today's per-app usage
@@ -5268,6 +5467,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 setLocalStorageItem(`arc_app_usage_${todayKey}`, appTrackerState.usage);
                 setLocalStorageItem('arc_tracked_apps_catalog', appTrackerState.apps);
                 setLocalStorageItem('arc_youtube_channel_filter', appTrackerState.youtubeFilter);
+                setLocalStorageItem('arc_website_filter', appTrackerState.websiteFilter);
                 setLocalStorageItem('arc_app_accessibility_perm', appTrackerState.permissionGranted ? 'granted' : 'pending');
                 setLocalStorageItem('arc_app_strict_mode', appTrackerState.strictMode ? 'true' : 'false');
             } catch (_) {}
@@ -5307,11 +5507,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
 
             // Live update focus countdown elements
+            const formatted = getFocusTimeRemainingFormatted();
             const focusTimeLeftEl = document.getElementById('focus-blocker-time-left');
-            if (focusTimeLeftEl) focusTimeLeftEl.textContent = getFocusTimeRemainingFormatted();
+            if (focusTimeLeftEl) focusTimeLeftEl.textContent = formatted;
+
+            const webTimeLeftEl = document.getElementById('web-blocker-time-left');
+            if (webTimeLeftEl) webTimeLeftEl.textContent = formatted;
 
             const focusBannerTimerEl = document.getElementById('st-focus-banner-timer');
-            if (focusBannerTimerEl) focusBannerTimerEl.textContent = getFocusTimeRemainingFormatted();
+            if (focusBannerTimerEl) focusBannerTimerEl.textContent = formatted;
 
             // If an app is active in foreground
             if (appTrackerState.activeAppId) {
@@ -5386,9 +5590,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 return;
             }
 
+            // 3. Special notice for Chrome/Browser
+            if (appId === 'chrome' && isFocusActive() && appTrackerState.websiteFilter.enabled) {
+                showToast(`Chrome active: ${appTrackerState.websiteFilter.blockedWebsites.length} distracting websites (YouTube, Instagram, etc.) are blocked.`);
+            } else {
+                showToast(`Tracking active on ${app.name}`);
+            }
+
             appTrackerState.activeAppId = appId;
             playSfx('check');
-            showToast(`Tracking active on ${app.name}`);
             renderScreenTimeView();
         }
 
@@ -5522,6 +5732,31 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
         }
 
+        function showWebsiteBlockerShield(domainName, reason) {
+            const overlay = document.getElementById('arc-website-blocker-overlay');
+            if (!overlay) return;
+
+            const domainEl = document.getElementById('web-blocker-domain-name');
+            const reasonEl = document.getElementById('web-blocker-reason-text');
+            const timeEl = document.getElementById('web-blocker-time-left');
+
+            if (domainEl) domainEl.textContent = domainName || 'Restricted Website';
+            if (reasonEl) reasonEl.textContent = reason ? `Restricted because: ${reason}. Productive tools (GitHub, StackOverflow, Docs) remain accessible.` : 'Access to this site is locked during active Focus sprints to prevent browsing rabbit holes.';
+            if (timeEl) timeEl.textContent = getFocusTimeRemainingFormatted();
+
+            playBlockerAlarmSfx();
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function closeWebsiteBlockerShield() {
+            const overlay = document.getElementById('arc-website-blocker-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+        }
+
         function updateBlockerCountdown() {
             const el = document.getElementById('blocker-reset-countdown');
             if (!el) return;
@@ -5583,7 +5818,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
 
             playSfx('fanfare');
-            showToast(`Focus session started (${minutes}m). Distracting apps blocked!`);
+            showToast(`Focus session started (${minutes}m). Distracting apps & websites blocked!`);
             renderScreenTimeView();
         }
 
@@ -5603,6 +5838,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
 
             closeFocusBlockerShield();
+            closeWebsiteBlockerShield();
             renderScreenTimeView();
         }
 
@@ -5737,6 +5973,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             appTrackerState.youtubeFilter.blockedChannels.push({
                 handle: cleanHandle,
                 name: val.replace('@', ''),
+                country: 'Custom',
                 reason
             });
 
@@ -5788,6 +6025,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             if (listEl) {
                 listEl.innerHTML = appTrackerState.youtubeFilter.blockedChannels.map(item => {
+                    const isIndia = item.country === 'India';
                     return `
                         <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs">
                             <div class="flex items-center space-x-2">
@@ -5795,7 +6033,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                     <i class="fa-brands fa-youtube"></i>
                                 </div>
                                 <div>
-                                    <span class="font-bold text-white">${item.handle}</span>
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="font-bold text-white">${item.handle}</span>
+                                        ${isIndia ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-300 font-mono">🇮🇳 India</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 font-mono">🌐 Global</span>'}
+                                    </div>
                                     <span class="text-[10px] text-slate-400 block">${item.reason}</span>
                                 </div>
                             </div>
@@ -5828,6 +6069,167 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             } else {
                 feedback.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30";
                 feedback.innerHTML = `✓ <strong>${val}</strong> is ALLOWED. Educational/Permitted channel.`;
+                playSfx('check');
+            }
+        }
+
+        /* Chrome & Browser Website Filter Controls */
+        function isWebsiteBlocked(urlOrDomain) {
+            if (!appTrackerState.websiteFilter.enabled || !urlOrDomain) return false;
+            let query = urlOrDomain.trim().toLowerCase();
+
+            try {
+                if (query.startsWith('http://') || query.startsWith('https://')) {
+                    const parsed = new URL(query);
+                    query = parsed.hostname.toLowerCase();
+                }
+            } catch (_) {}
+
+            query = query.replace(/^www\./, '');
+
+            for (const site of appTrackerState.websiteFilter.blockedWebsites) {
+                const targetDomain = site.domain.toLowerCase().replace(/^www\./, '');
+                if (query === targetDomain || query.endsWith('.' + targetDomain) || query.includes(targetDomain)) {
+                    return {
+                        blocked: true,
+                        domain: site.domain,
+                        name: site.name || site.domain,
+                        reason: site.reason || 'Distracting website blocked during Focus Sprint'
+                    };
+                }
+            }
+
+            return false;
+        }
+
+        function toggleWebsiteFilterEnabled() {
+            appTrackerState.websiteFilter.enabled = !appTrackerState.websiteFilter.enabled;
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(appTrackerState.websiteFilter.enabled ? "Chrome Website Filter ACTIVE." : "Chrome Website Filter paused.");
+            renderScreenTimeView();
+        }
+
+        function addBlockedWebsite(domain, name, reason) {
+            if (!domain) return;
+            let clean = domain.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+            const existing = appTrackerState.websiteFilter.blockedWebsites.find(w => w.domain.toLowerCase() === clean);
+            if (existing) {
+                if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+                    window.showToast(`${clean} is already in the website blocklist.`);
+                }
+                return;
+            }
+
+            appTrackerState.websiteFilter.blockedWebsites.push({
+                domain: clean,
+                name: name || clean,
+                category: 'Custom Restricted',
+                reason: reason || 'Distracting website'
+            });
+
+            saveAppTrackerData();
+            if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+                showToast(`Blocked ${clean} in Chrome during focus.`);
+            }
+            renderWebsiteFilterModal();
+            renderScreenTimeView();
+        }
+
+        function submitAddBlockedWebsite() {
+            const input = document.getElementById('web-add-domain-input');
+            const reasonInput = document.getElementById('web-add-reason-input');
+            const val = input?.value.trim();
+            if (!val) {
+                alert("Please enter a domain or website URL (e.g. cricbuzz.com or hotstar.com).");
+                return;
+            }
+
+            const reason = reasonInput?.value.trim() || 'Distracting website';
+            addBlockedWebsite(val, val, reason);
+
+            playSfx('fanfare');
+            if (input) input.value = '';
+            if (reasonInput) reasonInput.value = '';
+        }
+
+        function removeBlockedWebsite(domain) {
+            appTrackerState.websiteFilter.blockedWebsites = appTrackerState.websiteFilter.blockedWebsites.filter(w => w.domain.toLowerCase() !== domain.toLowerCase());
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(`Unblocked ${domain} in browser.`);
+            renderWebsiteFilterModal();
+            renderScreenTimeView();
+        }
+
+        function openWebsiteFilterModal() {
+            renderWebsiteFilterModal();
+            const modal = document.getElementById('arc-website-filter-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeWebsiteFilterModal() {
+            const modal = document.getElementById('arc-website-filter-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            renderScreenTimeView();
+        }
+
+        function renderWebsiteFilterModal() {
+            const masterToggle = document.getElementById('web-filter-master-toggle');
+            const countBadge = document.getElementById('web-blocked-count-badge');
+            const listEl = document.getElementById('web-modal-blocked-list');
+
+            if (masterToggle) masterToggle.checked = appTrackerState.websiteFilter.enabled;
+            if (countBadge) countBadge.textContent = appTrackerState.websiteFilter.blockedWebsites.length;
+
+            if (listEl) {
+                listEl.innerHTML = appTrackerState.websiteFilter.blockedWebsites.map(site => {
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px]">
+                                    <i class="fa-solid fa-globe"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-white font-mono">${site.domain}</span>
+                                    <span class="text-[10px] text-slate-400 block">${site.reason}</span>
+                                </div>
+                            </div>
+
+                            <button role="button" onclick="removeBlockedWebsite('${site.domain}')" title="Unblock website" aria-label="Unblock ${site.domain}" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-400 flex items-center justify-center transition border border-slate-800">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function runWebsiteAccessTest() {
+            const input = document.getElementById('web-test-domain-input');
+            const feedback = document.getElementById('web-test-feedback-box');
+            const val = input?.value.trim();
+            if (!val || !feedback) return;
+
+            const check = isWebsiteBlocked(val);
+            feedback.classList.remove('hidden');
+
+            if (check && check.blocked) {
+                feedback.className = "text-[11px] font-mono text-cyan-400 bg-cyan-950/40 p-2 rounded-xl border border-cyan-500/30 flex items-center justify-between";
+                feedback.innerHTML = `
+                    <span>⛔ <strong>${check.domain}</strong> is RESTRICTED in Chrome (${check.reason})</span>
+                    <button role="button" onclick="showWebsiteBlockerShield('${check.domain}', '${check.reason}')" class="px-2 py-0.5 rounded bg-cyan-500 text-black text-[10px] font-bold">Simulate Block</button>
+                `;
+                showWebsiteBlockerShield(check.domain, check.reason);
+            } else {
+                feedback.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30";
+                feedback.innerHTML = `✓ <strong>${val}</strong> is ALLOWED. Work/Research site permitted in Chrome.`;
                 playSfx('check');
             }
         }
@@ -6095,10 +6497,13 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const headerYtCount = document.getElementById('st-header-yt-filter-count');
             if (headerYtCount) headerYtCount.textContent = appTrackerState.youtubeFilter.blockedChannels.length;
 
+            const headerWebCount = document.getElementById('st-header-web-filter-count');
+            if (headerWebCount) headerWebCount.textContent = appTrackerState.websiteFilter.blockedWebsites.length;
+
             const ytStatusEl = document.getElementById('st-kpi-yt-status');
             if (ytStatusEl) {
                 ytStatusEl.innerHTML = appTrackerState.youtubeFilter.enabled
-                    ? `<i class="fa-brands fa-youtube"></i> Active (${appTrackerState.youtubeFilter.blockedChannels.length} Blocked)`
+                    ? `<i class="fa-brands fa-youtube"></i> Active (${appTrackerState.youtubeFilter.blockedChannels.length} YT / ${appTrackerState.websiteFilter.blockedWebsites.length} Web)`
                     : '<i class="fa-brands fa-youtube text-slate-500"></i> Filter Paused';
             }
 
@@ -6134,7 +6539,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     focusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white"></span> FOCUS ACTIVE';
                 }
                 if (focusDesc) {
-                    focusDesc.innerHTML = `<span class="text-purple-300 font-bold"><i class="fa-solid fa-lock text-purple-400 mr-1"></i> ${focusBlockedCount} distracting apps are locked.</span> <span id="st-focus-banner-timer" class="font-mono font-black text-white ml-1.5">${getFocusTimeRemainingFormatted()}</span> remaining in focus sprint.`;
+                    focusDesc.innerHTML = `<span class="text-purple-300 font-bold"><i class="fa-solid fa-lock text-purple-400 mr-1"></i> ${focusBlockedCount} apps &amp; ${appTrackerState.websiteFilter.blockedWebsites.length} websites locked in Chrome.</span> <span id="st-focus-banner-timer" class="font-mono font-black text-white ml-1.5">${getFocusTimeRemainingFormatted()}</span> remaining in focus sprint.`;
                 }
                 if (focusActions) {
                     focusActions.innerHTML = `
@@ -6159,7 +6564,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     focusPill.textContent = "IDLE";
                 }
                 if (focusDesc) {
-                    focusDesc.textContent = "During active Focus sessions and Pomodoros, all chosen distracting apps and YouTube feeds are immediately locked.";
+                    focusDesc.textContent = "During active Focus sessions and Pomodoros, distracting apps and websites inside Chrome are immediately locked.";
                 }
                 if (focusActions) {
                     focusActions.innerHTML = `
@@ -6372,6 +6777,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                     </button>
                                 ` : ''}
 
+                                ${app.id === 'chrome' ? `
+                                    <!-- CHROME SPECIFIC WEBSITE FILTER SHORTCUT BUTTON -->
+                                    <button role="button" onclick="openWebsiteFilterModal(); playSfx('modalOpen')" class="w-full py-1.5 px-2.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/40 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition flex items-center justify-between shadow-sm">
+                                        <span class="flex items-center gap-1.5">
+                                            <i class="fa-brands fa-chrome text-cyan-400"></i> Website Filter in Browser
+                                        </span>
+                                        <span class="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold">
+                                            ${appTrackerState.websiteFilter.blockedWebsites.length} Blocked
+                                        </span>
+                                    </button>
+                                ` : ''}
+
                                 <!-- ACTION BUTTONS -->
                                 <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
                                     <button role="button" onclick="openLimitModal('${app.id}'); playSfx('click')" class="py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition flex items-center justify-center gap-1">
@@ -6442,6 +6859,16 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             submitAddBlockedChannel,
             removeBlockedYouTubeChannel,
             runYouTubeChannelTest,
+            isWebsiteBlocked,
+            toggleWebsiteFilterEnabled,
+            submitAddBlockedWebsite,
+            addBlockedWebsite,
+            removeBlockedWebsite,
+            openWebsiteFilterModal,
+            closeWebsiteFilterModal,
+            runWebsiteAccessTest,
+            showWebsiteBlockerShield,
+            closeWebsiteBlockerShield,
             showFocusBlockerShield,
             closeFocusBlockerShield,
             showYouTubeBlockerShield,

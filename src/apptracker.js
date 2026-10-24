@@ -163,24 +163,83 @@ export const DEFAULT_TRACKED_APPS = [
 ];
 
 export const DEFAULT_BLOCKED_YOUTUBE_CHANNELS = [
-  { handle: '@MrBeast', name: 'MrBeast', reason: 'High sensory distraction' },
-  { handle: '@Sidemen', name: 'Sidemen', reason: 'Entertainment / Challenges' },
-  { handle: '@IShowSpeed', name: 'IShowSpeed', reason: 'Streaming / Noise' },
-  { handle: '@PewDiePie', name: 'PewDiePie', reason: 'Gaming / Entertainment' },
-  { handle: '@LoganPaul', name: 'Logan Paul', reason: 'Entertainment / Vlogs' },
-  { handle: '@TSeries', name: 'T-Series', reason: 'Music videos / Distraction' },
-  { handle: '@DudePerfect', name: 'Dude Perfect', reason: 'Entertainment / Tricks' },
-  { handle: 'Shorts', name: 'YouTube Shorts Feed', reason: 'Infinite scrolling short-form loop' }
+  // Global High-Distraction Channels
+  { handle: '@MrBeast', name: 'MrBeast', country: 'Global', reason: 'High sensory distraction & challenges' },
+  { handle: '@Sidemen', name: 'Sidemen', country: 'Global', reason: 'Entertainment & challenges' },
+  { handle: '@IShowSpeed', name: 'IShowSpeed', country: 'Global', reason: 'Streaming & high noise' },
+  { handle: '@PewDiePie', name: 'PewDiePie', country: 'Global', reason: 'Gaming & entertainment' },
+  { handle: '@LoganPaul', name: 'Logan Paul', country: 'Global', reason: 'Entertainment & vlogs' },
+  { handle: '@TSeries', name: 'T-Series', country: 'India', reason: 'Music videos & trailers distraction' },
+  { handle: '@DudePerfect', name: 'Dude Perfect', country: 'Global', reason: 'Trick shots & entertainment' },
+  { handle: 'Shorts', name: 'YouTube Shorts Feed', country: 'Global', reason: 'Infinite scrolling short-form loop' },
+
+  // India High-Distraction Entertainment, Roasts, Vlogs & Gaming
+  { handle: '@CarryMinati', name: 'CarryMinati (Ajey Nagar)', country: 'India', reason: 'Roasts, gaming & comedy distraction' },
+  { handle: '@TotalGaming', name: 'Total Gaming (Ajjubhai)', country: 'India', reason: 'High-volume Free Fire & gaming streams' },
+  { handle: '@TechnoGamerzOfficial', name: 'Techno Gamerz (Ujjwal)', country: 'India', reason: 'GTA & marathon gaming streams' },
+  { handle: '@ashishchanchlanivines', name: 'Ashish Chanchlani', country: 'India', reason: 'Comedy skits & entertainment' },
+  { handle: '@BBKiVines', name: 'BB Ki Vines (Bhuvan Bam)', country: 'India', reason: 'Comedy skits & web entertainment' },
+  { handle: '@Round2hell', name: 'Round2hell', country: 'India', reason: 'High-energy comedy skits' },
+  { handle: '@triggeredinsaan', name: 'Triggered Insaan (Nischay)', country: 'India', reason: 'Reaction videos, roasts & memes' },
+  { handle: '@souravjoshivlogs7028', name: 'Sourav Joshi Vlogs', country: 'India', reason: 'Daily high-frequency vlog binges' },
+  { handle: '@Mythpat', name: 'Mythpat (Mithilesh)', country: 'India', reason: 'Gaming & comedy entertainment' },
+  { handle: '@HarshBeniwal', name: 'Harsh Beniwal', country: 'India', reason: 'Comedy sketches & drama' },
+  { handle: '@ElvishYadavVlogs', name: 'Elvish Yadav', country: 'India', reason: 'Vlogs, lifestyle & drama' },
+  { handle: '@TanmayBhatYT', name: 'Tanmay Bhat', country: 'India', reason: 'Meme reviews & reaction streams' }
 ];
 
 export const DEFAULT_ALLOWED_YOUTUBE_CHANNELS = [
-  { handle: '@freecodecamp', name: 'freeCodeCamp.org', category: 'Programming' },
-  { handle: '@hubermanlab', name: 'Andrew Huberman', category: 'Neuroscience & Health' },
-  { handle: '@lexfridman', name: 'Lex Fridman', category: 'Deep Conversations & AI' },
-  { handle: '@3blue1brown', name: '3Blue1Brown', category: 'Mathematics & Science' },
-  { handle: '@fireship', name: 'Fireship', category: 'High-Velocity Tech' },
-  { handle: '@veritasium', name: 'Veritasium', category: 'Science Education' },
-  { handle: '@mitocw', name: 'MIT OpenCourseWare', category: 'Academic Lectures' }
+  // India Premier Educational & Technical Channels
+  { handle: '@chaiaurcode', name: 'Chai aur Code (Hitesh Choudhary)', country: 'India', category: 'Software Engineering & JavaScript' },
+  { handle: '@CodeWithHarry', name: 'CodeWithHarry (Haris Khan)', country: 'India', category: 'Python, C++, Web Development' },
+  { handle: '@ApnaCollegeOfficial', name: 'Apna College (Shradha Khapra)', country: 'India', category: 'DSA, Java, Web Development' },
+  { handle: '@PhysicsWallah', name: 'Physics Wallah (Alakh Pandey)', country: 'India', category: 'Physics, Science & Academics' },
+  { handle: '@KhanGSRecentre', name: 'Khan GS Research Centre (Khan Sir)', country: 'India', category: 'General Science, Geopolitics & UPSC' },
+  { handle: '@ThinkSchool', name: 'Think School (Parth Verma)', country: 'India', category: 'Business Case Studies & Strategy' },
+  { handle: '@mohak_mangal', name: 'Soch by Mohak Mangal', country: 'India', category: 'Indian Policy, Economics & Analysis' },
+  { handle: '@NitishRajput', name: 'Nitish Rajput', country: 'India', category: 'Investigative Research & Current Affairs' },
+  { handle: '@GateSmashers', name: 'Gate Smashers (Varun Singla)', country: 'India', category: 'Computer Science Core, OS & GATE' },
+  { handle: '@lovebabbar', name: 'Love Babbar (CodeHelp)', country: 'India', category: 'DSA in C++, System Design & Placement' },
+  { handle: '@takeUforward', name: 'take U forward (Striver)', country: 'India', category: 'SDE Sheet, Algorithms & LeetCode' },
+  { handle: '@NPTELIITM', name: 'NPTEL India (IIT Lectures)', country: 'India', category: 'Premier Indian University Lectures' },
+  { handle: '@GeekyShows', name: 'Geeky Shows', country: 'India', category: 'Core Programming & Web Frameworks' },
+
+  // Global Premier Educational Channels
+  { handle: '@freecodecamp', name: 'freeCodeCamp.org', country: 'Global', category: 'Full-Stack Software Engineering' },
+  { handle: '@hubermanlab', name: 'Andrew Huberman', country: 'Global', category: 'Neuroscience & Deep Focus' },
+  { handle: '@lexfridman', name: 'Lex Fridman', country: 'Global', category: 'Deep Conversations, AI & Robotics' },
+  { handle: '@3blue1brown', name: '3Blue1Brown (Grant Sanderson)', country: 'Global', category: 'Mathematics & Neural Networks' },
+  { handle: '@fireship', name: 'Fireship (Jeff Delaney)', country: 'Global', category: 'High-Velocity Tech & Code in 100s' },
+  { handle: '@veritasium', name: 'Veritasium (Derek Muller)', country: 'Global', category: 'Physics & Scientific Reasoning' },
+  { handle: '@mitocw', name: 'MIT OpenCourseWare', country: 'Global', category: 'Undergraduate & Graduate Lectures' }
+];
+
+export const DEFAULT_BLOCKED_WEBSITES = [
+  { domain: 'youtube.com', name: 'YouTube', category: 'Video / Streaming', reason: 'Infinite autoplay & video rabbit holes' },
+  { domain: 'instagram.com', name: 'Instagram', category: 'Social Media', reason: 'Reels doomscrolling & endless stories' },
+  { domain: 'reddit.com', name: 'Reddit', category: 'Social Media', reason: 'Meme rabbit holes & infinite comment threads' },
+  { domain: 'x.com', name: 'X / Twitter', category: 'Social Media', reason: 'Timeline arguments & continuous refreshing' },
+  { domain: 'twitter.com', name: 'Twitter', category: 'Social Media', reason: 'Social feed distraction' },
+  { domain: 'facebook.com', name: 'Facebook', category: 'Social Media', reason: 'Social feed & marketplace distraction' },
+  { domain: 'netflix.com', name: 'Netflix', category: 'Streaming', reason: 'Binge-watching shows & movies during work' },
+  { domain: 'hotstar.com', name: 'JioCinema / Disney+ Hotstar', category: 'Streaming & Cricket', reason: 'Cricket livestreams & movies' },
+  { domain: 'primevideo.com', name: 'Amazon Prime Video', category: 'Streaming', reason: 'Entertainment movies & drama series' },
+  { domain: 'twitch.tv', name: 'Twitch', category: 'Live Streaming', reason: 'Gaming livestreams & chat distraction' },
+  { domain: 'cricbuzz.com', name: 'Cricbuzz', category: 'Live Scores', reason: 'Compulsive cricket score-checking' },
+  { domain: 'quora.com', name: 'Quora', category: 'Forums', reason: 'Unfocused reading rabbit holes' },
+  { domain: 'tiktok.com', name: 'TikTok', category: 'Short Video', reason: 'Short-form dopamine loop' }
+];
+
+export const DEFAULT_ALLOWED_WEBSITES = [
+  { domain: 'github.com', name: 'GitHub', category: 'Developer Repositories' },
+  { domain: 'stackoverflow.com', name: 'Stack Overflow', category: 'Programming Q&A' },
+  { domain: 'google.com', name: 'Google Search', category: 'Academic & Technical Research' },
+  { domain: 'notion.so', name: 'Notion', category: 'Workspace & Notes' },
+  { domain: 'leetcode.com', name: 'LeetCode', category: 'Algorithm Practice' },
+  { domain: 'geeksforgeeks.org', name: 'GeeksforGeeks', category: 'Computer Science Documentation' },
+  { domain: 'wikipedia.org', name: 'Wikipedia', category: 'Factual Reference' },
+  { domain: 'developer.mozilla.org', name: 'MDN Web Docs', category: 'Web Documentation' },
+  { domain: 'chatgpt.com', name: 'ChatGPT', category: 'AI Coding Assistant' }
 ];
 
 class ArcAppTrackerEngine {
@@ -206,6 +265,11 @@ class ArcAppTrackerEngine {
     this.focusInterval = null;
 
     // YouTube Channel Filter
+    this.websiteFilter = {
+      enabled: true,
+      blockedWebsites: JSON.parse(JSON.stringify(DEFAULT_BLOCKED_WEBSITES))
+    };
+
     this.youtubeFilter = {
       enabled: true,
       blockShorts: true,
@@ -227,6 +291,7 @@ class ArcAppTrackerEngine {
     await this.loadTodayUsage();
     await this.loadSettings();
     await this.loadYouTubeFilter();
+    await this.loadWebsiteFilter();
 
     // Start 1-second precision tick for active app and focus countdown
     this.startHeartbeat();
@@ -315,6 +380,123 @@ class ArcAppTrackerEngine {
       }
     } catch (e) {
       console.warn('[ArcAppTracker] Error loading YouTube filter:', e);
+    }
+  }
+
+  async loadWebsiteFilter() {
+    try {
+      const stored = await arcStorage.getItem('arc_website_filter');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && typeof parsed === 'object') {
+          this.websiteFilter = { ...this.websiteFilter, ...parsed };
+        }
+      }
+    } catch (e) {
+      console.warn('[ArcAppTracker] Error loading Website filter:', e);
+    }
+  }
+
+  async saveWebsiteFilter() {
+    try {
+      await arcStorage.setItem('arc_website_filter', JSON.stringify(this.websiteFilter));
+    } catch (e) {
+      console.warn('[ArcAppTracker] Error saving Website filter:', e);
+    }
+  }
+
+  /**
+   * Website Filter inside Chrome & Browsers during Focus
+   */
+  isWebsiteBlocked(urlOrDomain) {
+    if (!this.websiteFilter.enabled || !urlOrDomain) return false;
+    let query = urlOrDomain.trim().toLowerCase();
+
+    // Clean protocol and paths
+    try {
+      if (query.startsWith('http://') || query.startsWith('https://')) {
+        const parsed = new URL(query);
+        query = parsed.hostname.toLowerCase();
+      }
+    } catch (_) {}
+
+    query = query.replace(/^www\./, '');
+
+    for (const site of this.websiteFilter.blockedWebsites) {
+      const targetDomain = site.domain.toLowerCase().replace(/^www\./, '');
+      if (query === targetDomain || query.endsWith('.' + targetDomain) || query.includes(targetDomain)) {
+        return {
+          blocked: true,
+          domain: site.domain,
+          name: site.name || site.domain,
+          reason: site.reason || 'Distracting website blocked during Focus Sprint'
+        };
+      }
+    }
+
+    return false;
+  }
+
+  addBlockedWebsite(domain, name, reason) {
+    if (!domain) return;
+    let clean = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    const existing = this.websiteFilter.blockedWebsites.find(w => w.domain.toLowerCase() === clean);
+    if (existing) {
+      if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+        window.showToast(`${clean} is already in the website blocklist.`);
+      }
+      return;
+    }
+
+    this.websiteFilter.blockedWebsites.push({
+      domain: clean,
+      name: name || clean,
+      category: 'Custom Restricted',
+      reason: reason || 'Distracting website'
+    });
+
+    this.saveWebsiteFilter();
+    this.playAudio('success');
+
+    if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+      window.showToast(`Blocked ${clean} in Chrome during focus.`);
+    }
+
+    if (typeof window !== 'undefined' && typeof window.renderWebsiteFilterModal === 'function') {
+      window.renderWebsiteFilterModal();
+    }
+    if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
+      window.renderScreenTimeView();
+    }
+  }
+
+  removeBlockedWebsite(domain) {
+    this.websiteFilter.blockedWebsites = this.websiteFilter.blockedWebsites.filter(w => w.domain.toLowerCase() !== domain.toLowerCase());
+    this.saveWebsiteFilter();
+    this.playAudio('click');
+
+    if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+      window.showToast(`Removed ${domain} from browser blocklist.`);
+    }
+
+    if (typeof window !== 'undefined' && typeof window.renderWebsiteFilterModal === 'function') {
+      window.renderWebsiteFilterModal();
+    }
+    if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
+      window.renderScreenTimeView();
+    }
+  }
+
+  toggleWebsiteFilterEnabled() {
+    this.websiteFilter.enabled = !this.websiteFilter.enabled;
+    this.saveWebsiteFilter();
+    this.playAudio('click');
+
+    if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+      window.showToast(this.websiteFilter.enabled ? "Chrome Website Filter ACTIVE." : "Chrome Website Filter paused.");
+    }
+    if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
+      window.renderScreenTimeView();
     }
   }
 
@@ -802,5 +984,9 @@ if (typeof window !== 'undefined') {
   window.toggleYouTubeFilterEnabled = () => arcAppTracker.toggleYouTubeFilterEnabled();
   window.toggleYouTubeShortsBlock = () => arcAppTracker.toggleYouTubeShortsBlock();
   window.removeBlockedYouTubeChannel = (h) => arcAppTracker.removeBlockedYouTubeChannel(h);
+  window.toggleWebsiteFilterEnabled = () => arcAppTracker.toggleWebsiteFilterEnabled();
+  window.removeBlockedWebsite = (d) => arcAppTracker.removeBlockedWebsite(d);
+  window.isWebsiteBlocked = (u) => arcAppTracker.isWebsiteBlocked(u);
+  window.addBlockedWebsite = (d, n, r) => arcAppTracker.addBlockedWebsite(d, n, r);
 }
 
