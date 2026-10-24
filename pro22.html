@@ -1557,7 +1557,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
         <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
                 <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
-        <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden">
+                <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden">
             <!-- TOP HERO BANNER & STATS -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
                 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
@@ -1567,20 +1567,28 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
                                 LIVE SCREEN TIME MATRIX
                             </span>
+                            <span id="st-focus-badge-top" class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-moon"></i> Focus Blocker Ready
+                            </span>
                             <span id="st-perm-badge-top" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-                                Accessibility Setup Available
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Accessibility Setup Available
                             </span>
                         </div>
                         <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
                             <i class="fa-solid fa-hourglass-half text-cyan-400"></i> App Screen Time &amp; Lockout Shield
                         </h2>
                         <p class="text-xs sm:text-sm text-slate-300">
-                            Automatic per-application usage tracking with strict lockout barriers. Reclaim your focus during the Winter Arc.
+                            Automatic per-application usage tracking, Focus Mode app blocklists, and YouTube channel filtering.
                         </p>
                     </div>
 
                     <div class="flex items-center gap-2 flex-wrap self-stretch sm:self-auto">
+                        <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 border border-purple-500/40 text-purple-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Configure which apps are blocked during Focus and Pomodoro">
+                            <i class="fa-solid fa-shield-halved text-purple-400"></i> Focus Blocklist (<span id="st-header-focus-block-count">8</span>)
+                        </button>
+                        <button role="button" onclick="openYouTubeFilterModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-red-950/60 hover:bg-red-900/60 border border-red-500/40 text-red-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Filter and block distracting YouTube channels">
+                            <i class="fa-brands fa-youtube text-red-500"></i> YouTube Filter (<span id="st-header-yt-filter-count">8</span>)
+                        </button>
                         <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 hover:border-cyan-400 border border-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-universal-access text-cyan-400"></i> Permissions
                         </button>
@@ -1602,9 +1610,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
 
                     <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Apps Tracked</span>
-                        <div class="text-xl sm:text-2xl font-black font-mono text-white mt-0.5" id="st-kpi-tracked-count">10 Apps</div>
-                        <span class="text-[9px] text-slate-500 block">Configurable daily quotas</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Focus Blocklist</span>
+                        <div class="text-xl sm:text-2xl font-black font-mono text-purple-400 mt-0.5" id="st-kpi-focus-count">8 Apps</div>
+                        <span class="text-[9px] text-slate-500 block">Locked during Focus &amp; Pomodoro</span>
                     </div>
 
                     <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800" id="st-kpi-blocked-card">
@@ -1614,11 +1622,47 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
 
                     <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Lockout Shield Status</span>
-                        <div class="text-sm sm:text-base font-extrabold text-cyan-300 mt-1 flex items-center gap-1.5" id="st-kpi-shield-status">
-                            <i class="fa-solid fa-lock text-xs"></i> Active With Override
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">YouTube Filter</span>
+                        <div class="text-sm sm:text-base font-extrabold text-red-400 mt-1 flex items-center gap-1.5" id="st-kpi-yt-status">
+                            <i class="fa-brands fa-youtube"></i> Active (Shorts Blocked)
                         </div>
-                        <span class="text-[9px] text-slate-500 block">Resets daily at midnight</span>
+                        <span class="text-[9px] text-slate-500 block">Restricts distracting channels</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOCUS & POMODORO LOCKOUT CONTROLLER BANNER -->
+            <div id="st-focus-controller-card" class="glass-card rounded-2xl p-4 sm:p-5 border border-purple-500/30 bg-purple-950/15 space-y-3 transition-all duration-300">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shrink-0 mt-0.5">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+                                    Focus Mode &amp; Pomodoro App Blocker
+                                </h3>
+                                <span id="st-focus-status-pill" class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono font-bold">
+                                    IDLE
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-0.5" id="st-focus-desc-text">
+                                During active Focus sessions and Pomodoros, all chosen distracting apps and YouTube feeds are immediately locked.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-wrap" id="st-focus-actions-container">
+                        <button role="button" onclick="startFocusSession(25); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md shadow-purple-600/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-play"></i> Start 25m Focus
+                        </button>
+                        <button role="button" onclick="startFocusSession(50); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 font-bold text-xs transition">
+                            50m Block
+                        </button>
+                        <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-sliders"></i> Customize Apps
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1632,7 +1676,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <div>
                         <h4 class="text-xs sm:text-sm font-bold text-white">Accessibility &amp; App Tracking Permissions</h4>
                         <p class="text-[11px] sm:text-xs text-amber-200/80">
-                            Granting accessibility enables active window monitoring across apps and triggers the lockout shield the moment an app's daily quota expires.
+                            Granting accessibility enables active window monitoring across apps and triggers the lockout shield the moment an app's daily quota expires or during Focus time.
                         </p>
                     </div>
                 </div>
@@ -1670,11 +1714,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <!-- CATEGORY TABS -->
                     <div id="st-category-tabs" class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 overflow-x-auto text-xs font-semibold">
                         <button role="button" onclick="setAppFilter('all'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 bg-cyan-500 text-black font-bold shadow-sm" data-filter="all">All Apps</button>
+                        <button role="button" onclick="setAppFilter('focus-blocked'); playSfx('click')" id="st-filter-focus-tab" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="focus-blocked">Focus Blocked</button>
                         <button role="button" onclick="setAppFilter('social'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="social">Social</button>
                         <button role="button" onclick="setAppFilter('entertainment'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="entertainment">Entertainment</button>
                         <button role="button" onclick="setAppFilter('productivity'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="productivity">Productivity</button>
                         <button role="button" onclick="setAppFilter('gaming'); playSfx('click')" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="gaming">Gaming</button>
-                        <button role="button" onclick="setAppFilter('blocked'); playSfx('click')" id="st-filter-blocked-tab" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="blocked">Blocked (0)</button>
+                        <button role="button" onclick="setAppFilter('blocked'); playSfx('click')" id="st-filter-blocked-tab" class="st-filter-btn px-3 py-1.5 rounded-lg transition shrink-0 text-slate-400 hover:text-white" data-filter="blocked">Daily Blocked (0)</button>
                     </div>
 
                     <!-- SEARCH INPUT -->
@@ -1941,7 +1986,233 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
         </div>
-    </main>
+    
+        <!-- FOCUS / POMODORO LOCKOUT SHIELD OVERLAY -->
+        <div id="arc-focus-blocker-overlay" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-purple-950/60 to-black border-2 border-purple-500/80 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(168,85,247,0.35)] space-y-6 text-center animate-zoom-in my-auto">
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-purple-500/20 border-2 border-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <span class="absolute inset-0 rounded-3xl border border-purple-400 animate-ping opacity-30"></span>
+                    <i id="focus-blocker-app-icon" class="fa-solid fa-moon text-3xl sm:text-4xl text-purple-400"></i>
+                </div>
+
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-black uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span>
+                        FOCUS &amp; POMODORO SESSION ACTIVE
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        <span id="focus-blocker-app-name">Application</span> is Blocked
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        This application is locked to preserve your deep work sprint. Distractions are forbidden until your Focus timer expires.
+                    </p>
+                </div>
+
+                <!-- FOCUS TIMER STATUS -->
+                <div class="p-4 rounded-2xl bg-slate-950 border border-purple-500/30 space-y-1">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Focus Time Remaining</span>
+                    <div id="focus-blocker-time-left" class="text-2xl sm:text-3xl font-black font-mono text-purple-300">25:00</div>
+                    <span class="text-[10px] text-purple-400/80 font-medium block">Stay in the zone. Finish the sprint first.</span>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="space-y-2 pt-1">
+                    <button role="button" onclick="closeFocusBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-black text-sm uppercase tracking-wider transition shadow-lg shadow-purple-500/25 hover:scale-[1.02]">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Return to Focus Session
+                    </button>
+                    <button role="button" onclick="closeFocusBlockerShield(); openFocusBlocklistModal();" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
+                        <i class="fa-solid fa-sliders mr-1.5"></i> Customize Focus Blocklist
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YOUTUBE DISTRACTION FILTER SHIELD OVERLAY -->
+        <div id="arc-youtube-blocker-overlay" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-red-950/60 to-black border-2 border-red-500/80 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(239,68,68,0.35)] space-y-6 text-center animate-zoom-in my-auto">
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-red-500/20 border-2 border-red-500 flex items-center justify-center shadow-lg shadow-red-500/30">
+                    <span class="absolute inset-0 rounded-3xl border border-red-400 animate-ping opacity-30"></span>
+                    <i class="fa-brands fa-youtube text-3xl sm:text-4xl text-red-500"></i>
+                </div>
+
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] font-mono font-black uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping"></span>
+                        DISTRACTING CHANNEL RESTRICTED
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        <span id="yt-blocker-channel-name">Channel</span> is Blocked
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" id="yt-blocker-reason-text">
+                        This creator is classified as high-dopamine distraction. Educational tutorials and technical lectures remain fully accessible.
+                    </p>
+                </div>
+
+                <!-- RECOMMENDED ALTERNATIVES -->
+                <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-left space-y-2">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Approved High-Leverage Creators:</span>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">@freecodecamp</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">@hubermanlab</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">@3blue1brown</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">@fireship</span>
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="space-y-2 pt-1">
+                    <button role="button" onclick="closeYouTubeBlockerShield(); openYouTubeFilterModal();" class="w-full py-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white font-black text-sm uppercase tracking-wider transition shadow-lg shadow-red-500/25 hover:scale-[1.02]">
+                        <i class="fa-solid fa-sliders mr-1.5"></i> Manage YouTube Filter
+                    </button>
+                    <button role="button" onclick="closeYouTubeBlockerShield(); switchTab('screentime');" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
+                        Back to Screen Time Matrix
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOCUS APP BLOCKLIST CUSTOMIZER MODAL -->
+        <div id="arc-focus-blocklist-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-xl bg-slate-900 border border-purple-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-400 text-lg">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white">Focus &amp; Pomodoro Blocklist</h3>
+                            <p class="text-xs text-slate-400">Choose which apps are blocked when Focus Mode or Pomodoro is active</p>
+                        </div>
+                    </div>
+                    <button role="button" onclick="closeFocusBlocklistModal()" aria-label="Close Focus Blocklist Modal" title="Close Focus Blocklist Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- PRESETS -->
+                <div class="space-y-1.5">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Presets</span>
+                    <div class="grid grid-cols-3 gap-2 text-xs font-semibold">
+                        <button role="button" onclick="setAllAppsFocusBlock('distractions')" class="py-2 px-2.5 rounded-xl bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:bg-purple-900/60 transition text-center truncate">
+                            <i class="fa-solid fa-shield-cat mr-1"></i> Block Distractions
+                        </button>
+                        <button role="button" onclick="setAllAppsFocusBlock(true)" class="py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-center truncate">
+                            Block All Apps
+                        </button>
+                        <button role="button" onclick="setAllAppsFocusBlock(false)" class="py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-center truncate">
+                            Allow All Apps
+                        </button>
+                    </div>
+                </div>
+
+                <!-- APP TOGGLE LIST -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Installed Applications</span>
+                        <span>Focus Lockout</span>
+                    </div>
+                    <div id="focus-modal-app-list" class="max-h-64 overflow-y-auto space-y-2 pr-1 no-scrollbar">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                    <span class="text-[11px] text-slate-400">Changes save automatically</span>
+                    <button role="button" onclick="closeFocusBlocklistModal()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-purple-600/20">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YOUTUBE CHANNEL FILTER MODAL -->
+        <div id="arc-youtube-filter-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-xl bg-slate-900 border border-red-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 animate-zoom-in my-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-red-500/20 border border-red-400/40 flex items-center justify-center text-red-500 text-lg">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white">YouTube Distraction Filter</h3>
+                            <p class="text-xs text-slate-400">Block clickbait &amp; entertainment while allowing educational tutorials</p>
+                        </div>
+                    </div>
+                    <button role="button" onclick="closeYouTubeFilterModal()" aria-label="Close YouTube Filter Modal" title="Close YouTube Filter Modal" class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- CONTROLS: MASTER TOGGLE & SHORTS BLOCK -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-white block">Channel Filter</span>
+                            <span class="text-[10px] text-slate-400 block">Restricts selected channels</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="yt-filter-master-toggle" onchange="toggleYouTubeFilterEnabled()" aria-label="Enable YouTube Channel Filter" title="Enable YouTube Channel Filter" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                        </label>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-white block">Block Shorts Feed</span>
+                            <span class="text-[10px] text-slate-400 block">Stops infinite video loop</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="yt-filter-shorts-toggle" onchange="toggleYouTubeShortsBlock()" aria-label="Block YouTube Shorts Feed" title="Block YouTube Shorts Feed" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ADD CHANNEL FORM -->
+                <div class="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Add Channel to Block</span>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="yt-add-channel-input" placeholder="Channel Handle or Name (e.g. @MrBeast, Sidemen)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                        <input type="text" id="yt-add-reason-input" placeholder="Reason (e.g. Vlogs / Gaming)" class="sm:w-40 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                        <button role="button" onclick="submitAddBlockedChannel()" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs uppercase tracking-wider transition shrink-0 shadow-md shadow-red-600/20">
+                            + Block
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BLOCKED CHANNELS LIST -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Restricted YouTube Creators (<span id="yt-blocked-count-badge">8</span>)</span>
+                        <span class="text-red-400">Blocked</span>
+                    </div>
+                    <div id="yt-modal-blocked-list" class="max-h-44 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE CHANNEL ACCESS TESTER -->
+                <div class="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Test Channel Access Barrier</span>
+                    <div class="flex gap-2">
+                        <input type="text" id="yt-test-channel-input" placeholder="Type @MrBeast or @freecodecamp..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+                        <button role="button" onclick="runYouTubeChannelTest()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition border border-cyan-500/30">
+                            Test Channel
+                        </button>
+                    </div>
+                    <div id="yt-test-feedback-box" class="text-[11px] font-mono hidden pt-1"></div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                    <span class="text-[11px] text-slate-400">Educational creators remain open</span>
+                    <button role="button" onclick="closeYouTubeFilterModal()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-red-600/20">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+</main>
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
     <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800 bg-slate-950/95 backdrop-blur-lg px-2 py-1.5 flex items-center justify-around shadow-2xl">
@@ -4830,20 +5101,41 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
            ========================================================================== */
         
         /* ==========================================================================
-           7. AUTOMATED APP SCREEN TIME & APP BLOCKER SHIELD ENGINE
+           7. AUTOMATED APP SCREEN TIME, FOCUS BLOCKLIST & YOUTUBE FILTER ENGINE
            Self-contained, 100% offline, zero-CORS browser compatible
            ========================================================================== */
         const DEFAULT_TRACKED_APPS = [
-            { id: 'youtube', name: 'YouTube', category: 'Entertainment', icon: 'fa-brands fa-youtube', colorClass: 'text-red-500', bgClass: 'bg-red-500/10', borderClass: 'border-red-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true },
-            { id: 'instagram', name: 'Instagram', category: 'Social Media', icon: 'fa-brands fa-instagram', colorClass: 'text-pink-500', bgClass: 'bg-pink-500/10', borderClass: 'border-pink-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
-            { id: 'twitter', name: 'X / Twitter', category: 'Social Media', icon: 'fa-brands fa-x-twitter', colorClass: 'text-slate-200', bgClass: 'bg-slate-700/20', borderClass: 'border-slate-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
-            { id: 'reddit', name: 'Reddit', category: 'Social Media', icon: 'fa-brands fa-reddit-alien', colorClass: 'text-orange-500', bgClass: 'bg-orange-500/10', borderClass: 'border-orange-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true },
-            { id: 'tiktok', name: 'TikTok', category: 'Social Media', icon: 'fa-brands fa-tiktok', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 20 * 60, blockEnabled: true },
-            { id: 'netflix', name: 'Netflix', category: 'Entertainment', icon: 'fa-solid fa-film', colorClass: 'text-red-600', bgClass: 'bg-red-600/10', borderClass: 'border-red-600/30', dailyLimitSecs: 60 * 60, blockEnabled: true },
-            { id: 'discord', name: 'Discord', category: 'Messaging', icon: 'fa-brands fa-discord', colorClass: 'text-indigo-400', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30', dailyLimitSecs: 60 * 60, blockEnabled: true },
-            { id: 'chrome', name: 'Browser / Surfing', category: 'Browsing', icon: 'fa-brands fa-chrome', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 90 * 60, blockEnabled: false },
-            { id: 'gaming', name: 'Steam / Gaming', category: 'Gaming', icon: 'fa-solid fa-gamepad', colorClass: 'text-purple-400', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true },
-            { id: 'vscode', name: 'VS Code / Coding', category: 'Productivity', icon: 'fa-solid fa-code', colorClass: 'text-blue-400', bgClass: 'bg-blue-500/10', borderClass: 'border-blue-500/30', dailyLimitSecs: 240 * 60, blockEnabled: false }
+            { id: 'youtube', name: 'YouTube', category: 'Entertainment', icon: 'fa-brands fa-youtube', colorClass: 'text-red-500', bgClass: 'bg-red-500/10', borderClass: 'border-red-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'instagram', name: 'Instagram', category: 'Social Media', icon: 'fa-brands fa-instagram', colorClass: 'text-pink-500', bgClass: 'bg-pink-500/10', borderClass: 'border-pink-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'twitter', name: 'X / Twitter', category: 'Social Media', icon: 'fa-brands fa-x-twitter', colorClass: 'text-slate-200', bgClass: 'bg-slate-700/20', borderClass: 'border-slate-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'reddit', name: 'Reddit', category: 'Social Media', icon: 'fa-brands fa-reddit-alien', colorClass: 'text-orange-500', bgClass: 'bg-orange-500/10', borderClass: 'border-orange-500/30', dailyLimitSecs: 30 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'tiktok', name: 'TikTok', category: 'Social Media', icon: 'fa-brands fa-tiktok', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 20 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'netflix', name: 'Netflix', category: 'Entertainment', icon: 'fa-solid fa-film', colorClass: 'text-red-600', bgClass: 'bg-red-600/10', borderClass: 'border-red-600/30', dailyLimitSecs: 60 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'discord', name: 'Discord', category: 'Messaging', icon: 'fa-brands fa-discord', colorClass: 'text-indigo-400', bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30', dailyLimitSecs: 60 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'gaming', name: 'Steam / Gaming', category: 'Gaming', icon: 'fa-solid fa-gamepad', colorClass: 'text-purple-400', bgClass: 'bg-purple-500/10', borderClass: 'border-purple-500/30', dailyLimitSecs: 45 * 60, blockEnabled: true, blockInFocus: true },
+            { id: 'chrome', name: 'Browser / Surfing', category: 'Browsing', icon: 'fa-brands fa-chrome', colorClass: 'text-cyan-400', bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', dailyLimitSecs: 90 * 60, blockEnabled: false, blockInFocus: false },
+            { id: 'vscode', name: 'VS Code / Coding', category: 'Productivity', icon: 'fa-solid fa-code', colorClass: 'text-blue-400', bgClass: 'bg-blue-500/10', borderClass: 'border-blue-500/30', dailyLimitSecs: 240 * 60, blockEnabled: false, blockInFocus: false }
+        ];
+
+        const DEFAULT_BLOCKED_YOUTUBE_CHANNELS = [
+            { handle: '@MrBeast', name: 'MrBeast', reason: 'High sensory distraction' },
+            { handle: '@Sidemen', name: 'Sidemen', reason: 'Entertainment / Challenges' },
+            { handle: '@IShowSpeed', name: 'IShowSpeed', reason: 'Streaming / Noise' },
+            { handle: '@PewDiePie', name: 'PewDiePie', reason: 'Gaming / Entertainment' },
+            { handle: '@LoganPaul', name: 'Logan Paul', reason: 'Entertainment / Vlogs' },
+            { handle: '@TSeries', name: 'T-Series', reason: 'Music videos / Distraction' },
+            { handle: '@DudePerfect', name: 'Dude Perfect', reason: 'Entertainment / Tricks' },
+            { handle: 'Shorts', name: 'YouTube Shorts Feed', reason: 'Infinite scrolling short-form loop' }
+        ];
+
+        const DEFAULT_ALLOWED_YOUTUBE_CHANNELS = [
+            { handle: '@freecodecamp', name: 'freeCodeCamp.org', category: 'Programming' },
+            { handle: '@hubermanlab', name: 'Andrew Huberman', category: 'Neuroscience & Health' },
+            { handle: '@lexfridman', name: 'Lex Fridman', category: 'Deep Conversations & AI' },
+            { handle: '@3blue1brown', name: '3Blue1Brown', category: 'Mathematics & Science' },
+            { handle: '@fireship', name: 'Fireship', category: 'High-Velocity Tech' },
+            { handle: '@veritasium', name: 'Veritasium', category: 'Science Education' },
+            { handle: '@mitocw', name: 'MIT OpenCourseWare', category: 'Academic Lectures' }
         ];
 
         let appTrackerState = {
@@ -4855,6 +5147,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             strictMode: false,
             permissionGranted: false,
             blockedShieldAppId: null,
+            blockedFocusAppId: null,
+            focusActive: false,
+            focusSecondsLeft: 25 * 60,
+            focusTotalSeconds: 25 * 60,
+            youtubeFilter: {
+                enabled: true,
+                blockShorts: true,
+                blockedChannels: JSON.parse(JSON.stringify(DEFAULT_BLOCKED_YOUTUBE_CHANNELS))
+            },
             timer: null
         };
 
@@ -4872,6 +5173,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     appTrackerState.apps = Array.from(map.values());
                 } else {
                     appTrackerState.apps = JSON.parse(JSON.stringify(DEFAULT_TRACKED_APPS));
+                }
+
+                // Load YouTube filter config
+                const savedYt = getLocalStorageItem('arc_youtube_channel_filter');
+                if (savedYt && typeof savedYt === 'object') {
+                    appTrackerState.youtubeFilter = { ...appTrackerState.youtubeFilter, ...savedYt };
                 }
 
                 // Load today's per-app usage
@@ -4900,9 +5207,28 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const todayKey = getTodayKey();
                 setLocalStorageItem(`arc_app_usage_${todayKey}`, appTrackerState.usage);
                 setLocalStorageItem('arc_tracked_apps_catalog', appTrackerState.apps);
+                setLocalStorageItem('arc_youtube_channel_filter', appTrackerState.youtubeFilter);
                 setLocalStorageItem('arc_app_accessibility_perm', appTrackerState.permissionGranted ? 'granted' : 'pending');
                 setLocalStorageItem('arc_app_strict_mode', appTrackerState.strictMode ? 'true' : 'false');
             } catch (_) {}
+        }
+
+        function isFocusActive() {
+            if (typeof window !== 'undefined' && window.F && window.F.run && window.F.mode === 'work') {
+                return true;
+            }
+            return appTrackerState.focusActive;
+        }
+
+        function getFocusTimeRemainingFormatted() {
+            if (typeof window !== 'undefined' && window.F && window.F.left !== undefined && window.F.run) {
+                const mins = Math.floor(window.F.left / 60);
+                const secs = window.F.left % 60;
+                return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+            const mins = Math.floor(appTrackerState.focusSecondsLeft / 60);
+            const secs = appTrackerState.focusSecondsLeft % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
         }
 
         function tickAppTracker() {
@@ -4912,11 +5238,32 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 appTrackerState.currentDayKey = todayKey;
             }
 
+            // Decrement internal focus session if running
+            if (appTrackerState.focusActive && appTrackerState.focusSecondsLeft > 0) {
+                appTrackerState.focusSecondsLeft--;
+                if (appTrackerState.focusSecondsLeft <= 0) {
+                    stopFocusSession(true);
+                }
+            }
+
+            // Live update focus countdown elements
+            const focusTimeLeftEl = document.getElementById('focus-blocker-time-left');
+            if (focusTimeLeftEl) focusTimeLeftEl.textContent = getFocusTimeRemainingFormatted();
+
+            const focusBannerTimerEl = document.getElementById('st-focus-banner-timer');
+            if (focusBannerTimerEl) focusBannerTimerEl.textContent = getFocusTimeRemainingFormatted();
+
             // If an app is active in foreground
             if (appTrackerState.activeAppId) {
                 const appId = appTrackerState.activeAppId;
                 const app = appTrackerState.apps.find(a => a.id === appId);
                 if (app) {
+                    // Check if Focus Mode became active and this app is blocked in focus
+                    if (isFocusActive() && app.blockInFocus) {
+                        triggerFocusBlock(appId);
+                        return;
+                    }
+
                     appTrackerState.usage[appId] = (appTrackerState.usage[appId] || 0) + 1;
                     const used = appTrackerState.usage[appId];
 
@@ -4947,16 +5294,34 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
         function isAppBlocked(appId) {
             const app = appTrackerState.apps.find(a => a.id === appId);
-            if (!app || !app.blockEnabled) return false;
-            const used = appTrackerState.usage[appId] || 0;
-            return used >= app.dailyLimitSecs;
+            if (!app) return false;
+
+            // Check Focus / Pomodoro block
+            if (isFocusActive() && app.blockInFocus) {
+                return true;
+            }
+
+            // Check Daily quota limit
+            if (app.blockEnabled) {
+                const used = appTrackerState.usage[appId] || 0;
+                if (used >= app.dailyLimitSecs) return true;
+            }
+
+            return false;
         }
 
         function setActiveApp(appId) {
             const app = appTrackerState.apps.find(a => a.id === appId);
             if (!app) return;
 
-            if (isAppBlocked(appId)) {
+            // 1. Check if Focus is active and app is blocked in focus
+            if (isFocusActive() && app.blockInFocus) {
+                triggerFocusBlock(appId);
+                return;
+            }
+
+            // 2. Check if daily limit is exhausted
+            if (app.blockEnabled && (appTrackerState.usage[appId] || 0) >= app.dailyLimitSecs) {
                 triggerAppLockout(appId);
                 return;
             }
@@ -4983,6 +5348,19 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             playBlockerAlarmSfx();
             showBlockerShield(appId);
+            renderScreenTimeView();
+        }
+
+        function triggerFocusBlock(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            if (appTrackerState.activeAppId === appId) {
+                appTrackerState.activeAppId = null;
+            }
+
+            playBlockerAlarmSfx();
+            showFocusBlockerShield(appId);
             renderScreenTimeView();
         }
 
@@ -5026,6 +5404,58 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         function closeBlockerShield() {
             appTrackerState.blockedShieldAppId = null;
             const overlay = document.getElementById('arc-app-blocker-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+        }
+
+        function showFocusBlockerShield(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            appTrackerState.blockedFocusAppId = appId;
+            const overlay = document.getElementById('arc-focus-blocker-overlay');
+            if (!overlay) return;
+
+            const nameEl = document.getElementById('focus-blocker-app-name');
+            const iconEl = document.getElementById('focus-blocker-app-icon');
+            const timeEl = document.getElementById('focus-blocker-time-left');
+
+            if (nameEl) nameEl.textContent = app.name;
+            if (iconEl) iconEl.className = `${app.icon} text-3xl sm:text-4xl text-purple-400`;
+            if (timeEl) timeEl.textContent = getFocusTimeRemainingFormatted();
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function closeFocusBlockerShield() {
+            appTrackerState.blockedFocusAppId = null;
+            const overlay = document.getElementById('arc-focus-blocker-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+        }
+
+        function showYouTubeBlockerShield(channelName, reason) {
+            const overlay = document.getElementById('arc-youtube-blocker-overlay');
+            if (!overlay) return;
+
+            const nameEl = document.getElementById('yt-blocker-channel-name');
+            const reasonEl = document.getElementById('yt-blocker-reason-text');
+
+            if (nameEl) nameEl.textContent = channelName || 'Restricted Channel';
+            if (reasonEl) reasonEl.textContent = reason ? `Restricted because: ${reason}. Educational tutorials remain fully accessible.` : 'This creator is classified as high-dopamine distraction. Educational tutorials and technical lectures remain fully accessible.';
+
+            playBlockerAlarmSfx();
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function closeYouTubeBlockerShield() {
+            const overlay = document.getElementById('arc-youtube-blocker-overlay');
             if (overlay) {
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
@@ -5081,6 +5511,267 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             renderScreenTimeView();
         }
 
+        /* Focus Mode Controls */
+        function startFocusSession(minutes = 25) {
+            appTrackerState.focusActive = true;
+            appTrackerState.focusSecondsLeft = minutes * 60;
+            appTrackerState.focusTotalSeconds = minutes * 60;
+
+            // Trigger global PP12 Pomodoro if available
+            if (typeof window !== 'undefined' && typeof window.fstart === 'function') {
+                try { window.fstart(); } catch (_) {}
+            }
+
+            playSfx('fanfare');
+            showToast(`Focus session started (${minutes}m). Distracting apps blocked!`);
+            renderScreenTimeView();
+        }
+
+        function stopFocusSession(completed = false) {
+            appTrackerState.focusActive = false;
+
+            if (typeof window !== 'undefined' && typeof window.fpause === 'function') {
+                try { window.fpause(); } catch (_) {}
+            }
+
+            if (completed) {
+                playSfx('fanfare');
+                showToast("Focus session completed! Great discipline.");
+            } else {
+                playSfx('click');
+                showToast("Focus session stopped.");
+            }
+
+            closeFocusBlockerShield();
+            renderScreenTimeView();
+        }
+
+        function toggleAppFocusBlock(appId) {
+            const app = appTrackerState.apps.find(a => a.id === appId);
+            if (!app) return;
+
+            app.blockInFocus = !app.blockInFocus;
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(`${app.name} is now ${app.blockInFocus ? 'BLOCKED' : 'ALLOWED'} during Focus.`);
+            renderScreenTimeView();
+            renderFocusBlocklistModal();
+        }
+
+        function setAllAppsFocusBlock(type) {
+            appTrackerState.apps.forEach(app => {
+                if (type === 'distractions') {
+                    app.blockInFocus = (app.category === 'Social Media' || app.category === 'Entertainment' || app.category === 'Gaming' || app.category === 'Messaging');
+                } else {
+                    app.blockInFocus = Boolean(type);
+                }
+            });
+            saveAppTrackerData();
+            playSfx('check');
+            showToast("Focus blocklist updated.");
+            renderScreenTimeView();
+            renderFocusBlocklistModal();
+        }
+
+        function openFocusBlocklistModal() {
+            renderFocusBlocklistModal();
+            const modal = document.getElementById('arc-focus-blocklist-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeFocusBlocklistModal() {
+            const modal = document.getElementById('arc-focus-blocklist-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            renderScreenTimeView();
+        }
+
+        function renderFocusBlocklistModal() {
+            const listEl = document.getElementById('focus-modal-app-list');
+            if (!listEl) return;
+
+            listEl.innerHTML = appTrackerState.apps.map(app => {
+                const isBlocked = Boolean(app.blockInFocus);
+                return `
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-sm shrink-0">
+                                <i class="${app.icon} ${app.colorClass}"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-white block">${app.name}</span>
+                                <span class="text-[10px] text-slate-400">${app.category}</span>
+                            </div>
+                        </div>
+
+                        <button role="button" onclick="toggleAppFocusBlock('${app.id}')" class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 ${isBlocked ? 'bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'}">
+                            <i class="fa-solid ${isBlocked ? 'fa-lock text-purple-400' : 'fa-lock-open text-slate-500'} text-[11px]"></i>
+                            <span>${isBlocked ? 'BLOCKED' : 'ALLOWED'}</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* YouTube Channel Filter Controls */
+        function isYouTubeChannelBlocked(channelInput) {
+            if (!appTrackerState.youtubeFilter.enabled || !channelInput) return false;
+            const query = channelInput.trim().toLowerCase();
+
+            // Check Shorts
+            if (appTrackerState.youtubeFilter.blockShorts && (query === 'shorts' || query.includes('/shorts') || query.includes('short'))) {
+                return { blocked: true, channel: 'YouTube Shorts', reason: 'Short-form distraction loop' };
+            }
+
+            for (const b of appTrackerState.youtubeFilter.blockedChannels) {
+                const h = b.handle.toLowerCase().replace('@', '');
+                const n = b.name.toLowerCase();
+                const qClean = query.replace('@', '');
+
+                if (qClean === h || query.includes(h) || query.includes(n) || n.includes(qClean)) {
+                    return { blocked: true, channel: b.name || b.handle, reason: b.reason || 'Distracting channel' };
+                }
+            }
+
+            return false;
+        }
+
+        function toggleYouTubeFilterEnabled() {
+            appTrackerState.youtubeFilter.enabled = !appTrackerState.youtubeFilter.enabled;
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(appTrackerState.youtubeFilter.enabled ? "YouTube Channel Filter ACTIVE." : "YouTube Channel Filter paused.");
+            renderScreenTimeView();
+        }
+
+        function toggleYouTubeShortsBlock() {
+            appTrackerState.youtubeFilter.blockShorts = !appTrackerState.youtubeFilter.blockShorts;
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(appTrackerState.youtubeFilter.blockShorts ? "YouTube Shorts Feed BLOCKED." : "YouTube Shorts allowed.");
+            renderScreenTimeView();
+        }
+
+        function submitAddBlockedChannel() {
+            const input = document.getElementById('yt-add-channel-input');
+            const reasonInput = document.getElementById('yt-add-reason-input');
+            const val = input?.value.trim();
+            if (!val) {
+                alert("Please enter a channel name or @handle.");
+                return;
+            }
+
+            const cleanHandle = val.startsWith('@') ? val : '@' + val;
+            const existing = appTrackerState.youtubeFilter.blockedChannels.find(c => c.handle.toLowerCase() === cleanHandle.toLowerCase());
+            if (existing) {
+                alert(`${cleanHandle} is already in the blocked list.`);
+                return;
+            }
+
+            const reason = reasonInput?.value.trim() || 'Entertainment / Distraction';
+            appTrackerState.youtubeFilter.blockedChannels.push({
+                handle: cleanHandle,
+                name: val.replace('@', ''),
+                reason
+            });
+
+            saveAppTrackerData();
+            playSfx('fanfare');
+            if (input) input.value = '';
+            if (reasonInput) reasonInput.value = '';
+            showToast(`Blocked ${cleanHandle} on YouTube.`);
+            renderYouTubeFilterModal();
+            renderScreenTimeView();
+        }
+
+        function removeBlockedYouTubeChannel(handle) {
+            appTrackerState.youtubeFilter.blockedChannels = appTrackerState.youtubeFilter.blockedChannels.filter(c => c.handle.toLowerCase() !== handle.toLowerCase());
+            saveAppTrackerData();
+            playSfx('click');
+            showToast(`Unblocked ${handle} on YouTube.`);
+            renderYouTubeFilterModal();
+            renderScreenTimeView();
+        }
+
+        function openYouTubeFilterModal() {
+            renderYouTubeFilterModal();
+            const modal = document.getElementById('arc-youtube-filter-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeYouTubeFilterModal() {
+            const modal = document.getElementById('arc-youtube-filter-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            renderScreenTimeView();
+        }
+
+        function renderYouTubeFilterModal() {
+            const masterToggle = document.getElementById('yt-filter-master-toggle');
+            const shortsToggle = document.getElementById('yt-filter-shorts-toggle');
+            const countBadge = document.getElementById('yt-blocked-count-badge');
+            const listEl = document.getElementById('yt-modal-blocked-list');
+
+            if (masterToggle) masterToggle.checked = appTrackerState.youtubeFilter.enabled;
+            if (shortsToggle) shortsToggle.checked = appTrackerState.youtubeFilter.blockShorts;
+            if (countBadge) countBadge.textContent = appTrackerState.youtubeFilter.blockedChannels.length;
+
+            if (listEl) {
+                listEl.innerHTML = appTrackerState.youtubeFilter.blockedChannels.map(item => {
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-red-500/20 text-red-500 flex items-center justify-center font-bold text-[10px]">
+                                    <i class="fa-brands fa-youtube"></i>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-white">${item.handle}</span>
+                                    <span class="text-[10px] text-slate-400 block">${item.reason}</span>
+                                </div>
+                            </div>
+
+                            <button role="button" onclick="removeBlockedYouTubeChannel('${item.handle}')" title="Unblock channel" aria-label="Unblock ${item.handle}" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-400 flex items-center justify-center transition border border-slate-800">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function runYouTubeChannelTest() {
+            const input = document.getElementById('yt-test-channel-input');
+            const feedback = document.getElementById('yt-test-feedback-box');
+            const val = input?.value.trim();
+            if (!val || !feedback) return;
+
+            const check = isYouTubeChannelBlocked(val);
+            feedback.classList.remove('hidden');
+
+            if (check && check.blocked) {
+                feedback.className = "text-[11px] font-mono text-rose-400 bg-rose-950/40 p-2 rounded-xl border border-rose-500/30 flex items-center justify-between";
+                feedback.innerHTML = `
+                    <span>⛔ <strong>${check.channel}</strong> is RESTRICTED (${check.reason})</span>
+                    <button role="button" onclick="showYouTubeBlockerShield('${check.channel}', '${check.reason}')" class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">Simulate Block</button>
+                `;
+                showYouTubeBlockerShield(check.channel, check.reason);
+            } else {
+                feedback.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30";
+                feedback.innerHTML = `✓ <strong>${val}</strong> is ALLOWED. Educational/Permitted channel.`;
+                playSfx('check');
+            }
+        }
+
         function openAccessibilityModal() {
             const modal = document.getElementById('arc-accessibility-modal');
             if (modal) {
@@ -5110,7 +5801,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (/Android/i.test(navigator.userAgent)) {
                 window.location.href = "intent:#Intent;action=android.settings.ACCESSIBILITY_SETTINGS;end";
             } else {
-                alert("Android Accessibility Settings:\\n\\n1. Open Settings ➔ Accessibility.\\n2. Enable Arc Tracker Service.\\n3. Return here to confirm.");
+                alert("Android Accessibility Settings:\n\n1. Open Settings ➔ Accessibility.\n2. Enable Arc Tracker Service.\n3. Return here to confirm.");
             }
         }
 
@@ -5118,7 +5809,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (/Android/i.test(navigator.userAgent)) {
                 window.location.href = "intent:#Intent;action=android.settings.USAGE_ACCESS_SETTINGS;end";
             } else {
-                alert("Android Usage Access Settings:\\n\\n1. Open Settings ➔ Apps ➔ Special App Access ➔ Usage Access.\\n2. Enable Arc Tracker.\\n3. Return here to confirm.");
+                alert("Android Usage Access Settings:\n\n1. Open Settings ➔ Apps ➔ Special App Access ➔ Usage Access.\n2. Enable Arc Tracker.\n3. Return here to confirm.");
             }
         }
 
@@ -5228,6 +5919,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 borderClass: 'border-cyan-500/30',
                 dailyLimitSecs: Math.max(1, mins) * 60,
                 blockEnabled: true,
+                blockInFocus: (category === 'Social Media' || category === 'Entertainment' || category === 'Gaming' || category === 'Messaging'),
                 isCustom: true
             };
 
@@ -5318,27 +6010,44 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (!view) return;
 
             let totalUsage = 0;
-            let blockedCount = 0;
+            let dailyBlockedCount = 0;
+            let focusBlockedCount = 0;
 
             appTrackerState.apps.forEach(app => {
                 const used = appTrackerState.usage[app.id] || 0;
                 totalUsage += used;
-                if (isAppBlocked(app.id)) blockedCount++;
+                if (app.blockEnabled && used >= app.dailyLimitSecs) dailyBlockedCount++;
+                if (app.blockInFocus) focusBlockedCount++;
             });
+
+            const focusRunning = isFocusActive();
 
             // Update top KPIs
             const totalEl = document.getElementById('st-kpi-total-time');
             if (totalEl) totalEl.textContent = formatDuration(totalUsage);
 
-            const countEl = document.getElementById('st-kpi-tracked-count');
-            if (countEl) countEl.textContent = `${appTrackerState.apps.length} Apps`;
+            const countEl = document.getElementById('st-kpi-focus-count');
+            if (countEl) countEl.textContent = `${focusBlockedCount} Apps`;
+
+            const headerFocusCount = document.getElementById('st-header-focus-block-count');
+            if (headerFocusCount) headerFocusCount.textContent = focusBlockedCount;
+
+            const headerYtCount = document.getElementById('st-header-yt-filter-count');
+            if (headerYtCount) headerYtCount.textContent = appTrackerState.youtubeFilter.blockedChannels.length;
+
+            const ytStatusEl = document.getElementById('st-kpi-yt-status');
+            if (ytStatusEl) {
+                ytStatusEl.innerHTML = appTrackerState.youtubeFilter.enabled
+                    ? `<i class="fa-brands fa-youtube"></i> Active (${appTrackerState.youtubeFilter.blockedChannels.length} Blocked)`
+                    : '<i class="fa-brands fa-youtube text-slate-500"></i> Filter Paused';
+            }
 
             const blockedEl = document.getElementById('st-kpi-blocked-count');
             const blockedCard = document.getElementById('st-kpi-blocked-card');
             const blockedSub = document.getElementById('st-kpi-blocked-sub');
             if (blockedEl) {
-                blockedEl.textContent = `${blockedCount} Locked`;
-                if (blockedCount > 0) {
+                blockedEl.textContent = `${dailyBlockedCount} Locked`;
+                if (dailyBlockedCount > 0) {
                     blockedEl.className = "text-xl sm:text-2xl font-black font-mono text-rose-400 animate-pulse mt-0.5";
                     if (blockedCard) blockedCard.className = "bg-slate-950/70 p-3.5 rounded-xl border border-rose-500/40 bg-rose-950/20";
                     if (blockedSub) blockedSub.textContent = "Limit exceeded • Access locked";
@@ -5349,17 +6058,66 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 }
             }
 
-            const shieldStatus = document.getElementById('st-kpi-shield-status');
-            const strictBtn = document.getElementById('st-strict-mode-btn');
-            const strictBtnText = document.getElementById('st-strict-btn-text');
-            if (shieldStatus) {
-                shieldStatus.innerHTML = appTrackerState.strictMode ? '<i class="fa-solid fa-lock text-xs text-rose-400"></i> Zero Tolerance (Strict)' : '<i class="fa-solid fa-shield text-xs text-cyan-300"></i> Active With Override';
-            }
-            if (strictBtn) {
-                strictBtn.className = appTrackerState.strictMode ? "px-3 py-2 rounded-xl bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm" : "px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
-            }
-            if (strictBtnText) {
-                strictBtnText.textContent = appTrackerState.strictMode ? "Strict: ON" : "Strict Mode";
+            // Focus Controller Card dynamic state
+            const focusCard = document.getElementById('st-focus-controller-card');
+            const focusPill = document.getElementById('st-focus-status-pill');
+            const focusDesc = document.getElementById('st-focus-desc-text');
+            const focusActions = document.getElementById('st-focus-actions-container');
+            const focusBadgeTop = document.getElementById('st-focus-badge-top');
+
+            if (focusRunning) {
+                if (focusCard) {
+                    focusCard.className = "glass-card rounded-2xl p-4 sm:p-5 border-2 border-purple-500/80 bg-purple-950/30 shadow-[0_0_30px_rgba(168,85,247,0.2)] space-y-3 transition-all duration-300";
+                }
+                if (focusPill) {
+                    focusPill.className = "px-2.5 py-0.5 rounded-full bg-purple-500 text-white font-mono text-[10px] font-black uppercase tracking-wider flex items-center gap-1 animate-pulse";
+                    focusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white"></span> FOCUS ACTIVE';
+                }
+                if (focusDesc) {
+                    focusDesc.innerHTML = `<span class="text-purple-300 font-bold"><i class="fa-solid fa-lock text-purple-400 mr-1"></i> ${focusBlockedCount} distracting apps are locked.</span> <span id="st-focus-banner-timer" class="font-mono font-black text-white ml-1.5">${getFocusTimeRemainingFormatted()}</span> remaining in focus sprint.`;
+                }
+                if (focusActions) {
+                    focusActions.innerHTML = `
+                        <button role="button" onclick="stopFocusSession(false); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/40 font-bold text-xs transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-stop"></i> Stop Focus
+                        </button>
+                        <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800/60 text-purple-200 border border-purple-500/40 font-bold text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-sliders"></i> Blocklist (${focusBlockedCount})
+                        </button>
+                    `;
+                }
+                if (focusBadgeTop) {
+                    focusBadgeTop.className = "px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/50 text-[10px] font-mono font-bold flex items-center gap-1";
+                    focusBadgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> Focus Lockdown Active';
+                }
+            } else {
+                if (focusCard) {
+                    focusCard.className = "glass-card rounded-2xl p-4 sm:p-5 border border-purple-500/30 bg-purple-950/15 space-y-3 transition-all duration-300";
+                }
+                if (focusPill) {
+                    focusPill.className = "px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono font-bold";
+                    focusPill.textContent = "IDLE";
+                }
+                if (focusDesc) {
+                    focusDesc.textContent = "During active Focus sessions and Pomodoros, all chosen distracting apps and YouTube feeds are immediately locked.";
+                }
+                if (focusActions) {
+                    focusActions.innerHTML = `
+                        <button role="button" onclick="startFocusSession(25); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md shadow-purple-600/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-play"></i> Start 25m Focus
+                        </button>
+                        <button role="button" onclick="startFocusSession(50); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 font-bold text-xs transition">
+                            50m Block
+                        </button>
+                        <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-sliders"></i> Customize Apps
+                        </button>
+                    `;
+                }
+                if (focusBadgeTop) {
+                    focusBadgeTop.className = "px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold flex items-center gap-1";
+                    focusBadgeTop.innerHTML = '<i class="fa-solid fa-moon"></i> Focus Blocker Ready';
+                }
             }
 
             // Permissions banner
@@ -5390,7 +6148,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 }
             });
             const blockedTab = document.getElementById('st-filter-blocked-tab');
-            if (blockedTab) blockedTab.textContent = `Blocked (${blockedCount})`;
+            if (blockedTab) blockedTab.textContent = `Daily Blocked (${dailyBlockedCount})`;
+
+            const focusTab = document.getElementById('st-filter-focus-tab');
+            if (focusTab) focusTab.textContent = `Focus Blocked (${focusBlockedCount})`;
 
             // Active App Status Bar
             const activeStatusContainer = document.getElementById('st-active-app-status-container');
@@ -5398,64 +6159,81 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (activeStatusContainer) {
                 if (currentActiveApp) {
                     activeStatusContainer.innerHTML = `
-                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold flex items-center gap-1.5 animate-pulse">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Tracking: ${currentActiveApp.name}
-                        </span>
-                        <button role="button" onclick="pauseActiveApp()" class="px-3 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition">
-                            <i class="fa-solid fa-pause mr-1"></i> Pause
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-mono text-xs flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                                Monitored: <strong class="text-white">${currentActiveApp.name}</strong>
+                            </span>
+                            <button role="button" onclick="pauseActiveApp()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition">
+                                Pause
+                            </button>
+                        </div>
                     `;
                 } else {
                     activeStatusContainer.innerHTML = `
-                        <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-mono text-xs flex items-center gap-1.5 self-start sm:self-auto">
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-mono text-xs flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-slate-500"></span> Standby / Standalone
                         </span>
                     `;
                 }
             }
 
-            // Launcher Pills
+            // Quick App Launcher Pills
             const pillsContainer = document.getElementById('st-app-launcher-pills');
             if (pillsContainer) {
-                pillsContainer.innerHTML = appTrackerState.apps.map(app => {
+                pillsContainer.innerHTML = appTrackerState.apps.slice(0, 8).map(app => {
                     const isBlocked = isAppBlocked(app.id);
-                    const isCurrent = appTrackerState.activeAppId === app.id;
+                    const isActive = appTrackerState.activeAppId === app.id;
                     return `
-                        <button role="button" onclick="setActiveApp('${app.id}')" class="px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-2 shrink-0 transition ${isCurrent ? 'bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/30' : (isBlocked ? 'bg-rose-950/40 text-rose-300 border-rose-500/40 hover:bg-rose-900/40' : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700')}">
-                            <i class="${app.icon}"></i>
+                        <button role="button" onclick="setActiveApp('${app.id}')" class="px-3 py-1.5 rounded-xl border text-xs font-semibold shrink-0 transition flex items-center gap-1.5 ${isActive ? 'bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/25' : (isBlocked ? 'bg-rose-950/40 text-rose-300 border-rose-500/40 hover:bg-rose-900/40' : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white')}">
+                            <i class="${app.icon} text-[11px] ${isActive ? 'text-black' : (isBlocked ? 'text-rose-400' : app.colorClass)}"></i>
                             <span>${app.name}</span>
-                            ${isBlocked ? '<i class="fa-solid fa-lock text-[10px] text-rose-400"></i>' : ''}
+                            ${isBlocked ? '<i class="fa-solid fa-lock text-[9px] text-rose-400 ml-0.5"></i>' : ''}
                         </button>
                     `;
                 }).join('');
             }
 
-            // Filter apps for grid
-            let filtered = appTrackerState.apps.filter(app => {
-                if (appTrackerState.activeFilter === 'social') return app.category === 'Social Media' || app.category === 'Messaging';
-                if (appTrackerState.activeFilter === 'entertainment') return app.category === 'Entertainment';
-                if (appTrackerState.activeFilter === 'productivity') return app.category === 'Productivity' || app.category === 'Browsing';
-                if (appTrackerState.activeFilter === 'gaming') return app.category === 'Gaming';
-                if (appTrackerState.activeFilter === 'blocked') return isAppBlocked(app.id);
-                return true;
-            });
+            // Filter & Search Apps for Grid
+            let filteredApps = appTrackerState.apps;
+            if (appTrackerState.activeFilter === 'social') {
+                filteredApps = filteredApps.filter(a => a.category === 'Social Media');
+            } else if (appTrackerState.activeFilter === 'entertainment') {
+                filteredApps = filteredApps.filter(a => a.category === 'Entertainment');
+            } else if (appTrackerState.activeFilter === 'productivity') {
+                filteredApps = filteredApps.filter(a => a.category === 'Productivity');
+            } else if (appTrackerState.activeFilter === 'gaming') {
+                filteredApps = filteredApps.filter(a => a.category === 'Gaming');
+            } else if (appTrackerState.activeFilter === 'blocked') {
+                filteredApps = filteredApps.filter(a => (appTrackerState.usage[a.id] || 0) >= a.dailyLimitSecs && a.blockEnabled);
+            } else if (appTrackerState.activeFilter === 'focus-blocked') {
+                filteredApps = filteredApps.filter(a => a.blockInFocus);
+            }
 
             if (appTrackerState.searchQuery) {
                 const q = appTrackerState.searchQuery.toLowerCase();
-                filtered = filtered.filter(a => a.name.toLowerCase().includes(q) || a.category.toLowerCase().includes(q));
+                filteredApps = filteredApps.filter(a => a.name.toLowerCase().includes(q) || a.category.toLowerCase().includes(q));
             }
 
-            // App Cards Grid
-            const grid = document.getElementById('st-apps-grid');
-            if (grid) {
-                if (filtered.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 text-xs font-mono">No applications match the current filter or search criteria.</div>`;
+            // Render Apps Grid
+            const gridEl = document.getElementById('st-apps-grid');
+            if (gridEl) {
+                if (filteredApps.length === 0) {
+                    gridEl.innerHTML = `
+                        <div class="col-span-full py-12 text-center text-slate-500 space-y-2">
+                            <i class="fa-solid fa-magnifying-glass text-3xl opacity-40"></i>
+                            <p class="text-sm">No applications match your current filter or search.</p>
+                            <button role="button" onclick="setAppFilter('all')" class="text-xs text-cyan-400 font-bold hover:underline">Reset Filters</button>
+                        </div>
+                    `;
                 } else {
-                    grid.innerHTML = filtered.map(app => {
+                    gridEl.innerHTML = filteredApps.map(app => {
                         const used = appTrackerState.usage[app.id] || 0;
                         const limit = app.dailyLimitSecs;
                         const pct = Math.min(100, Math.round((used / limit) * 100));
-                        const isBlocked = isAppBlocked(app.id);
+                        const isDailyLocked = app.blockEnabled && used >= limit;
+                        const isFocusLocked = focusRunning && app.blockInFocus;
+                        const isBlocked = isDailyLocked || isFocusLocked;
                         const isNearLimit = pct >= 80 && !isBlocked;
                         const isActive = appTrackerState.activeAppId === app.id;
 
@@ -5464,36 +6242,48 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         else if (isNearLimit) barColor = 'bg-amber-400';
 
                         return `
-                            <div class="bg-slate-950/80 rounded-2xl p-4 border ${isBlocked ? 'border-rose-500/60 shadow-lg shadow-rose-950/40' : (isActive ? 'border-cyan-400/80 shadow-lg shadow-cyan-950/40' : 'border-slate-800/90')} space-y-3 relative overflow-hidden transition-all duration-200 hover:border-slate-700">
-                                ${isBlocked ? `
+                            <div class="bg-slate-950/80 rounded-2xl p-4 border ${isFocusLocked ? 'border-purple-500/70 shadow-lg shadow-purple-950/40' : (isDailyLocked ? 'border-rose-500/60 shadow-lg shadow-rose-950/40' : (isActive ? 'border-cyan-400/80 shadow-lg shadow-cyan-950/40' : 'border-slate-800/90'))} space-y-3 relative overflow-hidden transition-all duration-200 hover:border-slate-700">
+                                ${isFocusLocked ? `
+                                    <div class="absolute top-0 right-0 bg-purple-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
+                                        <i class="fa-solid fa-moon text-[8px]"></i> FOCUS BLOCKED
+                                    </div>
+                                ` : (isDailyLocked ? `
                                     <div class="absolute top-0 right-0 bg-rose-600 text-white font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
-                                        <i class="fa-solid fa-lock text-[8px]"></i> BLOCKED
+                                        <i class="fa-solid fa-lock text-[8px]"></i> DAILY BLOCKED
                                     </div>
                                 ` : (isActive ? `
                                     <div class="absolute top-0 right-0 bg-cyan-500 text-black font-mono text-[9px] font-black uppercase tracking-widest px-3 py-0.5 rounded-bl-xl shadow-md flex items-center gap-1">
                                         <span class="w-1.5 h-1.5 rounded-full bg-black animate-ping"></span> ACTIVE
                                     </div>
-                                ` : '')}
+                                ` : ''))}
 
                                 <!-- APP HEADER -->
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-11 h-11 rounded-2xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-xl shrink-0 shadow-md">
-                                        <i class="${app.icon} ${app.colorClass}"></i>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-11 h-11 rounded-2xl ${app.bgClass} border ${app.borderClass} flex items-center justify-center text-xl shrink-0 shadow-md">
+                                            <i class="${app.icon} ${app.colorClass}"></i>
+                                        </div>
+                                        <div class="truncate">
+                                            <h4 class="text-sm font-bold text-white truncate flex items-center gap-1.5">
+                                                <span>${app.name}</span>
+                                                ${app.isCustom ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">Custom</span>' : ''}
+                                            </h4>
+                                            <span class="text-[10px] text-slate-400 font-medium">${app.category}</span>
+                                        </div>
                                     </div>
-                                    <div class="truncate flex-1">
-                                        <h4 class="text-sm font-bold text-white truncate flex items-center gap-1.5">
-                                            <span>${app.name}</span>
-                                            ${app.isCustom ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">Custom</span>' : ''}
-                                        </h4>
-                                        <span class="text-[10px] text-slate-400 font-medium">${app.category}</span>
-                                    </div>
+
+                                    <!-- FOCUS BLOCK TOGGLE BUTTON -->
+                                    <button role="button" onclick="toggleAppFocusBlock('${app.id}'); playSfx('click')" class="px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition flex items-center gap-1 ${app.blockInFocus ? 'bg-purple-600/25 text-purple-300 border border-purple-500/40 hover:bg-purple-600/40' : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200'}" title="Toggle whether this app is blocked during Focus / Pomodoro">
+                                        <i class="fa-solid ${app.blockInFocus ? 'fa-moon text-purple-400' : 'fa-circle-check text-slate-500'} text-[10px]"></i>
+                                        <span>${app.blockInFocus ? 'Focus: Block' : 'Focus: Allow'}</span>
+                                    </button>
                                 </div>
 
                                 <!-- USAGE PROGRESS BAR -->
                                 <div class="space-y-1.5">
                                     <div class="flex justify-between items-center text-xs">
                                         <span class="font-mono font-bold text-white" id="st-active-counter-${app.id}">${formatDuration(used)}</span>
-                                        <span class="text-slate-400 text-[11px] font-mono">Limit: <strong class="text-slate-200">${formatDuration(limit)}</strong></span>
+                                        <span class="text-slate-400 text-[11px] font-mono">Daily Limit: <strong class="text-slate-200">${formatDuration(limit)}</strong></span>
                                     </div>
 
                                     <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800/80">
@@ -5501,14 +6291,26 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                     </div>
 
                                     <div class="flex justify-between items-center text-[10px] font-mono">
-                                        <span class="${isBlocked ? 'text-rose-400 font-bold' : (isNearLimit ? 'text-amber-400 font-semibold' : 'text-slate-400')}">
-                                            ${isBlocked ? '100% QUOTA EXHAUSTED' : (isNearLimit ? `${pct}% • Quota warning` : `${pct}% consumed`)}
+                                        <span class="${isDailyLocked ? 'text-rose-400 font-bold' : (isNearLimit ? 'text-amber-400 font-semibold' : 'text-slate-400')}">
+                                            ${isDailyLocked ? '100% DAILY LIMIT REACHED' : (isNearLimit ? `${pct}% • Quota warning` : `${pct}% consumed`)}
                                         </span>
                                         <span class="text-slate-500">
-                                            ${app.blockEnabled ? '<i class="fa-solid fa-shield text-cyan-400"></i> Shield Enabled' : 'Monitoring only'}
+                                            ${app.blockEnabled ? '<i class="fa-solid fa-shield text-cyan-400"></i> Shield On' : 'Monitor only'}
                                         </span>
                                     </div>
                                 </div>
+
+                                ${app.id === 'youtube' ? `
+                                    <!-- YOUTUBE SPECIFIC CHANNEL FILTER SHORTCUT BUTTON -->
+                                    <button role="button" onclick="openYouTubeFilterModal(); playSfx('modalOpen')" class="w-full py-1.5 px-2.5 rounded-xl bg-red-950/40 hover:bg-red-900/40 border border-red-500/40 text-red-300 text-xs font-bold transition flex items-center justify-between shadow-sm">
+                                        <span class="flex items-center gap-1.5">
+                                            <i class="fa-brands fa-youtube text-red-500"></i> Channel Distraction Filter
+                                        </span>
+                                        <span class="px-1.5 py-0.2 rounded bg-red-500/20 text-red-300 text-[10px] font-mono font-bold">
+                                            ${appTrackerState.youtubeFilter.blockedChannels.length} Blocked
+                                        </span>
+                                    </button>
+                                ` : ''}
 
                                 <!-- ACTION BUTTONS -->
                                 <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-900">
@@ -5516,7 +6318,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                         <i class="fa-solid fa-sliders text-cyan-400 text-[11px]"></i> Limit
                                     </button>
 
-                                    ${isBlocked ? `
+                                    ${isFocusLocked ? `
+                                        <button role="button" onclick="showFocusBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-purple-600/30">
+                                            <i class="fa-solid fa-moon text-[11px]"></i> Focus Lock
+                                        </button>
+                                    ` : (isDailyLocked ? `
                                         <button role="button" onclick="showBlockerShield('${app.id}'); playSfx('modalOpen')" class="py-1.5 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center justify-center gap-1 shadow-md shadow-rose-600/30">
                                             <i class="fa-solid fa-lock text-[11px]"></i> Locked
                                         </button>
@@ -5528,7 +6334,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                         <button role="button" onclick="setActiveApp('${app.id}')" class="py-1.5 px-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold transition flex items-center justify-center gap-1">
                                             <i class="fa-solid fa-play text-[11px]"></i> Launch
                                         </button>
-                                    `)}
+                                    `))}
                                 </div>
 
                                 <!-- EXTRA QUICK CONTROLS (TEST +10M & RESET) -->
@@ -5561,6 +6367,25 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             setActiveApp,
             pauseActiveApp,
             isAppBlocked,
+            isFocusActive,
+            startFocusSession,
+            stopFocusSession,
+            toggleAppFocusBlock,
+            setAllAppsFocusBlock,
+            openFocusBlocklistModal,
+            closeFocusBlocklistModal,
+            isYouTubeChannelBlocked,
+            toggleYouTubeFilterEnabled,
+            toggleYouTubeShortsBlock,
+            openYouTubeFilterModal,
+            closeYouTubeFilterModal,
+            submitAddBlockedChannel,
+            removeBlockedYouTubeChannel,
+            runYouTubeChannelTest,
+            showFocusBlockerShield,
+            closeFocusBlockerShield,
+            showYouTubeBlockerShield,
+            closeYouTubeBlockerShield,
             showBlockerShield,
             closeBlockerShield,
             submitEmergencyExtension,
@@ -5581,7 +6406,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             setFilter: setAppFilter,
             setSearch: setAppSearch
         };
-
 
         function initApp() {
             verifyDataSchema();
