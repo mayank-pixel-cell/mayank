@@ -192,7 +192,7 @@ export class ArcHardwareGatekeeper {
     if (this.overrides.manualParticles !== null) {
       return !this.overrides.manualParticles;
     }
-    return this.tier === 'lower_end';
+    return false;
   }
 
   isCelestialAudioDisabled() {
@@ -200,7 +200,7 @@ export class ArcHardwareGatekeeper {
     if (this.overrides.manualCelestialAudio !== null) {
       return !this.overrides.manualCelestialAudio;
     }
-    return this.tier === 'lower_end';
+    return false;
   }
 
   applyOptimizations() {
@@ -217,35 +217,23 @@ export class ArcHardwareGatekeeper {
       return;
     }
 
-    // Lower-End Optimizations
+    // Lower-End Optimizations (Keep audio-reactive particles & ambient sound enabled with smooth performance)
     if (this.isLowerEnd()) {
       if (typeof window !== 'undefined') {
-        // 1. Disable moving particle canvas
-        window.__fxOff = true;
-        if (typeof window.__fxStop === 'function') window.__fxStop();
-        if (typeof window.fxParticles !== 'undefined') {
-          try { window.fxParticles.length = 0; } catch (e) {}
-        }
-        const cv = document.getElementById('fx-canvas');
-        if (cv) {
-          const ctx = cv.getContext('2d');
-          if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
-        }
-
-        // 2. Disable Celestial Bodies ambient multi-oscillator soundscape
-        if (window.HeavenlyBodies && typeof window.HeavenlyBodies.disable === 'function') {
-          window.HeavenlyBodies.disable();
-        }
-
-        // Auto-disable ambient presets in state
-        if (window.state && window.state.settings) {
-          window.state.settings.particleDensity = 'off';
-          window.state.settings.snowflakeParticles = false;
-          window.state.settings.audioReactiveParticles = false;
-          window.state.settings.ambientPreset = 'off';
+        if (this.overrides.manualParticles === false) {
+          window.__fxOff = true;
+          if (typeof window.__fxStop === 'function') window.__fxStop();
+          if (typeof window.fxParticles !== 'undefined') {
+            try { window.fxParticles.length = 0; } catch (e) {}
+          }
+          const cv = document.getElementById('fx-canvas');
+          if (cv) {
+            const ctx = cv.getContext('2d');
+            if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
+          }
         }
       }
-      console.log(`[ArcHardwareGatekeeper] ⚡ Lower-end device profile active (${this.reasons.join(', ')}). Particles and Celestial Bodies audio disabled to ensure 60 FPS.`);
+      console.log(`[ArcHardwareGatekeeper] ⚡ Smooth 60 FPS optimizations active (${this.reasons.join(', ')}).`);
     } else {
       console.log(`[ArcHardwareGatekeeper] 🚀 High-end hardware validated (${this.reasons.join(', ')}). Full particle and sound fidelity enabled.`);
     }
