@@ -3236,12 +3236,16 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 ripple.style.left = `${x}px`;
                 ripple.style.top = `${y}px`;
 
+                const prevOverflow = target.style.overflow;
                 const computedPos = window.getComputedStyle(target).position;
                 if (computedPos === 'static') target.style.position = 'relative';
                 target.style.overflow = 'hidden';
 
                 target.appendChild(ripple);
-                setTimeout(() => { if (ripple.parentNode) ripple.remove(); }, 550);
+                setTimeout(() => {
+                    if (ripple.parentNode) ripple.remove();
+                    target.style.overflow = prevOverflow;
+                }, 550);
             } catch(err) {}
         }
         window.createClickRipple = createClickRipple;
@@ -8526,7 +8530,7 @@ html[data-transition=bounce] .tab-view-enter{animation:pp-bounce .5s ease both}
 #pp12-back.open{opacity:1;pointer-events:auto}
 #pp12-drawer{position:fixed;top:0;right:0;height:100%;width:min(26rem,100%);z-index:60;display:flex;flex-direction:column;visibility:hidden;transform:translateX(105%);transition:transform .35s cubic-bezier(.16,1,.3,1),visibility 0s .35s;background:var(--pp-panel);color:var(--pp-fg);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-left:1px solid var(--pp-line)}
 #pp12-drawer.open{visibility:visible;transform:none;transition-delay:0s}
-.pp-tab,.pp-btn{padding:.45rem .7rem;border-radius:.7rem;border:1px solid var(--pp-line);background:rgba(127,127,127,.12);color:var(--pp-fg);font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;text-align:left}
+.pp-tab,.pp-btn{padding:.45rem .7rem;border-radius:.7rem;border:1px solid var(--pp-line);background:rgba(127,127,127,.12);color:var(--pp-fg);font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;text-align:left;flex-shrink:0;min-width:max-content}
 .pp-tab.on,.pp-btn.on,#btn-ambient-toggle.on{border-color:var(--pp-accent);color:var(--pp-accent);background:rgba(0,240,255,0.14);background:color-mix(in srgb,var(--pp-accent) 14%,transparent)}
 .pp-btn:hover,.pp-tab:hover{border-color:var(--pp-accent)}
 .pp-row{padding:.7rem 0;border-bottom:1px solid var(--pp-line)}
@@ -8672,14 +8676,14 @@ html[data-mode=light] .arc-click-ripple {
 <aside id="pp12-drawer" role="dialog" aria-modal="true" aria-label="Settings" aria-hidden="true" class="backdrop-blur-md">
   <div class="flex items-center justify-between p-4 pb-2"><h2 class="font-black text-lg"><i class="fa-solid fa-gear"></i> Settings</h2><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-close" aria-label="Close settings">✕</button></div>
   <div class="px-4"><input id="settings-search" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" type="search" placeholder="Search settings…" aria-label="Search settings"></div>
-  <div id="pp-tabs" role="tablist" aria-label="Settings categories" class="flex gap-1 p-4 pb-2 overflow-x-auto">
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="audio">[ Audio &amp; Synth ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="vis">[ Visuals &amp; Themes ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="habit">[ Habit Engine ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="focus">[ Focus &amp; Time ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="account">[ 👤 Accounts &amp; Sync ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sys">[ System &amp; Data ]</button>
-    <button class="pp-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sec">[ 🛡️ Security Sentinel ]</button>
+  <div id="pp-tabs" role="tablist" aria-label="Settings categories" class="flex gap-1.5 p-4 pb-2 overflow-x-auto">
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="audio">[ Audio &amp; Synth ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="vis">[ Visuals &amp; Themes ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="habit">[ Habit Engine ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="focus">[ Focus &amp; Time ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="account">[ 👤 Accounts &amp; Sync ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sys">[ System &amp; Data ]</button>
+    <button class="pp-tab shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" role="tab" aria-controls="pp-body" data-t="sec">[ 🛡️ Security Sentinel ]</button>
   </div>
   <div id="pp-body" class="flex-1 overflow-y-auto px-4 pb-6"></div>
 </aside>
