@@ -176,13 +176,17 @@
             appearance: none;
             cursor: pointer;
             border-radius: 6px;
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .habit-checkbox:checked {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23060913' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            background-size: 74% 74%;
+            background-position: center;
+            background-repeat: no-repeat;
             background-color: #00F0FF;
             border-color: #00F0FF;
-            box-shadow: 0 0 14px rgba(0, 240, 255, 0.9);
-            transform: scale(1.08);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.9);
+            transform: scale(1.1);
         }
 
         /* Mobile Tab View Animations */
@@ -1610,7 +1614,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
                     <!-- THE ACTION BUTTONS RELOCATED FROM HEADER -->
                     <div class="flex items-center gap-2.5 flex-wrap shrink-0">
-                        <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode(); playSfx('click')" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-cyan-400 hover:text-cyan-300 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
+                        <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode()" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-cyan-400 hover:text-cyan-300 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
                             <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400 mr-2 text-sm"></i>
                             <span id="header-mode-toggle-label">Light Mode</span>
                         </button>
@@ -2830,21 +2834,21 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const now = audioCtx.currentTime;
 
                 if (type === 'check') {
-                    // 1. Transient tactile attack click
+                    // 1. Transient tactile attack click (crisp mechanical snap)
                     const pop = audioCtx.createOscillator();
                     const popG = audioCtx.createGain();
                     pop.type = 'triangle';
-                    pop.frequency.setValueAtTime(920, now);
-                    pop.frequency.exponentialRampToValueAtTime(280, now + 0.035);
-                    popG.gain.setValueAtTime(0.12, now);
-                    popG.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    pop.frequency.setValueAtTime(1050, now);
+                    pop.frequency.exponentialRampToValueAtTime(260, now + 0.038);
+                    popG.gain.setValueAtTime(0.14, now);
+                    popG.gain.exponentialRampToValueAtTime(0.001, now + 0.042);
                     pop.connect(popG); popG.connect(sfxOut());
                     pop.start(now); pop.stop(now + 0.045);
 
-                    // 2. Shimmering celestial major chord arpeggio (C5 -> E5 -> G5 -> C6)
-                    const chord = [523.25, 659.25, 783.99, 1046.50];
+                    // 2. Shimmering celestial major chord arpeggio with high crystal 5th (C5 -> E5 -> G5 -> C6 -> E6)
+                    const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51];
                     chord.forEach((f, i) => {
-                        const t = now + i * 0.032;
+                        const t = now + i * 0.030;
                         const o1 = audioCtx.createOscillator();
                         const o2 = audioCtx.createOscillator(); // detuned for lush sparkle
                         const g = audioCtx.createGain();
@@ -2853,39 +2857,45 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         o1.frequency.setValueAtTime(f, t);
                         o2.frequency.setValueAtTime(f * 1.004, t);
                         g.gain.setValueAtTime(0.0001, t);
-                        g.gain.exponentialRampToValueAtTime(0.15, t + 0.015);
-                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+                        g.gain.exponentialRampToValueAtTime(0.16, t + 0.015);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.44);
                         o1.connect(g); o2.connect(g);
                         g.connect(sfxOut());
                         o1.start(t); o2.start(t);
-                        o1.stop(t + 0.44); o2.stop(t + 0.44);
+                        o1.stop(t + 0.46); o2.stop(t + 0.46);
                     });
 
-                    // 3. Warm sub-harmonic bass foundation (82.4Hz)
+                    // 3. Warm sub-harmonic bass foundation (82.4Hz -> 41.2Hz)
                     const sub = audioCtx.createOscillator();
                     const subG = audioCtx.createGain();
                     sub.type = 'sine';
                     sub.frequency.setValueAtTime(82.4, now);
                     sub.frequency.exponentialRampToValueAtTime(41.2, now + 0.18);
-                    subG.gain.setValueAtTime(0.14, now);
-                    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    subG.gain.setValueAtTime(0.15, now);
+                    subG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
                     sub.connect(subG); subG.connect(sfxOut());
-                    sub.start(now); sub.stop(now + 0.22);
+                    sub.start(now); sub.stop(now + 0.24);
                 } else if (type === 'uncheck') {
-                    // Organic soft descending lowpass bubble drop
-                    const osc = audioCtx.createOscillator();
+                    // Organic soft descending lowpass dual-bubble drop
+                    const osc1 = audioCtx.createOscillator();
+                    const osc2 = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     const filter = audioCtx.createBiquadFilter();
                     filter.type = 'lowpass';
-                    filter.frequency.setValueAtTime(850, now);
-                    filter.frequency.exponentialRampToValueAtTime(180, now + 0.11);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(360, now);
-                    osc.frequency.exponentialRampToValueAtTime(120, now + 0.11);
-                    gain.gain.setValueAtTime(0.13, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
-                    osc.connect(gain); gain.connect(filter); filter.connect(sfxOut());
-                    osc.start(now); osc.stop(now + 0.12);
+                    filter.frequency.setValueAtTime(950, now);
+                    filter.frequency.exponentialRampToValueAtTime(150, now + 0.12);
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(420, now);
+                    osc1.frequency.exponentialRampToValueAtTime(160, now + 0.12);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(210, now);
+                    osc2.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+                    gain.gain.setValueAtTime(0.14, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc1.connect(gain); osc2.connect(gain);
+                    gain.connect(filter); filter.connect(sfxOut());
+                    osc1.start(now); osc2.start(now);
+                    osc1.stop(now + 0.13); osc2.stop(now + 0.13);
                 } else if (type === 'click') {
                     // Silky organic mechanical bubble pop
                     const osc1 = audioCtx.createOscillator();
@@ -2908,49 +2918,101 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     osc1.start(now); osc2.start(now);
                     osc1.stop(now + 0.04); osc2.stop(now + 0.04);
                 } else if (type === 'hover') {
+                    // Delicate crystal glass micro-tick
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(880, now);
-                    gain.gain.setValueAtTime(0.015, now);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+                    osc.frequency.setValueAtTime(1200, now);
+                    osc.frequency.exponentialRampToValueAtTime(1450, now + 0.018);
+                    gain.gain.setValueAtTime(0.016, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
                     osc.connect(gain);
                     gain.connect(sfxOut());
                     osc.start(now);
-                    osc.stop(now + 0.03);
+                    osc.stop(now + 0.025);
                 } else if (type === 'tab') {
-                    // Glass marimba glissando + soft air filter swoosh
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, now); // D5
-                    osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.06); // A5
-                    gain.gain.setValueAtTime(0.07, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc.connect(gain); gain.connect(sfxOut());
-                    osc.start(now); osc.stop(now + 0.085);
+                    // 3-tone glass marimba cascade (D5 -> G5 -> B5)
+                    [587.33, 783.99, 987.77].forEach((f, i) => {
+                        const t = now + i * 0.022;
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(f, t);
+                        gain.gain.setValueAtTime(0.0001, t);
+                        gain.gain.exponentialRampToValueAtTime(0.065, t + 0.008);
+                        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.075);
+                        osc.connect(gain); gain.connect(sfxOut());
+                        osc.start(t); osc.stop(t + 0.08);
+                    });
+                } else if (type === 'pomodoroStart') {
+                    // Uplifting focus triad chord (F4 -> A4 -> C5 -> F5)
+                    [349.23, 440.00, 523.25, 698.46].forEach((f, i) => {
+                        const t = now + i * 0.045;
+                        const o1 = audioCtx.createOscillator(), o2 = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o1.type = 'sine'; o2.type = 'triangle';
+                        o1.frequency.setValueAtTime(f, t);
+                        o2.frequency.setValueAtTime(f * 1.002, t);
+                        g.gain.setValueAtTime(0.0001, t);
+                        g.gain.exponentialRampToValueAtTime(0.12, t + 0.02);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+                        o1.connect(g); o2.connect(g);
+                        g.connect(sfxOut());
+                        o1.start(t); o2.start(t);
+                        o1.stop(t + 0.6); o2.stop(t + 0.6);
+                    });
+                } else if (type === 'pomodoroComplete') {
+                    // Tibetan singing bowl harmonic ring (432Hz, 864Hz, 1296Hz) + high shimmer
+                    [432.0, 864.0, 1296.0, 2093.0].forEach((freq, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = idx === 3 ? 'triangle' : 'sine';
+                        osc.frequency.setValueAtTime(freq, now);
+                        gain.gain.setValueAtTime(0.0001, now);
+                        gain.gain.exponentialRampToValueAtTime(0.18 / (idx + 1), now + 0.04);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+                        osc.connect(gain); gain.connect(sfxOut());
+                        osc.start(now); osc.stop(now + 2.9);
+                    });
+                } else if (type === 'habitCelebration') {
+                    // Celebratory victory fanfare arpeggio (C5 -> E5 -> G5 -> C6 -> E6 -> G6)
+                    [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98].forEach((f, i) => {
+                        const t = now + i * 0.04;
+                        const o1 = audioCtx.createOscillator(), o2 = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o1.type = 'triangle'; o2.type = 'sine';
+                        o1.frequency.setValueAtTime(f, t);
+                        o2.frequency.setValueAtTime(f * 1.003, t);
+                        g.gain.setValueAtTime(0.0001, t);
+                        g.gain.exponentialRampToValueAtTime(0.14, t + 0.02);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+                        o1.connect(g); o2.connect(g);
+                        g.connect(sfxOut());
+                        o1.start(t); o2.start(t);
+                        o1.stop(t + 0.65); o2.stop(t + 0.65);
+                    });
                 } else if (type === 'themeShift') {
                     const isLight = document.documentElement.getAttribute('data-mode') === 'light';
                     if (isLight) {
                         // Crystal sunburst chime cascade
-                        [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
+                        [659.25, 830.61, 987.77, 1318.51, 1661.22].forEach((f, i) => {
                             const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-                            o.type = 'sine'; o.frequency.setValueAtTime(f, now + i * 0.035);
-                            g.gain.setValueAtTime(0.08, now + i * 0.035);
-                            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.035 + 0.28);
+                            o.type = 'sine'; o.frequency.setValueAtTime(f, now + i * 0.032);
+                            g.gain.setValueAtTime(0.09, now + i * 0.032);
+                            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.032 + 0.32);
                             o.connect(g); g.connect(sfxOut());
-                            o.start(now + i * 0.035); o.stop(now + i * 0.035 + 0.3);
+                            o.start(now + i * 0.032); o.stop(now + i * 0.032 + 0.35);
                         });
                     } else {
                         // Deep cyberpunk warp resonance drop
                         const o = audioCtx.createOscillator(), g = audioCtx.createGain();
                         o.type = 'triangle';
-                        o.frequency.setValueAtTime(440, now);
-                        o.frequency.exponentialRampToValueAtTime(110, now + 0.2);
-                        g.gain.setValueAtTime(0.12, now);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+                        o.frequency.setValueAtTime(520, now);
+                        o.frequency.exponentialRampToValueAtTime(85, now + 0.22);
+                        g.gain.setValueAtTime(0.14, now);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
                         o.connect(g); g.connect(sfxOut());
-                        o.start(now); o.stop(now + 0.25);
+                        o.start(now); o.stop(now + 0.28);
                     }
                 } else if (type === 'zenBell') {
                     // Authentic singing bowl harmonic bell
@@ -8144,27 +8206,50 @@ html[data-mode=light] .text-slate-600{
     color: #94a3b8 !important;
 }
 
-/* High-Contrast Brand Accents */
+/* High-Contrast Brand Accents & Slash-Opacity Overrides */
 html[data-mode=light] .text-cyan-400,
 html[data-mode=light] .text-cyan-300,
-html[data-mode=light] .text-cyan-200{
+html[data-mode=light] .text-cyan-200,
+html[data-mode=light] .text-cyan-400\/90,
+html[data-mode=light] .text-cyan-400\/80,
+html[data-mode=light] .text-cyan-300\/90,
+html[data-mode=light] .text-cyan-200\/80,
+html[data-mode=light] [class*="text-cyan-300"],
+html[data-mode=light] [class*="text-cyan-200"]{
     color: #0284c7 !important;
 }
 html[data-mode=light] .text-amber-400,
-html[data-mode=light] .text-amber-300{
+html[data-mode=light] .text-amber-300,
+html[data-mode=light] .text-amber-200,
+html[data-mode=light] .text-amber-400\/80,
+html[data-mode=light] .text-amber-300\/80,
+html[data-mode=light] .text-amber-200\/80,
+html[data-mode=light] .text-amber-200\/90,
+html[data-mode=light] [class*="text-amber-300"],
+html[data-mode=light] [class*="text-amber-200"]{
     color: #b45309 !important;
 }
 html[data-mode=light] .text-emerald-400,
-html[data-mode=light] .text-emerald-300{
+html[data-mode=light] .text-emerald-300,
+html[data-mode=light] .text-emerald-500\/80,
+html[data-mode=light] [class*="text-emerald-400"],
+html[data-mode=light] [class*="text-emerald-300"]{
     color: #047857 !important;
 }
 html[data-mode=light] .text-purple-400,
-html[data-mode=light] .text-purple-300{
+html[data-mode=light] .text-purple-300,
+html[data-mode=light] .text-purple-400\/80,
+html[data-mode=light] .text-purple-300\/80,
+html[data-mode=light] [class*="text-purple-300"],
+html[data-mode=light] [class*="text-purple-400"]{
     color: #7c3aed !important;
 }
 html[data-mode=light] .text-blue-400,
 html[data-mode=light] .text-blue-300{
     color: #1d4ed8 !important;
+}
+html[data-mode=light] .text-slate-400\/90{
+    color: #475569 !important;
 }
 
 /* Clipped Gradient Headings & Numeric Displays */
@@ -8189,28 +8274,43 @@ html[data-mode=light] #arc-completion-banner{
 }
 
 /* 4. Elimination of Murky Dark Wells & Inner Boxes */
+html[data-mode=light] .bg-slate-900\/95,
 html[data-mode=light] .bg-slate-900\/90,
 html[data-mode=light] .bg-slate-900\/80,
 html[data-mode=light] .bg-slate-900\/70,
 html[data-mode=light] .bg-slate-900\/60,
+html[data-mode=light] .bg-slate-900\/50,
 html[data-mode=light] .bg-slate-900\/40,
 html[data-mode=light] .bg-slate-900,
 html[data-mode=light] .bg-slate-950\/95,
 html[data-mode=light] .bg-slate-950\/90,
 html[data-mode=light] .bg-slate-950\/80,
+html[data-mode=light] .bg-slate-950\/70,
 html[data-mode=light] .bg-slate-950\/60,
 html[data-mode=light] .bg-slate-950\/50,
 html[data-mode=light] .bg-slate-950\/40,
-html[data-mode=light] .bg-slate-950{
+html[data-mode=light] .bg-slate-950,
+html[data-mode=light] .bg-slate-800\/80,
+html[data-mode=light] .bg-slate-800\/60,
+html[data-mode=light] .bg-slate-800,
+html[data-mode=light] .bg-slate-700\/20,
+html[data-mode=light] [class*="bg-slate-950\/"],
+html[data-mode=light] [class*="bg-slate-900\/"],
+html[data-mode=light] [class*="bg-slate-800\/"]{
     background-color: rgba(241, 245, 249, 0.75) !important;
     border-color: rgba(203, 213, 225, 0.75) !important;
 }
+html[data-mode=light] .border-slate-800\/90,
 html[data-mode=light] .border-slate-800\/80,
+html[data-mode=light] .border-slate-800\/70,
 html[data-mode=light] .border-slate-800\/60,
 html[data-mode=light] .border-slate-800,
 html[data-mode=light] .border-slate-700\/80,
+html[data-mode=light] .border-slate-700\/60,
 html[data-mode=light] .border-slate-700,
-html[data-mode=light] .border-slate-600{
+html[data-mode=light] .border-slate-600,
+html[data-mode=light] .border-slate-500\/30,
+html[data-mode=light] [class*="border-slate-"]{
     border-color: rgba(203, 213, 225, 0.8) !important;
 }
 html[data-mode=light] .bg-slate-800{
@@ -8220,16 +8320,33 @@ html[data-mode=light] .bg-slate-800{
 /* 5. Clean Tactile Buttons & Badges */
 html[data-mode=light] button.bg-slate-800,
 html[data-mode=light] button.bg-slate-900,
+html[data-mode=light] button.bg-slate-800\/80,
+html[data-mode=light] button.bg-slate-800\/60,
+html[data-mode=light] button[class*="bg-slate-800"],
+html[data-mode=light] button[class*="bg-slate-900"],
+html[data-mode=light] #btn-ambient-toggle,
+html[data-mode=light] #btn-open-settings,
+html[data-mode=light] #btn-audio-toggle,
 html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red),
 html[data-mode=light] .pp-btn:not(.on),
 html[data-mode=light] .pp-tab:not(.on){
     background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     color: #1e293b !important;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #btn-ambient-toggle i,
+html[data-mode=light] #btn-open-settings i,
+html[data-mode=light] #btn-audio-toggle i{
+    color: #0284c7 !important;
 }
 html[data-mode=light] button.bg-slate-800:hover,
 html[data-mode=light] button.bg-slate-900:hover,
+html[data-mode=light] button[class*="bg-slate-800"]:hover,
+html[data-mode=light] button[class*="bg-slate-900"]:hover,
+html[data-mode=light] #btn-ambient-toggle:hover,
+html[data-mode=light] #btn-open-settings:hover,
+html[data-mode=light] #btn-audio-toggle:hover,
 html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red):hover,
 html[data-mode=light] .pp-btn:not(.on):hover,
 html[data-mode=light] .pp-tab:not(.on):hover{
@@ -8237,8 +8354,17 @@ html[data-mode=light] .pp-tab:not(.on):hover{
     border-color: #0284c7 !important;
     color: #0284c7 !important;
 }
+html[data-mode=light] #btn-ambient-toggle.on{
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #btn-ambient-toggle.on i{
+    color: #ffffff !important;
+}
 html[data-mode=light] button.bg-slate-800:active,
-html[data-mode=light] button.bg-slate-900:active{
+html[data-mode=light] button.bg-slate-900:active,
+html[data-mode=light] button[class*="bg-slate-800"]:active{
     background-color: #f1f5f9 !important;
 }
 html[data-mode=light] .bg-cyan-500,
@@ -8409,12 +8535,17 @@ html[data-mode=light] .calendar-grade-f{
 html[data-mode=light] .calendar-grade-f .grade-letter{
     color: #e11d48 !important;
 }
+html[data-mode=light] .calendar-day-card span:first-of-type{
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
 html[data-mode=light] .pulse-today-ring{
     outline: 2px solid #0284c7 !important;
     box-shadow: 0 0 16px rgba(2, 132, 199, 0.35) !important;
 }
 html[data-mode=light] .calendar-day-selected{
-    outline: 2px solid #0f172a !important;
+    outline: 2px solid #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
 }
 
 /* 9. Habits Rows & Checkboxes */
@@ -8423,18 +8554,51 @@ html[data-mode=light] .habit-checkbox{
     background-color: #ffffff !important;
 }
 html[data-mode=light] .habit-checkbox:checked{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-size: 74% 74% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     background-color: #0284c7 !important;
     border-color: #0284c7 !important;
+    box-shadow: 0 0 14px rgba(2, 132, 199, 0.45) !important;
 }
 html[data-mode=light] .habit-row{
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
 }
 html[data-mode=light] .habit-row.border-l-slate-700{
     border-left-color: #cbd5e1 !important;
 }
 html[data-mode=light] .habit-row.bg-emerald-950\/20{
-    background: rgba(236, 253, 245, 0.9) !important;
+    background: linear-gradient(90deg, rgba(236, 253, 245, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
     border-left-color: #10b981 !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08) !important;
+}
+
+/* 9b. Habit Celebration Banner & RPG Floating Text in Light Mode */
+html[data-mode=light] #habit-celebration-banner{
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.15), 0 0 20px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] #habit-celebration-banner .text-white{
+    color: #0f172a !important;
+}
+html[data-mode=light] #habit-celebration-banner .text-slate-400{
+    color: #475569 !important;
+}
+html[data-mode=light] .rpg-floating-combat-text{
+    color: #0284c7 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(2, 132, 199, 0.4) !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12), 0 0 12px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] .rpg-floating-combat-text.crit{
+    color: #b45309 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.14), 0 0 14px rgba(245, 158, 11, 0.35) !important;
 }
 
 /* 10. Modals, Drawers, Overlays & PIN Keypad */
@@ -8709,15 +8873,55 @@ html[data-mode=light] .arc-click-ripple {
     100% { transform: scale(2.2); opacity: 0; }
 }
 
-/* Floating XP & Combat Sparkle Rise */
-.floating-xp-anim {
-    animation: floatingXpRise 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    pointer-events: none;
+/* Pomodoro Breathing Pulse Ring */
+.pomodoro-running-glow {
+    animation: pomodoroBreathingRing 2.4s infinite ease-in-out !important;
 }
-@keyframes floatingXpRise {
-    0% { transform: translateY(0) scale(0.7); opacity: 0; filter: drop-shadow(0 0 6px rgba(0,240,255,0.8)); }
-    22% { transform: translateY(-18px) scale(1.15); opacity: 1; }
-    100% { transform: translateY(-60px) scale(0.95); opacity: 0; filter: drop-shadow(0 0 14px rgba(0,240,255,0)); }
+@keyframes pomodoroBreathingRing {
+    0%, 100% {
+        box-shadow: 0 0 14px rgba(0, 240, 255, 0.4), 0 0 0 1px rgba(0, 240, 255, 0.5) !important;
+    }
+    50% {
+        box-shadow: 0 0 28px rgba(0, 240, 255, 0.8), 0 0 0 3px rgba(0, 240, 255, 0.9) !important;
+    }
+}
+html[data-mode=light] .pomodoro-running-glow {
+    animation: pomodoroBreathingRingLight 2.4s infinite ease-in-out !important;
+}
+@keyframes pomodoroBreathingRingLight {
+    0%, 100% {
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35), 0 0 0 1px rgba(2, 132, 199, 0.5) !important;
+    }
+    50% {
+        box-shadow: 0 6px 28px rgba(2, 132, 199, 0.65), 0 0 0 3px rgba(2, 132, 199, 0.8) !important;
+    }
+}
+
+/* Ambient Cursor Follower Glow */
+#arc-ambient-cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 480px;
+    margin-left: -240px;
+    margin-top: -240px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.65;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(139, 92, 246, 0.035) 42%, transparent 70%);
+    will-change: transform;
+    transition: opacity 0.4s ease;
+}
+html[data-mode=light] #arc-ambient-cursor-glow {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, rgba(99, 102, 241, 0.045) 42%, transparent 70%) !important;
+    opacity: 0.82 !important;
+}
+
+/* Global Smooth Color & Theme Transition */
+html, body, .glass-card, header, nav, button, input, select, textarea, #pp12-drawer {
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.25s ease, box-shadow 0.35s ease !important;
 }
 </style>
 
@@ -9636,16 +9840,16 @@ function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.do
 const fset=()=>{F.left=(F.mode==='work'?S().focusWork:S().focusBreak)*60};
 const ftxt=()=>String(Math.floor(F.left/60)).padStart(2,'0')+':'+String(F.left%60).padStart(2,'0');
 function fui(){const t=ftxt(),a=$('#pp-f-time'),h=$('#pp12-hud');if(a)a.textContent=t;
- if(h){$('#pp-hud-t').textContent=t;$('#pp-hud-m').textContent=F.mode==='work'?'FOCUS':'BREAK';h.style.display=F.run?'flex':'none'}
+ if(h){$('#pp-hud-t').textContent=t;$('#pp-hud-m').textContent=F.mode==='work'?'FOCUS':'BREAK';h.style.display=F.run?'flex':'none';h.classList.toggle('pomodoro-running-glow',!!F.run)}
  const g=$('#pp-f-go');if(g)g.textContent=F.run?'Pause (P)':'Start (P)';document.body.classList.toggle('pp-focus',F.run&&F.mode==='work'&&!!S().focusBlocker)}
 function logFocus(sec){state.screenTimeLogs.push({date:getTodayKey(),type:'focus',seconds:sec,ts:Date.now()});save()}
 function logLaptop(){const d=getTodayKey();let e=state.screenTimeLogs.find(x=>x.date===d&&x.type==='laptop');if(!e){e={date:d,type:'laptop',seconds:0};state.screenTimeLogs.push(e)}e.seconds=(state.laptop&&state.laptop.totalSeconds)||0}
 function ftick(){if(--F.left>0){fui();return}
- if(F.mode==='work')logFocus(S().focusWork*60);F.mode=F.mode==='work'?'break':'work';fset();playSfx('check');
+ if(F.mode==='work')logFocus(S().focusWork*60);F.mode=F.mode==='work'?'break':'work';fset();playSfx(F.mode==='break'?'pomodoroComplete':'pomodoroStart');
  const w=F.mode==='work';toast(w?'Break over — back to focus':'Focus block complete — take a break');announce(w?'Focus block started':'Break started');
  if(S().focusSyncAudio){if(w){if(S().ambientPreset!=='off')play()}else pauseAmb()}fui();stats()}
-function fstart(){if(F.run)return;F.run=true;F.id=setInterval(ftick,1000);if(S().focusSyncAudio&&F.mode==='work'&&S().ambientPreset!=='off'&&!A.on)play();announce('Focus timer started');fui()}
-function fpause(){if(!F.run)return;F.run=false;clearInterval(F.id);if(S().focusSyncAudio&&A.on)pauseAmb();announce('Focus timer paused');fui()}
+function fstart(){if(F.run)return;F.run=true;F.id=setInterval(ftick,1000);playSfx('pomodoroStart');if(S().focusSyncAudio&&F.mode==='work'&&S().ambientPreset!=='off'&&!A.on)play();announce('Focus timer started');fui()}
+function fpause(){if(!F.run)return;F.run=false;clearInterval(F.id);playSfx('click');if(S().focusSyncAudio&&A.on)pauseAmb();announce('Focus timer paused');fui()}
 function stats(){const d=getTodayKey(),f=state.screenTimeLogs.filter(x=>x.date===d&&x.type==='focus').reduce((a,x)=>a+x.seconds,0),l=(state.laptop&&state.laptop.totalSeconds)||0,e=l?Math.min(100,Math.round(f/l*100)):0,el=$('#pp-stats');
  if(el)el.innerHTML=`<div>Active laptop session: <b>${formatDuration(l)}</b></div><div>Pomodoro focus today: <b>${formatDuration(f)}</b></div><div>Focus efficiency: <b>${e}%</b></div>`}
 
@@ -11502,11 +11706,11 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     if (state.settings && state.settings.floatingCombatText === false) return;
     const el = document.createElement('div');
     el.className = 'rpg-floating-combat-text' + (isCrit ? ' crit' : '') + (isDmg ? ' dmg' : '');
-    el.textContent = text;
+    el.innerHTML = `<span style="font-size:11px;margin-right:4px;">${isCrit ? '⚡' : '✦'}</span><span>${text}</span>`;
     el.style.left = (x || (window.innerWidth / 2 - 50)) + 'px';
     el.style.top = (y || (window.innerHeight / 2)) + 'px';
     document.body.appendChild(el);
-    setTimeout(() => { try { el.remove(); } catch (e) {} }, 1200);
+    setTimeout(() => { try { el.remove(); } catch (e) {} }, 1250);
   };
 
   // 5. Central XP & Stat Engine
@@ -11565,15 +11769,18 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       playCustomRpgSfx('habitCelebrate');
     }
 
-    // 2. Confetti burst from location
+    // 2. Confetti & sparkle burst from checkbox position
     const x = (clientX && clientX > 0) ? clientX : window.innerWidth / 2;
     const y = (clientY && clientY > 0) ? clientY : window.innerHeight / 2;
     triggerConfettiBurst(x, y);
+    if (typeof triggerGradeParticleBurst === 'function') {
+      triggerGradeParticleBurst(x, y, isCrit ? 'S' : 'A');
+    }
     if (isCrit) {
       setTimeout(() => triggerConfettiBurst(x, y), 140);
     }
 
-    // 3. Floating combat text
+    // 3. Floating combat & XP badge
     if (isCrit) {
       state.bonusXP = (state.bonusXP || 0) + (weight * 25);
       spawnFloatingCombatText(`💥 CRIT STRIKE! +${earnedXP} XP (${attr} +${weight * 50})`, x - 80, y - 20, true);
@@ -13011,11 +13218,19 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   const origSwitchTab = window.switchTab;
   window.switchTab = function(tabName) {
     if (typeof origSwitchTab === 'function') origSwitchTab.apply(this, arguments);
-    ['tracker', 'rules', 'results', 'progression', 'settings'].forEach(t => {
+    ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime'].forEach(t => {
       const v = document.getElementById(`view-${t}`);
       const dTab = document.getElementById(`tab-${t}`);
       const mTab = document.getElementById(`mobile-tab-${t}`);
-      if (v) v.classList.toggle('hidden', t !== tabName);
+      if (v) {
+        const isTarget = (t === tabName);
+        v.classList.toggle('hidden', !isTarget);
+        if (isTarget) {
+          v.classList.remove('tab-view-enter');
+          void v.offsetWidth;
+          v.classList.add('tab-view-enter');
+        }
+      }
       if (dTab) {
         dTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
         if (t === tabName) {
@@ -13042,11 +13257,42 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   };
 
   // 18. Initialize Everything on DOM Ready
+  function initAmbientCursorGlow() {
+    if (window.innerWidth < 768) return; // avoid overhead on mobile touch devices
+    let glow = document.getElementById('arc-ambient-cursor-glow');
+    if (!glow) {
+      glow = document.createElement('div');
+      glow.id = 'arc-ambient-cursor-glow';
+      document.body.appendChild(glow);
+    }
+    let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+    let curX = targetX, curY = targetY;
+    let raf = null;
+
+    window.addEventListener('mousemove', e => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+
+    function loop() {
+      curX += (targetX - curX) * 0.14;
+      curY += (targetY - curY) * 0.14;
+      glow.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+      if (Math.abs(targetX - curX) > 0.4 || Math.abs(targetY - curY) > 0.4) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        raf = null;
+      }
+    }
+  }
+
   function initUpgrade() {
     injectEnhancedSettingsOptions();
     renderProgressionTab();
     renderKnowledgeBase();
     updateRpgLevelUI();
+    initAmbientCursorGlow();
   }
 
   if (document.readyState === 'loading') {
