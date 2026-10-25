@@ -10274,12 +10274,18 @@ html[data-mode=light] #settings-gold-card > div {
 }
 html[data-mode=light] #settings-gold-card h2,
 html[data-mode=light] #settings-gold-card h3,
-html[data-mode=light] #settings-gold-card h4 {
+html[data-mode=light] #settings-gold-card h4,
+html[data-mode=light] #settings-gold-card .text-white {
     color: #0f172a !important;
 }
 html[data-mode=light] #settings-gold-card p,
 html[data-mode=light] #settings-gold-card li span {
     color: #334155 !important;
+}
+html[data-mode=light] #settings-gold-card .under-construction-badge {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #92400e !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
 }
 html[data-mode=light] #settings-gold-card [class*="from-slate-950/80"] {
     background: rgba(255, 255, 255, 0.95) !important;
@@ -13575,7 +13581,26 @@ window.ArcGold = (function() {
     }
   }
 
+  let isBoxOpen = false;
+
+  function toggleBox() {
+    isBoxOpen = !isBoxOpen;
+    render();
+  }
+
+  function openBox() {
+    isBoxOpen = true;
+    render();
+  }
+
+  function closeBox() {
+    isBoxOpen = false;
+    render();
+  }
+
   function scrollToGoldCard() {
+    isBoxOpen = true;
+    render();
     const card = document.getElementById('settings-gold-card');
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -13656,8 +13681,70 @@ window.ArcGold = (function() {
       });
     }
 
+    if (!isBoxOpen) {
+      container.innerHTML = `
+        <div class="glass-card rounded-2xl border border-amber-500/40 p-3.5 sm:p-4 transition-all duration-300 bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.08)] hover:border-amber-400/60">
+          <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="window.ArcGold.toggleBox()" title="Click to open Arc Gold &amp; 120Hz settings">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+                <i class="fa-solid fa-crown text-lg"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-sm font-black text-white tracking-wide truncate">Arc Gold Membership</h3>
+                  <span class="under-construction-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 shrink-0 shadow-sm">
+                    <i class="fa-solid fa-person-digging text-amber-400 animate-pulse text-[11px]"></i> Under Construction
+                  </span>
+                  ${goldActive ? `
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shrink-0">
+                      <i class="fa-solid fa-check"></i> VIP Active
+                    </span>
+                  ` : ''}
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5 truncate">
+                  ProMotion 120Hz engine &amp; VIP tiers • Tap to expand details
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="event.stopPropagation(); window.ArcGold.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-amber-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+                <span>Open</span>
+                <i class="fa-solid fa-chevron-down text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     container.innerHTML = `
-      <div class="glass-card rounded-3xl p-5 sm:p-7 border border-amber-500/40 relative overflow-hidden space-y-6 shadow-[0_0_35px_rgba(245,158,11,0.12)] bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-amber-950/20">
+      <div class="glass-card rounded-3xl p-5 sm:p-7 border border-amber-500/40 relative overflow-hidden space-y-6 shadow-[0_0_35px_rgba(245,158,11,0.12)] bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-amber-950/20 transition-all duration-300">
+        <!-- TOP COLLAPSIBLE TOGGLE BAR -->
+        <div class="flex items-center justify-between gap-3 pb-4 border-b border-amber-500/20 cursor-pointer select-none" onclick="window.ArcGold.toggleBox()" title="Click to collapse">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="under-construction-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-person-digging text-amber-400 animate-pulse text-[11px]"></i> Under Construction
+            </span>
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline">· Tap anywhere on this bar to close</span>
+          </div>
+          <button type="button" onclick="event.stopPropagation(); window.ArcGold.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+            <span>Close</span>
+            <i class="fa-solid fa-chevron-up text-[10px]"></i>
+          </button>
+        </div>
+
+        <!-- UNDER CONSTRUCTION ADVISORY BANNER -->
+        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start sm:items-center gap-3 text-xs text-amber-200">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 border border-amber-500/40">
+            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <span class="font-bold text-amber-300">Under Construction:</span>
+            <span class="text-slate-300 ml-1">Arc Gold and the 120Hz ProMotion Engine are currently under active development. You can preview, test, and activate tiers below.</span>
+          </div>
+        </div>
+
         <!-- AMBIENT GOLD HEADER -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-amber-500/20">
           <div class="flex items-center gap-3.5">
@@ -13906,6 +13993,9 @@ window.ArcGold = (function() {
     scrollToGoldCard,
     updateHeaderBadge,
     runSmoothnessTest,
+    toggleBox,
+    openBox,
+    closeBox,
     render,
     init
   };
