@@ -10133,6 +10133,231 @@ html[data-mode=light] #st-radar-shield-score {
 }
 
 /* ==========================================================================
+   LIGHT MODE: COMFORT & ACCESSIBILITY & SETTINGS CHIPS
+   Fixes dark bar and black-on-black text in #ax-keep (Reverting in 8s bar)
+   ========================================================================== */
+html[data-mode=light] .sx-hr {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #ax-keep {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #ax-keep span,
+html[data-mode=light] #ax-kt {
+    color: #0f172a !important;
+    font-weight: 600 !important;
+}
+html[data-mode=light] .sx-chip {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] .sx-chip:hover {
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #ax-keep .sx-chip,
+html[data-mode=light] button[data-x="keep"] {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3) !important;
+}
+html[data-mode=light] #ax-keep .sx-chip:hover,
+html[data-mode=light] button[data-x="keep"]:hover {
+    background: #0369a1 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: SCREEN TIME HISTORICAL ANALYTICS & COMPARISONS
+   Fixes pitch-dark cards with unreadable black text in Screen Time tab
+   ========================================================================== */
+html[data-mode=light] #st-historical-analytics-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #st-historical-analytics-card .bg-gradient-to-br,
+html[data-mode=light] #st-historical-analytics-card [class*="from-slate-950"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] #st-historical-analytics-card .bg-slate-950,
+html[data-mode=light] #st-historical-analytics-card .bg-slate-950/70,
+html[data-mode=light] #st-historical-analytics-card .bg-slate-950/80 {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-historical-analytics-card .border-slate-800,
+html[data-mode=light] #st-historical-analytics-card .border-slate-800/80 {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-historical-analytics-card h3,
+html[data-mode=light] #st-historical-analytics-card h4 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-historical-analytics-card p {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-weekly-top-app-name {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-weekly-top-app-cat {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-weekly-top-app-time {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard .bg-slate-900 {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard span.text-cyan-300 {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix > div {
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .bg-emerald-950/40 {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-emerald-400 {
+    color: #047857 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .bg-rose-950/40 {
+    background: rgba(244, 63, 94, 0.12) !important;
+    border-color: rgba(244, 63, 94, 0.35) !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-rose-400 {
+    color: #be123c !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-slate-400 {
+    color: #334155 !important;
+}
+html[data-mode=light] #st-historical-analytics-card button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0284c7 !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #st-historical-analytics-card button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box {
+    background: rgba(254, 243, 199, 0.65) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box .text-amber-300 {
+    color: #b45309 !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box p {
+    color: #475569 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: ARC GOLD MEMBERSHIP CARD
+   ========================================================================== */
+html[data-mode=light] #settings-gold-card > div {
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.7) 0%, rgba(255, 255, 255, 0.98) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.08) !important;
+}
+html[data-mode=light] #settings-gold-card h2,
+html[data-mode=light] #settings-gold-card h3,
+html[data-mode=light] #settings-gold-card h4 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-gold-card p,
+html[data-mode=light] #settings-gold-card li span {
+    color: #334155 !important;
+}
+html[data-mode=light] #settings-gold-card .bg-gradient-to-r.from-slate-950/80 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+}
+html[data-mode=light] #settings-gold-card .bg-slate-950/70,
+html[data-mode=light] #settings-gold-card .bg-slate-950/60 {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card .border-slate-800,
+html[data-mode=light] #settings-gold-card .border-slate-800/80 {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #settings-gold-card button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card .gold-plan-card-active {
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.85) 0%, #ffffff 100%) !important;
+    border-color: rgba(245, 158, 11, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2) !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: MODALS (PHONE LINKING & SCREEN TIME SHARING)
+   ========================================================================== */
+html[data-mode=light] #arc-phone-linking-modal > div,
+html[data-mode=light] #arc-screentime-share-modal > div {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16) !important;
+}
+html[data-mode=light] #arc-phone-linking-modal h3,
+html[data-mode=light] #arc-screentime-share-modal h3 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-phone-linking-modal p,
+html[data-mode=light] #arc-screentime-share-modal p {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-share-preview-card {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-share-preview-card .bg-slate-900/80 {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-share-preview-card span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-share-name,
+html[data-mode=light] #st-share-combined-time {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-phone-linking-modal .bg-slate-950/80 {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-phone-linking-modal .bg-slate-900 {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #arc-phone-linking-modal button.bg-slate-800,
+html[data-mode=light] #arc-screentime-share-modal button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* ==========================================================================
    PHONE APPLICATION WIDGETS & ANDROID SIMULATOR STYLES
    ========================================================================== */
 .phone-widget-card {
