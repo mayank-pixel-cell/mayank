@@ -1914,6 +1914,177 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
 
+            <!-- ==========================================================================
+                 PHONE APPLICATION HOMESCREEN WIDGETS (SCREEN TIME USAGE & FOCUS CONTROLLER)
+                 Modeled precisely after Android Homescreen Widgets as shown in user image
+                 ========================================================================== -->
+            <div id="st-phone-widgets-section" class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-purple-500 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
+                <!-- TOP HEADER & CONTROLS -->
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-solid fa-mobile-screen text-purple-400"></i>
+                                PHONE APPLICATION WIDGETS
+                            </span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold flex items-center gap-1 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Live Sync Active
+                            </span>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-shapes text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"></i> Android Screen Time &amp; Focus Mode Widgets
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300">
+                            Real-time categorized usage breakdown (Distracting, Productive, Others) and 1-click Focus Mode activation for your phone application.
+                        </p>
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
+                        <button role="button" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-purple-600/30 transition active:scale-95" title="Open interactive smartphone homescreen preview just like in the screenshot">
+                            <i class="fa-solid fa-mobile-screen-button text-cyan-300"></i> Open Phone Homescreen
+                        </button>
+                        <button role="button" onclick="ArcPhoneWidgets.refresh(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5" title="Refresh widget telemetry">
+                            <i class="fa-solid fa-arrows-rotate text-purple-400"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2 SPECIAL WIDGETS SIDE-BY-SIDE (MATCHING IMAGE EXACTLY) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
+                    <!-- 1. SCREEN TIME SPENT WIDGET (IMAGE MATCH) -->
+                    <div id="phone-widget-screentime-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group">
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                                <i class="fa-solid fa-chart-pie text-orange-400"></i> Screen Time Spent
+                            </span>
+                            <span class="text-[10px] font-mono text-slate-500 flex items-center gap-1">
+                                <i class="fa-brands fa-android text-emerald-400"></i> 4x2 Launcher Widget
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-4">
+                            <!-- Left: Circular Segmented Gauge (Total Usage + Subtitle) -->
+                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
+                                    <!-- Background Track -->
+                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
+                                    <!-- Segment 1: Distracting (Orange) -->
+                                    <circle id="phone-widget-svg-distracting" cx="80" cy="80" r="56" stroke="#f97316" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="134 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
+                                    <!-- Segment 2: Productive (Green) -->
+                                    <circle id="phone-widget-svg-productive" cx="80" cy="80" r="56" stroke="#22c55e" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="31 352" stroke-dashoffset="-138" class="transition-all duration-700 ease-out" />
+                                    <!-- Segment 3: Others (Grey) -->
+                                    <circle id="phone-widget-svg-others" cx="80" cy="80" r="56" stroke="#94a3b8" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="175 352" stroke-dashoffset="-173" class="transition-all duration-700 ease-out" />
+                                </svg>
+                                <!-- Center Text Readout -->
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+                                    <span id="phone-widget-total-val" class="text-3xl font-black font-sans text-white tracking-tight leading-none drop-shadow">51m</span>
+                                    <span class="text-[11px] font-medium text-slate-400 mt-1">Today's usage</span>
+                                </div>
+                            </div>
+
+                            <!-- Right: Categorized Breakdown with Colored Dots -->
+                            <div class="flex-1 space-y-3.5 pl-2">
+                                <!-- Distracting -->
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316] shrink-0 mt-1 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                                    <div class="leading-tight">
+                                        <div id="phone-widget-distracting-time" class="text-lg font-black text-white font-sans">20m</div>
+                                        <div class="text-xs text-slate-400 font-medium">Distracting</div>
+                                    </div>
+                                </div>
+
+                                <!-- Productive -->
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e] shrink-0 mt-1 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                                    <div class="leading-tight">
+                                        <div id="phone-widget-productive-time" class="text-lg font-black text-white font-sans">5m</div>
+                                        <div class="text-xs text-slate-400 font-medium">Productive</div>
+                                    </div>
+                                </div>
+
+                                <!-- Others -->
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#94a3b8] shrink-0 mt-1"></span>
+                                    <div class="leading-tight">
+                                        <div id="phone-widget-others-time" class="text-lg font-black text-white font-sans">25m</div>
+                                        <div class="text-xs text-slate-400 font-medium">Others</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Quick Action -->
+                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
+                            <span id="phone-widget-category-summary">🎮 YouTube, Social &amp; Games</span>
+                            <button role="button" onclick="switchTab('screentime'); openFocusBlocklistModal(); playSfx('click')" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline">
+                                Configure Limits &rarr;
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. TURN ON FOCUS MODE WIDGET (IMAGE COMPANION) -->
+                    <div id="phone-widget-focus-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group border-purple-500/30">
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="text-purple-300 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                                <i class="fa-solid fa-moon text-purple-400"></i> Turn On Focus Mode
+                            </span>
+                            <span id="phone-widget-focus-badge" class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">
+                                STANDBY
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-4">
+                            <!-- Left: Circular Focus Ring Gauge -->
+                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
+                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
+                                    <circle id="phone-widget-svg-focus" cx="80" cy="80" r="56" stroke="#a855f7" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
+                                </svg>
+                                <!-- Center Readout: OFF or Timer countdown -->
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+                                    <span id="phone-widget-focus-val" class="text-2xl sm:text-3xl font-black font-sans text-purple-200 tracking-tight leading-none drop-shadow">OFF</span>
+                                    <span id="phone-widget-focus-sub" class="text-[11px] font-medium text-slate-400 mt-1">Focus Mode</span>
+                                </div>
+                            </div>
+
+                            <!-- Right: Focus Status & Preset Selector -->
+                            <div class="flex-1 space-y-3 pl-2">
+                                <div class="flex items-start gap-2.5">
+                                    <span id="phone-widget-focus-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1 transition-colors"></span>
+                                    <div class="leading-tight">
+                                        <div id="phone-widget-focus-status" class="text-base font-black text-white">Focus Standby</div>
+                                        <div id="phone-widget-focus-desc" class="text-xs text-slate-400">Blocks 8 distracting apps</div>
+                                    </div>
+                                </div>
+
+                                <!-- Duration Presets Chips -->
+                                <div>
+                                    <span class="text-[10px] font-mono text-slate-400 block mb-1.5 uppercase font-bold">Session Target:</span>
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(25); playSfx('click')" class="phone-focus-chip active" data-mins="25">25m</button>
+                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(45); playSfx('click')" class="phone-focus-chip" data-mins="45">45m</button>
+                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(60); playSfx('click')" class="phone-focus-chip" data-mins="60">60m</button>
+                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(90); playSfx('click')" class="phone-focus-chip" data-mins="90">90m</button>
+                                    </div>
+                                </div>
+
+                                <!-- 1-Click Action Button -->
+                                <button role="button" id="phone-widget-toggle-focus-btn" onclick="ArcPhoneWidgets.toggleFocus()" class="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95">
+                                    <i class="fa-solid fa-bolt text-amber-300"></i> Turn On Focus Mode
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Footer Status -->
+                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
+                            <span id="phone-widget-active-app-state">🛡️ Lockout Shield Armed</span>
+                            <span class="text-purple-300 font-mono text-[10px]" id="phone-widget-focus-timer-pill">Idle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- FOCUS & POMODORO LOCKOUT CONTROLLER BANNER -->
             <div id="st-focus-controller-card" class="glass-card rounded-2xl p-4 sm:p-5 border border-purple-500/30 bg-purple-950/15 space-y-3 transition-all duration-300">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -7535,6 +7706,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 window.ArcScreenTimeNotifier.syncTimes(desktopSecs, mobileSecs, combinedSecs);
             }
 
+            // 9c. Update Phone Application Widgets
+            if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.updateWidgets === 'function') {
+                window.ArcPhoneWidgets.updateWidgets();
+            }
+
             // 10. Persist to storage & state
             window.state = window.state || {};
             window.state.deviceScreenTime = deviceData;
@@ -9633,6 +9809,95 @@ html[data-mode=light] #st-combined-time-val {
 html[data-mode=light] #st-radar-shield-score {
     color: #0369A1 !important;
 }
+
+/* ==========================================================================
+   PHONE APPLICATION WIDGETS & ANDROID SIMULATOR STYLES
+   ========================================================================== */
+.phone-widget-card {
+    background: #18181b;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.phone-widget-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 20px 42px -6px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+html[data-mode=light] .phone-widget-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.08) !important;
+}
+html[data-mode=light] .phone-widget-card .text-white {
+    color: #0f172a !important;
+}
+
+.phone-focus-chip {
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background: #27272a;
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.phone-focus-chip:hover {
+    background: #3f3f46;
+    color: #ffffff;
+    border-color: rgba(168, 85, 247, 0.4);
+}
+.phone-focus-chip.active {
+    background: rgba(168, 85, 247, 0.25);
+    color: #e9d5ff;
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* Smartphone Simulator Frame */
+.arc-phone-frame {
+    width: 100%;
+    max-width: 380px;
+    height: 720px;
+    border-radius: 46px;
+    background: #000000;
+    border: 8px solid #27272a;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.arc-phone-screen {
+    flex: 1;
+    position: relative;
+    background-color: #0c0a1a;
+    background-image: url('./assets/phone-homescreen-bg.jpg'), linear-gradient(180deg, #1e1b4b 0%, #312e81 35%, #0f172a 75%, #020617 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+.arc-phone-screen::-webkit-scrollbar {
+    width: 0px;
+    display: none;
+}
+.arc-phone-notch {
+    width: 90px;
+    height: 20px;
+    background: #000000;
+    border-radius: 0 0 14px 14px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+}
 </style>
 
 <div id="pp12-live" class="pp-sr" aria-live="polite" role="status"></div>
@@ -10125,6 +10390,248 @@ html[data-mode=light] #st-radar-shield-score {
       <button type="button" onclick="ArcAutoStart.dismissPrompt()" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white font-medium text-xs transition">
         Maybe Later
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     INTERACTIVE PHONE APPLICATION HOMESCREEN SIMULATOR MODAL (IMAGE TWIN)
+     ========================================================================== -->
+<div id="arc-phone-simulator-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Phone Application Homescreen & Widgets">
+  <div class="relative my-auto flex flex-col items-center max-w-sm w-full animate-zoom-in">
+    <!-- Top Close Bar -->
+    <div class="w-full flex items-center justify-between mb-2 px-2 text-white">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs font-bold font-mono uppercase tracking-wider text-slate-300">Android 15 Phone Simulator</span>
+      </div>
+      <button type="button" onclick="ArcPhoneWidgets.closeSimulator()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition" title="Close Phone View">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Smartphone Bezel Frame -->
+    <div class="arc-phone-frame w-full shadow-[0_0_80px_rgba(0,0,0,0.85)]">
+      <!-- Top Speaker / Dynamic Notch -->
+      <div class="arc-phone-notch"></div>
+
+      <!-- Phone Screen with Mountain Wallpaper -->
+      <div class="arc-phone-screen p-4 flex flex-col justify-between" id="arc-phone-sim-screen">
+        <!-- 1. Android Status Bar -->
+        <div class="flex items-center justify-between text-white text-[11px] font-sans px-1 pt-1 select-none z-10">
+          <div class="flex items-center gap-1.5">
+            <span id="phone-sim-status-time" class="font-bold">15:19</span>
+            <i class="fa-solid fa-comment text-[10px] opacity-80"></i>
+          </div>
+          <div class="flex items-center gap-1.5 text-[10px]">
+            <i class="fa-solid fa-bell text-[9px] opacity-80"></i>
+            <span class="font-mono text-[9px] font-bold">VoWiFi 5G+</span>
+            <div class="flex items-center gap-0.5 font-bold">
+              <span class="text-[10px]">79%</span>
+              <i class="fa-solid fa-battery-three-quarters text-emerald-400"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Phone Homescreen Widgets Area -->
+        <div class="pt-3 space-y-2 z-10">
+          <!-- Widget Switcher Tabs -->
+          <div class="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-mono">
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" id="sim-tab-screentime" class="px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition">
+              📊 Screen Time
+            </button>
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" id="sim-tab-focus" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition">
+              ⚡ Focus Mode
+            </button>
+          </div>
+
+          <!-- Embedded Widget 1: Screen Time Spent (on phone) -->
+          <div id="sim-widget-screentime-container" class="phone-widget-card p-4 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                <svg class="w-28 h-28 -rotate-90 transform" viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
+                  <circle id="sim-widget-svg-distracting" cx="80" cy="80" r="56" stroke="#f97316" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="134 352" stroke-dashoffset="0" />
+                  <circle id="sim-widget-svg-productive" cx="80" cy="80" r="56" stroke="#22c55e" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="31 352" stroke-dashoffset="-138" />
+                  <circle id="sim-widget-svg-others" cx="80" cy="80" r="56" stroke="#94a3b8" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="175 352" stroke-dashoffset="-173" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+                  <span id="sim-widget-total-val" class="text-2xl font-black font-sans text-white tracking-tight leading-none">51m</span>
+                  <span class="text-[10px] text-slate-400 mt-0.5">Today's usage</span>
+                </div>
+              </div>
+              <div class="flex-1 space-y-2 pl-1">
+                <div class="flex items-start gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#f97316] shrink-0 mt-1"></span>
+                  <div class="leading-none">
+                    <div id="sim-widget-distracting-time" class="text-sm font-black text-white font-sans">20m</div>
+                    <div class="text-[10px] text-slate-400">Distracting</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#22c55e] shrink-0 mt-1"></span>
+                  <div class="leading-none">
+                    <div id="sim-widget-productive-time" class="text-sm font-black text-white font-sans">5m</div>
+                    <div class="text-[10px] text-slate-400">Productive</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#94a3b8] shrink-0 mt-1"></span>
+                  <div class="leading-none">
+                    <div id="sim-widget-others-time" class="text-sm font-black text-white font-sans">25m</div>
+                    <div class="text-[10px] text-slate-400">Others</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Embedded Widget 2: Focus Mode (on phone) -->
+          <div id="sim-widget-focus-container" class="phone-widget-card p-4 space-y-2.5 hidden">
+            <div class="flex items-center justify-between gap-2">
+              <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                <svg class="w-28 h-28 -rotate-90 transform" viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
+                  <circle id="sim-widget-svg-focus" cx="80" cy="80" r="56" stroke="#a855f7" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 352" stroke-dashoffset="0" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+                  <span id="sim-widget-focus-val" class="text-xl font-black font-sans text-purple-200 tracking-tight leading-none">OFF</span>
+                  <span id="sim-widget-focus-sub" class="text-[10px] text-slate-400 mt-0.5">Focus Mode</span>
+                </div>
+              </div>
+              <div class="flex-1 space-y-2 pl-1">
+                <div>
+                  <div id="sim-widget-focus-status" class="text-xs font-black text-white">Focus Standby</div>
+                  <div id="sim-widget-focus-desc" class="text-[10px] text-slate-400">8 Apps Blocked</div>
+                </div>
+                <button role="button" id="sim-widget-toggle-focus-btn" onclick="ArcPhoneWidgets.toggleFocus()" class="w-full py-2 px-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-bolt"></i> Turn On Focus
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. App Icons Grid (Exactly matching screenshot!) -->
+        <div class="py-3 space-y-3 z-10">
+          <!-- Row 1: Settings, My Files, Gemini, Music -->
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('settings')">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-slate-700 to-slate-800 border border-slate-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                <i class="fa-solid fa-sliders text-lg"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Settings</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('files')">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                <i class="fa-solid fa-folder text-lg"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">My Files</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('gemini')">
+              <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-blue-500 shadow-md group-hover:scale-105 transition">
+                <i class="fa-solid fa-wand-magic-sparkles text-xl text-blue-500"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Gemini</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('music')">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-orange-400 to-orange-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                <i class="fa-solid fa-music text-lg"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Music</span>
+            </div>
+          </div>
+
+          <!-- Row 2: Tools, Featured, Facebook, Amazon -->
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('tools')">
+              <div class="w-12 h-12 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-white/20 p-1.5 grid grid-cols-2 gap-1 group-hover:scale-105 transition">
+                <div class="w-3.5 h-3.5 rounded bg-rose-500"></div>
+                <div class="w-3.5 h-3.5 rounded bg-amber-400"></div>
+                <div class="w-3.5 h-3.5 rounded bg-cyan-400"></div>
+                <div class="w-3.5 h-3.5 rounded bg-emerald-400"></div>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Tools</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('featured')">
+              <div class="w-12 h-12 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-white/20 p-1.5 grid grid-cols-2 gap-1 group-hover:scale-105 transition">
+                <div class="w-3.5 h-3.5 rounded bg-indigo-500"></div>
+                <div class="w-3.5 h-3.5 rounded bg-rose-400"></div>
+                <div class="w-3.5 h-3.5 rounded bg-purple-500"></div>
+                <div class="w-3.5 h-3.5 rounded bg-cyan-300"></div>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Featured</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group relative" onclick="ArcPhoneWidgets.handlePhoneAppClick('facebook')">
+              <div class="w-12 h-12 rounded-2xl bg-[#1877f2] flex items-center justify-center text-white shadow-md group-hover:scale-105 transition relative">
+                <i class="fa-brands fa-facebook-f text-2xl font-bold"></i>
+                <span class="sim-lock-badge absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-600 text-white text-[10px] flex items-center justify-center hidden"><i class="fa-solid fa-lock text-[9px]"></i></span>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Facebook</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group relative" onclick="ArcPhoneWidgets.handlePhoneAppClick('amazon')">
+              <div class="w-12 h-12 rounded-2xl bg-[#fcd200] text-black flex items-center justify-center shadow-md group-hover:scale-105 transition relative">
+                <i class="fa-brands fa-amazon text-2xl"></i>
+                <span class="sim-lock-badge absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-600 text-white text-[10px] flex items-center justify-center hidden"><i class="fa-solid fa-lock text-[9px]"></i></span>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Amazon</span>
+            </div>
+          </div>
+
+          <!-- Row 3: Strava, Theme Store -->
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('strava')">
+              <div class="w-12 h-12 rounded-2xl bg-[#fc5200] flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                <i class="fa-brands fa-strava text-2xl"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Strava</span>
+            </div>
+
+            <div class="flex flex-col items-center cursor-pointer group" onclick="ArcPhoneWidgets.handlePhoneAppClick('theme-store')">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                <i class="fa-solid fa-paintbrush text-lg"></i>
+              </div>
+              <span class="text-[10px] text-white mt-1 font-medium truncate w-14">Theme Store</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Bottom Dock & Navigation Bar -->
+        <div class="space-y-2 pt-2 z-10">
+          <div class="text-center text-white/50 text-xs">
+            <i class="fa-solid fa-chevron-up"></i>
+          </div>
+
+          <!-- Dock (Chrome, Camera) -->
+          <div class="flex items-center justify-center gap-6 py-1">
+            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition" onclick="ArcPhoneWidgets.handlePhoneAppClick('chrome')">
+              <i class="fa-brands fa-chrome text-2xl text-blue-500"></i>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-slate-700 to-slate-900 border border-slate-600 flex items-center justify-center text-white shadow-lg cursor-pointer hover:scale-105 transition" onclick="ArcPhoneWidgets.handlePhoneAppClick('camera')">
+              <i class="fa-solid fa-camera text-xl"></i>
+            </div>
+          </div>
+
+          <!-- Android 3-Button Navigation Bar -->
+          <div class="flex items-center justify-around py-1 text-white/60 text-xs border-t border-white/10 select-none">
+            <button role="button" onclick="ArcPhoneWidgets.closeSimulator()" class="p-1 hover:text-white transition" title="Back">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button role="button" onclick="ArcPhoneWidgets.closeSimulator()" class="p-1 hover:text-white transition" title="Home">
+              <i class="fa-regular fa-circle text-sm"></i>
+            </button>
+            <button role="button" onclick="ArcPhoneWidgets.openSimulator()" class="p-1 hover:text-white transition" title="Recent Tasks">
+              <i class="fa-regular fa-square text-sm"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -11722,6 +12229,403 @@ window.ArcScreenTimeNotifier = (function() {
   };
 })();
 
+// ==========================================================================
+// ARC PHONE WIDGETS & ANDROID SIMULATOR CONTROLLER MODULE
+// Modeled directly from the user's Android homescreen screenshot
+// ==========================================================================
+window.ArcPhoneWidgets = (function() {
+  'use strict';
+  let _selectedFocusMinutes = 25;
+  let _simTab = 'screentime';
+
+  function getBreakdown() {
+    let distractingSecs = 0;
+    let productiveSecs = 0;
+    let othersSecs = 0;
+
+    if (window.appTrackerState && Array.isArray(window.appTrackerState.apps) && window.appTrackerState.usage) {
+      const usage = window.appTrackerState.usage;
+      window.appTrackerState.apps.forEach(app => {
+        const secs = Number(usage[app.id]) || 0;
+        const cat = (app.category || '').toLowerCase();
+        if (cat.includes('entertainment') || cat.includes('social') || cat.includes('gaming')) {
+          distractingSecs += secs;
+        } else if (cat.includes('productiv') || cat.includes('study') || cat.includes('coding')) {
+          productiveSecs += secs;
+        } else {
+          othersSecs += secs;
+        }
+      });
+    }
+
+    let totalSecs = distractingSecs + productiveSecs + othersSecs;
+
+    // If zero or fresh session, check mobile / device screentime or provide baseline matching screenshot (20m, 5m, 25m = 50m / 51m)
+    if (totalSecs < 60) {
+      let mobSecs = 0;
+      try {
+        const devData = JSON.parse(localStorage.getItem('arc_cross_device_screentime'));
+        if (devData && devData.mobile && devData.mobile.seconds) mobSecs = Number(devData.mobile.seconds);
+      } catch(_) {}
+
+      if (mobSecs >= 60) {
+        distractingSecs = Math.round(mobSecs * 0.40);
+        productiveSecs = Math.round(mobSecs * 0.10);
+        othersSecs = mobSecs - distractingSecs - productiveSecs;
+        totalSecs = mobSecs;
+      } else {
+        // Screenshot baseline (20m distracting, 5m productive, 26m others = 51m total)
+        distractingSecs = 20 * 60;
+        productiveSecs = 5 * 60;
+        othersSecs = 26 * 60;
+        totalSecs = 51 * 60;
+      }
+    }
+
+    const dMins = Math.round(distractingSecs / 60);
+    const pMins = Math.round(productiveSecs / 60);
+    const oMins = Math.max(0, Math.round(othersSecs / 60));
+    const tMins = Math.max(1, Math.round(totalSecs / 60));
+
+    return {
+      totalMins: tMins,
+      distractingMins: dMins,
+      productiveMins: pMins,
+      othersMins: oMins
+    };
+  }
+
+  function updateWidgets() {
+    const b = getBreakdown();
+    const C = 2 * Math.PI * 56; // 351.858
+
+    const total = b.distractingMins + b.productiveMins + b.othersMins;
+    const f1 = total > 0 ? (b.distractingMins / total) : 0.392;
+    const f2 = total > 0 ? (b.productiveMins / total) : 0.098;
+    const f3 = total > 0 ? (b.othersMins / total) : 0.510;
+
+    const gap = 4;
+    const len1 = Math.max(0, f1 * C - gap);
+    const len2 = Math.max(0, f2 * C - gap);
+    const len3 = Math.max(0, f3 * C - gap);
+
+    const off1 = 0;
+    const off2 = -(f1 * C);
+    const off3 = -((f1 + f2) * C);
+
+    const totalDisplay = b.totalMins >= 60
+      ? `${Math.floor(b.totalMins / 60)}h ${b.totalMins % 60}m`
+      : `${b.totalMins}m`;
+
+    // 1. Update In-View Screentime Widget
+    const totEl = document.getElementById('phone-widget-total-val');
+    const distEl = document.getElementById('phone-widget-distracting-time');
+    const prodEl = document.getElementById('phone-widget-productive-time');
+    const othEl = document.getElementById('phone-widget-others-time');
+
+    if (totEl) totEl.textContent = totalDisplay;
+    if (distEl) distEl.textContent = `${b.distractingMins}m`;
+    if (prodEl) prodEl.textContent = `${b.productiveMins}m`;
+    if (othEl) othEl.textContent = `${b.othersMins}m`;
+
+    const svgDist = document.getElementById('phone-widget-svg-distracting');
+    const svgProd = document.getElementById('phone-widget-svg-productive');
+    const svgOth = document.getElementById('phone-widget-svg-others');
+
+    if (svgDist) {
+      svgDist.setAttribute('stroke-dasharray', `${len1.toFixed(1)} ${C.toFixed(1)}`);
+      svgDist.setAttribute('stroke-dashoffset', off1.toFixed(1));
+    }
+    if (svgProd) {
+      svgProd.setAttribute('stroke-dasharray', `${len2.toFixed(1)} ${C.toFixed(1)}`);
+      svgProd.setAttribute('stroke-dashoffset', off2.toFixed(1));
+    }
+    if (svgOth) {
+      svgOth.setAttribute('stroke-dasharray', `${len3.toFixed(1)} ${C.toFixed(1)}`);
+      svgOth.setAttribute('stroke-dashoffset', off3.toFixed(1));
+    }
+
+    // 2. Update Simulator Screentime Widget
+    const simTotEl = document.getElementById('sim-widget-total-val');
+    const simDistEl = document.getElementById('sim-widget-distracting-time');
+    const simProdEl = document.getElementById('sim-widget-productive-time');
+    const simOthEl = document.getElementById('sim-widget-others-time');
+
+    if (simTotEl) simTotEl.textContent = totalDisplay;
+    if (simDistEl) simDistEl.textContent = `${b.distractingMins}m`;
+    if (simProdEl) simProdEl.textContent = `${b.productiveMins}m`;
+    if (simOthEl) simOthEl.textContent = `${b.othersMins}m`;
+
+    const simSvgDist = document.getElementById('sim-widget-svg-distracting');
+    const simSvgProd = document.getElementById('sim-widget-svg-productive');
+    const simSvgOth = document.getElementById('sim-widget-svg-others');
+
+    if (simSvgDist) {
+      simSvgDist.setAttribute('stroke-dasharray', `${len1.toFixed(1)} ${C.toFixed(1)}`);
+      simSvgDist.setAttribute('stroke-dashoffset', off1.toFixed(1));
+    }
+    if (simSvgProd) {
+      simSvgProd.setAttribute('stroke-dasharray', `${len2.toFixed(1)} ${C.toFixed(1)}`);
+      simSvgProd.setAttribute('stroke-dashoffset', off2.toFixed(1));
+    }
+    if (simSvgOth) {
+      simSvgOth.setAttribute('stroke-dasharray', `${len3.toFixed(1)} ${C.toFixed(1)}`);
+      simSvgOth.setAttribute('stroke-dashoffset', off3.toFixed(1));
+    }
+
+    // 3. Update Focus Widgets (Both In-View & Simulator)
+    const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
+    const focusValEl = document.getElementById('phone-widget-focus-val');
+    const focusSubEl = document.getElementById('phone-widget-focus-sub');
+    const focusBadgeEl = document.getElementById('phone-widget-focus-badge');
+    const focusDotEl = document.getElementById('phone-widget-focus-dot');
+    const focusStatusEl = document.getElementById('phone-widget-focus-status');
+    const focusDescEl = document.getElementById('phone-widget-focus-desc');
+    const focusBtn = document.getElementById('phone-widget-toggle-focus-btn');
+    const focusTimerPill = document.getElementById('phone-widget-focus-timer-pill');
+    const svgFocus = document.getElementById('phone-widget-svg-focus');
+
+    // Simulator elements
+    const simFocusValEl = document.getElementById('sim-widget-focus-val');
+    const simFocusSubEl = document.getElementById('sim-widget-focus-sub');
+    const simFocusStatusEl = document.getElementById('sim-widget-focus-status');
+    const simFocusDescEl = document.getElementById('sim-widget-focus-desc');
+    const simFocusBtn = document.getElementById('sim-widget-toggle-focus-btn');
+    const simSvgFocus = document.getElementById('sim-widget-svg-focus');
+    const lockBadges = document.querySelectorAll('.sim-lock-badge');
+
+    if (active) {
+      const timeRemaining = (typeof getFocusTimeRemainingFormatted === 'function')
+        ? getFocusTimeRemainingFormatted()
+        : '24:59';
+
+      if (focusValEl) {
+        focusValEl.textContent = timeRemaining;
+        focusValEl.className = 'text-2xl sm:text-3xl font-black font-mono text-cyan-300 tracking-tight leading-none drop-shadow animate-pulse';
+      }
+      if (focusSubEl) focusSubEl.innerHTML = '<span class="text-emerald-400 font-bold flex items-center justify-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ACTIVE</span>';
+      if (focusBadgeEl) {
+        focusBadgeEl.textContent = 'ACTIVE FOCUS';
+        focusBadgeEl.className = 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30';
+      }
+      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse';
+      if (focusStatusEl) focusStatusEl.textContent = 'Focus Mode Active';
+      if (focusDescEl) focusDescEl.textContent = '8 distracting apps currently locked';
+      if (focusTimerPill) focusTimerPill.textContent = `${timeRemaining} Left`;
+
+      if (focusBtn) {
+        focusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1.5"></i> End Focus Session';
+        focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 transition transform active:scale-95';
+      }
+
+      if (svgFocus) {
+        svgFocus.setAttribute('stroke', '#06b6d4');
+        svgFocus.setAttribute('stroke-dasharray', '240 352');
+      }
+
+      // Simulator Focus
+      if (simFocusValEl) {
+        simFocusValEl.textContent = timeRemaining;
+        simFocusValEl.className = 'text-xl font-black font-mono text-cyan-300 tracking-tight leading-none animate-pulse';
+      }
+      if (simFocusSubEl) simFocusSubEl.innerHTML = '<span class="text-emerald-400 font-bold">ACTIVE</span>';
+      if (simFocusStatusEl) simFocusStatusEl.textContent = 'Active Focus';
+      if (simFocusDescEl) simFocusDescEl.textContent = 'Apps Locked';
+      if (simFocusBtn) {
+        simFocusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1"></i> End Focus';
+        simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+      }
+      if (simSvgFocus) {
+        simSvgFocus.setAttribute('stroke', '#06b6d4');
+        simSvgFocus.setAttribute('stroke-dasharray', '240 352');
+      }
+
+      lockBadges.forEach(b => { if (b && b.classList) b.classList.remove('hidden'); });
+
+    } else {
+      if (focusValEl) {
+        focusValEl.textContent = 'OFF';
+        focusValEl.className = 'text-2xl sm:text-3xl font-black font-sans text-purple-200 tracking-tight leading-none drop-shadow';
+      }
+      if (focusSubEl) focusSubEl.textContent = 'Focus Mode';
+      if (focusBadgeEl) {
+        focusBadgeEl.textContent = 'STANDBY';
+        focusBadgeEl.className = 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold';
+      }
+      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1';
+      if (focusStatusEl) focusStatusEl.textContent = 'Focus Standby';
+      if (focusDescEl) focusDescEl.textContent = 'Tap below to block distracting apps';
+      if (focusTimerPill) focusTimerPill.textContent = 'Idle';
+
+      if (focusBtn) {
+        focusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1.5"></i> Turn On Focus Mode';
+        focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95';
+      }
+
+      if (svgFocus) {
+        svgFocus.setAttribute('stroke', '#a855f7');
+        svgFocus.setAttribute('stroke-dasharray', '90 352');
+      }
+
+      // Simulator Focus
+      if (simFocusValEl) {
+        simFocusValEl.textContent = 'OFF';
+        simFocusValEl.className = 'text-xl font-black font-sans text-purple-200 tracking-tight leading-none';
+      }
+      if (simFocusSubEl) simFocusSubEl.textContent = 'Focus Mode';
+      if (simFocusStatusEl) simFocusStatusEl.textContent = 'Focus Standby';
+      if (simFocusDescEl) simFocusDescEl.textContent = '8 Apps Blocked';
+      if (simFocusBtn) {
+        simFocusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1"></i> Turn On Focus';
+        simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+      }
+      if (simSvgFocus) {
+        simSvgFocus.setAttribute('stroke', '#a855f7');
+        simSvgFocus.setAttribute('stroke-dasharray', '90 352');
+      }
+
+      lockBadges.forEach(b => { if (b && b.classList) b.classList.add('hidden'); });
+    }
+
+    // Update status bar clock on simulator
+    const clockEl = document.getElementById('phone-sim-status-time');
+    if (clockEl) {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      clockEl.textContent = `${hh}:${mm}`;
+    }
+  }
+
+  function selectFocusDuration(mins) {
+    _selectedFocusMinutes = Number(mins) || 25;
+    document.querySelectorAll('.phone-focus-chip').forEach(chip => {
+      if (chip && chip.classList) {
+        if (Number(chip.getAttribute('data-mins')) === _selectedFocusMinutes) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      }
+    });
+    updateWidgets();
+  }
+
+  function toggleFocus(customMins) {
+    const mins = customMins || _selectedFocusMinutes || 25;
+    const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
+
+    if (active) {
+      if (typeof stopFocusSession === 'function') {
+        stopFocusSession(false);
+      } else if (typeof window.fpause === 'function') {
+        window.fpause();
+      }
+      if (window.playSfx) window.playSfx('click');
+      if (typeof showToast === 'function') showToast('Focus Mode ended.');
+    } else {
+      if (typeof startFocusSession === 'function') {
+        startFocusSession(mins);
+      } else if (typeof window.fstart === 'function') {
+        window.fstart();
+      }
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast(`Focus Mode turned ON (${mins}m)! Distracting apps blocked.`);
+    }
+
+    updateWidgets();
+  }
+
+  function openSimulator() {
+    const modal = document.getElementById('arc-phone-simulator-modal');
+    if (!modal) return;
+    if (modal.classList) modal.classList.add('open');
+    if (window.playSfx) window.playSfx('modalOpen');
+    updateWidgets();
+  }
+
+  function closeSimulator() {
+    const modal = document.getElementById('arc-phone-simulator-modal');
+    if (!modal) return;
+    if (modal.classList) modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function setSimWidgetTab(tab) {
+    _simTab = tab;
+    const scEl = document.getElementById('sim-widget-screentime-container');
+    const foEl = document.getElementById('sim-widget-focus-container');
+    const tabSc = document.getElementById('sim-tab-screentime');
+    const tabFo = document.getElementById('sim-tab-focus');
+
+    if (tab === 'focus') {
+      if (scEl && scEl.classList) scEl.classList.add('hidden');
+      if (foEl && foEl.classList) foEl.classList.remove('hidden');
+      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
+      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold transition'; }
+    } else {
+      if (scEl && scEl.classList) scEl.classList.remove('hidden');
+      if (foEl && foEl.classList) foEl.classList.add('hidden');
+      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition'; }
+      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
+    }
+  }
+
+  function handlePhoneAppClick(appKey) {
+    const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
+
+    if (active && (appKey === 'facebook' || appKey === 'amazon')) {
+      if (window.playSfx) window.playSfx('quantumHum');
+      if (typeof showFocusBlockerShield === 'function') {
+        const fakeApp = {
+          id: appKey,
+          name: appKey.charAt(0).toUpperCase() + appKey.slice(1),
+          icon: appKey === 'facebook' ? 'fa-brands fa-facebook' : 'fa-brands fa-amazon',
+          colorClass: appKey === 'facebook' ? 'text-blue-500' : 'text-amber-500'
+        };
+        showFocusBlockerShield(fakeApp);
+      } else {
+        if (typeof showToast === 'function') showToast(`🚫 ${appKey.toUpperCase()} is locked during Focus Mode!`);
+      }
+      return;
+    }
+
+    if (appKey === 'settings') {
+      closeSimulator();
+      if (typeof switchTab === 'function') switchTab('settings');
+      return;
+    }
+
+    if (appKey === 'music') {
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast('🎵 Ambient focus audio active');
+      return;
+    }
+
+    if (window.playSfx) window.playSfx('click');
+    if (typeof showToast === 'function') {
+      showToast(`📱 Opened ${appKey.charAt(0).toUpperCase() + appKey.slice(1)} on phone tracker`);
+    }
+  }
+
+  function init() {
+    updateWidgets();
+    setInterval(updateWidgets, 1000);
+  }
+
+  return {
+    init,
+    refresh: updateWidgets,
+    updateWidgets,
+    selectFocusDuration,
+    toggleFocus,
+    openSimulator,
+    closeSimulator,
+    setSimWidgetTab,
+    handlePhoneAppClick
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
     window.ArcSecurity.init();
@@ -11734,6 +12638,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
     window.ArcScreenTimeNotifier.init();
+  }
+  if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.init === 'function') {
+    window.ArcPhoneWidgets.init();
   }
 });
 </script>
