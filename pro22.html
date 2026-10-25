@@ -12405,6 +12405,9 @@ window.ArcProfile = (function() {
 
   function onLoginSuccess(authUser) {
     if (!authUser) return;
+    if (window.ArcGold && typeof window.ArcGold.claimFirstMonthTrial === 'function') {
+      window.ArcGold.claimFirstMonthTrial(authUser);
+    }
     const current = getProfile();
     const updated = {
       ...current,
@@ -13370,6 +13373,25 @@ window.ArcPhoneWidgets = (function() {
 window.ArcGold = (function() {
   const STORAGE_KEY = 'arc_gold_membership';
   const PLANS = {
+    trial: {
+      id: 'trial',
+      name: '30-Day Free First Month Pass',
+      price: 0,
+      period: 'trial',
+      symbol: '₹',
+      displayPrice: 'FREE',
+      periodText: 'first month',
+      badge: '🎁 30-DAY FREE TRIAL',
+      badgeColor: 'bg-gradient-to-r from-emerald-500/20 to-teal-500/30 text-emerald-300 border-emerald-400/50',
+      desc: 'Automatic first-month perk upon login. Includes full 120Hz ProMotion & Custom Wallpaper.',
+      features: [
+        '120Hz Ultra-Smooth ProMotion',
+        'Custom Photo Wallpaper Background',
+        'Uncapped Max Frame Rate Engine',
+        'VIP Gold Crown Profile Badge',
+        'Automatic 3-Day Expiry Notification'
+      ]
+    },
     monthly: {
       id: 'monthly',
       name: 'Monthly Pass',
@@ -13461,6 +13483,101 @@ window.ArcGold = (function() {
   function is120HzEnabled() {
     const s = getState();
     return !!(s.isGold && s.maxHzEnabled);
+  }
+
+  function getExpiryNotice() {
+    const state = getState();
+    if (!state.isGold || !state.expiresAt || state.plan === 'lifetime') return null;
+    const now = Date.now();
+    const diffMs = state.expiresAt - now;
+    if (diffMs <= 0) return { expired: true, daysLeft: 0, hoursLeft: 0, isTrial: !!state.isTrial };
+    const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+    if (diffMs <= THREE_DAYS_MS) {
+      const daysLeft = Math.max(1, Math.ceil(diffMs / (24 * 60 * 60 * 1000)));
+      const hoursLeft = Math.max(1, Math.ceil(diffMs / (60 * 60 * 1000)));
+      return {
+        urgent: true,
+        daysLeft: daysLeft,
+        hoursLeft: hoursLeft,
+        isTrial: !!state.isTrial,
+        expiresAt: state.expiresAt
+      };
+    }
+    return null;
+  }
+
+  function checkExpiryNotification(suppressDuplicateToday = true) {
+    const notice = getExpiryNotice();
+    if (!notice || !notice.urgent) return;
+    const todayKey = new Date().toISOString().split('T')[0];
+    const NOTIF_KEY = 'arc_gold_expiry_last_notified';
+    const lastNotified = localStorage.getItem(NOTIF_KEY);
+    if (!suppressDuplicateToday || lastNotified !== todayKey) {
+      localStorage.setItem(NOTIF_KEY, todayKey);
+      const daysText = notice.daysLeft === 1 ? 'tomorrow' : ('in ' + notice.daysLeft + ' days');
+      const typeText = notice.isTrial ? 'Free First Month Arc Gold Trial' : 'Arc Gold Membership';
+      const msg = '⚠️ Heads up: Your ' + typeText + ' ends ' + daysText + '! Renew to keep 120Hz & Custom Wallpaper.';
+      setTimeout(() => {
+        if (typeof showToast === 'function') showToast(msg);
+      }, 1800);
+    }
+  }
+
+  function claimFirstMonthTrial(user, isSilent = false) {
+    const current = getState();
+    if (current.isGold && (current.plan === 'lifetime' || current.plan === 'annual')) {
+      return false;
+    }
+    const email = (user && user.email) ? user.email.toLowerCase().trim() : 'active_user';
+    const TRIAL_CLAIM_KEY = 'arc_gold_trial_granted_' + email;
+    const GLOBAL_TRIAL_CLAIM_KEY = 'arc_gold_first_month_claimed';
+
+    if (localStorage.getItem(TRIAL_CLAIM_KEY) === 'true' || localStorage.getItem(GLOBAL_TRIAL_CLAIM_KEY) === 'true') {
+      return false;
+    }
+
+    const now = Date.now();
+    const expiresAt = now + (30 * 24 * 60 * 60 * 1000); // 30 days = 1 month free
+
+    const trialState = {
+      isGold: true,
+      plan: 'trial',
+      isTrial: true,
+      trialUser: email,
+      planName: '30-Day Free First Month Pass',
+      price: 0,
+      period: 'trial',
+      currency: 'INR',
+      symbol: '₹',
+      activatedAt: now,
+      expiresAt: expiresAt,
+      maxHzEnabled: true,
+      orderId: 'ARC-FREE-TRIAL-' + Math.random().toString(36).substring(2, 9).toUpperCase()
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trialState));
+    localStorage.setItem(TRIAL_CLAIM_KEY, 'true');
+    localStorage.setItem(GLOBAL_TRIAL_CLAIM_KEY, 'true');
+
+    applyRefreshRate();
+    render();
+    updateHeaderBadge();
+
+    if (window.ArcHardwareGatekeeper && typeof window.ArcHardwareGatekeeper.renderSettingsCard === 'function') {
+      window.ArcHardwareGatekeeper.renderSettingsCard();
+    }
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
+      window.ArcCustomBackground.apply();
+      window.ArcCustomBackground.renderCard();
+    }
+
+    if (!isSilent) {
+      if (typeof playSfx === 'function') playSfx('victory');
+      if (typeof showToast === 'function') {
+        showToast('🎁 Welcome! Your 30-Day Free Arc Gold VIP trial has been automatically activated!');
+      }
+    }
+    return true;
   }
 
   function activatePlan(planId) {
@@ -13620,17 +13737,24 @@ window.ArcGold = (function() {
   function updateHeaderBadge() {
     let badge = document.getElementById('arc-gold-header-vip');
     if (isGold()) {
+      const notice = getExpiryNotice();
+      const isUrgent = notice && notice.urgent;
+      const label = isUrgent
+        ? ('<i class="fa-solid fa-crown text-amber-400 text-xs animate-pulse"></i> ARC GOLD <span class="text-amber-200 text-[9px] bg-red-500/40 px-1.5 py-0.2 rounded border border-red-400/50">' + notice.daysLeft + 'd left</span>')
+        : '<i class="fa-solid fa-crown text-amber-400 text-xs animate-pulse"></i> ARC GOLD';
+
       if (!badge) {
         const nav = document.querySelector('header .flex.items-center.gap-2') || document.querySelector('header');
         if (nav) {
           badge = document.createElement('span');
           badge.id = 'arc-gold-header-vip';
           badge.className = 'hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-amber-500/20 via-yellow-500/30 to-amber-500/20 text-amber-300 border border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.25)]';
-          badge.innerHTML = '<i class="fa-solid fa-crown text-amber-400 text-xs animate-pulse"></i> ARC GOLD';
+          badge.innerHTML = label;
           nav.appendChild(badge);
         }
       } else {
         badge.style.display = '';
+        badge.innerHTML = label;
       }
     } else if (badge) {
       badge.style.display = 'none';
@@ -13705,8 +13829,15 @@ window.ArcGold = (function() {
                   </span>
                   ${goldActive ? `
                     <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shrink-0">
-                      <i class="fa-solid fa-check"></i> VIP Active
+                      <i class="fa-solid fa-check"></i> ${state.isTrial ? 'Free Trial Active' : 'VIP Active'}
                     </span>
+                    ${(function() {
+                      const n = getExpiryNotice();
+                      if (n && n.urgent) {
+                        return '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-red-500/25 text-red-300 border border-red-500/50 flex items-center gap-1 shrink-0 animate-pulse"><i class="fa-solid fa-clock"></i> Ends in ' + n.daysLeft + 'd</span>';
+                      }
+                      return '';
+                    })()}
                   ` : ''}
                 </div>
                 <p class="text-[11px] text-slate-400 mt-0.5 truncate">
@@ -13741,6 +13872,39 @@ window.ArcGold = (function() {
             <i class="fa-solid fa-chevron-up text-[10px]"></i>
           </button>
         </div>
+
+        <!-- 3-DAY EXPIRY URGENT NOTIFICATION BANNER -->
+        ${(function() {
+          const notice = getExpiryNotice();
+          if (notice && notice.urgent) {
+            return `
+              <div id="gold-expiry-urgent-banner" class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/25 via-orange-500/20 to-red-500/15 border-2 border-amber-400/80 shadow-[0_0_25px_rgba(245,158,11,0.35)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500/30 flex items-center justify-center text-amber-300 shrink-0 border border-amber-400">
+                    <i class="fa-solid fa-clock text-base animate-pulse"></i>
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-amber-300 text-sm flex items-center gap-2">
+                      <span>⚠️ ${notice.isTrial ? 'Free First Month Trial' : 'Arc Gold Subscription'} Ending Soon!</span>
+                      <span class="px-2 py-0.5 rounded-full bg-red-500/30 text-red-200 border border-red-400/50 text-[10px] uppercase font-mono font-bold animate-pulse">
+                        ${notice.daysLeft === 1 ? 'Expires Tomorrow' : notice.daysLeft + ' Days Left'}
+                      </span>
+                    </div>
+                    <p class="text-slate-200 text-xs mt-1 leading-relaxed">
+                      Your ${notice.isTrial ? 'first month free trial' : 'membership'} will expire on <b>${expiresFormatted}</b>. Choose an Annual (₹365/yr) or Lifetime (₹700) pass below to keep your 120Hz ProMotion Engine and Custom Wallpaper active.
+                    </p>
+                  </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2 self-end sm:self-center">
+                  <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-md transition active:scale-95">
+                    Renew Annual (₹1/day)
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+          return '';
+        })()}
 
         <!-- UNDER CONSTRUCTION ADVISORY BANNER -->
         <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start sm:items-center gap-3 text-xs text-amber-200">
@@ -13962,18 +14126,26 @@ window.ArcGold = (function() {
 
         <!-- ACTIVE SUBSCRIPTION DETAILS (IF ACTIVE) -->
         ${goldActive ? `
-          <div id="gold-active-details" class="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div id="gold-active-details" class="p-4 rounded-2xl ${state.isTrial ? 'bg-gradient-to-r from-emerald-950/30 via-slate-900/90 to-amber-950/20 border-emerald-500/40' : 'bg-amber-950/20 border-amber-500/30'} border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
             <div class="space-y-1">
-              <div class="font-bold text-amber-300 flex items-center gap-2">
-                <i class="fa-solid fa-receipt"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
+              <div class="font-bold ${state.isTrial ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-2">
+                <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
+                ${state.isTrial ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase">First Month Free</span>' : ''}
               </div>
               <div class="text-[11px] text-slate-400">
-                Plan: <b class="text-white">${currentPlan ? currentPlan.name : 'VIP'}</b> (${state.symbol}${state.price}) · Status: <span class="text-emerald-400 font-bold">Active</span> · Expiry: ${expiresFormatted}
+                Plan: <b class="text-white">${state.isTrial ? '30-Day Free First Month Pass' : (currentPlan ? currentPlan.name : 'VIP')}</b> (${state.symbol}${state.price}) · Status: <span class="text-emerald-400 font-bold">Active</span> · Expiry: ${expiresFormatted}
+                ${(function() {
+                  const n = getExpiryNotice();
+                  if (n && n.urgent) {
+                    return ' · <span class="text-amber-400 font-bold animate-pulse">⚠️ Expires in ' + n.daysLeft + ' day' + (n.daysLeft > 1 ? 's' : '') + '!</span>';
+                  }
+                  return '';
+                })()}
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <button type="button" onclick="window.ArcGold.cancelPlan()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold transition">
-                Downgrade to Free
+                ${state.isTrial ? 'End Trial Early' : 'Downgrade to Free'}
               </button>
             </div>
           </div>
@@ -13984,6 +14156,14 @@ window.ArcGold = (function() {
 
   function init() {
     applyRefreshRate();
+    let loggedInUser = null;
+    if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+      loggedInUser = window.ArcGoogleSync.getUser();
+    }
+    if (loggedInUser) {
+      claimFirstMonthTrial(loggedInUser, true);
+    }
+    checkExpiryNotification(true);
     render();
     updateHeaderBadge();
   }
@@ -14004,6 +14184,9 @@ window.ArcGold = (function() {
     toggleBox,
     openBox,
     closeBox,
+    claimFirstMonthTrial,
+    getExpiryNotice,
+    checkExpiryNotification,
     render,
     init
   };
@@ -20083,6 +20266,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
             if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
               window.ArcProfile.onLoginSuccess(profile);
             }
+            if (window.ArcGold && typeof window.ArcGold.claimFirstMonthTrial === 'function') {
+              window.ArcGold.claimFirstMonthTrial(profile);
+            }
             if (typeof playSfx === 'function') playSfx('victory');
             if (typeof showToast === 'function') showToast(`👋 Welcome, ${profile.name}! Google Account connected.`);
             renderUi();
@@ -20109,6 +20295,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     setUser(demoUser);
     if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
       window.ArcProfile.onLoginSuccess(demoUser);
+    }
+    if (window.ArcGold && typeof window.ArcGold.claimFirstMonthTrial === 'function') {
+      window.ArcGold.claimFirstMonthTrial(demoUser);
     }
     if (typeof playSfx === 'function') playSfx('victory');
     if (typeof showToast === 'function') {
