@@ -1,12 +1,15 @@
 {
   "name": "Arc Tracker 2026",
   "short_name": "Arc Tracker",
-  "description": "Secure Offline Winter & Summer Arc Habit and Fitness Tracker",
+  "id": "com.arctracker.app",
+  "description": "Secure Offline Winter & Summer Arc Habit and Fitness Tracker with 120Hz ProMotion",
   "start_url": "./index.html",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#060913",
   "theme_color": "#00F0FF",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "categories": ["productivity", "lifestyle", "utilities"],
   "icons": [
     {
       "src": "icons/128x128.png",
