@@ -919,6 +919,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
     <!-- SUBTLE NOISE OVERLAY LAYER -->
     <div class="bg-noise"></div>
 
+    <!-- CUSTOM BACKGROUND WALLPAPER LAYER (ARC GOLD EXCLUSIVE) -->
+    <div id="arc-custom-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-cover bg-center bg-no-repeat transition-all duration-500" style="display: none;">
+        <div id="arc-custom-bg-overlay" class="absolute inset-0 bg-slate-950/45 transition-colors duration-300"></div>
+    </div>
+
     <!-- FX CANVAS FOR PARTICLE SNOW / EMBERS & CONFETTI -->
     <canvas id="fx-canvas"></canvas>
 
@@ -1604,6 +1609,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
                 </div>
             </div>
+
+            <!-- CUSTOM BACKGROUND WALLPAPER (ARC GOLD EXCLUSIVE) -->
+            <div id="settings-custom-bg-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300"></div>
 
             <!-- AUTO-START ON DEVICE BOOT SETTINGS CARD -->
             <div id="settings-autostart-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
@@ -5328,6 +5336,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (tabName === 'settings') {
                 if (window.renderHabitManager) renderHabitManager(true);
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
+                if (window.ArcCustomBackground && typeof window.ArcCustomBackground.renderCard === 'function') window.ArcCustomBackground.renderCard();
             }
         }
 
@@ -5350,21 +5359,25 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const sxRoot = document.getElementById('sx-root');
 
             const themeArcCard = document.getElementById('settings-theme-arc-card');
+            const customBgCard = document.getElementById('settings-custom-bg-card');
             const hwCard = document.getElementById('settings-hardware-profiler-card');
             if (category === 'all') {
                 if (themeArcCard) themeArcCard.style.display = '';
+                if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
+                if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
             } else if (category === 'account') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
+                if (customBgCard) customBgCard.style.display = 'none';
                 if (hwCard) hwCard.style.display = 'none';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
@@ -10264,6 +10277,37 @@ html[data-mode=light] #settings-gold-card .gold-plan-card-active {
 }
 
 /* ==========================================================================
+   LIGHT MODE: CUSTOM BACKGROUND SETTINGS CARD
+   ========================================================================== */
+html[data-mode=light] #settings-custom-bg-card {
+    background: #ffffff !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+html[data-mode=light] #settings-custom-bg-card h3,
+html[data-mode=light] #settings-custom-bg-card .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-custom-bg-card p,
+html[data-mode=light] #settings-custom-bg-card .text-slate-400,
+html[data-mode=light] #settings-custom-bg-card .text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] #settings-custom-bg-card [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-custom-bg-card [class*="bg-slate-800"] {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #settings-custom-bg-card .border-slate-800,
+html[data-mode=light] #settings-custom-bg-card [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+
+/* ==========================================================================
    LIGHT MODE: MODALS (PHONE LINKING & SCREEN TIME SHARING)
    ========================================================================== */
 html[data-mode=light] #arc-phone-linking-modal > div,
@@ -13335,6 +13379,7 @@ window.ArcGold = (function() {
       desc: 'Flexible month-to-month access. Cancel anytime with zero penalty.',
       features: [
         '120Hz Ultra-Smooth ProMotion',
+        'Custom Photo Wallpaper Background',
         'Uncapped Max Frame Rate Engine',
         'VIP Gold Crown Profile Badge',
         'Cancel Anytime'
@@ -13353,6 +13398,7 @@ window.ArcGold = (function() {
       desc: 'Save 61% compared to monthly. Full 365 days of uninterrupted ultra smoothness.',
       features: [
         'Everything in Monthly Pass',
+        'Custom Photo Wallpaper Background',
         'Costs just ₹1 per day (Save 61%)',
         '365 Days Uninterrupted ProMotion',
         'Priority Hardware Smooth Mode'
@@ -13371,6 +13417,7 @@ window.ArcGold = (function() {
       desc: 'Single one-time payment. Own ProMotion 120Hz forever with VIP Founder prestige.',
       features: [
         'Permanent Lifetime 120Hz Access',
+        'Custom Photo Wallpaper Background',
         'Zero Recurring Fees Forever',
         'Lifetime VIP Founder Crown & Badge',
         'All Future Arc Gold Perks Included'
@@ -13446,6 +13493,10 @@ window.ArcGold = (function() {
     if (window.ArcHardwareGatekeeper && typeof window.ArcHardwareGatekeeper.renderSettingsCard === 'function') {
       window.ArcHardwareGatekeeper.renderSettingsCard();
     }
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
+      window.ArcCustomBackground.apply();
+      window.ArcCustomBackground.renderCard();
+    }
     if (window.SettingsApp && typeof window.SettingsApp.onTab === 'function') {
       window.SettingsApp.onTab('settings');
     }
@@ -13471,6 +13522,10 @@ window.ArcGold = (function() {
     updateHeaderBadge();
     if (window.ArcHardwareGatekeeper && typeof window.ArcHardwareGatekeeper.renderSettingsCard === 'function') {
       window.ArcHardwareGatekeeper.renderSettingsCard();
+    }
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
+      window.ArcCustomBackground.apply();
+      window.ArcCustomBackground.renderCard();
     }
     if (window.SettingsApp && typeof window.SettingsApp.onTab === 'function') {
       window.SettingsApp.onTab('settings');
@@ -13949,6 +14004,344 @@ window.ArcGold = (function() {
     init
   };
 })();
+
+// ============================================================================
+// ARC CUSTOM BACKGROUND ENGINE (ARC GOLD EXCLUSIVE)
+// Allows Arc Gold VIP members to set a custom photo background.
+// Includes intelligent client-side image compression (max 1920x1080 JPEG)
+// to prevent localStorage quota overflows, an adjustable dimming slider
+// for readability, and renders audio-reactive snow / embers over the wallpaper.
+// ============================================================================
+window.ArcCustomBackground = (function() {
+  const STORAGE_KEY = 'arc_custom_background_v1';
+
+  function getState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data && typeof data === 'object') {
+          return {
+            enabled: data.enabled !== false,
+            imageData: data.imageData || null,
+            fileName: data.fileName || 'wallpaper.jpg',
+            dim: typeof data.dim === 'number' ? data.dim : 45,
+            updatedAt: data.updatedAt || Date.now()
+          };
+        }
+      }
+    } catch (e) {}
+    return {
+      enabled: false,
+      imageData: null,
+      fileName: '',
+      dim: 45,
+      updatedAt: null
+    };
+  }
+
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn('Failed to save custom background to localStorage:', e);
+      if (typeof showToast === 'function') {
+        showToast('Storage quota exceeded. Image compressed but could not be saved.');
+      }
+    }
+  }
+
+  function isGold() {
+    return !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+  }
+
+  function apply() {
+    const bgEl = document.getElementById('arc-custom-bg');
+    const overlayEl = document.getElementById('arc-custom-bg-overlay');
+    if (!bgEl) return;
+
+    const gold = isGold();
+    const state = getState();
+    const hasImage = !!(gold && state.enabled && state.imageData);
+
+    if (hasImage) {
+      bgEl.style.display = 'block';
+      bgEl.style.backgroundImage = 'url("' + state.imageData + '")';
+      document.body.classList.add('has-custom-wallpaper');
+
+      if (overlayEl) {
+        const dimVal = Math.max(10, Math.min(90, state.dim || 45));
+        const isLight = document.documentElement.getAttribute('data-mode') === 'light';
+        if (isLight) {
+          overlayEl.style.backgroundColor = 'rgba(255, 255, 255, ' + ((dimVal / 100) * 0.7 + 0.15).toFixed(2) + ')';
+        } else {
+          overlayEl.style.backgroundColor = 'rgba(6, 9, 19, ' + (dimVal / 100).toFixed(2) + ')';
+        }
+      }
+    } else {
+      bgEl.style.display = 'none';
+      bgEl.style.backgroundImage = '';
+      document.body.classList.remove('has-custom-wallpaper');
+    }
+  }
+
+  function setDim(val) {
+    const state = getState();
+    state.dim = parseInt(val, 10) || 45;
+    saveState(state);
+    apply();
+    const label = document.getElementById('custom-bg-dim-val');
+    if (label) label.textContent = state.dim + '%';
+  }
+
+  function handleFileSelect(input) {
+    if (!isGold()) {
+      if (window.ArcGold && typeof window.ArcGold.scrollToGoldCard === 'function') {
+        window.ArcGold.scrollToGoldCard();
+      }
+      if (typeof showToast === 'function') {
+        showToast('⭐ Custom Photo Wallpaper is an Arc Gold VIP perk. Upgrade to unlock!');
+      }
+      if (input) input.value = '';
+      return;
+    }
+
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      if (typeof showToast === 'function') {
+        showToast('Please select a valid image file (JPG, PNG, WebP).');
+      }
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const MAX_W = 1920;
+        const MAX_H = 1080;
+        let w = img.width;
+        let h = img.height;
+
+        if (w > MAX_W || h > MAX_H) {
+          const ratio = Math.min(MAX_W / w, MAX_H / h);
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        try {
+          const compressed = canvas.toDataURL('image/jpeg', 0.82);
+          const state = {
+            enabled: true,
+            imageData: compressed,
+            fileName: file.name || 'custom-wallpaper.jpg',
+            dim: 45,
+            updatedAt: Date.now()
+          };
+          saveState(state);
+          apply();
+          renderCard();
+          if (typeof showToast === 'function') {
+            showToast('🎨 Custom Wallpaper applied! Audio-reactive particles active.');
+          }
+        } catch (err) {
+          console.error('Error saving wallpaper:', err);
+          if (typeof showToast === 'function') {
+            showToast('Failed to save image. Please choose a smaller photo.');
+          }
+        }
+      };
+      img.onerror = function() {
+        if (typeof showToast === 'function') {
+          showToast('Failed to load image. Please try a different photo.');
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
+  function removeBackground() {
+    const state = getState();
+    state.enabled = false;
+    state.imageData = null;
+    state.fileName = '';
+    saveState(state);
+    apply();
+    renderCard();
+    if (typeof showToast === 'function') {
+      showToast('Custom wallpaper removed. Reverted to default theme background.');
+    }
+  }
+
+  function triggerUpload() {
+    if (!isGold()) {
+      if (window.ArcGold && typeof window.ArcGold.scrollToGoldCard === 'function') {
+        window.ArcGold.scrollToGoldCard();
+      }
+      if (typeof showToast === 'function') {
+        showToast('⭐ Custom Photo Wallpaper is an Arc Gold VIP perk. Upgrade to unlock!');
+      }
+      return;
+    }
+    const input = document.getElementById('arc-custom-bg-input');
+    if (input) input.click();
+  }
+
+  function renderCard() {
+    const card = document.getElementById('settings-custom-bg-card');
+    if (!card) return;
+
+    const gold = isGold();
+    const state = getState();
+    const hasCustomBg = !!(gold && state.enabled && state.imageData);
+
+    if (gold) {
+      card.innerHTML = `
+        <div class="flex flex-col gap-4">
+          <!-- CARD HEADER -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+                <i class="fa-solid fa-image text-lg"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-sm font-bold text-white tracking-wide">Custom Photo Wallpaper</h3>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-sm">
+                    <i class="fa-solid fa-crown text-[10px]"></i> Arc Gold VIP
+                  </span>
+                  ${hasCustomBg ? `
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                      <i class="fa-solid fa-check"></i> Active
+                    </span>
+                  ` : ''}
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Upload your own background photo. Audio-reactive snowflakes &amp; embers float over it.
+                </p>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex items-center gap-2 shrink-0">
+              <input type="file" id="arc-custom-bg-input" accept="image/*" class="hidden" onchange="window.ArcCustomBackground.handleFileSelect(this)" />
+              <button type="button" onclick="window.ArcCustomBackground.triggerUpload()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition active:scale-95">
+                <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+                <span>${hasCustomBg ? 'Change Photo' : 'Upload Photo'}</span>
+              </button>
+              ${hasCustomBg ? `
+                <button type="button" onclick="window.ArcCustomBackground.removeBackground()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="Revert to standard background">
+                  <i class="fa-solid fa-trash-can text-xs"></i>
+                  <span class="hidden sm:inline">Reset</span>
+                </button>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- PREVIEW & CONTROLS -->
+          ${hasCustomBg ? `
+            <div class="pt-3 border-t border-slate-800/80 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+              <!-- MINI PREVIEW THUMBNAIL -->
+              <div class="flex items-center gap-3">
+                <div class="relative w-20 h-12 rounded-lg overflow-hidden border border-amber-400/50 shadow-md shrink-0 bg-slate-950">
+                  <img src="${state.imageData}" alt="Wallpaper preview" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-slate-950/20 pointer-events-none"></div>
+                  <div class="absolute bottom-1 right-1 px-1 py-0.2 bg-black/70 rounded text-[8px] font-mono text-amber-300">Active</div>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-semibold text-white truncate max-w-[200px] sm:max-w-[260px]">${state.fileName || 'custom-wallpaper.jpg'}</div>
+                  <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-[10px]"></i>
+                    <span>Particles &amp; audio effects overlaid</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DIMMING SLIDER -->
+              <div class="flex items-center gap-3 w-full md:w-auto bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                <div class="text-xs text-slate-300 flex items-center gap-1.5 shrink-0">
+                  <i class="fa-solid fa-circle-half-stroke text-amber-400 text-xs"></i>
+                  <span>Wallpaper Dim:</span>
+                </div>
+                <input type="range" min="10" max="85" step="5" value="${state.dim || 45}" oninput="window.ArcCustomBackground.setDim(this.value)" class="w-28 sm:w-36 accent-amber-400 cursor-pointer" />
+                <span id="custom-bg-dim-val" class="text-xs font-mono font-bold text-amber-300 w-9 text-right">${state.dim || 45}%</span>
+              </div>
+            </div>
+          ` : `
+            <div onclick="window.ArcCustomBackground.triggerUpload()" class="mt-1 p-5 rounded-xl border-2 border-dashed border-amber-500/30 hover:border-amber-400/60 bg-amber-500/5 hover:bg-amber-500/10 transition cursor-pointer flex flex-col items-center justify-center text-center gap-2 group">
+              <div class="w-12 h-12 rounded-full bg-amber-500/15 group-hover:bg-amber-500/25 flex items-center justify-center text-amber-400 transition text-lg">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-amber-300">Click to choose a photo from your computer</span>
+                <p class="text-[11px] text-slate-400 mt-0.5">Supports high-res JPG, PNG, and WebP (auto-optimized for silky performance)</p>
+              </div>
+            </div>
+          `}
+        </div>
+      `;
+    } else {
+      // Free Tier: Gated UI with redirect to Arc Gold
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 shrink-0">
+              <i class="fa-solid fa-lock text-base"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-sm font-bold text-white tracking-wide">Custom Photo Wallpaper</h3>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                  <i class="fa-solid fa-crown text-[10px]"></i> Arc Gold Perk
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Customize your app with your own photo background while audio-reactive particles float on top.
+              </p>
+            </div>
+          </div>
+          <div class="shrink-0 flex items-center gap-2">
+            <button type="button" onclick="window.ArcGold.scrollToGoldCard()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 border border-amber-400/50 text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
+              <i class="fa-solid fa-crown text-amber-400"></i>
+              <span>Unlock with Arc Gold</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function init() {
+    apply();
+    renderCard();
+  }
+
+  return {
+    STORAGE_KEY,
+    getState,
+    saveState,
+    isGold,
+    apply,
+    setDim,
+    handleFileSelect,
+    removeBackground,
+    triggerUpload,
+    renderCard,
+    init
+  };
+})();
+
 
 document.addEventListener('DOMContentLoaded', () => {
 // ============================================================================
@@ -14509,6 +14902,9 @@ window.ArcScreenTimeStore = (function() {
   if (window.ArcGold && typeof window.ArcGold.init === 'function') {
     window.ArcGold.init();
   }
+  if (window.ArcCustomBackground && typeof window.ArcCustomBackground.init === 'function') {
+    window.ArcCustomBackground.init();
+  }
   if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.init === 'function') {
     window.ArcScreenTimeStore.init();
   }
@@ -14660,7 +15056,7 @@ function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.do
  try{localStorage.setItem('arc_app_theme',s.theme);localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}
  const mb=$('#header-mode-toggle-btn'),mi=$('#header-mode-toggle-icon'),ml=$('#header-mode-toggle-label');
  if(mb&&mi){mi.className=isLight?'fa-solid fa-moon text-indigo-400':'fa-solid fa-sun text-amber-400';if(ml)ml.textContent=isLight?'Dark Mode':'Light Mode';mb.title=isLight?'Switch to Dark Mode':'Switch to Light Mode';mb.setAttribute('aria-label',isLight?'Switch to Dark Mode':'Switch to Light Mode')}
- try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){}}
+ try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){};try{if(window.ArcCustomBackground&&typeof window.ArcCustomBackground.apply==='function')window.ArcCustomBackground.apply()}catch(e){}}
 
 /* ---------- FOCUS / POMODORO + SCREEN TIME ---------- */
 const fset=()=>{F.left=(F.mode==='work'?S().focusWork:S().focusBreak)*60};
