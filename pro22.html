@@ -2067,8 +2067,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <span class="font-mono text-amber-300 text-sm" id="st-comp-month-combined">106h 05m</span>
                             </div>
                             <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden flex mt-1 border border-slate-800">
-                                <div id="st-comp-month-bar-laptop" class="h-full bg-cyan-400" style="width: 70%"></div>
-                                <div id="st-comp-month-bar-phone" class="h-full bg-purple-400" style="width: 30%"></div>
+                                <div id="st-comp-month-bar-laptop" class="h-full bg-cyan-400 w-[70%]"></div>
+                                <div id="st-comp-month-bar-phone" class="h-full bg-purple-400 w-[30%]"></div>
                             </div>
                         </div>
                     </div>
@@ -10140,13 +10140,13 @@ html[data-mode=light] #st-historical-analytics-card [class*="from-slate-950"] {
     box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
 }
 html[data-mode=light] #st-historical-analytics-card .bg-slate-950,
-html[data-mode=light] #st-historical-analytics-card .bg-slate-950/70,
-html[data-mode=light] #st-historical-analytics-card .bg-slate-950/80 {
+html[data-mode=light] #st-historical-analytics-card [class*="bg-slate-950/70"],
+html[data-mode=light] #st-historical-analytics-card [class*="bg-slate-950/80"] {
     background: #f8fafc !important;
     border-color: #e2e8f0 !important;
 }
 html[data-mode=light] #st-historical-analytics-card .border-slate-800,
-html[data-mode=light] #st-historical-analytics-card .border-slate-800/80 {
+html[data-mode=light] #st-historical-analytics-card [class*="border-slate-800/80"] {
     border-color: #e2e8f0 !important;
 }
 html[data-mode=light] #st-historical-analytics-card h3,
@@ -10177,14 +10177,14 @@ html[data-mode=light] #st-weekly-apps-leaderboard span.text-cyan-300 {
 html[data-mode=light] #st-sub4-days-matrix > div {
     border-color: #cbd5e1 !important;
 }
-html[data-mode=light] #st-sub4-days-matrix .bg-emerald-950/40 {
+html[data-mode=light] #st-sub4-days-matrix [class*="bg-emerald-950/40"] {
     background: rgba(16, 185, 129, 0.12) !important;
     border-color: rgba(16, 185, 129, 0.35) !important;
 }
 html[data-mode=light] #st-sub4-days-matrix .text-emerald-400 {
     color: #047857 !important;
 }
-html[data-mode=light] #st-sub4-days-matrix .bg-rose-950/40 {
+html[data-mode=light] #st-sub4-days-matrix [class*="bg-rose-950/40"] {
     background: rgba(244, 63, 94, 0.12) !important;
     border-color: rgba(244, 63, 94, 0.35) !important;
 }
@@ -10230,17 +10230,17 @@ html[data-mode=light] #settings-gold-card p,
 html[data-mode=light] #settings-gold-card li span {
     color: #334155 !important;
 }
-html[data-mode=light] #settings-gold-card .bg-gradient-to-r.from-slate-950/80 {
+html[data-mode=light] #settings-gold-card [class*="from-slate-950/80"] {
     background: rgba(255, 255, 255, 0.95) !important;
     border-color: rgba(245, 158, 11, 0.35) !important;
 }
-html[data-mode=light] #settings-gold-card .bg-slate-950/70,
-html[data-mode=light] #settings-gold-card .bg-slate-950/60 {
+html[data-mode=light] #settings-gold-card [class*="bg-slate-950/70"],
+html[data-mode=light] #settings-gold-card [class*="bg-slate-950/60"] {
     background: #ffffff !important;
     border-color: #e2e8f0 !important;
 }
 html[data-mode=light] #settings-gold-card .border-slate-800,
-html[data-mode=light] #settings-gold-card .border-slate-800/80 {
+html[data-mode=light] #settings-gold-card [class*="border-slate-800/80"] {
     border-color: #e2e8f0 !important;
 }
 html[data-mode=light] #settings-gold-card button.bg-slate-800 {
@@ -10279,7 +10279,7 @@ html[data-mode=light] #st-share-preview-card {
     border-color: #cbd5e1 !important;
     color: #0f172a !important;
 }
-html[data-mode=light] #st-share-preview-card .bg-slate-900/80 {
+html[data-mode=light] #st-share-preview-card [class*="bg-slate-900/80"] {
     background: #ffffff !important;
     border-color: #e2e8f0 !important;
 }
@@ -10290,7 +10290,7 @@ html[data-mode=light] #st-share-name,
 html[data-mode=light] #st-share-combined-time {
     color: #0f172a !important;
 }
-html[data-mode=light] #arc-phone-linking-modal .bg-slate-950/80 {
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-slate-950/80"] {
     background: #f8fafc !important;
     border-color: #e2e8f0 !important;
 }
