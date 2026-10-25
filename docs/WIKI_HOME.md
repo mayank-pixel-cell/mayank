@@ -58,6 +58,7 @@
 Downloads are available under [Releases](https://github.com/mayank-pixel-cell/mayank/releases):
 
 - **Windows:** Download and run `Arc.Tracker_1.0.0_x64-setup.exe` (or `.msi`).
+- **Microsoft Store:** For store packaging & submission, see the [Microsoft Store Publishing Guide](MICROSOFT_STORE_GUIDE.md).
 - **macOS:** Download `Arc.Tracker_1.0.0_aarch64.dmg`, open it, and drag Arc Tracker into your Applications folder.
 - **Quick Local Launch:** Double-click `Launch-ArcTracker.bat` to launch the offline native window locally.
 
