@@ -970,8 +970,23 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </button>
             </nav>
 
-            <!-- ACTION BUTTONS (Header Cleaned - Controls relocated to Settings) -->
+            <!-- ACTION BUTTONS -->
             <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+                <!-- User Profile Capsule -->
+                <div role="button" tabindex="0" id="header-profile-pill" onclick="ArcProfile.openSetupModal()" class="cursor-pointer flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-400/50 transition-all text-xs text-slate-200 shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Customize Operative Profile & Handle">
+                    <div id="header-avatar-circle" class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/50 grid place-items-center text-[10px] overflow-hidden shrink-0">O</div>
+                    <div class="hidden sm:flex flex-col text-left leading-none">
+                        <span id="header-profile-name" class="font-bold text-[11px] text-white truncate max-w-[100px]">Operative</span>
+                        <span id="header-profile-user" class="text-[9px] text-cyan-400 font-mono truncate max-w-[100px]">@operative</span>
+                    </div>
+                </div>
+
+                <!-- Share Tracker Button -->
+                <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
+                    <i class="fa-solid fa-share-nodes text-xs"></i>
+                    <span class="hidden md:inline">Share</span>
+                </button>
+
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>
             </div>
         </div>
@@ -9479,6 +9494,7 @@ html[data-mode=light] #st-app-launcher-pills button.bg-cyan-500 {
 html[data-mode=light] #st-combined-time-val {
     background: linear-gradient(90deg, #0284C7, #4F46E5) !important;
     -webkit-background-clip: text !important;
+    background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
 }
 html[data-mode=light] #st-radar-shield-score {
@@ -9579,55 +9595,77 @@ html[data-mode=light] #st-radar-shield-score {
   </div>
 </div>
 
-<!-- App PIN Configuration Modal -->
-<div id="pp-sec-pin-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Configure app security PIN">
-  <div class="pp-box">
+<!-- App Security Password / PIN Configuration Modal -->
+<div id="pp-sec-pin-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Configure app security password">
+  <div class="pp-box max-w-md w-full">
     <div class="flex items-center gap-2 text-cyan-400 font-black text-base mb-2">
       <i class="fa-solid fa-shield-halved text-lg"></i>
-      <h3 id="sec-pin-modal-title">Configure Security PIN</h3>
+      <h3 id="sec-pin-modal-title">Configure Security Password / PIN</h3>
     </div>
-    <p class="text-xs text-slate-300 mb-3">When enabled, Arc Tracker locks itself on startup and on demand, preventing unauthorized viewing of your private habits and reflections.</p>
+    <p class="text-xs text-slate-300 mb-3">Protect your private habits, notes, and screen time. Choose any password or numeric PIN of 4 or more characters/numbers.</p>
     <div class="space-y-3 mb-4" id="sec-pin-fields">
       <div id="sec-pin-curr-wrap" class="hidden">
-        <label for="sec-pin-curr" class="block text-[11px] font-semibold text-slate-400 mb-1">Current PIN</label>
-        <input id="sec-pin-curr" type="password" maxlength="6" inputmode="numeric" pattern="[0-9]*" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" placeholder="Enter current PIN">
+        <label for="sec-pin-curr" class="block text-[11px] font-semibold text-slate-400 mb-1">Current Password / PIN</label>
+        <div class="relative">
+          <input id="sec-pin-curr" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="Enter current password or PIN">
+          <button type="button" onclick="ArcSecurity.togglePassVisible('sec-pin-curr')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
       </div>
       <div id="sec-pin-new-wrap">
-        <label for="sec-pin-new" class="block text-[11px] font-semibold text-slate-400 mb-1">New 4-6 Digit PIN</label>
-        <input id="sec-pin-new" type="password" maxlength="6" inputmode="numeric" pattern="[0-9]*" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" placeholder="4 to 6 numbers">
+        <div class="flex items-center justify-between mb-1">
+          <label for="sec-pin-new" class="text-[11px] font-semibold text-slate-400">New Password or PIN (Min 4 characters)</label>
+          <span class="text-[10px] text-cyan-400/90 font-mono">Numbers or text</span>
+        </div>
+        <div class="relative">
+          <input id="sec-pin-new" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="e.g. 123456, winterarc2026, or custom passphrase">
+          <button type="button" onclick="ArcSecurity.togglePassVisible('sec-pin-new')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
       </div>
       <div id="sec-pin-confirm-wrap">
-        <label for="sec-pin-confirm" class="block text-[11px] font-semibold text-slate-400 mb-1">Confirm PIN</label>
-        <input id="sec-pin-confirm" type="password" maxlength="6" inputmode="numeric" pattern="[0-9]*" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" placeholder="Re-enter PIN">
+        <label for="sec-pin-confirm" class="block text-[11px] font-semibold text-slate-400 mb-1">Confirm New Password / PIN</label>
+        <div class="relative">
+          <input id="sec-pin-confirm" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="Re-enter password or PIN">
+          <button type="button" onclick="ArcSecurity.togglePassVisible('sec-pin-confirm')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
       </div>
-      <p id="sec-pin-modal-err" class="text-xs text-rose-400 h-4 font-mono"></p>
+      <p id="sec-pin-modal-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
     </div>
     <div class="flex gap-2">
-      <button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-pin-save">Save PIN</button>
-      <button role="button" class="pp-btn text-rose-400 border-rose-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 hidden" id="btn-sec-pin-disable">Remove PIN</button>
+      <button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-bold" id="btn-sec-pin-save">Save Password</button>
+      <button role="button" class="pp-btn text-rose-400 border-rose-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 hidden" id="btn-sec-pin-disable">Remove Lock</button>
       <button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-close>Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- Full-Screen App PIN Lock Overlay -->
-<div id="arc-pin-overlay" class="fixed inset-0 z-[120] hidden flex-col items-center justify-center p-4 bg-slate-950/95 select-none" role="dialog" aria-modal="true" aria-label="Security PIN verification">
-  <div class="max-w-xs w-full p-6 rounded-2xl border border-cyan-500/30 bg-slate-900/90 shadow-2xl flex flex-col items-center space-y-4 text-center">
-    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 grid place-items-center text-cyan-400 text-2xl shadow-inner">
+<!-- Full-Screen App Security Password & PIN Lock Overlay -->
+<div id="arc-pin-overlay" class="fixed inset-0 z-[120] hidden flex-col items-center justify-center p-4 bg-slate-950/95 select-none" role="dialog" aria-modal="true" aria-label="Security password verification">
+  <div class="max-w-xs sm:max-w-sm w-full p-6 sm:p-7 rounded-2xl border border-cyan-500/30 bg-slate-900/95 shadow-2xl flex flex-col items-center space-y-3.5 text-center backdrop-blur-xl">
+    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 grid place-items-center text-cyan-400 text-2xl shadow-inner shrink-0">
       <i class="fa-solid fa-shield-halved"></i>
     </div>
     <div>
       <h3 class="text-base font-black tracking-wider text-white">ARC SENTINEL</h3>
-      <p class="text-xs text-slate-400 mt-0.5">Enter Security PIN to unlock</p>
+      <p class="text-xs text-slate-400 mt-0.5">Enter Security Password or PIN to unlock</p>
     </div>
-    <div class="flex gap-3 justify-center py-1" id="arc-pin-dots">
-      <span class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 bg-transparent transition-all"></span>
-      <span class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 bg-transparent transition-all"></span>
-      <span class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 bg-transparent transition-all"></span>
-      <span class="w-3.5 h-3.5 rounded-full border-2 border-slate-600 bg-transparent transition-all"></span>
+
+    <!-- Flexible Input Box with Eye Toggle -->
+    <div class="w-full relative">
+      <input id="arc-lock-pass-input" type="password" maxlength="64" autocomplete="off" class="w-full text-center text-base sm:text-lg font-mono tracking-widest px-4 py-2.5 rounded-xl bg-slate-950/90 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none transition shadow-inner" placeholder="Enter password or PIN...">
+      <button type="button" onclick="ArcSecurity.togglePassVisible('arc-lock-pass-input')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1" title="Show/Hide Password">
+        <i class="fa-solid fa-eye"></i>
+      </button>
     </div>
-    <p id="arc-pin-err" class="text-xs text-rose-400 h-4 font-mono"></p>
-    <div class="grid grid-cols-3 gap-2 w-full pt-1" id="arc-pin-pad">
+
+    <!-- Dynamic Indicator -->
+    <div class="flex gap-1.5 justify-center py-0.5 flex-wrap max-w-full min-h-[14px]" id="arc-pin-dots">
+      <!-- Dots render dynamically as typed -->
+    </div>
+
+    <p id="arc-pin-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
+
+    <!-- Numeric Quick Keypad (For mobile/touch, keyboard typing also supported) -->
+    <div class="grid grid-cols-3 gap-2 w-full pt-0.5" id="arc-pin-pad">
       <button type="button" class="arc-pad-btn" data-v="1">1</button>
       <button type="button" class="arc-pad-btn" data-v="2">2</button>
       <button type="button" class="arc-pad-btn" data-v="3">3</button>
@@ -9637,9 +9675,203 @@ html[data-mode=light] #st-radar-shield-score {
       <button type="button" class="arc-pad-btn" data-v="7">7</button>
       <button type="button" class="arc-pad-btn" data-v="8">8</button>
       <button type="button" class="arc-pad-btn" data-v="9">9</button>
-      <button type="button" class="arc-pad-btn text-xs text-slate-400" data-v="clear">CLR</button>
+      <button type="button" class="arc-pad-btn text-xs text-slate-400 font-mono" data-v="clear">CLR</button>
       <button type="button" class="arc-pad-btn" data-v="0">0</button>
       <button type="button" class="arc-pad-btn text-xs text-slate-400" data-v="back" aria-label="Backspace"><i class="fa-solid fa-delete-left"></i></button>
+    </div>
+
+    <!-- Unlock Action Button -->
+    <button type="button" id="arc-lock-submit-btn" onclick="ArcSecurity.submitUnlock()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 active:scale-95 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-unlock"></i> Unlock Tracker
+    </button>
+
+    <!-- Forgot Password / Email Verification Link -->
+    <div class="pt-1 border-t border-slate-800/80 w-full">
+      <button type="button" id="btn-arc-forgot-pin" onclick="ArcSecurity.openForgotPasswordModal()" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold transition hover:underline flex items-center justify-center gap-1.5 mx-auto">
+        <i class="fa-solid fa-envelope-open-text text-[11px]"></i> Forgot Password? (Email Recovery)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot Password / Email Verification Modal -->
+<div id="arc-forgot-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Forgot password and email verification">
+  <div class="pp-box max-w-md w-full">
+    <div class="flex items-center gap-2 text-cyan-400 font-black text-base mb-2">
+      <i class="fa-solid fa-envelope-circle-check text-lg"></i>
+      <h3>Account Verification &amp; Password Reset</h3>
+    </div>
+    <p class="text-xs text-slate-300 mb-3">Reset your security password via your logged-in Google / Arc account.</p>
+
+    <!-- Logged in account banner -->
+    <div id="arc-forgot-account-card" class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center gap-3 mb-3">
+      <!-- Injected with current user name and email -->
+    </div>
+
+    <!-- Dispatch status & offline code banner -->
+    <div id="arc-forgot-dispatch-info" class="space-y-2 mb-3">
+      <p class="text-xs text-slate-300" id="arc-forgot-dispatch-text">
+        We sent a 6-digit verification code to your email. Enter it below to unlock and change your password.
+      </p>
+      <div id="arc-forgot-offline-badge" class="p-2.5 rounded-lg bg-cyan-950/40 border border-cyan-500/40 text-xs text-cyan-300 flex items-center justify-between font-mono">
+        <span>Security Recovery Code:</span>
+        <strong id="arc-forgot-code-disp" class="text-white text-base tracking-widest font-black">123456</strong>
+      </div>
+    </div>
+
+    <!-- Code Input -->
+    <div class="space-y-1 mb-3">
+      <label for="arc-forgot-otp-input" class="block text-[11px] font-semibold text-slate-400">Enter 6-Digit Verification Code</label>
+      <input id="arc-forgot-otp-input" type="text" maxlength="6" inputmode="numeric" class="w-full text-center text-xl font-mono tracking-widest px-4 py-2 rounded-xl bg-slate-950 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:outline-none" placeholder="000000">
+      <p id="arc-forgot-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
+    </div>
+
+    <div class="flex gap-2">
+      <button type="button" onclick="ArcSecurity.verifyRecoveryCode()" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Verify &amp; Change Password</button>
+      <button type="button" onclick="ArcSecurity.closeForgotPasswordModal()" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Choose Operative Details Modal -->
+<div id="arc-profile-setup-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Customize user profile and username">
+  <div class="pp-box max-w-md w-full">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2 text-cyan-400 font-black text-base">
+        <i class="fa-solid fa-user-astronaut text-lg"></i>
+        <h3>Operative Identity Setup</h3>
+      </div>
+      <button type="button" onclick="ArcProfile.closeSetupModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-slate-300 mb-4">Personalize your display name and unique @username handle across all your synced devices.</p>
+
+    <!-- Live Preview Card -->
+    <div class="p-3.5 rounded-xl bg-gradient-to-r from-cyan-950/50 via-slate-900 to-indigo-950/50 border border-cyan-500/30 flex items-center gap-3.5 mb-4 shadow-inner">
+      <div id="arc-preview-avatar" class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white font-black text-lg flex items-center justify-center border-2 border-cyan-400 shadow-lg overflow-hidden shrink-0">
+        O
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-2">
+          <h4 id="arc-preview-name" class="font-extrabold text-sm text-white truncate">Operative</h4>
+          <span id="arc-preview-rank-tag" class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono">Lv. 1</span>
+        </div>
+        <p id="arc-preview-username" class="text-xs text-cyan-400 font-mono">@operative</p>
+        <p id="arc-preview-email" class="text-[10px] text-slate-400 truncate">user@gmail.com</p>
+      </div>
+    </div>
+
+    <div class="space-y-3 mb-4">
+      <div>
+        <label for="arc-input-display-name" class="block text-[11px] font-semibold text-slate-400 mb-1">Display Profile Name</label>
+        <input id="arc-input-display-name" type="text" maxlength="32" oninput="ArcProfile.handleLivePreview()" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-medium" placeholder="Your Name or Call-Sign">
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label for="arc-input-username" class="text-[11px] font-semibold text-slate-400">Username Handle (@)</label>
+          <span class="text-[10px] text-slate-400 font-mono">Letters, numbers, underscores</span>
+        </div>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-400 font-mono font-bold text-sm">@</span>
+          <input id="arc-input-username" type="text" maxlength="24" oninput="ArcProfile.handleLivePreview()" class="pp-in pl-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="username">
+        </div>
+      </div>
+      <div>
+        <label for="arc-select-title" class="block text-[11px] font-semibold text-slate-400 mb-1">Operative Title / Rank</label>
+        <select id="arc-select-title" onchange="ArcProfile.handleLivePreview()" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+          <option value="Shadow Initiate">Shadow Initiate (Focus Cultivator)</option>
+          <option value="Iron Vanguard">Iron Vanguard (Habit Sentinel)</option>
+          <option value="Dopamine Aegis">Dopamine Aegis (Attention Defender)</option>
+          <option value="Apex Sovereign">Apex Sovereign (Execution Master)</option>
+          <option value="Titan of Discipline">Titan of Discipline (Zero Procrastination)</option>
+        </select>
+      </div>
+      <div>
+        <label for="arc-input-motto" class="block text-[11px] font-semibold text-slate-400 mb-1">Personal Lock-In Motto</label>
+        <input id="arc-input-motto" type="text" maxlength="80" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 text-xs" placeholder="Transform in Silence.">
+      </div>
+      <p id="arc-profile-modal-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
+    </div>
+
+    <div class="flex gap-2">
+      <button type="button" onclick="ArcProfile.saveProfile()" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Save Identity Details</button>
+      <button type="button" onclick="ArcProfile.closeSetupModal()" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Share This Tracker Modal -->
+<div id="arc-share-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Share Arc Tracker">
+  <div class="pp-box max-w-lg w-full">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2 text-cyan-400 font-black text-base">
+        <i class="fa-solid fa-share-nodes text-lg"></i>
+        <h3>Share Your Arc Tracker</h3>
+      </div>
+      <button type="button" onclick="ArcShare.closeShareModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-slate-300 mb-4">Inspire others and hold yourself accountable. Share your lock-in stats or invite friends to transform with Arc Tracker.</p>
+
+    <!-- Progress Snapshot Card Preview -->
+    <div id="arc-share-snapshot-card" class="p-4 rounded-2xl bg-gradient-to-br from-[#0c1322] via-[#080d1a] to-[#150d22] border border-cyan-400/40 shadow-xl space-y-3 mb-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white grid place-items-center font-black text-sm">❄️</div>
+          <div>
+            <h4 class="font-extrabold text-xs text-white">WINTER ARC 2026</h4>
+            <span class="text-[10px] text-cyan-400 font-mono">Transform in Silence</span>
+          </div>
+        </div>
+        <div class="text-right">
+          <span id="share-card-user" class="text-xs font-bold text-white block">@operative</span>
+          <span id="share-card-rank" class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Lv. 1 • Shadow Initiate</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 pt-1 text-center font-mono">
+        <div class="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <span class="text-[9px] text-slate-400 block">ACTIVE STREAK</span>
+          <span id="share-card-streak" class="text-base font-black text-amber-400">3 Days</span>
+        </div>
+        <div class="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <span class="text-[9px] text-slate-400 block">DOPAMINE SHIELD</span>
+          <span id="share-card-shield" class="text-base font-black text-cyan-400">100%</span>
+        </div>
+        <div class="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <span class="text-[9px] text-slate-400 block">ARC DAY</span>
+          <span id="share-card-day" class="text-base font-black text-purple-300">25 / 92</span>
+        </div>
+      </div>
+      <p class="text-[10px] text-slate-400 italic text-center pt-1">"He who conquers himself is the mightiest warrior."</p>
+    </div>
+
+    <!-- 1-Click Share Channels -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+      <button type="button" onclick="ArcShare.shareNative()" class="p-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs flex flex-col items-center justify-center gap-1 transition active:scale-95 shadow-md">
+        <i class="fa-solid fa-arrow-up-from-bracket text-base"></i>
+        <span>Share Device</span>
+      </button>
+      <button type="button" onclick="ArcShare.shareWhatsApp()" class="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex flex-col items-center justify-center gap-1 transition active:scale-95 shadow-md">
+        <i class="fa-brands fa-whatsapp text-base"></i>
+        <span>WhatsApp</span>
+      </button>
+      <button type="button" onclick="ArcShare.shareTwitter()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex flex-col items-center justify-center gap-1 transition active:scale-95 border border-slate-700">
+        <i class="fa-brands fa-x-twitter text-base"></i>
+        <span>X / Twitter</span>
+      </button>
+      <button type="button" onclick="ArcShare.shareTelegram()" class="p-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs flex flex-col items-center justify-center gap-1 transition active:scale-95 shadow-md">
+        <i class="fa-brands fa-telegram text-base"></i>
+        <span>Telegram</span>
+      </button>
+    </div>
+
+    <div class="space-y-2">
+      <button type="button" onclick="ArcShare.copyShareLink()" class="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
+        <i class="fa-solid fa-link text-cyan-400"></i>
+        <span id="arc-share-copy-link-label">Copy Tracker Web Link</span>
+      </button>
+      <button type="button" onclick="ArcShare.copyTextSummary()" class="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
+        <i class="fa-solid fa-copy text-purple-400"></i>
+        <span id="arc-share-copy-text-label">Copy Formatted Progress Report</span>
+      </button>
     </div>
   </div>
 </div>
@@ -9869,7 +10101,7 @@ window.ArcSecurity = (function() {
   }
 
   async function setPin(pin) {
-    if (!/^\d{4,6}$/.test(pin)) throw new Error('PIN must be 4 to 6 numeric digits.');
+    if (!pin || pin.length < 4) throw new Error('Password or PIN must be at least 4 characters/numbers.');
     const salt = hexFromBytes(crypto.getRandomValues(new Uint8Array(16)));
     const hash = await sha256(pin + salt + 'arc_secret_pin_v1');
     localStorage.setItem('arc_sec_pin_hash', hash);
@@ -9888,7 +10120,7 @@ window.ArcSecurity = (function() {
 
   async function removePin(currentPin) {
     const ok = await verifyPin(currentPin);
-    if (!ok) throw new Error('Current PIN is incorrect.');
+    if (!ok) throw new Error('Current password or PIN is incorrect.');
     localStorage.removeItem('arc_sec_pin_hash');
     localStorage.removeItem('arc_sec_pin_salt');
     updatePinBadge();
@@ -9899,11 +10131,14 @@ window.ArcSecurity = (function() {
     const ov = document.getElementById('arc-pin-overlay');
     if (!ov) return;
     _pinBuffer = '';
+    const passIn = document.getElementById('arc-lock-pass-input');
+    if (passIn) passIn.value = '';
     _updatePinDots();
     const err = document.getElementById('arc-pin-err');
     if (err) err.textContent = '';
     ov.classList.remove('hidden');
     ov.classList.add('flex');
+    if (passIn) setTimeout(() => passIn.focus(), 150);
     if (window.playSfx) window.playSfx('modalOpen');
   }
 
@@ -9913,51 +10148,194 @@ window.ArcSecurity = (function() {
     ov.classList.remove('flex');
     ov.classList.add('hidden');
     _pinBuffer = '';
+    const passIn = document.getElementById('arc-lock-pass-input');
+    if (passIn) passIn.value = '';
     if (window.playSfx) window.playSfx('modalClose');
   }
 
   function _updatePinDots() {
-    const dots = document.querySelectorAll('#arc-pin-dots span');
-    dots.forEach((dot, idx) => {
-      if (idx < _pinBuffer.length) {
-        dot.className = 'w-3.5 h-3.5 rounded-full border-2 border-cyan-400 bg-cyan-400 shadow-[0_0_8px_rgba(0,240,255,0.8)] transition-all';
-      } else {
-        dot.className = 'w-3.5 h-3.5 rounded-full border-2 border-slate-600 bg-transparent transition-all';
+    const passIn = document.getElementById('arc-lock-pass-input');
+    const currentLen = (passIn && passIn.value) ? passIn.value.length : _pinBuffer.length;
+    const dotsContainer = document.getElementById('arc-pin-dots');
+    if (!dotsContainer) return;
+    if (currentLen === 0) {
+      dotsContainer.innerHTML = '<span class="text-[11px] text-slate-500 font-mono">Enter password or PIN to unlock</span>';
+      return;
+    }
+    let html = '';
+    const maxDots = Math.min(currentLen, 32);
+    for (let i = 0; i < maxDots; i++) {
+      html += '<span class="w-2.5 h-2.5 rounded-full border border-cyan-400 bg-cyan-400 shadow-[0_0_8px_rgba(0,240,255,0.8)] transition-all inline-block"></span>';
+    }
+    if (currentLen > 32) {
+      html += `<span class="text-[10px] text-cyan-300 font-mono ml-1">+${currentLen - 32}</span>`;
+    }
+    dotsContainer.innerHTML = html;
+  }
+
+  function togglePassVisible(inputId) {
+    const inp = document.getElementById(inputId);
+    if (!inp) return;
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  async function submitUnlock() {
+    const passInput = document.getElementById('arc-lock-pass-input');
+    const val = (passInput ? passInput.value : _pinBuffer).trim();
+    const err = document.getElementById('arc-pin-err');
+    if (err) err.textContent = '';
+    if (!val) {
+      if (err) err.textContent = 'Please enter your security password or PIN.';
+      return false;
+    }
+    const ok = await verifyPin(val);
+    if (ok) {
+      hideLockScreen();
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast('Security Lock Unlocked');
+      return true;
+    } else {
+      if (err) err.textContent = 'Incorrect password or PIN. Try again.';
+      if (window.playSfx) window.playSfx('uncheck');
+      if (passInput) {
+        passInput.classList.add('border-rose-500');
+        setTimeout(() => passInput.classList.remove('border-rose-500'), 1000);
       }
-    });
+      return false;
+    }
   }
 
   async function handlePinInput(val) {
     const err = document.getElementById('arc-pin-err');
     if (err) err.textContent = '';
+    const passInput = document.getElementById('arc-lock-pass-input');
+    let current = (passInput ? passInput.value : _pinBuffer) || '';
     if (val === 'clear') {
-      _pinBuffer = '';
-      _updatePinDots();
-      return;
-    }
-    if (val === 'back') {
-      _pinBuffer = _pinBuffer.slice(0, -1);
-      _updatePinDots();
-      return;
-    }
-    if (/^\d$/.test(val) && _pinBuffer.length < 6) {
+      current = '';
+    } else if (val === 'back') {
+      current = current.slice(0, -1);
+    } else if (/^[0-9]$/.test(val)) {
       if (window.playKeypadNote) window.playKeypadNote(val);
-      _pinBuffer += val;
-      _updatePinDots();
-      if (_pinBuffer.length >= 4) {
-        const ok = await verifyPin(_pinBuffer);
-        if (ok) {
-          hideLockScreen();
-          if (window.playSfx) window.playSfx('fanfare');
-          if (typeof showToast === 'function') showToast('Security PIN Verified');
-        } else if (_pinBuffer.length === 6) {
-          if (err) err.textContent = 'Incorrect PIN. Try again.';
-          if (window.playSfx) window.playSfx('uncheck');
-          _pinBuffer = '';
-          setTimeout(_updatePinDots, 200);
-        }
+      current += val;
+    }
+    _pinBuffer = current;
+    if (passInput) passInput.value = current;
+    _updatePinDots();
+
+    if (current.length >= 4) {
+      const ok = await verifyPin(current);
+      if (ok) {
+        hideLockScreen();
+        if (window.playSfx) window.playSfx('fanfare');
+        if (typeof showToast === 'function') showToast('Security Password Verified');
       }
     }
+  }
+
+  function openForgotPasswordModal() {
+    const modal = document.getElementById('arc-forgot-modal');
+    if (!modal) return;
+    const accountCard = document.getElementById('arc-forgot-account-card');
+    const dispatchText = document.getElementById('arc-forgot-dispatch-text');
+    const codeDisp = document.getElementById('arc-forgot-code-disp');
+    const otpIn = document.getElementById('arc-forgot-otp-input');
+    const err = document.getElementById('arc-forgot-err');
+
+    if (otpIn) otpIn.value = '';
+    if (err) err.textContent = '';
+
+    // Get current authenticated user
+    let user = null;
+    if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+      user = window.ArcGoogleSync.getUser();
+    }
+    if (!user) {
+      try {
+        const stored = localStorage.getItem('arc_google_user');
+        if (stored) user = JSON.parse(stored);
+      } catch(_) {}
+    }
+    if (!user) {
+      user = {
+        name: 'Operative',
+        email: 'operative@winterarc.local',
+        picture: ''
+      };
+    }
+
+    if (accountCard) {
+      accountCard.innerHTML = `
+        <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 grid place-items-center font-bold text-sm shrink-0">
+          ${user.picture ? `<img src="${user.picture}" class="w-full h-full rounded-full object-cover">` : (user.name || 'U').charAt(0).toUpperCase()}
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="font-bold text-xs text-white truncate">${user.name}</div>
+          <div class="text-[11px] text-slate-400 font-mono truncate">${user.email}</div>
+        </div>
+      `;
+    }
+
+    // Generate secure 6-digit OTP code
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    localStorage.setItem('arc_sec_recovery_otp', otp);
+    localStorage.setItem('arc_sec_recovery_otp_time', String(Date.now()));
+
+    if (codeDisp) codeDisp.textContent = otp;
+    if (dispatchText) {
+      dispatchText.innerHTML = `We dispatched an email verification code to <b class="text-cyan-300 font-mono">${user.email}</b>. In this local desktop session, your verified recovery code is shown below.`;
+    }
+
+    modal.classList.add('open');
+    if (otpIn) setTimeout(() => otpIn.focus(), 150);
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function closeForgotPasswordModal() {
+    const modal = document.getElementById('arc-forgot-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  async function verifyRecoveryCode() {
+    const otpIn = document.getElementById('arc-forgot-otp-input');
+    const err = document.getElementById('arc-forgot-err');
+    if (err) err.textContent = '';
+    const entered = (otpIn ? otpIn.value : '').trim();
+    const stored = localStorage.getItem('arc_sec_recovery_otp');
+    const storedTime = parseInt(localStorage.getItem('arc_sec_recovery_otp_time') || '0', 10);
+
+    if (!entered) {
+      if (err) err.textContent = 'Please enter the 6-digit verification code.';
+      return;
+    }
+    if (Date.now() - storedTime > 15 * 60 * 1000) {
+      if (err) err.textContent = 'Verification code expired. Please request a new one.';
+      return;
+    }
+    if (entered !== stored) {
+      if (err) err.textContent = 'Incorrect verification code. Please check and try again.';
+      if (window.playSfx) window.playSfx('uncheck');
+      return;
+    }
+
+    // Code verified! Reset password & prompt user to set a new one
+    localStorage.removeItem('arc_sec_recovery_otp');
+    localStorage.removeItem('arc_sec_recovery_otp_time');
+    localStorage.removeItem('arc_sec_pin_hash');
+    localStorage.removeItem('arc_sec_pin_salt');
+    updatePinBadge();
+
+    closeForgotPasswordModal();
+    hideLockScreen();
+
+    if (window.playSfx) window.playSfx('fanfare');
+    if (typeof showToast === 'function') {
+      showToast('Identity verified! Set your new security password.');
+    }
+    setTimeout(() => {
+      openPinModal();
+    }, 200);
   }
 
   function openQuarantine(scanReport, rawPayload, filename) {
@@ -10022,11 +10400,11 @@ window.ArcSecurity = (function() {
     const setBtn = document.getElementById('btn-sec-toggle-pin');
     const hasPin = isPinSet();
     if (badge) {
-      badge.textContent = hasPin ? 'ACTIVE (4-6 digits)' : 'Disabled';
+      badge.textContent = hasPin ? 'ACTIVE (Password/PIN Protected)' : 'Disabled';
       badge.className = hasPin ? 'text-[10px] text-emerald-400 font-mono' : 'text-[10px] text-slate-400 font-mono';
     }
     if (lockBtn) lockBtn.classList.toggle('hidden', !hasPin);
-    if (setBtn) setBtn.textContent = hasPin ? 'Manage PIN' : 'Setup Security PIN';
+    if (setBtn) setBtn.textContent = hasPin ? 'Manage Password' : 'Setup Security Password';
   }
 
   async function triggerAuditUi() {
@@ -10059,15 +10437,33 @@ window.ArcSecurity = (function() {
       });
     }
 
+    const passIn = document.getElementById('arc-lock-pass-input');
+    if (passIn) {
+      passIn.addEventListener('input', () => {
+        const err = document.getElementById('arc-pin-err');
+        if (err) err.textContent = '';
+        _updatePinDots();
+      });
+      passIn.addEventListener('keydown', async e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          await submitUnlock();
+        }
+      });
+    }
+
     document.addEventListener('keydown', e => {
       const ov = document.getElementById('arc-pin-overlay');
       if (!ov || ov.classList.contains('hidden')) return;
+      if (document.activeElement && document.activeElement.id === 'arc-lock-pass-input') {
+        return;
+      }
       if (/^[0-9]$/.test(e.key)) handlePinInput(e.key);
       else if (e.key === 'Backspace') handlePinInput('back');
       else if (e.key === 'Escape' || e.key === 'Delete') handlePinInput('clear');
     });
 
-    document.querySelectorAll('#pp-sec-quarantine [data-close], #pp-sec-enc-exp [data-close], #pp-sec-enc-imp [data-close], #pp-sec-pin-modal [data-close]').forEach(btn => {
+    document.querySelectorAll('#pp-sec-quarantine [data-close], #pp-sec-enc-exp [data-close], #pp-sec-enc-imp [data-close], #pp-sec-pin-modal [data-close], #arc-forgot-modal [data-close]').forEach(btn => {
       btn.addEventListener('click', () => {
         const m = btn.closest('.pp-modal');
         if (m) m.classList.remove('open');
@@ -10162,26 +10558,26 @@ window.ArcSecurity = (function() {
         const confIn = document.getElementById('sec-pin-confirm');
         const hasPin = isPinSet();
         if (hasPin) {
-          const ok = await verifyPin(currIn ? currIn.value : '');
+          const ok = await verifyPin(currIn ? currIn.value.trim() : '');
           if (!ok) {
-            if (err) err.textContent = 'Current PIN is incorrect.';
+            if (err) err.textContent = 'Current password or PIN is incorrect.';
             return;
           }
         }
-        const p1 = newIn ? newIn.value : '';
-        const p2 = confIn ? confIn.value : '';
-        if (!/^\d{4,6}$/.test(p1)) {
-          if (err) err.textContent = 'PIN must be 4 to 6 numbers.';
+        const p1 = (newIn ? newIn.value : '').trim();
+        const p2 = (confIn ? confIn.value : '').trim();
+        if (!p1 || p1.length < 4) {
+          if (err) err.textContent = 'Password must be at least 4 characters or numbers.';
           return;
         }
         if (p1 !== p2) {
-          if (err) err.textContent = 'PINs do not match.';
+          if (err) err.textContent = 'Passwords do not match.';
           return;
         }
         await setPin(p1);
         const modal = document.getElementById('pp-sec-pin-modal');
         if (modal) modal.classList.remove('open');
-        if (typeof showToast === 'function') showToast('Security PIN Enabled');
+        if (typeof showToast === 'function') showToast('Security Password Saved');
       });
     }
 
@@ -10191,10 +10587,10 @@ window.ArcSecurity = (function() {
         const err = document.getElementById('sec-pin-modal-err');
         const currIn = document.getElementById('sec-pin-curr');
         try {
-          await removePin(currIn ? currIn.value : '');
+          await removePin(currIn ? currIn.value.trim() : '');
           const modal = document.getElementById('pp-sec-pin-modal');
           if (modal) modal.classList.remove('open');
-          if (typeof showToast === 'function') showToast('Security PIN Removed');
+          if (typeof showToast === 'function') showToast('Security Password Removed');
         } catch (e) {
           if (err) err.textContent = e.message;
         }
@@ -10245,6 +10641,11 @@ window.ArcSecurity = (function() {
     showLockScreen,
     hideLockScreen,
     handlePinInput,
+    submitUnlock,
+    togglePassVisible,
+    openForgotPasswordModal,
+    closeForgotPasswordModal,
+    verifyRecoveryCode,
     openQuarantine,
     openEncExportModal,
     openEncImportModal,
@@ -10258,9 +10659,350 @@ window.ArcSecurity = (function() {
   };
 })();
 
+// User Operative Profile & Handle Management Module
+window.ArcProfile = (function() {
+  'use strict';
+  const STORAGE_KEY = 'arc_user_profile';
+
+  function getDefaultProfile() {
+    let authUser = null;
+    if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+      authUser = window.ArcGoogleSync.getUser();
+    }
+    const name = (authUser && authUser.name) ? authUser.name : 'Operative';
+    const email = (authUser && authUser.email) ? authUser.email : 'operative@winterarc.local';
+    const cleanUser = name.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'operative';
+    return {
+      displayName: name,
+      username: cleanUser,
+      title: 'Shadow Initiate',
+      motto: 'Transform in Silence.',
+      email: email,
+      avatar: name.charAt(0).toUpperCase() || 'O',
+      isCustomized: false
+    };
+  }
+
+  function getProfile() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        return Object.assign(getDefaultProfile(), JSON.parse(raw));
+      }
+    } catch (_) {}
+    return getDefaultProfile();
+  }
+
+  function saveProfile() {
+    const nameIn = document.getElementById('arc-input-display-name');
+    const userIn = document.getElementById('arc-input-username');
+    const titleIn = document.getElementById('arc-select-title');
+    const mottoIn = document.getElementById('arc-input-motto');
+    const err = document.getElementById('arc-profile-modal-err');
+    if (err) err.textContent = '';
+
+    const displayName = (nameIn ? nameIn.value : '').trim();
+    let username = (userIn ? userIn.value : '').trim().toLowerCase().replace(/^@+/, '');
+    const title = (titleIn ? titleIn.value : '').trim() || 'Shadow Initiate';
+    const motto = (mottoIn ? mottoIn.value : '').trim() || 'Transform in Silence.';
+
+    if (!displayName || displayName.length < 2) {
+      if (err) err.textContent = 'Display name must be at least 2 characters.';
+      return false;
+    }
+    if (!username || username.length < 3) {
+      if (err) err.textContent = 'Username handle must be at least 3 characters.';
+      return false;
+    }
+    if (!/^[a-z0-9_]+$/.test(username)) {
+      if (err) err.textContent = 'Username can only contain letters, numbers, and underscores.';
+      return false;
+    }
+
+    const current = getProfile();
+    const updated = {
+      ...current,
+      displayName,
+      username,
+      title,
+      motto,
+      avatar: displayName.charAt(0).toUpperCase(),
+      isCustomized: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    renderHeaderProfile();
+    closeSetupModal();
+    if (window.playSfx) window.playSfx('fanfare');
+    if (typeof showToast === 'function') {
+      showToast(`Identity saved: ${displayName} (@${username})`);
+    }
+    return true;
+  }
+
+  function handleLivePreview() {
+    const nameIn = document.getElementById('arc-input-display-name');
+    const userIn = document.getElementById('arc-input-username');
+    const titleIn = document.getElementById('arc-select-title');
+
+    const name = (nameIn && nameIn.value.trim()) || 'Operative';
+    let handle = (userIn && userIn.value.trim().toLowerCase().replace(/^@+/, '')) || 'operative';
+    const title = (titleIn && titleIn.value) || 'Shadow Initiate';
+
+    const pAvatar = document.getElementById('arc-preview-avatar');
+    const pName = document.getElementById('arc-preview-name');
+    const pUser = document.getElementById('arc-preview-username');
+    const pRank = document.getElementById('arc-preview-rank-tag');
+
+    if (pAvatar) pAvatar.textContent = name.charAt(0).toUpperCase() || 'O';
+    if (pName) pName.textContent = name;
+    if (pUser) pUser.textContent = '@' + handle;
+    if (pRank) pRank.textContent = title;
+  }
+
+  function openSetupModal() {
+    const modal = document.getElementById('arc-profile-setup-modal');
+    if (!modal) return;
+    const p = getProfile();
+    const nameIn = document.getElementById('arc-input-display-name');
+    const userIn = document.getElementById('arc-input-username');
+    const titleIn = document.getElementById('arc-select-title');
+    const mottoIn = document.getElementById('arc-input-motto');
+    const emailDisp = document.getElementById('arc-preview-email');
+    const err = document.getElementById('arc-profile-modal-err');
+
+    if (nameIn) nameIn.value = p.displayName;
+    if (userIn) userIn.value = p.username;
+    if (titleIn) titleIn.value = p.title;
+    if (mottoIn) mottoIn.value = p.motto || '';
+    if (emailDisp) emailDisp.textContent = p.email || 'synced.user@gmail.com';
+    if (err) err.textContent = '';
+
+    handleLivePreview();
+    modal.classList.add('open');
+    if (nameIn) setTimeout(() => nameIn.focus(), 150);
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function closeSetupModal() {
+    const modal = document.getElementById('arc-profile-setup-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function renderHeaderProfile() {
+    const p = getProfile();
+    const nameEl = document.getElementById('header-profile-name');
+    const userEl = document.getElementById('header-profile-user');
+    const avatarEl = document.getElementById('header-avatar-circle');
+
+    if (nameEl) nameEl.textContent = p.displayName;
+    if (userEl) userEl.textContent = '@' + p.username;
+    if (avatarEl) {
+      let authUser = null;
+      if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+        authUser = window.ArcGoogleSync.getUser();
+      }
+      if (authUser && authUser.picture) {
+        avatarEl.innerHTML = `<img src="${authUser.picture}" class="w-full h-full object-cover rounded-full">`;
+      } else {
+        avatarEl.textContent = p.avatar || 'O';
+      }
+    }
+  }
+
+  function onLoginSuccess(authUser) {
+    if (!authUser) return;
+    const current = getProfile();
+    const updated = {
+      ...current,
+      email: authUser.email || current.email
+    };
+    if (!current.isCustomized) {
+      if (authUser.name) updated.displayName = authUser.name;
+      const cleanUser = (authUser.name || 'user').toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 16);
+      if (cleanUser) updated.username = cleanUser;
+      updated.avatar = (authUser.name || 'U').charAt(0).toUpperCase();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      renderHeaderProfile();
+      // Prompt user to pick/confirm details right after login
+      setTimeout(openSetupModal, 600);
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      renderHeaderProfile();
+    }
+  }
+
+  function init() {
+    renderHeaderProfile();
+  }
+
+  return {
+    init,
+    getProfile,
+    saveProfile,
+    openSetupModal,
+    closeSetupModal,
+    handleLivePreview,
+    renderHeaderProfile,
+    onLoginSuccess
+  };
+})();
+
+// Tracker Sharing and Accountability Report Module
+window.ArcShare = (function() {
+  'use strict';
+
+  function getProgressStats() {
+    const profile = (window.ArcProfile && typeof window.ArcProfile.getProfile === 'function')
+      ? window.ArcProfile.getProfile()
+      : { displayName: 'Operative', username: 'operative', title: 'Shadow Initiate', motto: 'Transform in Silence.' };
+
+    let day = 25;
+    if (window.state && window.state.day) day = window.state.day;
+    else if (window.currentDayIndex) day = window.currentDayIndex + 1;
+
+    let streak = 3;
+    if (window.state && typeof window.state.streak === 'number') {
+      streak = window.state.streak;
+    } else if (window.state && window.state.gam && typeof window.state.gam.streak === 'number') {
+      streak = window.state.gam.streak;
+    }
+
+    let shield = '100%';
+    const shieldEl = document.getElementById('st-radar-shield-score');
+    if (shieldEl && shieldEl.textContent) shield = shieldEl.textContent.trim();
+
+    return { profile, day, streak, shield };
+  }
+
+  function openShareModal() {
+    const modal = document.getElementById('arc-share-modal');
+    if (!modal) return;
+    const stats = getProgressStats();
+
+    const uEl = document.getElementById('share-card-user');
+    const rEl = document.getElementById('share-card-rank');
+    const sEl = document.getElementById('share-card-streak');
+    const dEl = document.getElementById('share-card-day');
+    const shEl = document.getElementById('share-card-shield');
+
+    if (uEl) uEl.textContent = `@${stats.profile.username}`;
+    if (rEl) rEl.textContent = `${stats.profile.title}`;
+    if (sEl) sEl.textContent = `${stats.streak} Days`;
+    if (dEl) dEl.textContent = `${stats.day} / 92`;
+    if (shEl) shEl.textContent = stats.shield;
+
+    modal.classList.add('open');
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function closeShareModal() {
+    const modal = document.getElementById('arc-share-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function buildSummaryText() {
+    const s = getProgressStats();
+    return `❄️ WINTER ARC 2026 - DISCIPLINE REPORT\n` +
+      `Operative: ${s.profile.displayName} (@${s.profile.username}) • ${s.profile.title}\n` +
+      `📅 Progress: Day ${s.day} / 92 Days\n` +
+      `🔥 Active Streak: ${s.streak} Days\n` +
+      `🛡️ Dopamine Shield: ${s.shield}\n` +
+      `💬 Motto: "${s.profile.motto || 'Transform in Silence.'}"\n\n` +
+      `Locking in and conquering distractions with Arc Tracker.\n#WinterArc #Discipline #LockIn #ArcTracker`;
+  }
+
+  async function copyShareLink() {
+    const url = window.location.href;
+    const lbl = document.getElementById('arc-share-copy-link-label');
+    try {
+      await navigator.clipboard.writeText(url);
+      if (lbl) {
+        lbl.textContent = 'Copied Link to Clipboard! ✓';
+        setTimeout(() => { lbl.textContent = 'Copy Tracker Web Link'; }, 2000);
+      }
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast('Tracker URL copied to clipboard');
+    } catch (_) {
+      prompt('Copy tracker link:', url);
+    }
+  }
+
+  async function copyTextSummary() {
+    const text = buildSummaryText();
+    const lbl = document.getElementById('arc-share-copy-text-label');
+    try {
+      await navigator.clipboard.writeText(text);
+      if (lbl) {
+        lbl.textContent = 'Report Copied to Clipboard! ✓';
+        setTimeout(() => { lbl.textContent = 'Copy Formatted Progress Report'; }, 2000);
+      }
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast('Progress report copied to clipboard');
+    } catch (_) {
+      prompt('Copy progress report:', text);
+    }
+  }
+
+  async function shareNative() {
+    const text = buildSummaryText();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Winter Arc 2026 Progress',
+          text: text,
+          url: window.location.href
+        });
+        if (typeof showToast === 'function') showToast('Shared successfully!');
+      } catch (err) {
+        if (err.name !== 'AbortError') copyTextSummary();
+      }
+    } else {
+      copyTextSummary();
+    }
+  }
+
+  function shareWhatsApp() {
+    const text = buildSummaryText();
+    const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  }
+
+  function shareTwitter() {
+    const text = buildSummaryText();
+    const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  }
+
+  function shareTelegram() {
+    const text = buildSummaryText();
+    const url = 'https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  }
+
+  return {
+    openShareModal,
+    closeShareModal,
+    copyShareLink,
+    copyTextSummary,
+    shareNative,
+    shareWhatsApp,
+    shareTwitter,
+    shareTelegram
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
     window.ArcSecurity.init();
+  }
+  if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
+    window.ArcProfile.init();
   }
 });
 </script>
@@ -15400,6 +16142,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
             } catch(e) {}
 
             setUser(profile);
+            if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
+              window.ArcProfile.onLoginSuccess(profile);
+            }
             if (typeof playSfx === 'function') playSfx('victory');
             if (typeof showToast === 'function') showToast(`👋 Welcome, ${profile.name}! Google Account connected.`);
             renderUi();
@@ -15424,6 +16169,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       connectedAt: Date.now()
     };
     setUser(demoUser);
+    if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
+      window.ArcProfile.onLoginSuccess(demoUser);
+    }
     if (typeof playSfx === 'function') playSfx('victory');
     if (typeof showToast === 'function') {
       showToast('🟢 Google Account Connected! Multi-device sync enabled.');
@@ -15435,6 +16183,9 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   function disconnect() {
     if (!confirm('Disconnect Google Account? Your local habits, check-ins, and streaks will NOT be deleted.')) return;
     setUser(null);
+    if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+      window.ArcProfile.renderHeaderProfile();
+    }
     if (typeof playSfx === 'function') playSfx('modalClose');
     if (typeof showToast === 'function') showToast('Google Account disconnected. All local progress preserved.');
     renderUi();
