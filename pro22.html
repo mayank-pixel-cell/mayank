@@ -1604,6 +1604,68 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
                 </div>
             </div>
+
+            <!-- AUTO-START ON DEVICE BOOT SETTINGS CARD -->
+            <div id="settings-autostart-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-power-off"></i> SYSTEM STARTUP
+                            </span>
+                            <span id="autostart-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">DISABLED</span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                            Launch When Device Turns On (Auto-Start)
+                        </h3>
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Automatically launch Arc Tracker whenever your PC, Mac, or phone turns on so screen time tracking and habit sentinel run continuously without missing a beat.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                        <button role="button" id="btn-toggle-autostart" onclick="ArcAutoStart.toggle()" class="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-500/20">
+                            <i class="fa-solid fa-power-off"></i>
+                            <span id="btn-toggle-autostart-text">Turn On Auto-Start</span>
+                        </button>
+                        <button role="button" onclick="ArcAutoStart.openModal()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95">
+                            <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                            <span>Setup Guide</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERMANENT SCREEN TIME NOTIFICATION CARD -->
+            <div id="settings-screentime-notif-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-bell"></i> SYSTEM TRAY &amp; LOCK SCREEN
+                            </span>
+                            <span id="screentime-notif-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">DISABLED</span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                            Permanent Screen Time Notification
+                        </h3>
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Pins a live, silent notification in your device's notification center, status bar, and lock screen displaying your total screen time and dopamine shield score at a glance.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
+                        <button role="button" id="btn-toggle-perm-notif" onclick="ArcScreenTimeNotifier.toggle()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20">
+                            <i class="fa-solid fa-bell"></i>
+                            <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
+                        </button>
+                        <button role="button" onclick="ArcScreenTimeNotifier.testNotification()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95" title="Test &amp; Preview Notification">
+                            <i class="fa-solid fa-eye text-purple-400"></i>
+                            <span>Preview</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
             <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
         </section>
@@ -2595,6 +2657,69 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         <!-- HIDDEN QUANTUM MICRO-NODE GLYPH (1 of 7 Easter Eggs) -->
         <div id="arc-quantum-dot" role="button" tabindex="0" onclick="toggleCyberdeckTerminal(true)" title="[⌘ CLASSIFIED TELEMETRY ACCESS]" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-cyan-400/30 hover:bg-cyan-400 active:scale-125 transition-all duration-300 cursor-pointer shadow-[0_0_8px_rgba(0,240,255,0.4)] hover:shadow-[0_0_16px_rgba(0,240,255,1)] opacity-40 hover:opacity-100 animate-pulse"></div>
     </footer>
+
+    <!-- PERMANENT FLOATING LIVE SCREEN TIME HUD PILL -->
+    <div id="arc-screentime-hud" class="fixed bottom-20 md:bottom-6 left-4 sm:left-6 z-40 select-none transition-all duration-300">
+        <!-- Floating Pill Trigger -->
+        <div id="arc-hud-pill" onclick="ArcScreenTimeNotifier.toggleHudCard()" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-cyan-500/40 hover:border-cyan-400 text-white shadow-2xl backdrop-blur-xl transition hover:scale-105 active:scale-95 group">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono font-bold uppercase tracking-wider group-hover:text-cyan-300 flex items-center gap-1">
+                <i class="fa-solid fa-clock text-cyan-400"></i>
+                <span class="hidden sm:inline">SCREEN TIME:</span>
+            </span>
+            <span id="arc-hud-timer" class="font-mono font-black text-xs sm:text-sm text-cyan-300 tracking-wider">00h 00m 00s</span>
+            <i id="arc-hud-caret" class="fa-solid fa-chevron-up text-[10px] text-slate-400 transition-transform"></i>
+        </div>
+
+        <!-- Expandable Quick Control Popup -->
+        <div id="arc-hud-card" class="hidden absolute bottom-11 left-0 w-72 sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 shadow-2xl backdrop-blur-2xl space-y-3 mb-2 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <span class="font-extrabold text-xs text-white">Live Screen Time Monitor</span>
+                </div>
+                <button type="button" onclick="ArcScreenTimeNotifier.toggleHudCard(false)" class="text-slate-400 hover:text-white text-xs p-1">✕</button>
+            </div>
+
+            <div class="space-y-1.5 text-xs font-mono">
+                <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+                    <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-laptop text-cyan-400"></i> Laptop / PC</span>
+                    <strong id="arc-hud-pc-time" class="text-white">00h 00m</strong>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+                    <span class="text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen text-purple-400"></i> Mobile Tracker</span>
+                    <strong id="arc-hud-mob-time" class="text-white">00h 00m</strong>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30">
+                    <span class="text-cyan-300 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-shield-halved"></i> Dopamine Shield</span>
+                    <strong id="arc-hud-shield-score" class="text-emerald-400">100%</strong>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+                <button type="button" onclick="toggleLaptopTracker()" class="flex-1 py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+                    <i class="fa-solid fa-pause"></i>
+                    <span id="arc-hud-pause-btn">Pause</span>
+                </button>
+                <button type="button" onclick="switchTab('screentime'); ArcScreenTimeNotifier.toggleHudCard(false)" class="flex-1 py-1.5 px-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition shadow-sm">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Matrix View</span>
+                </button>
+            </div>
+
+            <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                <span class="text-slate-400">OS Notification Tray:</span>
+                <button type="button" onclick="ArcScreenTimeNotifier.toggle()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline" id="arc-hud-notif-link">
+                    Enable
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-card px-3.5 py-2.5 rounded-xl border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-2 shadow-2xl max-w-[90vw]">
@@ -5600,6 +5725,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     state.laptop.totalSeconds++;
                     const display = document.getElementById('laptop-timer-display');
                     if (display) display.textContent = formatDuration(state.laptop.totalSeconds);
+                    if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
+                        window.ArcScreenTimeNotifier.tick(state.laptop.totalSeconds);
+                    }
                 }
             }, 1000);
         }
@@ -7401,6 +7529,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const sideComb = document.getElementById('sidebar-combined-time');
             if (sideMob) sideMob.textContent = formatDurationShort(mobileSecs);
             if (sideComb) sideComb.textContent = formatDurationShort(combinedSecs);
+
+            // 9b. Update live HUD and permanent notification
+            if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.syncTimes === 'function') {
+                window.ArcScreenTimeNotifier.syncTimes(desktopSecs, mobileSecs, combinedSecs);
+            }
 
             // 10. Persist to storage & state
             window.state = window.state || {};
@@ -9876,6 +10009,126 @@ html[data-mode=light] #st-radar-shield-score {
   </div>
 </div>
 
+<!-- Full-Screen Post-Unlock Cinematic Loading Overlay -->
+<div id="arc-unlock-loader" class="fixed inset-0 z-[130] hidden flex-col items-center justify-center p-6 bg-slate-950/98 backdrop-blur-2xl select-none transition-opacity duration-500" role="status" aria-label="Loading application state">
+  <div class="max-w-md w-full flex flex-col items-center text-center space-y-6">
+    <!-- Animated Glowing Ring & Logo -->
+    <div class="relative w-24 h-24 grid place-items-center">
+      <div class="absolute inset-0 rounded-full border-4 border-cyan-500/20 border-t-cyan-400 animate-spin" style="animation-duration: 1.2s;"></div>
+      <div class="absolute inset-2 rounded-full border-2 border-indigo-500/20 border-b-indigo-400 animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 grid place-items-center text-white text-2xl shadow-[0_0_25px_rgba(6,182,212,0.6)]">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+    </div>
+
+    <!-- Time-aware Greeting & Motivational Message -->
+    <div class="space-y-2">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-[11px] font-bold tracking-wider" id="arc-loader-badge">
+        🌅 EARLY BIRD PROTOCOL ACTIVE
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="arc-loader-greeting">
+        Good morning, early bird!
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-300 max-w-sm mx-auto leading-relaxed" id="arc-loader-subtext">
+        The sunrise belongs to those who discipline their mind before the world wakes. Initializing high-focus terminal...
+      </p>
+    </div>
+
+    <!-- Progress Bar & Subsystem Step -->
+    <div class="w-full space-y-2">
+      <div class="flex items-center justify-between text-[11px] font-mono">
+        <span class="text-slate-400" id="arc-loader-step">Verifying cryptographic state...</span>
+        <span class="text-cyan-400 font-bold" id="arc-loader-pct">0%</span>
+      </div>
+      <div class="w-full h-2 rounded-full bg-slate-900 border border-slate-800 overflow-hidden shadow-inner p-0.5">
+        <div id="arc-loader-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500 transition-all duration-300 ease-out shadow-[0_0_12px_rgba(6,182,212,0.8)]" style="width: 0%;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Auto-Start Setup Modal -->
+<div id="arc-autostart-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Configure Auto-Start on Device Boot">
+  <div class="pp-box max-w-lg w-full">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2 text-cyan-400 font-black text-base">
+        <i class="fa-solid fa-power-off text-lg"></i>
+        <h3>Launch When Device Turns On</h3>
+      </div>
+      <button type="button" onclick="ArcAutoStart.closeModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-slate-300 mb-4">Start Arc Tracker as soon as your computer or phone turns on. Keep your dopamine shield and habits active 24/7 without having to remember to open the app.</p>
+
+    <!-- Platform specific instructions tab -->
+    <div class="space-y-3 mb-4 text-xs">
+      <!-- Windows PC -->
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-white flex items-center gap-1.5"><i class="fa-brands fa-windows text-cyan-400"></i> Windows 10 / 11 (Automatic 1-Click)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">RECOMMENDED</span>
+        </div>
+        <p class="text-[11px] text-slate-300">Download the 1-Click Windows Startup installer script. It automatically registers Arc Tracker into your personal Windows Startup folder (<code class="text-cyan-300 font-mono text-[10px]">shell:startup</code>).</p>
+        <button type="button" onclick="ArcAutoStart.downloadWindowsStartupScript()" class="w-full py-2 px-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+          <i class="fa-solid fa-download"></i>
+          <span>Download 1-Click Windows Auto-Start (.bat)</span>
+        </button>
+      </div>
+
+      <!-- Android Phone / Tablet -->
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+        <span class="font-bold text-white flex items-center gap-1.5"><i class="fa-brands fa-android text-emerald-400"></i> Android Phone &amp; Tablet</span>
+        <ol class="text-[11px] text-slate-300 space-y-1 list-decimal list-inside">
+          <li>Open device <b>Settings ➔ Apps ➔ Arc Tracker</b>.</li>
+          <li>Tap <b>Battery ➔ Unrestricted / Allow background activity</b>.</li>
+          <li>Enable <b>Auto-start / Launch on reboot</b> (on Xiaomi, OnePlus, Samsung &amp; Realme devices).</li>
+          <li>In Recent Apps overview, tap the <b>Lock 🔒 icon</b> on Arc Tracker to keep it pinned in memory.</li>
+        </ol>
+      </div>
+
+      <!-- macOS -->
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+        <span class="font-bold text-white flex items-center gap-1.5"><i class="fa-brands fa-apple text-slate-200"></i> Apple macOS</span>
+        <p class="text-[11px] text-slate-300">Open <b>System Settings ➔ General ➔ Login Items</b>, click the <b>+</b> button under "Open at Login", and select <b>Arc Tracker</b>.</p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 mb-4">
+      <div>
+        <span class="text-xs font-bold text-white block">Auto-Start Setting Preference</span>
+        <span class="text-[10px] text-slate-400">Record auto-start status in your operative profile</span>
+      </div>
+      <button type="button" onclick="ArcAutoStart.toggle()" id="arc-autostart-modal-toggle-btn" class="px-3 py-1.5 rounded-lg bg-cyan-500 text-black font-extrabold text-xs">
+        Enable
+      </button>
+    </div>
+
+    <div class="flex gap-2">
+      <button type="button" onclick="ArcAutoStart.closeModal()" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Auto-Start Post-Unlock Polite Recommendation Modal -->
+<div id="arc-autostart-prompt-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Recommendation: Turn on auto-start">
+  <div class="pp-box max-w-sm w-full text-center">
+    <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-400 grid place-items-center text-xl mx-auto mb-3 shadow-lg">
+      <i class="fa-solid fa-power-off"></i>
+    </div>
+    <h3 class="text-base font-black text-white mb-1">Start Arc Tracker on Device Boot?</h3>
+    <p class="text-xs text-slate-300 mb-4 leading-relaxed">
+      Would you like Arc Tracker to automatically start when your device turns on? This guarantees your daily habits, screen time, and dopamine shield stay protected without manual intervention.
+    </p>
+    <div class="flex flex-col gap-2">
+      <button type="button" onclick="ArcAutoStart.acceptPrompt()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-black font-extrabold text-xs uppercase tracking-wider transition active:scale-95 shadow-md">
+        <i class="fa-solid fa-check mr-1"></i> Yes, Enable Auto-Start
+      </button>
+      <button type="button" onclick="ArcAutoStart.dismissPrompt()" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white font-medium text-xs transition">
+        Maybe Later
+      </button>
+    </div>
+  </div>
+</div>
+
 <script id="arc-security-js">
 window.ArcSecurity = (function() {
   'use strict';
@@ -10153,6 +10406,101 @@ window.ArcSecurity = (function() {
     if (window.playSfx) window.playSfx('modalClose');
   }
 
+  function showUnlockLoadingScreen() {
+    const loader = document.getElementById('arc-unlock-loader');
+    if (!loader) {
+      if (window.playSfx) window.playSfx('fanfare');
+      if (typeof showToast === 'function') showToast('Security Lock Unlocked');
+      return;
+    }
+
+    const hour = new Date().getHours();
+    const profile = (window.ArcProfile && typeof window.ArcProfile.getProfile === 'function')
+      ? window.ArcProfile.getProfile()
+      : { displayName: 'Operative' };
+    const name = profile.displayName || 'Operative';
+
+    let badgeText = '🌅 EARLY BIRD PROTOCOL ACTIVE';
+    let greetingText = `Good morning, early bird ${name}!`;
+    let subtext = 'The sunrise belongs to those who discipline their mind before the world wakes. Calibrating high-focus terminal...';
+
+    if (hour >= 4 && hour < 9) {
+      badgeText = '🌅 EARLY BIRD PROTOCOL ACTIVE';
+      greetingText = `Good morning, early bird ${name}!`;
+      subtext = 'The quiet hours belong to those who build empires. Sunrise discipline mode loaded.';
+    } else if (hour >= 9 && hour < 12) {
+      badgeText = '☀️ MORNING FOCUS SEQUENCE';
+      greetingText = `Good morning, ${name}!`;
+      subtext = 'Daylight execution protocol engaged. Lock in and conquer your priority targets.';
+    } else if (hour >= 12 && hour < 17) {
+      badgeText = '⚡ PEAK DISCIPLINE PROTOCOL';
+      greetingText = `Good afternoon, ${name}!`;
+      subtext = 'Midday momentum active. Guard your dopamine shield and sustain deep work.';
+    } else if (hour >= 17 && hour < 21) {
+      badgeText = '🌆 EVENING MASTERY PROTOCOL';
+      greetingText = `Good evening, ${name}!`;
+      subtext = 'Consolidating daily habit streaks and reviewing today’s victories.';
+    } else {
+      badgeText = '🌙 NIGHT OWL PROTOCOL ACTIVE';
+      greetingText = `Night owl operative, ${name}!`;
+      subtext = 'Midnight discipline unlocked. While the world sleeps, greatness is forged in silence.';
+    }
+
+    const badgeEl = document.getElementById('arc-loader-badge');
+    const greetEl = document.getElementById('arc-loader-greeting');
+    const subEl = document.getElementById('arc-loader-subtext');
+    const barEl = document.getElementById('arc-loader-bar');
+    const pctEl = document.getElementById('arc-loader-pct');
+    const stepEl = document.getElementById('arc-loader-step');
+
+    if (badgeEl) badgeEl.textContent = badgeText;
+    if (greetEl) greetEl.textContent = greetingText;
+    if (subEl) subEl.textContent = subtext;
+    if (barEl) barEl.style.width = '0%';
+    if (pctEl) pctEl.textContent = '0%';
+    if (stepEl) stepEl.textContent = 'Verifying cryptographic state...';
+
+    loader.classList.remove('hidden');
+    loader.classList.add('flex');
+    loader.style.opacity = '1';
+
+    if (window.playSfx) window.playSfx('modalOpen');
+
+    // Step progress smoothly from 0 to 100%
+    const steps = [
+      { pct: 28, text: 'Verifying state cryptographic integrity & audit checksum...', time: 350 },
+      { pct: 60, text: 'Decrypting habit telemetry & dopamine shield matrices...', time: 800 },
+      { pct: 88, text: 'Synchronizing multi-device screen time & active audio synthesis...', time: 1300 },
+      { pct: 100, text: 'Terminal fully loaded. Welcome back, Operative.', time: 1800 }
+    ];
+
+    steps.forEach(({ pct, text, time }) => {
+      setTimeout(() => {
+        if (barEl) barEl.style.width = `${pct}%`;
+        if (pctEl) pctEl.textContent = `${pct}%`;
+        if (stepEl) stepEl.textContent = text;
+        if (pct === 100 && window.playSfx) window.playSfx('fanfare');
+      }, time);
+    });
+
+    // Fade out and reveal app after 2.2 seconds
+    setTimeout(() => {
+      loader.style.opacity = '0';
+      setTimeout(() => {
+        loader.classList.remove('flex');
+        loader.classList.add('hidden');
+        if (typeof showToast === 'function') {
+          showToast(`✨ ${greetingText}`);
+        }
+
+        // Check if Auto-Start is configured; if not, ask the user
+        if (window.ArcAutoStart && typeof window.ArcAutoStart.promptIfUnconfigured === 'function') {
+          window.ArcAutoStart.promptIfUnconfigured();
+        }
+      }, 400);
+    }, 2200);
+  }
+
   function _updatePinDots() {
     const passIn = document.getElementById('arc-lock-pass-input');
     const currentLen = (passIn && passIn.value) ? passIn.value.length : _pinBuffer.length;
@@ -10191,8 +10539,7 @@ window.ArcSecurity = (function() {
     const ok = await verifyPin(val);
     if (ok) {
       hideLockScreen();
-      if (window.playSfx) window.playSfx('fanfare');
-      if (typeof showToast === 'function') showToast('Security Lock Unlocked');
+      showUnlockLoadingScreen();
       return true;
     } else {
       if (err) err.textContent = 'Incorrect password or PIN. Try again.';
@@ -10226,8 +10573,7 @@ window.ArcSecurity = (function() {
       const ok = await verifyPin(current);
       if (ok) {
         hideLockScreen();
-        if (window.playSfx) window.playSfx('fanfare');
-        if (typeof showToast === 'function') showToast('Security Password Verified');
+        showUnlockLoadingScreen();
       }
     }
   }
@@ -10640,6 +10986,7 @@ window.ArcSecurity = (function() {
     removePin,
     showLockScreen,
     hideLockScreen,
+    showUnlockLoadingScreen,
     handlePinInput,
     submitUnlock,
     togglePassVisible,
@@ -10997,12 +11344,396 @@ window.ArcShare = (function() {
   };
 })();
 
+// Device Auto-Start Management Module (Windows, Android, macOS)
+window.ArcAutoStart = (function() {
+  'use strict';
+  const STORAGE_KEY = 'arc_autostart_enabled';
+  const PROMPTED_KEY = 'arc_autostart_prompted';
+
+  function isEnabled() {
+    return localStorage.getItem(STORAGE_KEY) === 'true';
+  }
+
+  function setEnabled(enabled) {
+    localStorage.setItem(STORAGE_KEY, enabled ? 'true' : 'false');
+    renderUi();
+    if (enabled) {
+      if (typeof showToast === 'function') showToast('Auto-Start on Device Boot Enabled');
+    } else {
+      if (typeof showToast === 'function') showToast('Auto-Start on Device Boot Disabled');
+    }
+  }
+
+  function toggle() {
+    const next = !isEnabled();
+    setEnabled(next);
+    if (next) {
+      openModal();
+    }
+  }
+
+  function openModal() {
+    const modal = document.getElementById('arc-autostart-modal');
+    if (!modal) return;
+    renderUi();
+    modal.classList.add('open');
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('arc-autostart-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function promptIfUnconfigured() {
+    if (isEnabled()) return;
+    if (localStorage.getItem(PROMPTED_KEY) === 'true') return;
+
+    setTimeout(() => {
+      const modal = document.getElementById('arc-autostart-prompt-modal');
+      if (modal) {
+        modal.classList.add('open');
+        if (window.playSfx) window.playSfx('modalOpen');
+      }
+    }, 700);
+  }
+
+  function acceptPrompt() {
+    const modal = document.getElementById('arc-autostart-prompt-modal');
+    if (modal) modal.classList.remove('open');
+    localStorage.setItem(PROMPTED_KEY, 'true');
+    setEnabled(true);
+    openModal();
+  }
+
+  function dismissPrompt() {
+    const modal = document.getElementById('arc-autostart-prompt-modal');
+    if (modal) modal.classList.remove('open');
+    localStorage.setItem(PROMPTED_KEY, 'true');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function downloadWindowsStartupScript() {
+    const appUrl = window.location.href;
+    const batContent = `@echo off
+:: ========================================================
+::       ARC TRACKER - AUTOMATIC WINDOWS STARTUP INSTALLER
+:: ========================================================
+echo.
+echo [ARC TRACKER] Registering Arc Tracker to launch when your PC turns on...
+echo.
+
+set "STARTUP_FOLDER=%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"
+set "SHORTCUT_PATH=%STARTUP_FOLDER%\\ArcTracker.url"
+
+echo [InternetShortcut] > "%SHORTCUT_PATH%"
+echo URL=${appUrl} >> "%SHORTCUT_PATH%"
+echo IconIndex=0 >> "%SHORTCUT_PATH%"
+if exist "%LOCALAPPDATA%\\Microsoft\\Edge\\Application\\msedge.exe" (
+    echo IconFile=%LOCALAPPDATA%\\Microsoft\\Edge\\Application\\msedge.exe >> "%SHORTCUT_PATH%"
+)
+
+echo.
+echo [SUCCESS] Shortcut created in Startup folder:
+echo "%SHORTCUT_PATH%"
+echo.
+echo Arc Tracker will now start automatically every time your device powers on!
+echo.
+pause
+`;
+
+    const blob = new Blob([batContent], { type: 'application/x-bat' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Enable-ArcTracker-Startup.bat';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    if (window.playSfx) window.playSfx('fanfare');
+    if (typeof showToast === 'function') {
+      showToast('Downloaded Windows Auto-Start .bat script! Run it once to register.');
+    }
+  }
+
+  function renderUi() {
+    const active = isEnabled();
+    const pill = document.getElementById('autostart-status-pill');
+    const btn = document.getElementById('btn-toggle-autostart');
+    const btnText = document.getElementById('btn-toggle-autostart-text');
+    const modalBtn = document.getElementById('arc-autostart-modal-toggle-btn');
+
+    if (pill) {
+      pill.textContent = active ? 'ACTIVE (Starts on Boot)' : 'DISABLED';
+      pill.className = active
+        ? 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+        : 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+    }
+
+    if (btnText) {
+      btnText.textContent = active ? 'Auto-Start Enabled (Active)' : 'Turn On Auto-Start';
+    }
+    if (btn) {
+      btn.className = active
+        ? 'px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95'
+        : 'px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-500/20';
+    }
+
+    if (modalBtn) {
+      modalBtn.textContent = active ? 'Enabled ✓' : 'Enable';
+      modalBtn.className = active
+        ? 'px-3 py-1.5 rounded-lg bg-emerald-500 text-black font-extrabold text-xs'
+        : 'px-3 py-1.5 rounded-lg bg-cyan-500 text-black font-extrabold text-xs';
+    }
+  }
+
+  function init() {
+    renderUi();
+  }
+
+  return {
+    init,
+    isEnabled,
+    setEnabled,
+    toggle,
+    openModal,
+    closeModal,
+    promptIfUnconfigured,
+    acceptPrompt,
+    dismissPrompt,
+    downloadWindowsStartupScript,
+    renderUi
+  };
+})();
+
+// Permanent Live Screen Time Notification & Floating HUD Module
+window.ArcScreenTimeNotifier = (function() {
+  'use strict';
+  const STORAGE_KEY = 'arc_perm_notif_enabled';
+  let _intervalId = null;
+  let _lastSecs = 0;
+  let _desktopSecs = 0;
+  let _mobileSecs = 0;
+  let _combinedSecs = 0;
+  let _hudOpen = false;
+
+  function isEnabled() {
+    const val = localStorage.getItem(STORAGE_KEY);
+    return val === null ? true : val === 'true'; // default to true
+  }
+
+  function formatTime(seconds) {
+    if (typeof formatDuration === 'function') return formatDuration(seconds);
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+  }
+
+  function formatTimeShort(seconds) {
+    if (typeof formatDurationShort === 'function') return formatDurationShort(seconds);
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return `${h}h ${m}m`;
+  }
+
+  async function requestPermission() {
+    if (typeof Notification === 'undefined') {
+      if (typeof showToast === 'function') showToast('System notifications are not supported on this browser.');
+      return false;
+    }
+    if (Notification.permission === 'granted') return true;
+    try {
+      const res = await Notification.requestPermission();
+      renderUi();
+      return res === 'granted';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function toggle() {
+    const next = !isEnabled();
+    localStorage.setItem(STORAGE_KEY, next ? 'true' : 'false');
+    if (next) {
+      const granted = await requestPermission();
+      if (!granted) {
+        if (typeof showToast === 'function') showToast('Please grant notification permission in your browser or system settings.');
+      } else {
+        startNotificationLoop();
+        updateNotification(true);
+        if (typeof showToast === 'function') showToast('Permanent Screen Time notification pinned to tray.');
+      }
+    } else {
+      stopNotificationLoop();
+      if (typeof showToast === 'function') showToast('Permanent Screen Time notification turned off.');
+    }
+    renderUi();
+  }
+
+  function updateNotification(force = false) {
+    if (!isEnabled()) return;
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+
+    const formatted = formatTimeShort(_combinedSecs > 0 ? _combinedSecs : _lastSecs);
+    const shieldEl = document.getElementById('st-radar-shield-score');
+    const shield = shieldEl ? shieldEl.textContent.trim() : '100%';
+
+    let streak = 3;
+    if (window.state && typeof window.state.streak === 'number') streak = window.state.streak;
+
+    try {
+      new Notification(`⏳ Total Screen Time: ${formatted}`, {
+        tag: 'arc-live-screentime',
+        body: `🛡️ Dopamine Shield: ${shield} • Active Streak: ${streak} Days\nTracking active device screen time. Tap to open Arc Tracker.`,
+        icon: './icons/128x128.png',
+        badge: './icons/32x32.png',
+        silent: true,
+        renotify: false,
+        requireInteraction: true
+      });
+    } catch (e) {
+      try {
+        new Notification(`⏳ Total Screen Time: ${formatted}`, {
+          tag: 'arc-live-screentime',
+          body: `🛡️ Dopamine Shield: ${shield} • Active Streak: ${streak} Days`,
+          icon: './icons/128x128.png',
+          badge: './icons/32x32.png',
+          silent: true,
+          renotify: false
+        });
+      } catch (_) {}
+    }
+  }
+
+  async function testNotification() {
+    const granted = await requestPermission();
+    if (granted) {
+      updateNotification(true);
+      if (typeof showToast === 'function') showToast('Preview notification dispatched to system tray!');
+    } else {
+      if (typeof showToast === 'function') showToast('Allow notifications in your browser/device settings to preview.');
+    }
+  }
+
+  function startNotificationLoop() {
+    stopNotificationLoop();
+    if (!isEnabled()) return;
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    _intervalId = setInterval(() => {
+      updateNotification();
+    }, 45000);
+  }
+
+  function stopNotificationLoop() {
+    if (_intervalId) {
+      clearInterval(_intervalId);
+      _intervalId = null;
+    }
+  }
+
+  function toggleHudCard(force) {
+    const card = document.getElementById('arc-hud-card');
+    const caret = document.getElementById('arc-hud-caret');
+    if (!card) return;
+    _hudOpen = typeof force === 'boolean' ? force : !_hudOpen;
+    card.classList.toggle('hidden', !_hudOpen);
+    if (caret) caret.style.transform = _hudOpen ? 'rotate(180deg)' : '';
+    if (_hudOpen && window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function tick(seconds) {
+    _lastSecs = seconds;
+    const hudTimer = document.getElementById('arc-hud-timer');
+    if (hudTimer) {
+      const activeTotal = _combinedSecs > 0 ? _combinedSecs : seconds;
+      hudTimer.textContent = formatTime(activeTotal);
+    }
+  }
+
+  function syncTimes(desktopSecs, mobileSecs, combinedSecs) {
+    _desktopSecs = desktopSecs;
+    _mobileSecs = mobileSecs;
+    _combinedSecs = combinedSecs;
+
+    const pcEl = document.getElementById('arc-hud-pc-time');
+    const mobEl = document.getElementById('arc-hud-mob-time');
+    const shieldEl = document.getElementById('arc-hud-shield-score');
+    const srcShield = document.getElementById('st-radar-shield-score');
+
+    if (pcEl) pcEl.textContent = formatTimeShort(desktopSecs);
+    if (mobEl) mobEl.textContent = formatTimeShort(mobileSecs);
+    if (shieldEl && srcShield) shieldEl.textContent = srcShield.textContent;
+  }
+
+  function renderUi() {
+    const active = isEnabled();
+    const isGranted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+
+    const pill = document.getElementById('screentime-notif-status-pill');
+    const btn = document.getElementById('btn-toggle-perm-notif');
+    const btnText = document.getElementById('btn-toggle-perm-notif-text');
+    const hudNotifLink = document.getElementById('arc-hud-notif-link');
+
+    if (pill) {
+      pill.textContent = (active && isGranted) ? 'ACTIVE IN TRAY' : active ? 'PERMISSION NEEDED' : 'DISABLED';
+      pill.className = (active && isGranted)
+        ? 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+        : 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+    }
+
+    if (btnText) {
+      btnText.textContent = (active && isGranted) ? 'Permanent Notification Active ✓' : 'Enable Permanent Notification';
+    }
+    if (btn) {
+      btn.className = (active && isGranted)
+        ? 'px-4 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95'
+        : 'px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20';
+    }
+
+    if (hudNotifLink) {
+      hudNotifLink.textContent = (active && isGranted) ? 'Active in Tray ✓' : 'Enable Tray Notif';
+    }
+  }
+
+  function init() {
+    renderUi();
+    if (isEnabled() && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      startNotificationLoop();
+      setTimeout(updateNotification, 3000);
+    }
+  }
+
+  return {
+    init,
+    isEnabled,
+    toggle,
+    requestPermission,
+    updateNotification,
+    testNotification,
+    toggleHudCard,
+    tick,
+    syncTimes,
+    renderUi
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
     window.ArcSecurity.init();
   }
   if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
     window.ArcProfile.init();
+  }
+  if (window.ArcAutoStart && typeof window.ArcAutoStart.init === 'function') {
+    window.ArcAutoStart.init();
+  }
+  if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
+    window.ArcScreenTimeNotifier.init();
   }
 });
 </script>

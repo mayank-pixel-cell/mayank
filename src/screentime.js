@@ -441,6 +441,9 @@ class ArcScreenTimeEngine {
     if (typeof window !== 'undefined' && window.state && window.state.laptop) {
       window.state.laptop.totalSeconds = this.activeSeconds;
     }
+    if (typeof window !== 'undefined' && window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
+      window.ArcScreenTimeNotifier.tick(this.activeSeconds);
+    }
   }
 
   async persistNow() {
