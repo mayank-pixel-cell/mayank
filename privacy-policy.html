@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - Arc Tracker</title>
+  <meta name="description" content="Official Privacy Policy for Arc Tracker (Desktop, Android & iOS). 100% Offline-First, Zero Data Collection, and Client-Side Encrypted.">
+  <link rel="icon" type="image/png" href="./icons/128x128.png">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.25);
+      --success: #10b981;
+      --purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 840px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .summary-card {
+      background: rgba(6, 182, 212, 0.06);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card h3 {
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .summary-card p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #cbd5e1;
+      font-size: 0.925rem;
+    }
+
+    li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .highlight {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .compliance-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .compliance-box strong {
+      display: block;
+      color: #ffffff;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .compliance-box span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      width: 100%;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1.25rem;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge-pill">
+        <span class="badge-dot"></span>
+        Zero Data Collection • 100% Offline
+      </div>
+      <h1>Privacy Policy for Arc Tracker</h1>
+      <div class="meta">
+        <strong>Application:</strong> Arc Tracker (Desktop, Android & iOS)<br>
+        <strong>Last Updated:</strong> October 25, 2026<br>
+        <strong>Developer:</strong> Mayank / Arc Tracker Team
+      </div>
+    </header>
+
+    <div class="summary-card">
+      <h3>🔒 Plain-English Executive Summary</h3>
+      <p>
+        Arc Tracker is built from the ground up as a <strong>100% offline-first, client-side encrypted application</strong>. We do not collect, transmit, sell, or monetize your habits, screen time, or personal data. Everything you do stays exclusively on your own device.
+      </p>
+    </div>
+
+    <section>
+      <h2>1. Zero Personal Data Collection</h2>
+      <p>
+        Arc Tracker does not require registration, phone numbers, or credit cards to use its core features.
+      </p>
+      <ul>
+        <li><strong>No Personal Identifiable Information (PII):</strong> We do not ask for or store names, addresses, or phone numbers on any remote servers.</li>
+        <li><strong>No Telemetry or Tracking Frameworks:</strong> The application does not bundle Google Analytics, Firebase Tracking, Facebook SDKs, or any third-party behavioral telemetry.</li>
+        <li><strong>No Remote Server Ingestion:</strong> Your habit completions, streak logs, daily notes, and screen time records remain private and stored strictly on your local hardware.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. On-Device Storage & Cryptographic Security</h2>
+      <p>
+        All user data is stored locally using high-durability hardware storage engines:
+      </p>
+      <ul>
+        <li><strong>Native Storage:</strong> Stored via encrypted IndexedDB and Tauri Plugin Store on your device filesystem.</li>
+        <li><strong>Client-Side Cryptography:</strong> Protected with W3C WebCrypto PBKDF2 (100,000 rounds SHA-256) and AES-GCM encryption at rest.</li>
+        <li><strong>Offline Airgap:</strong> The application functions completely in Airplane Mode without internet access.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Device Permissions & Usage Details</h2>
+      <p>
+        Arc Tracker does not request access to your camera, microphone, GPS location, contacts, or photo library:
+      </p>
+      <ul>
+        <li><strong>Screen Time & App Monitoring (Android/Desktop):</strong> When enabled by the user, Arc Tracker uses the standard Android <span class="highlight">PACKAGE_USAGE_STATS</span> system API or local window handles solely to calculate screen time and enforce user-chosen focus lockout barriers. This data never leaves the device.</li>
+        <li><strong>Notifications:</strong> Local system notifications are used to alert you when your daily app quota expires or when a Pomodoro focus timer finishes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Account Deletion & Right to Erasure</h2>
+      <p>
+        In accordance with Apple App Store Guideline 5.1.1(v) and Google Play User Data policies, users have complete and immediate control over their data:
+      </p>
+      <ul>
+        <li><strong>Instant Factory Reset:</strong> You can erase all tracked habits, logs, passwords, and screen time data directly inside the application via <em>Settings &rarr; System & Data &rarr; Factory Reset (Erase Everything)</em>.</li>
+        <li><strong>Zero Lingering Footprint:</strong> Because data is not retained on remote servers, uninstalling the app or executing a Factory Reset completely and irrevocably purges all data.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Children's Privacy (COPPA Compliance)</h2>
+      <p>
+        Because Arc Tracker does not collect any personal information whatsoever, it complies fully with the Children's Online Privacy Protection Act (COPPA) and GDPR-K. We do not knowingly collect personal information from children under the age of 13.
+      </p>
+    </section>
+
+    <section>
+      <h2>6. App Store & Platform Compliance</h2>
+      <div class="compliance-grid">
+        <div class="compliance-box">
+          <strong>Apple App Store</strong>
+          <span>Complies with Guidelines 5.1.1 & 5.1.2 (Data Not Collected)</span>
+        </div>
+        <div class="compliance-box">
+          <strong>Google Play Store</strong>
+          <span>Complies with Target SDK & Data Safety Zero-Collection Policy</span>
+        </div>
+        <div class="compliance-box">
+          <strong>Airgap Standard</strong>
+          <span>100% Offline-First Architecture & Encrypted Backups</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Contact Information</h2>
+      <p>
+        If you have questions, feedback, or need assistance regarding this Privacy Policy or Arc Tracker, you may contact the developer:
+      </p>
+      <ul>
+        <li><strong>GitHub Repository:</strong> <a href="https://github.com/mayank-pixel-cell/mayank" target="_blank" rel="noopener">https://github.com/mayank-pixel-cell/mayank</a></li>
+        <li><strong>Issues & Inquiries:</strong> <a href="https://github.com/mayank-pixel-cell/mayank/issues" target="_blank" rel="noopener">Submit a GitHub Issue</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Arc Tracker. All rights reserved. Transform in silence.</p>
+    </footer>
+  </div>
+</body>
+</html>
