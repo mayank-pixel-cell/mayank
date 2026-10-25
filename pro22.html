@@ -13461,15 +13461,21 @@ window.ArcGold = (function() {
           if (data.plan !== 'lifetime' && data.expiresAt && Date.now() > data.expiresAt) {
             data.isGold = false;
             data.status = 'expired';
+            data.maxHzEnabled = false;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            setTimeout(() => {
+              revertToFree(true);
+            }, 20);
           }
           return data;
         }
+        return data;
       }
     } catch (e) {}
     return {
       isGold: false,
       plan: null,
+      status: 'free',
       activatedAt: null,
       expiresAt: null,
       maxHzEnabled: false
@@ -13483,6 +13489,74 @@ window.ArcGold = (function() {
   function is120HzEnabled() {
     const s = getState();
     return !!(s.isGold && s.maxHzEnabled);
+  }
+
+  function revertToFree(isNaturalExpiry = false) {
+    let current = {};
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) current = JSON.parse(raw);
+    } catch (e) {}
+
+    const wasGold = !!current.isGold;
+    const wasTrial = !!current.isTrial;
+    const hadPlan = current.plan;
+
+    const updated = {
+      isGold: false,
+      plan: null,
+      status: 'expired',
+      isTrial: wasTrial,
+      activatedAt: current.activatedAt || null,
+      expiresAt: current.expiresAt || null,
+      maxHzEnabled: false,
+      expiredAt: Date.now(),
+      previousPlan: hadPlan
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    // 1. Revert refresh rate & uncapped FPS back to 60 FPS
+    applyRefreshRate();
+
+    // 2. Revert custom photo wallpaper back to free default theme
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
+      window.ArcCustomBackground.apply();
+      window.ArcCustomBackground.renderCard();
+    }
+
+    // 3. Revert hardware profiler card & settings
+    if (window.ArcHardwareGatekeeper && typeof window.ArcHardwareGatekeeper.renderSettingsCard === 'function') {
+      window.ArcHardwareGatekeeper.renderSettingsCard();
+    }
+
+    // 4. Update Header VIP crown badge (removes it)
+    updateHeaderBadge();
+
+    // 5. Re-render Arc Gold card with expired notice
+    render();
+
+    // 6. Notify user if this was a fresh expiry transition
+    if (isNaturalExpiry && wasGold) {
+      if (typeof showToast === 'function') {
+        const typeStr = wasTrial ? 'Free First Month Arc Gold Trial' : 'Arc Gold Membership';
+        showToast('⏳ Your ' + typeStr + ' has ended. Special features have automatically reverted to the Free tier.');
+      }
+      if (typeof playSfx === 'function') {
+        playSfx('modalClose');
+      }
+    }
+  }
+
+  let watcherInterval = null;
+  function startExpiryWatcher() {
+    if (watcherInterval) clearInterval(watcherInterval);
+    watcherInterval = setInterval(() => {
+      const s = getState();
+      if (s && s.isGold && s.plan !== 'lifetime' && s.expiresAt && Date.now() > s.expiresAt) {
+        revertToFree(true);
+      }
+    }, 15000);
   }
 
   function getExpiryNotice() {
@@ -13628,26 +13702,7 @@ window.ArcGold = (function() {
   }
 
   function cancelPlan() {
-    const current = getState();
-    const updated = {
-      isGold: false,
-      plan: null,
-      activatedAt: null,
-      expiresAt: null,
-      maxHzEnabled: false,
-      previousPlan: current.plan
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    applyRefreshRate();
-    render();
-    updateHeaderBadge();
-    if (window.ArcHardwareGatekeeper && typeof window.ArcHardwareGatekeeper.renderSettingsCard === 'function') {
-      window.ArcHardwareGatekeeper.renderSettingsCard();
-    }
-    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
-      window.ArcCustomBackground.apply();
-      window.ArcCustomBackground.renderCard();
-    }
+    revertToFree(false);
     if (window.SettingsApp && typeof window.SettingsApp.onTab === 'function') {
       window.SettingsApp.onTab('settings');
     }
@@ -13838,7 +13893,11 @@ window.ArcGold = (function() {
                       }
                       return '';
                     })()}
-                  ` : ''}
+                  ` : (state.status === 'expired' ? `
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1 shrink-0">
+                      <i class="fa-solid fa-hourglass-end text-amber-400"></i> Expired · Free Tier
+                    </span>
+                  ` : '')}
                 </div>
                 <p class="text-[11px] text-slate-400 mt-0.5 truncate">
                   ProMotion 120Hz engine &amp; VIP tiers • Tap to expand details
@@ -13905,6 +13964,24 @@ window.ArcGold = (function() {
           }
           return '';
         })()}
+
+        <!-- EXPIRED SUBSCRIPTION REVERT BANNER -->
+        ${(!goldActive && state.status === 'expired') ? `
+          <div class="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <i class="fa-solid fa-hourglass-end text-sm"></i>
+              </div>
+              <div>
+                <span class="font-bold text-amber-300">Arc Gold ${state.isTrial ? 'Free Trial' : 'Membership'} Ended</span>
+                <p class="text-slate-400 text-xs mt-0.5">Your ProMotion 120Hz engine and Custom Photo Wallpaper have automatically reverted to the standard Free version. Renew any plan below to re-enable them instantly.</p>
+              </div>
+            </div>
+            <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs shrink-0 shadow-sm transition active:scale-95">
+              Renew
+            </button>
+          </div>
+        ` : ''}
 
         <!-- UNDER CONSTRUCTION ADVISORY BANNER -->
         <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start sm:items-center gap-3 text-xs text-amber-200">
@@ -14166,6 +14243,7 @@ window.ArcGold = (function() {
     checkExpiryNotification(true);
     render();
     updateHeaderBadge();
+    startExpiryWatcher();
   }
 
   return {
@@ -14187,6 +14265,8 @@ window.ArcGold = (function() {
     claimFirstMonthTrial,
     getExpiryNotice,
     checkExpiryNotification,
+    revertToFree,
+    startExpiryWatcher,
     render,
     init
   };
