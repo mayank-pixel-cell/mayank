@@ -3845,8 +3845,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             activeTab: 'tracker',
             streak: 3,
             dailyHabits: {},
+            dailyFocus: {},
             laptop: { isAutoPaused: false, isRunning: true, totalSeconds: 0, interval: null },
-            timer: { totalFocusSeconds: 14400 }
+            timer: { totalFocusSeconds: 0 }
         };
         window.state = state;
 
@@ -3963,6 +3964,21 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
         function getTodayKey() {
             return formatDateKey(getEffectiveToday());
+        }
+
+        function getTodayFocusSeconds() {
+            const todayKey = getTodayKey();
+            let secs = 0;
+            if (state && state.dailyFocus && state.dailyFocus[todayKey]) {
+                secs += Number(state.dailyFocus[todayKey]) || 0;
+            }
+            if (state && Array.isArray(state.screenTimeLogs)) {
+                const logSecs = state.screenTimeLogs
+                    .filter(x => x && x.date === todayKey && x.type === 'focus')
+                    .reduce((acc, cur) => acc + (Number(cur.seconds) || 0), 0);
+                secs = Math.max(secs, logSecs);
+            }
+            return secs;
         }
 
         function updateDynamicDayCounter() {
@@ -5839,6 +5855,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             // Decrement internal focus session if running
             if (appTrackerState.focusActive && appTrackerState.focusSecondsLeft > 0) {
                 appTrackerState.focusSecondsLeft--;
+                const today = getTodayKey();
+                state.dailyFocus = state.dailyFocus || {};
+                state.dailyFocus[today] = (state.dailyFocus[today] || 0) + 1;
+                state.timer = state.timer || { totalFocusSeconds: 0 };
+                state.timer.totalFocusSeconds = (state.timer.totalFocusSeconds || 0) + 1;
                 if (appTrackerState.focusSecondsLeft <= 0) {
                     stopFocusSession(true);
                 }
@@ -6181,9 +6202,21 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (completed) {
                 playSfx('fanfare');
                 showToast("Focus session completed! Great discipline.");
+                const today = getTodayKey();
+                if (Array.isArray(state.screenTimeLogs)) {
+                    state.screenTimeLogs.push({
+                        date: today,
+                        type: 'focus',
+                        seconds: appTrackerState.focusTotalSeconds || 1500,
+                        ts: Date.now()
+                    });
+                }
+                saveToLocalStorage();
+                try { if (typeof renderProgressionTab === 'function') renderProgressionTab(); } catch(_) {}
             } else {
                 playSfx('click');
                 showToast("Focus session stopped.");
+                saveToLocalStorage();
             }
 
             closeFocusBlockerShield();
@@ -6816,29 +6849,50 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             } catch (_) {}
         }
 
-        function renderScreenTimeView() {
-            const view = document.getElementById('view-screentime');
-            if (!view) return;
-
+        function getDopamineShieldData() {
             let totalUsage = 0;
             let dailyBlockedCount = 0;
             let focusBlockedCount = 0;
             let nearLimitCount = 0;
+            let totalApps = 0;
 
-            appTrackerState.apps.forEach(app => {
-                const used = appTrackerState.usage[app.id] || 0;
-                totalUsage += used;
-                const limit = app.dailyLimitSecs;
-                const pct = Math.min(100, Math.round((used / limit) * 100));
-                if (app.blockEnabled && used >= limit) dailyBlockedCount++;
-                else if (pct >= 80 && !app.blockInFocus) nearLimitCount++;
-                if (app.blockInFocus) focusBlockedCount++;
-            });
+            if (typeof appTrackerState !== 'undefined' && Array.isArray(appTrackerState.apps)) {
+                totalApps = appTrackerState.apps.length;
+                appTrackerState.apps.forEach(app => {
+                    const used = (appTrackerState.usage && appTrackerState.usage[app.id]) || 0;
+                    totalUsage += used;
+                    const limit = app.dailyLimitSecs || 1800;
+                    const pct = Math.min(100, Math.round((used / limit) * 100));
+                    if (app.blockEnabled && used >= limit) dailyBlockedCount++;
+                    else if (pct >= 80 && !app.blockInFocus) nearLimitCount++;
+                    if (app.blockInFocus) focusBlockedCount++;
+                });
+            }
+
+            const shieldScore = Math.max(0, 100 - (dailyBlockedCount * 25) - (nearLimitCount * 8));
+            return {
+                totalUsage,
+                dailyBlockedCount,
+                focusBlockedCount,
+                nearLimitCount,
+                shieldScore,
+                totalApps
+            };
+        }
+        window.getDopamineShieldData = getDopamineShieldData;
+
+        function renderScreenTimeView() {
+            const view = document.getElementById('view-screentime');
+            if (!view) return;
+
+            const shieldData = getDopamineShieldData();
+            const totalUsage = shieldData.totalUsage;
+            const dailyBlockedCount = shieldData.dailyBlockedCount;
+            const focusBlockedCount = shieldData.focusBlockedCount;
+            const nearLimitCount = shieldData.nearLimitCount;
+            const shieldScore = shieldData.shieldScore;
 
             const focusRunning = isFocusActive();
-
-            // Holographic Radar Shield Score Calculation & Display
-            const shieldScore = Math.max(0, 100 - (dailyBlockedCount * 25) - (nearLimitCount * 8));
             const radarScoreEl = document.getElementById('st-radar-shield-score');
             if (radarScoreEl) {
                 radarScoreEl.textContent = `${shieldScore}%`;
@@ -8186,6 +8240,11 @@ class ArcHardwareGatekeeper {
             }
             if (savedState) {
                 state = { ...state, ...savedState };
+            }
+            state.dailyFocus = state.dailyFocus || {};
+            // If legacy mock 14400 was present from template seed without real sessions, reset to 0
+            if (state.timer && state.timer.totalFocusSeconds === 14400 && (!state.screenTimeLogs || state.screenTimeLogs.length <= 1)) {
+                state.timer.totalFocusSeconds = 0;
             }
             if (state.settings) {
                 if (state.settings.particleDensity === 'off') state.settings.particleDensity = 'medium';
@@ -10371,7 +10430,8 @@ const ftxt=()=>String(Math.floor(F.left/60)).padStart(2,'0')+':'+String(F.left%6
 function fui(){const t=ftxt(),a=$('#pp-f-time'),h=$('#pp12-hud');if(a)a.textContent=t;
  if(h){$('#pp-hud-t').textContent=t;$('#pp-hud-m').textContent=F.mode==='work'?'FOCUS':'BREAK';h.style.display=F.run?'flex':'none';h.classList.toggle('pomodoro-running-glow',!!F.run)}
  const g=$('#pp-f-go');if(g)g.textContent=F.run?'Pause (P)':'Start (P)';document.body.classList.toggle('pp-focus',F.run&&F.mode==='work'&&!!S().focusBlocker)}
-function logFocus(sec){state.screenTimeLogs.push({date:getTodayKey(),type:'focus',seconds:sec,ts:Date.now()});save()}
+function logFocus(sec){const d=getTodayKey();state.dailyFocus=state.dailyFocus||{};state.dailyFocus[d]=(state.dailyFocus[d]||0)+sec;state.screenTimeLogs.push({date:d,type:'focus',seconds:sec,ts:Date.now()});save()}
+window.logFocus=logFocus;
 function logLaptop(){const d=getTodayKey();let e=state.screenTimeLogs.find(x=>x.date===d&&x.type==='laptop');if(!e){e={date:d,type:'laptop',seconds:0};state.screenTimeLogs.push(e)}e.seconds=(state.laptop&&state.laptop.totalSeconds)||0}
 function ftick(){if(--F.left>0){fui();return}
  if(F.mode==='work')logFocus(S().focusWork*60);F.mode=F.mode==='work'?'break':'work';fset();playSfx(F.mode==='break'?'pomodoroComplete':'pomodoroStart');
@@ -10962,9 +11022,9 @@ function pTick(){const l=Math.max(0,Math.ceil((P.end-Date.now())/1000));if(l!==P
 function pGo(){P.fresh=false;try{initAudio()}catch(e){}if(P.run){P.run=false;clearInterval(P.id);P.left=Math.max(1,Math.ceil((P.end-Date.now())/1000))}else{P.run=true;P.end=Date.now()+P.left*1000;P.id=setInterval(pTick,250)}sfx('click');pUI()}
 function pReset(){P.fresh=false;P.run=false;clearInterval(P.id);P.left=pLen();pUI()}
 function pDone(){P.run=false;clearInterval(P.id);
- if(P.m==='focus'){const s=state.pomo.f*60;state.timer.totalFocusSeconds=(state.timer.totalFocusSeconds||0)+s;state.pomo.n++;
+ if(P.m==='focus'){const s=state.pomo.f*60;state.timer.totalFocusSeconds=(state.timer.totalFocusSeconds||0)+s;state.dailyFocus=state.dailyFocus||{};state.dailyFocus[getTodayKey()]=(state.dailyFocus[getTodayKey()]||0)+s;state.pomo.n++;
   if(Array.isArray(state.screenTimeLogs))state.screenTimeLogs.push({date:T(),type:'focus',seconds:s,ts:Date.now()});
-  save();try{renderScreenTime()}catch(e){}toast('🍅 Focus complete · +'+state.pomo.f+' min logged');P.m='break';try{triggerConfettiBurst()}catch(e){}}
+  save();try{renderScreenTime()}catch(e){}try{renderProgressionTab()}catch(e){}toast('🍅 Focus complete · +'+state.pomo.f+' min logged');P.m='break';try{triggerConfettiBurst()}catch(e){}}
  else{toast('☕ Break over — ready to focus');P.m='focus'}
  sfx('check');P.left=pLen();pUI();all()}
 
@@ -12378,6 +12438,12 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     const focusXP = Math.floor(focusSecs / 900) * 10;
     stats.DEX += Math.floor(focusXP * 0.5);
 
+    // Screen Time Dopamine Shield Willpower bonus
+    const shieldData = (typeof getDopamineShieldData === 'function') ? getDopamineShieldData() : { shieldScore: 100, dailyBlockedCount: 0 };
+    if (shieldData.shieldScore >= 80 && shieldData.dailyBlockedCount === 0) {
+      stats.WIL += 40;
+    }
+
     const streak = state.streak || 0;
     const streakBonus = habitXP * (streak * 0.05);
     const totalXP = Math.round(habitXP + streakBonus + focusXP + (state.bonusXP || 0));
@@ -12510,17 +12576,23 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     const bossHpPct = Math.round((bossHpLeft / bossMaxHp) * 100);
     const bossDefeated = bossHpLeft <= 0;
 
-    // Daily Quests
+    // Focus & Screen Time metrics for today
     const todayKey = getTodayKey();
     const claimedQuests = state.dailyQuests[todayKey] || {};
     let habitsDoneToday = 0;
     (state.habits || []).forEach(h => { if (h.completed) habitsDoneToday++; });
-    const focusSecs = (state.timer && state.timer.totalFocusSeconds) || 0;
-    const focusMinsToday = Math.floor(focusSecs / 60);
+    const focusSecsToday = (typeof getTodayFocusSeconds === 'function') ? getTodayFocusSeconds() : 0;
+    const focusMinsToday = Math.floor(focusSecsToday / 60);
+    const totalLifetimeFocusSecs = (state.timer && state.timer.totalFocusSeconds) || 0;
+
+    const shieldData = (typeof getDopamineShieldData === 'function') ? getDopamineShieldData() : { shieldScore: 100, dailyBlockedCount: 0, totalUsage: 0 };
+    const shieldScore = shieldData.shieldScore;
+    const dailyBlockedCount = shieldData.dailyBlockedCount;
 
     const q1Done = habitsDoneToday >= 2;
     const q2Done = focusMinsToday >= 15;
     const q3Done = habitsDoneToday >= 4;
+    const q4Done = shieldScore >= 80 && dailyBlockedCount === 0;
 
     container.innerHTML = `
       <!-- HERO CHARACTER DOSSIER CARD -->
@@ -12575,7 +12647,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           </div>
           <div class="flex justify-between text-[10px] text-slate-400 font-mono">
             <span>🔥 Streak Multiplier: ×${rpg.streakMultiplier} XP</span>
-            <span>Focus Deep Work: +${Math.floor(focusSecs / 900) * 10} XP</span>
+            <span>Focus Deep Work: +${Math.floor(totalLifetimeFocusSecs / 900) * 10} XP</span>
           </div>
         </div>
       </div>
@@ -12669,6 +12741,87 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div class="h-full bg-amber-400" style="width:${Math.min(100, Math.round((rpg.stats.WIL / 1500) * 100))}%"></div>
           </div>
+          <div class="text-[10px] font-mono mt-1 ${shieldScore >= 80 ? 'text-cyan-300' : 'text-amber-400'} flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-cat"></i>
+            <span>${shieldScore >= 80 ? 'Dopamine Shield Active (+40 WIL)' : 'Shield Degraded (' + shieldScore + '%)'}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIGITAL DOPAMINE & SCREEN TIME TELEMETRY DOSSIER -->
+      <div class="glass-card st-cyber-ambient rounded-3xl p-5 sm:p-6 border border-cyan-500/30 bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-cyan-950/20 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-2xl shadow-md shrink-0">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2 flex-wrap">
+                <span>Digital Dopamine &amp; Screen Time Mastery</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${shieldScore >= 80 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'}">
+                  ${shieldScore}% SHIELD INTEGRITY
+                </span>
+              </h3>
+              <p class="text-xs text-slate-400">Biological attention shielding synchronized across Desktop and Mobile devices.</p>
+            </div>
+          </div>
+          <button role="button" onclick="switchTab('screentime'); playSfx('click')" class="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 text-xs font-bold transition flex items-center gap-2 shadow-sm self-start sm:self-auto shrink-0">
+            <i class="fa-solid fa-gauge-high"></i> Screen Time Command Center &rarr;
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          <!-- Shield Radar Metric -->
+          <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Shield Integrity</span>
+              <i class="fa-solid fa-shield text-cyan-400"></i>
+            </div>
+            <div class="text-xl sm:text-2xl font-black font-mono ${shieldScore >= 80 ? 'text-cyan-300' : (shieldScore >= 50 ? 'text-amber-400' : 'text-rose-400')}">
+              ${shieldScore}%
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">${dailyBlockedCount === 0 ? '✓ Zero lockouts today' : `⚠️ ${dailyBlockedCount} apps locked`}</p>
+          </div>
+
+          <!-- Cross-Device Screen Time -->
+          <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Unified Screen Time</span>
+              <i class="fa-solid fa-layer-group text-purple-400"></i>
+            </div>
+            <div class="text-xl sm:text-2xl font-black font-mono text-purple-300">
+              ${(() => {
+                let deskSecs = (state.laptop && state.laptop.totalSeconds) || 0;
+                let mobSecs = (state.deviceScreenTime && state.deviceScreenTime.mobile && state.deviceScreenTime.mobile.seconds) ? Number(state.deviceScreenTime.mobile.seconds) : 0;
+                return formatDuration(deskSecs + mobSecs);
+              })()}
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">💻 PC + 📱 Mobile sync</p>
+          </div>
+
+          <!-- Deep Work Focus Today -->
+          <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Deep Work Logged Today</span>
+              <i class="fa-solid fa-stopwatch text-emerald-400"></i>
+            </div>
+            <div class="text-xl sm:text-2xl font-black font-mono text-emerald-400">
+              ${formatDuration(focusSecsToday)}
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">${focusMinsToday >= 15 ? '✓ Focus Overdrive met' : `${15 - focusMinsToday}m to quest target`}</p>
+          </div>
+
+          <!-- RPG Willpower Bonus -->
+          <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+            <div class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Discipline Buff</span>
+              <i class="fa-solid fa-sparkles text-amber-400"></i>
+            </div>
+            <div class="text-xl sm:text-2xl font-black font-mono text-amber-300">
+              ${shieldScore >= 80 ? '+40 WIL XP' : '+0 WIL'}
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">${shieldScore >= 80 ? 'Active discipline perk' : 'Requires ≥80% Shield'}</p>
+          </div>
         </div>
       </div>
 
@@ -12758,6 +12911,25 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
                 ${claimedQuests.q3 ? 'Claimed' : '+100 XP'}
               </button>
             </div>
+
+            <!-- 4TH QUEST: SCREEN TIME DOPAMINE SENTINEL -->
+            <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-2">
+              <div>
+                <div class="font-bold text-slate-200 flex items-center gap-1.5">
+                  <span>🛡️ Dopamine Sentinel</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold ${shieldScore >= 80 ? 'bg-cyan-500/20 text-cyan-300' : 'bg-amber-500/20 text-amber-300'}">
+                    ${shieldScore}% Shield
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-400">Keep Dopamine Shield &ge;80% &amp; 0 locked apps (${dailyBlockedCount === 0 ? '0 locked' : dailyBlockedCount + ' locked'})</div>
+              </div>
+              <button role="button" onclick="claimDailyQuest('q4', 75, event)" ${q4Done && !claimedQuests.q4 ? '' : 'disabled'} class="px-3 py-1.5 rounded-xl text-xs font-black transition ${
+                claimedQuests.q4 ? 'bg-slate-800 text-slate-500' :
+                q4Done ? 'bg-amber-500 text-black hover:scale-105 shadow-md shadow-amber-500/20' : 'bg-slate-800/60 text-slate-500 opacity-60'
+              }">
+                ${claimedQuests.q4 ? 'Claimed' : '+75 XP'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -12770,10 +12942,11 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           </h3>
           <span class="text-xs font-mono text-purple-300">Level Perks</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           ${[
             { req: 5, icon: '⚡', name: 'Adrenaline Surge', desc: '+5% Daily Habit XP bonus' },
             { req: 10, icon: '🛡️', name: 'Streak Armor', desc: 'Prevents 1 accidental streak break' },
+            { req: 15, icon: '🛡️', name: 'Dopamine Aegis', desc: 'Shield ≥80% grants +15% Willpower discipline bonus' },
             { req: 20, icon: '🎯', name: 'Hyper-Focus Resonance', desc: '+15% Pomodoro focus XP multiplier' },
             { req: 35, icon: '💥', name: 'Critical Strike', desc: '20% chance for double XP on check' },
             { req: 50, icon: '👑', name: 'Sovereign Radiance', desc: '+25% Total Arc XP Multiplier' }
@@ -12952,13 +13125,31 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       content: 'No real transformation is a clean upward line. Occasional F-grades (<40% execution) or zero-days where resistance wins are inevitable points of friction. The fatal error is turning a 1-day stumble into a multi-day collapse through shame and defeatism. Follow the 3-step reboot: (1) Zero-Guilt Audit: Acknowledge the missed day objectively without self-flagellation. (2) Rule of Never Missing Twice: Under no circumstances allow two consecutive days of failure. (3) Micro-Friction Morning: Complete your primary non-negotiable within 60 minutes of waking the next morning to instantly re-establish identity.'
     },
     {
-      id: 'kb_dopamine_hygiene',
+      id: 'kb_dopamine_matrix',
       category: 'Science & Biology',
-      badge: 'DOPAMINE DETOX',
-      icon: 'fa-mobile-screen-button text-blue-400',
-      title: 'Digital Dopamine Hygiene & Screen Time Limits',
-      summary: 'Preventing context-switching fatigue and protecting executive function from algorithmic feeds.',
-      content: 'University of California Irvine research proves that it takes an average of 23 minutes and 15 seconds to return to deep focus after a single phone interruption. Mindless scrolling depletes baseline dopamine reserves, making high-effort habits feel agonizingly difficult. Use our auto-tracking screen time widget to keep passive screen time under control.'
+      badge: 'NEUROCHEMISTRY',
+      icon: 'fa-shield-halved text-cyan-400',
+      title: 'The Dopamine Matrix: Why Passive Scrolling Destroys Willpower',
+      summary: 'How variable-reward algorithms drain executive function and the neurobiology of the 23-minute focus switching penalty.',
+      content: 'When you scroll TikTok, Reels, or X, the brain\'s ventral tegmental area (VTA) releases sudden spikes of phasic dopamine in response to unpredictably rewarding content. Unlike natural rewards that require sustained effort, digital feeds flood the synapse with effortless pleasure. This triggers rapid downregulation of D2 dopamine receptors in the striatum, causing baseline (tonic) dopamine to plummet. The direct consequence: demanding, high-friction habits like deep studying, working out, or creative writing feel cognitively excruciating. Furthermore, Gloria Mark\'s landmark University of California Irvine research proves that an interrupted mind takes an average of 23 minutes and 15 seconds to regain full immersion. Arc Tracker\'s Screen Time Lockout Shield is designed as an external prefrontal prosthesis—imposing hard mechanical limits to insulate your finite biological will.'
+    },
+    {
+      id: 'kb_cross_device_sync',
+      category: 'Tactical FAQ',
+      badge: 'DEVICE STRATEGY',
+      icon: 'fa-mobile-screen-button text-purple-400',
+      title: 'Cross-Device Unified Sync: Breaking the Dual-Screen Loop',
+      summary: 'Eliminating the subconscious habit of closing desktop windows only to mindlessly scroll your phone.',
+      content: 'The most insidious distraction loop in modern knowledge work is the "device hop": putting your laptop to sleep with the intention to rest, only to immediately unlock your smartphone and scroll for 45 minutes in bed. Arc Tracker\'s Dual-Device Synapse Ecosystem addresses this by establishing a single unified 24-hour ledger across both your Windows desktop and Android mobile tracker. By calculating combined total screen time and sharing real-time quota telemetry, the system treats your attention as a single non-renewable resource across your entire hardware fleet.'
+    },
+    {
+      id: 'kb_hard_lockout_protocol',
+      category: 'Game Mechanics',
+      badge: 'HARD PROTOCOL',
+      icon: 'fa-lock text-rose-400',
+      title: 'The Hard Lockout Protocol: Why Friction Beats Motivation',
+      summary: 'The behavioral economics behind Ulysses Contracts and why the 100% lockout shield enforces true discipline.',
+      content: 'In classical literature, Ulysses had his crew tie him to the mast of his ship to resist the seductive song of the Sirens. Behavioral economists refer to this as a Ulysses Contract: making an irrevocable choice in a calm, rational state to bind your future irrational self. Relying on "self-control" at 11:30 PM when your prefrontal cortex is exhausted is a guaranteed failure mode. The Lockout Shield acts as your mast: once your chosen daily quota for an app expires, the system engages a full-screen lockdown. Overriding requires typing the manual commitment pledge "UNBREAKABLE" for an emergency 5-minute grace period—introducing deliberate micro-friction that interrupts impulsive autonomic scrolling.'
     },
     {
       id: 'kb_faq_tactics',
