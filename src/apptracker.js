@@ -754,17 +754,56 @@ class ArcAppTrackerEngine {
     }
   }
 
+  isStrictModeActive() {
+    const isGold = (typeof window !== 'undefined' && window.ArcGold && typeof window.ArcGold.isGold === 'function') ? window.ArcGold.isGold() : false;
+    return !!(isGold && this.strictMode);
+  }
+
+  toggleStrictMode(forceVal = null) {
+    const isGold = (typeof window !== 'undefined' && window.ArcGold && typeof window.ArcGold.isGold === 'function') ? window.ArcGold.isGold() : false;
+    if (!isGold) {
+      if (typeof window !== 'undefined' && typeof window.openGoldStrictModal === 'function') {
+        window.openGoldStrictModal();
+      }
+      return false;
+    }
+    if (this.focusSessionActive) {
+      if (typeof window !== 'undefined' && typeof window.triggerStrictModeLockoutNotice === 'function') {
+        window.triggerStrictModeLockoutNotice();
+      }
+      return false;
+    }
+    this.strictMode = forceVal !== null ? !!forceVal : !this.strictMode;
+    try {
+      arcStorage.setItem('arc_focus_strict_mode', String(this.strictMode));
+      arcStorage.setItem('arc_app_strict_mode', String(this.strictMode));
+    } catch (_) {}
+    return this.strictMode;
+  }
+
   stopFocusSession(completed = false) {
+    if (!completed && this.isStrictModeActive()) {
+      if (typeof window !== 'undefined' && typeof window.triggerStrictModeLockoutNotice === 'function') {
+        window.triggerStrictModeLockoutNotice();
+      } else {
+        this.playAudio('error');
+        if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+          window.showToast("🔒 Early exit forbidden: Arc Gold Strict Mode is active!");
+        }
+      }
+      return false;
+    }
+
     this.focusSessionActive = false;
 
     if (typeof window !== 'undefined' && typeof window.fpause === 'function') {
-      try { window.fpause(); } catch (_) {}
+      try { window.fpause(true); } catch (_) {}
     }
 
     if (completed) {
       this.playAudio('success');
       if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
-        window.showToast("Focus session completed! Great discipline.");
+        window.showToast(this.isStrictModeActive() ? "👑 Arc Gold Strict Mode Sprint Conquered! Pure discipline." : "Focus session completed! Great discipline.");
       }
     } else {
       this.playAudio('click');
@@ -776,6 +815,7 @@ class ArcAppTrackerEngine {
     if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
       window.renderScreenTimeView();
     }
+    return true;
   }
 
   toggleAppFocusBlock(appId) {
@@ -988,5 +1028,11 @@ if (typeof window !== 'undefined') {
   window.removeBlockedWebsite = (d) => arcAppTracker.removeBlockedWebsite(d);
   window.isWebsiteBlocked = (u) => arcAppTracker.isWebsiteBlocked(u);
   window.addBlockedWebsite = (d, n, r) => arcAppTracker.addBlockedWebsite(d, n, r);
+  if (!window.isFocusStrictModeActive) {
+    window.isFocusStrictModeActive = () => arcAppTracker.isStrictModeActive();
+  }
+  if (!window.toggleFocusStrictMode) {
+    window.toggleFocusStrictMode = (val) => arcAppTracker.toggleStrictMode(val);
+  }
 }
 

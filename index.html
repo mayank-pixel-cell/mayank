@@ -1867,8 +1867,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 hover:border-cyan-400 border border-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-universal-access text-cyan-400"></i> Permissions
                         </button>
-                        <button role="button" id="st-strict-mode-btn" onclick="toggleStrictMode(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-shield-halved"></i> <span id="st-strict-btn-text">Strict Mode</span>
+                        <button role="button" id="st-strict-mode-btn" onclick="toggleFocusStrictMode(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Arc Gold Strict Mode: Prevents ending focus sessions early">
+                            <i class="fa-solid fa-lock text-amber-400"></i> <span id="st-strict-btn-text">Strict Mode <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded border border-amber-500/30 font-bold">GOLD</span></span>
                         </button>
                         <button role="button" onclick="openAddCustomAppModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-cyan-500 active:bg-cyan-400 text-black text-xs font-extrabold uppercase tracking-wider transition shadow-lg shadow-cyan-500/20 hover:scale-105 flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Add App
@@ -1944,6 +1944,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <span class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i>Checking account...</span>
                         </div>
 
+                        <button role="button" onclick="ArcScreenTimeStore.openLastMonthModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-950/70 hover:bg-purple-900/70 border border-purple-500/40 text-purple-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="View Last Month's Screen Time, Pie Chart & App Trends">
+                            <i class="fa-solid fa-chart-pie text-purple-400"></i> Last Month
+                        </button>
+                        <button role="button" onclick="ArcScreenTimeStore.forceDailyRefresh(); playSfx('click')" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1 shadow-sm active:scale-95" title="Daily Refresh: Reset Today's Screen Time Counter">
+                            <i class="fa-solid fa-rotate text-emerald-400"></i> Refresh Today
+                        </button>
                         <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('quantumHum'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'A');}" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Sync latest screen time across devices">
                             <i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Sync Now
                         </button>
@@ -2103,7 +2109,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         </p>
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button type="button" onclick="ArcScreenTimeStore.openLastMonthModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-purple-950/70 hover:bg-purple-900/70 border border-purple-500/40 text-purple-200 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-purple-500/20 transition active:scale-95">
+                            <i class="fa-solid fa-chart-pie text-purple-400"></i> Last Month Breakdown
+                        </button>
                         <button type="button" onclick="ArcScreenTimeStore.openShareModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-cyan-500/20 transition active:scale-95">
                             <i class="fa-solid fa-share-nodes"></i> Share with Friends
                         </button>
@@ -2206,6 +2215,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <div id="st-comp-month-bar-laptop" class="h-full bg-cyan-400 w-[70%]"></div>
                                 <div id="st-comp-month-bar-phone" class="h-full bg-purple-400 w-[30%]"></div>
                             </div>
+                            <button type="button" onclick="ArcScreenTimeStore.openLastMonthModal(); playSfx('modalOpen')" class="w-full mt-2 py-1.5 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[11px] font-bold flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-chart-pie text-amber-400"></i> View Last Month App Pie Chart &amp; Bar Graphs &rarr;
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2453,6 +2465,29 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                         <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(60); playSfx('click')" class="phone-focus-chip" data-mins="60">60m</button>
                                         <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(90); playSfx('click')" class="phone-focus-chip" data-mins="90">90m</button>
                                     </div>
+                                </div>
+
+                                <!-- Strict Mode (Arc Gold Feature) -->
+                                <div id="phone-widget-strict-container" class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-amber-500/40 transition flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/30 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.2)]">
+                                            <i class="fa-solid fa-lock" id="phone-widget-strict-icon"></i>
+                                        </div>
+                                        <div class="min-w-0 leading-tight">
+                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                <span class="text-xs font-bold text-white">Strict Mode</span>
+                                                <span class="text-[9px] font-mono font-black px-1.5 py-0.2 rounded bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-sm">
+                                                    <i class="fa-solid fa-crown text-[8px] text-amber-400"></i> GOLD
+                                                </span>
+                                            </div>
+                                            <span class="text-[10px] text-slate-400 block truncate" id="phone-widget-strict-desc">Disables early exit until timer ends</span>
+                                        </div>
+                                    </div>
+                                    <label for="phone-widget-strict-toggle" class="relative inline-flex items-center cursor-pointer shrink-0" onclick="handleFocusStrictModeToggle(event)">
+                                        <span class="sr-only">Toggle Focus Strict Mode</span>
+                                        <input type="checkbox" id="phone-widget-strict-toggle" title="Toggle Focus Strict Mode" aria-label="Toggle Focus Strict Mode" class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-amber-400 peer-checked:to-yellow-500"></div>
+                                    </label>
                                 </div>
 
                                 <!-- 1-Click Action Button -->
@@ -2960,6 +2995,115 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span class="text-[11px] text-slate-400">Changes save automatically</span>
                     <button role="button" onclick="closeFocusBlocklistModal()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-purple-600/20">
                         Done
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARC GOLD FOCUS STRICT MODE LOCKOUT MODAL -->
+        <div id="arc-strict-lockout-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div id="arc-strict-lockout-card" class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-amber-950/30 to-slate-950 border-2 border-amber-500/80 rounded-3xl p-6 sm:p-8 shadow-[0_0_90px_rgba(245,158,11,0.4)] space-y-6 text-center animate-zoom-in my-auto">
+                <!-- Glowing Gold Lock with Pulse Ring -->
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/20 via-yellow-500/30 to-amber-600/20 border-2 border-amber-400 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.45)]">
+                    <span class="absolute inset-0 rounded-3xl border border-amber-400 animate-ping opacity-40"></span>
+                    <i class="fa-solid fa-lock text-3xl sm:text-4xl text-amber-300"></i>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/50 text-[10px] font-mono font-black uppercase tracking-widest shadow-sm">
+                        <i class="fa-solid fa-crown text-[9px] text-amber-400"></i>
+                        ARC GOLD STRICT MODE • LOCKED
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        Early Exit Is Forbidden
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md mx-auto">
+                        This focus sprint is protected by <span class="text-amber-300 font-bold">Arc Gold Strict Mode</span>. To build unbreakable discipline and eliminate procrastination, sessions cannot be cancelled or stopped early.
+                    </p>
+                </div>
+
+                <!-- LIVE COUNTDOWN DISPLAY -->
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 space-y-1 shadow-inner">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block font-mono">Time Remaining In Focus Sprint</span>
+                    <div id="strict-lockout-time-left" class="text-3xl sm:text-4xl font-black font-mono text-cyan-300 tracking-tight drop-shadow animate-pulse">24:55</div>
+                    <span id="strict-lockout-finish-time" class="text-[11px] text-amber-400/90 font-medium block">Stay in the zone · Timer must reach 00:00</span>
+                </div>
+
+                <!-- MOTIVATIONAL QUOTE -->
+                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-200/90 italic flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-gem text-amber-400 shrink-0"></i>
+                    <span>"Discipline is choosing between what you want now and what you want most."</span>
+                </div>
+
+                <!-- ACTION BUTTON -->
+                <div class="pt-1">
+                    <button role="button" onclick="closeStrictModeLockoutModal(); playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/30 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-fire text-slate-950"></i> I Understand · Stay Locked In
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARC GOLD STRICT MODE UPGRADE MODAL (FOR FREE USERS) -->
+        <div id="arc-gold-strict-upgrade-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-slate-900 to-black border-2 border-amber-500/70 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(245,158,11,0.3)] space-y-6 text-center animate-zoom-in my-auto">
+                <!-- Glowing Crown Icon -->
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400/20 via-yellow-500/30 to-amber-600/20 border-2 border-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                    <span class="absolute inset-0 rounded-3xl border border-amber-400 animate-ping opacity-30"></span>
+                    <i class="fa-solid fa-crown text-3xl sm:text-4xl text-amber-300"></i>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/50 text-[10px] font-mono font-black uppercase tracking-widest">
+                        ⭐ ARC GOLD VIP PERK
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        Unlock Focus Strict Mode
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md mx-auto">
+                        Strict Mode is an exclusive <span class="text-amber-300 font-bold">Arc Gold VIP</span> discipline feature. It locks your focus sessions so you cannot give up or exit early when temptation strikes.
+                    </p>
+                </div>
+
+                <!-- FEATURES HIGHLIGHT -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs">
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-start gap-2.5">
+                        <i class="fa-solid fa-lock text-amber-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Unbreakable Focus</div>
+                            <div class="text-[10px] text-slate-400">Zero early exits or pauses permitted</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-bolt-lightning text-cyan-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">ProMotion 120Hz</div>
+                            <div class="text-[10px] text-slate-400">Uncapped ultra-smooth animations</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-image text-purple-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Custom Wallpaper</div>
+                            <div class="text-[10px] text-slate-400">Personalize with high-res photos</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-crown text-yellow-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">VIP Crown Badge</div>
+                            <div class="text-[10px] text-slate-400">Golden aura in header &amp; profile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="space-y-2 pt-2">
+                    <button role="button" onclick="closeGoldStrictModal(); if(window.ArcGold){window.ArcGold.scrollToGoldCard();} playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/25 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-crown text-slate-950"></i> Upgrade To Arc Gold (from ₹1/day)
+                    </button>
+                    <button role="button" onclick="closeGoldStrictModal(); playSfx('modalClose')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition">
+                        Maybe Later
                     </button>
                 </div>
             </div>
@@ -3953,6 +4097,25 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     gain.connect(sfxOut());
                     osc.start(now);
                     osc.stop(now + 0.85);
+                } else if (type === 'strictDenied' || type === 'denied') {
+                    const o1 = audioCtx.createOscillator();
+                    const o2 = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o1.type = 'sawtooth';
+                    o2.type = 'square';
+                    o1.frequency.setValueAtTime(140, now);
+                    o2.frequency.setValueAtTime(144, now);
+                    o1.frequency.exponentialRampToValueAtTime(65, now + 0.32);
+                    o2.frequency.exponentialRampToValueAtTime(68, now + 0.32);
+                    g.gain.setValueAtTime(0.22, now);
+                    g.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    o1.connect(g);
+                    o2.connect(g);
+                    g.connect(sfxOut());
+                    o1.start(now);
+                    o2.start(now);
+                    o1.stop(now + 0.36);
+                    o2.stop(now + 0.36);
                 }
             } catch(e) {
                 console.warn('Audio playback suppressed', e);
@@ -5626,7 +5789,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 </div>
                             </label>
                         </div>
-                        <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2 sm:p-1.5 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[38px] min-h-[38px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
+                        <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2.5 sm:p-2 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -6565,6 +6728,7 @@ function toggleStreakFreezeFromRules(checked) {
             },
             timer: null
         };
+        window.appTrackerState = appTrackerState;
 
         function initAppTracker() {
             try {
@@ -6675,6 +6839,9 @@ function toggleStreakFreezeFromRules(checked) {
 
             const focusBannerTimerEl = document.getElementById('st-focus-banner-timer');
             if (focusBannerTimerEl) focusBannerTimerEl.textContent = formatted;
+
+            const strictTimeLeftEl = document.getElementById('strict-lockout-time-left');
+            if (strictTimeLeftEl) strictTimeLeftEl.textContent = formatted;
 
             // If an app is active in foreground
             if (appTrackerState.activeAppId) {
@@ -6988,27 +7155,42 @@ function toggleStreakFreezeFromRules(checked) {
             }
 
             playSfx('fanfare');
-            showToast(`Focus session started (${minutes}m). Distracting apps & websites blocked!`);
+            const strictNotice = isFocusStrictModeActive()
+                ? " 🔒 Arc Gold Strict Mode ACTIVE: Early exit is disabled!"
+                : "";
+            showToast(`Focus session started (${minutes}m). Distracting apps & websites blocked!${strictNotice}`);
             renderScreenTimeView();
+            updateStrictModeUI();
         }
 
         function stopFocusSession(completed = false) {
+            if (!completed && isFocusStrictModeActive()) {
+                triggerStrictModeLockoutNotice();
+                return false;
+            }
+
+            const wasStrict = isFocusStrictModeActive();
             appTrackerState.focusActive = false;
 
             if (typeof window !== 'undefined' && typeof window.fpause === 'function') {
-                try { window.fpause(); } catch (_) {}
+                try { window.fpause(true); } catch (_) {}
             }
 
             if (completed) {
                 playSfx('fanfare');
-                showToast("Focus session completed! Great discipline.");
+                if (wasStrict) {
+                    showToast("🏆 Strict Mode Focus session conquered! 100% discipline maintained.");
+                } else {
+                    showToast("Focus session completed! Great discipline.");
+                }
                 const today = getTodayKey();
                 if (Array.isArray(state.screenTimeLogs)) {
                     state.screenTimeLogs.push({
                         date: today,
                         type: 'focus',
                         seconds: appTrackerState.focusTotalSeconds || 1500,
-                        ts: Date.now()
+                        ts: Date.now(),
+                        strictMode: wasStrict
                     });
                 }
                 saveToLocalStorage();
@@ -7021,7 +7203,9 @@ function toggleStreakFreezeFromRules(checked) {
 
             closeFocusBlockerShield();
             closeWebsiteBlockerShield();
+            closeStrictModeLockoutModal();
             renderScreenTimeView();
+            updateStrictModeUI();
         }
 
         function toggleAppFocusBlock(appId) {
@@ -7612,12 +7796,181 @@ function toggleStreakFreezeFromRules(checked) {
             showToast(`Reset today's usage for ${app.name}.`);
         }
 
-        function toggleStrictMode() {
-            appTrackerState.strictMode = !appTrackerState.strictMode;
+        function isFocusStrictModeActive() {
+            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+            if (!isGold) return false;
+            const stateObj = (typeof appTrackerState !== 'undefined') ? appTrackerState : (window.appTrackerState || null);
+            return !!(stateObj && stateObj.strictMode);
+        }
+
+        function handleFocusStrictModeToggle(e) {
+            if (e) {
+                try { e.preventDefault(); e.stopPropagation(); } catch (_) {}
+            }
+            toggleFocusStrictMode();
+        }
+
+        function toggleFocusStrictMode(explicitVal) {
+            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+            if (!isGold) {
+                openGoldStrictModal();
+                updateStrictModeUI();
+                return false;
+            }
+
+            const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
+            if (active && appTrackerState.strictMode) {
+                triggerStrictModeLockoutNotice();
+                updateStrictModeUI();
+                return false;
+            }
+
+            if (typeof explicitVal === 'boolean') {
+                appTrackerState.strictMode = explicitVal;
+            } else {
+                appTrackerState.strictMode = !appTrackerState.strictMode;
+            }
+
             saveAppTrackerData();
             renderScreenTimeView();
-            showToast(appTrackerState.strictMode ? "Strict Mode Enabled (Emergency extensions disabled)." : "Strict Mode Disabled.");
+            updateStrictModeUI();
+
+            if (appTrackerState.strictMode) {
+                playSfx('fanfare');
+                showToast("👑 Arc Gold Strict Mode Armed: Next focus session cannot be ended early!");
+            } else {
+                playSfx('click');
+                showToast("Strict Mode Disabled.");
+            }
+            return true;
         }
+
+        function toggleStrictMode() {
+            return toggleFocusStrictMode();
+        }
+
+        function openStrictModeLockoutModal() {
+            const modal = document.getElementById('arc-strict-lockout-modal');
+            if (!modal) return;
+            const timeEl = document.getElementById('strict-lockout-time-left');
+            if (timeEl && typeof getFocusTimeRemainingFormatted === 'function') {
+                timeEl.textContent = getFocusTimeRemainingFormatted();
+            }
+            const finishEl = document.getElementById('strict-lockout-finish-time');
+            if (finishEl) {
+                let leftSecs = 1500;
+                if (window.F && window.F.run && window.F.left !== undefined) {
+                    leftSecs = window.F.left;
+                } else if (window.appTrackerState && window.appTrackerState.focusSecondsLeft) {
+                    leftSecs = window.appTrackerState.focusSecondsLeft;
+                }
+                const finishDate = new Date(Date.now() + leftSecs * 1000);
+                const timeStr = finishDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                finishEl.textContent = `Sprint finishes at ${timeStr} · Timer must reach 00:00`;
+            }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            const card = document.getElementById('arc-strict-lockout-card');
+            if (card) {
+                card.classList.remove('arc-strict-shake');
+                void card.offsetWidth;
+                card.classList.add('arc-strict-shake');
+            }
+        }
+
+        function closeStrictModeLockoutModal() {
+            const modal = document.getElementById('arc-strict-lockout-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function openGoldStrictModal() {
+            const modal = document.getElementById('arc-gold-strict-upgrade-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                playSfx('modalOpen');
+            }
+        }
+
+        function closeGoldStrictModal() {
+            const modal = document.getElementById('arc-gold-strict-upgrade-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function triggerStrictModeLockoutNotice() {
+            playSfx('strictDenied');
+            openStrictModeLockoutModal();
+            if (typeof showToast === 'function') {
+                showToast('🔒 Early Exit Forbidden: Arc Gold Strict Mode is active! Complete your sprint.');
+            }
+        }
+
+        function updateStrictModeUI() {
+            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+            const isStrictActive = isFocusStrictModeActive();
+            const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
+
+            const strictToggle = document.getElementById('phone-widget-strict-toggle');
+            const strictDesc = document.getElementById('phone-widget-strict-desc');
+            const strictContainer = document.getElementById('phone-widget-strict-container');
+
+            if (strictToggle) {
+                strictToggle.checked = !!(isGold && window.appTrackerState && window.appTrackerState.strictMode);
+                strictToggle.disabled = (active && isStrictActive);
+            }
+            if (strictDesc) {
+                if (active && isStrictActive) {
+                    strictDesc.innerHTML = '<span class="text-amber-400 font-bold">🔒 LOCKED IN SPRINT (No exit)</span>';
+                } else if (isStrictActive) {
+                    strictDesc.innerHTML = '<span class="text-amber-300 font-medium">Armed · Cannot exit early</span>';
+                } else if (!isGold) {
+                    strictDesc.innerHTML = '<span class="text-amber-400/80">👑 Gold Exclusive · Tap to unlock</span>';
+                } else {
+                    strictDesc.textContent = 'Disables early exit until timer ends';
+                }
+            }
+            if (strictContainer) {
+                if (isStrictActive) {
+                    strictContainer.className = 'p-2 sm:p-2.5 rounded-xl bg-amber-950/20 border-2 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)] flex items-center justify-between gap-2 transition';
+                } else {
+                    strictContainer.className = 'p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-amber-500/40 flex items-center justify-between gap-2 transition';
+                }
+            }
+
+            const toolbarBtn = document.getElementById('st-strict-mode-btn');
+            const toolbarText = document.getElementById('st-strict-btn-text');
+            if (toolbarBtn && toolbarText) {
+                if (isStrictActive) {
+                    toolbarBtn.className = "px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/25 to-yellow-500/25 border-2 border-amber-400/70 text-amber-300 text-xs font-black transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]";
+                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-amber-400"></i> Strict Focus: ON <span class="text-[9px] bg-amber-500/30 px-1 rounded text-amber-200">GOLD</span>';
+                } else {
+                    toolbarBtn.className = "px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
+                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-slate-400"></i> Strict Mode <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded border border-amber-500/30 font-bold">GOLD</span>';
+                }
+            }
+
+            const goldCardStrictToggle = document.getElementById('gold-toggle-strict-mode');
+            if (goldCardStrictToggle) {
+                goldCardStrictToggle.checked = !!(isGold && window.appTrackerState && window.appTrackerState.strictMode);
+                goldCardStrictToggle.disabled = (active && isStrictActive) || !isGold;
+            }
+        }
+
+        window.isFocusStrictModeActive = isFocusStrictModeActive;
+        window.toggleFocusStrictMode = toggleFocusStrictMode;
+        window.toggleStrictMode = toggleStrictMode;
+        window.openStrictModeLockoutModal = openStrictModeLockoutModal;
+        window.closeStrictModeLockoutModal = closeStrictModeLockoutModal;
+        window.openGoldStrictModal = openGoldStrictModal;
+        window.closeGoldStrictModal = closeGoldStrictModal;
+        window.triggerStrictModeLockoutNotice = triggerStrictModeLockoutNotice;
+        window.updateStrictModeUI = updateStrictModeUI;
 
         function setAppFilter(filterId) {
             appTrackerState.activeFilter = filterId;
@@ -7752,29 +8105,56 @@ function toggleStreakFreezeFromRules(checked) {
             const focusBadgeTop = document.getElementById('st-focus-badge-top');
 
             if (focusRunning) {
+                const isStrict = isFocusStrictModeActive();
                 if (focusCard) {
-                    focusCard.className = "glass-card rounded-2xl p-4 sm:p-5 border-2 border-purple-500/80 bg-purple-950/30 shadow-[0_0_30px_rgba(168,85,247,0.2)] space-y-3 transition-all duration-300";
+                    focusCard.className = isStrict
+                        ? "glass-card rounded-2xl p-4 sm:p-5 border-2 border-amber-500/80 bg-amber-950/25 shadow-[0_0_35px_rgba(245,158,11,0.25)] space-y-3 transition-all duration-300"
+                        : "glass-card rounded-2xl p-4 sm:p-5 border-2 border-purple-500/80 bg-purple-950/30 shadow-[0_0_30px_rgba(168,85,247,0.2)] space-y-3 transition-all duration-300";
                 }
                 if (focusPill) {
-                    focusPill.className = "px-2.5 py-0.5 rounded-full bg-purple-500 text-white font-mono text-[10px] font-black uppercase tracking-wider flex items-center gap-1 animate-pulse";
-                    focusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white"></span> FOCUS ACTIVE';
+                    if (isStrict) {
+                        focusPill.className = "px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-mono text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm";
+                        focusPill.innerHTML = '<i class="fa-solid fa-lock text-[9px] text-slate-950"></i> STRICT FOCUS ACTIVE';
+                    } else {
+                        focusPill.className = "px-2.5 py-0.5 rounded-full bg-purple-500 text-white font-mono text-[10px] font-black uppercase tracking-wider flex items-center gap-1 animate-pulse";
+                        focusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-white"></span> FOCUS ACTIVE';
+                    }
                 }
                 if (focusDesc) {
-                    focusDesc.innerHTML = `<span class="text-purple-300 font-bold"><i class="fa-solid fa-lock text-purple-400 mr-1"></i> ${focusBlockedCount} apps &amp; ${appTrackerState.websiteFilter.blockedWebsites.length} websites locked in Chrome.</span> <span id="st-focus-banner-timer" class="font-mono font-black text-white ml-1.5">${getFocusTimeRemainingFormatted()}</span> remaining in focus sprint.`;
+                    const strictNoticeText = isStrict
+                        ? '<span class="text-amber-300 font-bold block sm:inline sm:ml-2"><i class="fa-solid fa-lock text-amber-400"></i> Strict Mode Locked (No early exit)</span>'
+                        : '';
+                    focusDesc.innerHTML = `<span class="text-purple-300 font-bold"><i class="fa-solid fa-lock text-purple-400 mr-1"></i> ${focusBlockedCount} apps &amp; ${appTrackerState.websiteFilter.blockedWebsites.length} websites locked in Chrome.</span> <span id="st-focus-banner-timer" class="font-mono font-black text-white ml-1.5">${getFocusTimeRemainingFormatted()}</span> remaining in focus sprint.${strictNoticeText}`;
                 }
                 if (focusActions) {
-                    focusActions.innerHTML = `
-                        <button role="button" onclick="stopFocusSession(false); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/40 font-bold text-xs transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-stop"></i> Stop Focus
-                        </button>
-                        <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800/60 text-purple-200 border border-purple-500/40 font-bold text-xs transition flex items-center gap-1">
-                            <i class="fa-solid fa-sliders"></i> Blocklist (${focusBlockedCount})
-                        </button>
-                    `;
+                    if (isStrict) {
+                        focusActions.innerHTML = `
+                            <button role="button" onclick="stopFocusSession(false); playSfx('strictDenied')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-950/80 via-rose-950/80 to-amber-950/80 hover:from-amber-900/80 hover:to-rose-900/80 text-amber-200 border-2 border-amber-500/60 font-black text-xs transition flex items-center gap-1.5 shadow-lg shadow-amber-500/15 cursor-pointer" title="Strict Mode: Early exit is forbidden">
+                                <i class="fa-solid fa-lock text-amber-400 animate-pulse"></i> Locked Focus Sprint
+                            </button>
+                            <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800/60 text-purple-200 border border-purple-500/40 font-bold text-xs transition flex items-center gap-1">
+                                <i class="fa-solid fa-sliders"></i> Blocklist (${focusBlockedCount})
+                            </button>
+                        `;
+                    } else {
+                        focusActions.innerHTML = `
+                            <button role="button" onclick="stopFocusSession(false); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/40 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-stop"></i> Stop Focus
+                            </button>
+                            <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800/60 text-purple-200 border border-purple-500/40 font-bold text-xs transition flex items-center gap-1">
+                                <i class="fa-solid fa-sliders"></i> Blocklist (${focusBlockedCount})
+                            </button>
+                        `;
+                    }
                 }
                 if (focusBadgeTop) {
-                    focusBadgeTop.className = "px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/50 text-[10px] font-mono font-bold flex items-center gap-1";
-                    focusBadgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> Focus Lockdown Active';
+                    if (isStrict) {
+                        focusBadgeTop.className = "px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200 border border-amber-400/50 text-[10px] font-mono font-bold flex items-center gap-1";
+                        focusBadgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Strict Lockdown Active';
+                    } else {
+                        focusBadgeTop.className = "px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/50 text-[10px] font-mono font-bold flex items-center gap-1";
+                        focusBadgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span> Focus Lockdown Active';
+                    }
                 }
             } else {
                 if (focusCard) {
@@ -7788,6 +8168,9 @@ function toggleStreakFreezeFromRules(checked) {
                     focusDesc.textContent = "During active Focus sessions and Pomodoros, distracting apps and websites inside Chrome are immediately locked.";
                 }
                 if (focusActions) {
+                    const strictBadgeSnippet = isFocusStrictModeActive()
+                        ? `<span class="px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-1 shadow-sm"><i class="fa-solid fa-lock text-amber-400"></i> Strict Mode Armed</span>`
+                        : '';
                     focusActions.innerHTML = `
                         <button role="button" onclick="startFocusSession(25); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-md shadow-purple-600/30 flex items-center gap-1.5">
                             <i class="fa-solid fa-play"></i> Start 25m Focus
@@ -7798,6 +8181,7 @@ function toggleStreakFreezeFromRules(checked) {
                         <button role="button" onclick="openFocusBlocklistModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-xs transition flex items-center gap-1">
                             <i class="fa-solid fa-sliders"></i> Customize Apps
                         </button>
+                        ${strictBadgeSnippet}
                     `;
                 }
                 if (focusBadgeTop) {
@@ -8086,6 +8470,7 @@ function toggleStreakFreezeFromRules(checked) {
 
             // Synchronize and update cross-device screen time matrix (Desktop, Separately Made Mobile, and Combined)
             updateCrossDeviceScreenTimeUI();
+            updateStrictModeUI();
         }
 
         /* ==========================================================================
@@ -10284,6 +10669,15 @@ html, body, .glass-card, header, nav, button, input, select, textarea, #pp12-dra
     50% { border-color: rgba(239,68,68,1); }
 }
 
+@keyframes arcStrictShake {
+    0%, 100% { transform: translateX(0) scale(1); }
+    15%, 45%, 75% { transform: translateX(-8px) scale(1.02); }
+    30%, 60%, 90% { transform: translateX(8px) scale(1.02); }
+}
+.arc-strict-shake {
+    animation: arcStrictShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
 /* 7. Light Mode Overrides */
 html[data-mode=light] .st-radar-dial {
     background: radial-gradient(circle, rgba(2,132,199,0.1) 0%, rgba(248,250,252,0.95) 70%) !important;
@@ -11002,6 +11396,134 @@ html[data-mode=light] .phone-widget-card .text-white {
 </div>
 
 <!-- ==========================================================================
+     LAST MONTH'S SCREEN TIME ANALYTICS & APP BREAKDOWN MODAL
+     Includes Pie Chart with all apps, percentages, bar graphs & Red/Green trend
+     ========================================================================== -->
+<div id="arc-last-month-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Last Month's Screen Time Analytics">
+  <div class="relative my-auto flex flex-col max-w-2xl w-full glass-card rounded-3xl p-5 sm:p-7 border border-purple-500/40 shadow-2xl bg-gradient-to-b from-slate-900/95 via-slate-950/95 to-purple-950/40 animate-zoom-in space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <!-- MODAL HEADER -->
+    <div class="flex items-center justify-between border-b border-purple-500/20 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shadow-sm">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+            Last Month's Screen Time Analytics
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold uppercase">30-Day Deep Dive</span>
+          </h3>
+          <p class="text-xs text-slate-400">Total screentime, app percentages pie chart, weekly bar graphs &amp; month-over-month trend</p>
+        </div>
+      </div>
+      <button type="button" onclick="ArcScreenTimeStore.closeLastMonthModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- 1. TOTAL SCREEN TIME & MONTH-OVER-MONTH TREND BANNER (RED IF INCREASED, GREEN IF DECREASED) -->
+    <div class="space-y-3">
+      <!-- Total Card -->
+      <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-inner">
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Last Month's Total Screen Time</span>
+          <div class="text-2xl sm:text-3xl font-black font-mono text-white mt-0.5" id="lm-total-screentime">--</div>
+          <p class="text-xs text-slate-400 mt-1" id="lm-total-subtext">Calculating telemetry...</p>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto">
+          <button type="button" onclick="ArcScreenTimeStore.toggleLastMonthTrendDemo()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-mono text-[10px] font-bold transition flex items-center gap-1.5" title="Test Red vs Green trend state">
+            <i class="fa-solid fa-arrows-split-up-and-left text-cyan-400"></i> Toggle Red/Green Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Trend Banner (Red = Increased, Green = Decreased) -->
+      <div id="lm-trend-banner" class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 shadow-md flex items-center justify-between gap-3">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- 2. PIE CHART CONSISTING OF EVERY APP & PERCENTAGES -->
+    <div class="space-y-3 pt-1">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-chart-pie text-cyan-400"></i> App Usage Breakdown (Pie Chart &amp; Percentages)
+        </h4>
+        <span class="text-[10px] font-mono text-slate-400">Hover slices to inspect</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80">
+        <!-- Donut / Pie Chart SVG -->
+        <div class="flex flex-col items-center justify-center relative py-2">
+          <div class="relative w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center">
+            <svg id="lm-pie-svg" viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-[0_0_12px_rgba(168,85,247,0.25)]">
+              <!-- Slices rendered dynamically -->
+            </svg>
+            <div id="lm-donut-center" class="absolute text-center pointer-events-none px-2">
+              <div class="text-[9px] font-mono text-slate-400 uppercase tracking-widest truncate" id="lm-donut-sub">TOTAL LAST MONTH</div>
+              <div class="text-base sm:text-lg font-black font-mono text-white tracking-tight" id="lm-donut-val">--</div>
+              <div class="text-[9px] font-mono text-purple-300 truncate" id="lm-donut-foot">30 Days Combined</div>
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-500 font-mono mt-1 text-center">Interactive SVG Donut: All Tracked Apps</p>
+        </div>
+
+        <!-- App Percentages List (Every App Included) -->
+        <div class="space-y-2 max-h-56 overflow-y-auto pr-1 custom-scrollbar" id="lm-apps-breakdown-list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BAR GRAPHS (WEEKLY PROGRESSION & TOP APPS COMPARISON) -->
+    <div class="space-y-3 pt-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Weekly Progression Bar Graph -->
+        <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-simple text-purple-400"></i> Weekly Screen Time
+            </h5>
+            <span class="text-[9px] font-mono text-slate-400">4-Week Rhythm</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 items-end h-32 pt-2" id="lm-weekly-bars-container">
+            <!-- Weekly bars rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Top Apps Comparative Bar Graph -->
+        <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-bars-staggered text-cyan-400"></i> Top Apps Comparison
+            </h5>
+            <span class="text-[9px] font-mono text-slate-400">Duration Ranking</span>
+          </div>
+          <div class="space-y-2 pt-1" id="lm-top-apps-bars">
+            <!-- Top app comparison bars rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL FOOTER & ACTIONS -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-800">
+      <div class="flex items-center gap-2 text-xs text-slate-400 font-mono">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span>Everyday Automatic Refresh: <b>Active</b></span>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button type="button" onclick="ArcScreenTimeStore.forceDailyRefresh(); playSfx('click')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95 flex-1 sm:flex-initial">
+          <i class="fa-solid fa-rotate text-emerald-400"></i> Refresh Today's Counter
+        </button>
+        <button type="button" onclick="ArcScreenTimeStore.closeLastMonthModal()" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase tracking-wider transition active:scale-95 flex-1 sm:flex-initial">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
      APP STORE RATING & MICROSOFT STORE DESKTOP MODAL (CLEAN, NO FAKE NUMBERS)
      ========================================================================== -->
 <div id="arc-store-rating-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Arc Tracker on App Stores">
@@ -11375,7 +11897,7 @@ html[data-mode=light] .phone-widget-card .text-white {
 </div>
 
 <!-- App Security Password / PIN Configuration Modal -->
-<div id="pp-sec-pin-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Configure app security password">
+<div id="pp-sec-pin-modal" class="pp-modal z-[130]" role="dialog" aria-modal="true" aria-label="Configure app security password">
   <div class="pp-box max-w-md w-full">
     <div class="flex items-center gap-2 text-cyan-400 font-black text-base mb-2">
       <i class="fa-solid fa-shield-halved text-lg"></i>
@@ -11388,6 +11910,11 @@ html[data-mode=light] .phone-widget-card .text-white {
         <div class="relative">
           <input id="sec-pin-curr" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="Enter current password or PIN">
           <button type="button" onclick="ArcSecurity.togglePassVisible('sec-pin-curr')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
+        <div class="flex justify-end mt-1">
+          <button type="button" onclick="ArcSecurity.openForgotPasswordModal()" class="text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold transition hover:underline">
+            Forgot current password? Reset here
+          </button>
         </div>
       </div>
       <div id="sec-pin-new-wrap">
@@ -11573,7 +12100,7 @@ html[data-mode=light] .phone-widget-card .text-white {
 </div>
 
 <!-- Forgot Password / Email Verification Modal -->
-<div id="arc-forgot-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Forgot password and email verification">
+<div id="arc-forgot-modal" class="pp-modal z-[130]" role="dialog" aria-modal="true" aria-label="Forgot password and email verification">
   <div class="pp-box max-w-md w-full">
     <div class="flex items-center gap-2 text-cyan-400 font-black text-base mb-2">
       <i class="fa-solid fa-envelope-circle-check text-lg"></i>
@@ -11601,11 +12128,34 @@ html[data-mode=light] .phone-widget-card .text-white {
     <div class="space-y-1 mb-3">
       <label for="arc-forgot-otp-input" class="block text-[11px] font-semibold text-slate-400">Enter 6-Digit Verification Code</label>
       <input id="arc-forgot-otp-input" type="text" maxlength="6" inputmode="numeric" class="w-full text-center text-xl font-mono tracking-widest px-4 py-2 rounded-xl bg-slate-950 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:outline-none" placeholder="000000">
+    </div>
+
+    <!-- New Password Fields Directly on Reset Page -->
+    <div class="space-y-3 mb-3 pt-2 border-t border-slate-800/80">
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label for="arc-forgot-new-pass" class="text-[11px] font-semibold text-slate-400">New Password or PIN (Min 4 characters)</label>
+          <span class="text-[10px] text-cyan-400/90 font-mono">Numbers or text</span>
+        </div>
+        <div class="relative">
+          <input id="arc-forgot-new-pass" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="Enter new password or PIN">
+          <button type="button" onclick="ArcSecurity.togglePassVisible('arc-forgot-new-pass')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1" title="Show/Hide Password"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+      <div>
+        <label for="arc-forgot-confirm-pass" class="block text-[11px] font-semibold text-slate-400 mb-1">Confirm New Password / PIN</label>
+        <div class="relative">
+          <input id="arc-forgot-confirm-pass" type="password" maxlength="64" class="pp-in pr-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono" placeholder="Re-enter new password or PIN">
+          <button type="button" onclick="ArcSecurity.togglePassVisible('arc-forgot-confirm-pass')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1" title="Show/Hide Password"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
       <p id="arc-forgot-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
     </div>
 
     <div class="flex gap-2">
-      <button type="button" onclick="ArcSecurity.verifyRecoveryCode()" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Verify &amp; Change Password</button>
+      <button type="button" onclick="ArcSecurity.verifyRecoveryCode()" class="pp-btn flex-1 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-black border-none font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+        <i class="fa-solid fa-key"></i> Reset &amp; Save New Password
+      </button>
       <button type="button" onclick="ArcSecurity.closeForgotPasswordModal()" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Cancel</button>
     </div>
   </div>
@@ -13778,13 +14328,20 @@ window.ArcSecurity = (function() {
   function openForgotPasswordModal() {
     const modal = document.getElementById('arc-forgot-modal');
     if (!modal) return;
+    modal.style.zIndex = '130';
+    const pinModal = document.getElementById('pp-sec-pin-modal');
+    if (pinModal) pinModal.classList.remove('open');
     const accountCard = document.getElementById('arc-forgot-account-card');
     const dispatchText = document.getElementById('arc-forgot-dispatch-text');
     const codeDisp = document.getElementById('arc-forgot-code-disp');
     const otpIn = document.getElementById('arc-forgot-otp-input');
+    const newPassIn = document.getElementById('arc-forgot-new-pass');
+    const confPassIn = document.getElementById('arc-forgot-confirm-pass');
     const err = document.getElementById('arc-forgot-err');
 
     if (otpIn) otpIn.value = '';
+    if (newPassIn) newPassIn.value = '';
+    if (confPassIn) confPassIn.value = '';
     if (err) err.textContent = '';
 
     // Get current authenticated user
@@ -13842,6 +14399,8 @@ window.ArcSecurity = (function() {
 
   async function verifyRecoveryCode() {
     const otpIn = document.getElementById('arc-forgot-otp-input');
+    const newPassIn = document.getElementById('arc-forgot-new-pass');
+    const confPassIn = document.getElementById('arc-forgot-confirm-pass');
     const err = document.getElementById('arc-forgot-err');
     if (err) err.textContent = '';
     const entered = (otpIn ? otpIn.value : '').trim();
@@ -13850,6 +14409,7 @@ window.ArcSecurity = (function() {
 
     if (!entered) {
       if (err) err.textContent = 'Please enter the 6-digit verification code.';
+      if (otpIn) otpIn.focus();
       return;
     }
     if (Date.now() - storedTime > 15 * 60 * 1000) {
@@ -13859,26 +14419,42 @@ window.ArcSecurity = (function() {
     if (entered !== stored) {
       if (err) err.textContent = 'Incorrect verification code. Please check and try again.';
       if (window.playSfx) window.playSfx('uncheck');
+      if (otpIn) otpIn.focus();
       return;
     }
 
-    // Code verified! Reset password & prompt user to set a new one
+    // Validate new password fields
+    const p1 = (newPassIn ? newPassIn.value : '').trim();
+    const p2 = (confPassIn ? confPassIn.value : '').trim();
+    if (!p1 || p1.length < 4) {
+      if (err) err.textContent = 'New password must be at least 4 characters or numbers.';
+      if (newPassIn) newPassIn.focus();
+      return;
+    }
+    if (p1 !== p2) {
+      if (err) err.textContent = 'Passwords do not match.';
+      if (confPassIn) confPassIn.focus();
+      return;
+    }
+
+    // Code and new password verified! Save new password directly
     localStorage.removeItem('arc_sec_recovery_otp');
     localStorage.removeItem('arc_sec_recovery_otp_time');
-    localStorage.removeItem('arc_sec_pin_hash');
-    localStorage.removeItem('arc_sec_pin_salt');
+    
+    await setPin(p1);
     updatePinBadge();
 
     closeForgotPasswordModal();
     hideLockScreen();
 
+    if (window.ArcTwoFactor && typeof window.ArcTwoFactor.resetOverlaySteps === 'function') {
+      window.ArcTwoFactor.resetOverlaySteps();
+    }
+
     if (window.playSfx) window.playSfx('fanfare');
     if (typeof showToast === 'function') {
-      showToast('Identity verified! Set your new security password.');
+      showToast('🔒 Password changed successfully! You are unlocked.');
     }
-    setTimeout(() => {
-      openPinModal();
-    }, 200);
   }
 
   function openQuarantine(scanReport, rawPayload, filename) {
@@ -13918,6 +14494,7 @@ window.ArcSecurity = (function() {
   function openPinModal() {
     const modal = document.getElementById('pp-sec-pin-modal');
     if (!modal) return;
+    modal.style.zIndex = '130';
     const hasPin = isPinSet();
     const currWrap = document.getElementById('sec-pin-curr-wrap');
     const currIn = document.getElementById('sec-pin-curr');
@@ -15676,45 +16253,84 @@ window.ArcPhoneWidgets = (function() {
       const timeRemaining = (typeof getFocusTimeRemainingFormatted === 'function')
         ? getFocusTimeRemainingFormatted()
         : '24:59';
+      const isStrict = (typeof isFocusStrictModeActive === 'function') && isFocusStrictModeActive();
 
       if (focusValEl) {
         focusValEl.textContent = timeRemaining;
-        focusValEl.className = 'text-2xl sm:text-3xl font-black font-mono text-cyan-300 tracking-tight leading-none drop-shadow animate-pulse';
+        focusValEl.className = isStrict
+          ? 'text-2xl sm:text-3xl font-black font-mono text-amber-300 tracking-tight leading-none drop-shadow animate-pulse'
+          : 'text-2xl sm:text-3xl font-black font-mono text-cyan-300 tracking-tight leading-none drop-shadow animate-pulse';
       }
-      if (focusSubEl) focusSubEl.innerHTML = '<span class="text-emerald-400 font-bold flex items-center justify-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ACTIVE</span>';
+      if (focusSubEl) {
+        focusSubEl.innerHTML = isStrict
+          ? '<span class="text-amber-400 font-bold flex items-center justify-center gap-1"><i class="fa-solid fa-lock text-[10px]"></i> STRICT SPRINT</span>'
+          : '<span class="text-emerald-400 font-bold flex items-center justify-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ACTIVE</span>';
+      }
       if (focusBadgeEl) {
-        focusBadgeEl.textContent = 'ACTIVE FOCUS';
-        focusBadgeEl.className = 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30';
+        focusBadgeEl.textContent = isStrict ? 'STRICT FOCUS' : 'ACTIVE FOCUS';
+        focusBadgeEl.className = isStrict
+          ? 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 shadow-sm'
+          : 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30';
       }
-      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse';
-      if (focusStatusEl) focusStatusEl.textContent = 'Focus Mode Active';
-      if (focusDescEl) focusDescEl.textContent = '8 distracting apps currently locked';
+      if (focusDotEl) {
+        focusDotEl.className = isStrict
+          ? 'w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-pulse'
+          : 'w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse';
+      }
+      if (focusStatusEl) {
+        focusStatusEl.textContent = isStrict ? 'Strict Focus Active' : 'Focus Mode Active';
+      }
+      if (focusDescEl) {
+        focusDescEl.textContent = isStrict ? 'Early exit forbidden • Apps locked' : '8 distracting apps currently locked';
+      }
       if (focusTimerPill) focusTimerPill.textContent = `${timeRemaining} Left`;
 
       if (focusBtn) {
-        focusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1.5"></i> End Focus Session';
-        focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 transition transform active:scale-95';
+        if (isStrict) {
+          focusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1.5 animate-pulse"></i> Locked In Sprint (' + timeRemaining + ')';
+          focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 hover:from-amber-500 hover:to-rose-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 border border-amber-400/50 transition transform active:scale-95 cursor-pointer';
+          focusBtn.title = 'Strict Mode Active: Cannot exit early';
+        } else {
+          focusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1.5"></i> End Focus Session';
+          focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 transition transform active:scale-95';
+          focusBtn.title = 'End focus session early';
+        }
       }
 
       if (svgFocus) {
-        svgFocus.setAttribute('stroke', '#06b6d4');
+        svgFocus.setAttribute('stroke', isStrict ? '#f59e0b' : '#06b6d4');
         svgFocus.setAttribute('stroke-dasharray', '240 352');
       }
 
       // Simulator Focus
       if (simFocusValEl) {
         simFocusValEl.textContent = timeRemaining;
-        simFocusValEl.className = 'text-xl font-black font-mono text-cyan-300 tracking-tight leading-none animate-pulse';
+        simFocusValEl.className = isStrict
+          ? 'text-xl font-black font-mono text-amber-300 tracking-tight leading-none animate-pulse'
+          : 'text-xl font-black font-mono text-cyan-300 tracking-tight leading-none animate-pulse';
       }
-      if (simFocusSubEl) simFocusSubEl.innerHTML = '<span class="text-emerald-400 font-bold">ACTIVE</span>';
-      if (simFocusStatusEl) simFocusStatusEl.textContent = 'Active Focus';
-      if (simFocusDescEl) simFocusDescEl.textContent = 'Apps Locked';
+      if (simFocusSubEl) {
+        simFocusSubEl.innerHTML = isStrict
+          ? '<span class="text-amber-400 font-bold">🔒 STRICT</span>'
+          : '<span class="text-emerald-400 font-bold">ACTIVE</span>';
+      }
+      if (simFocusStatusEl) {
+        simFocusStatusEl.textContent = isStrict ? 'Strict Focus' : 'Active Focus';
+      }
+      if (simFocusDescEl) {
+        simFocusDescEl.textContent = isStrict ? 'Locked Sprint' : 'Apps Locked';
+      }
       if (simFocusBtn) {
-        simFocusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1"></i> End Focus';
-        simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+        if (isStrict) {
+          simFocusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1"></i> Locked (' + timeRemaining + ')';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-amber-400/40';
+        } else {
+          simFocusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1"></i> End Focus';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+        }
       }
       if (simSvgFocus) {
-        simSvgFocus.setAttribute('stroke', '#06b6d4');
+        simSvgFocus.setAttribute('stroke', isStrict ? '#f59e0b' : '#06b6d4');
         simSvgFocus.setAttribute('stroke-dasharray', '240 352');
       }
 
@@ -15794,6 +16410,14 @@ window.ArcPhoneWidgets = (function() {
     const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
 
     if (active) {
+      if (typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive()) {
+        if (typeof triggerStrictModeLockoutNotice === 'function') {
+          triggerStrictModeLockoutNotice();
+        } else if (typeof showToast === 'function') {
+          showToast('🔒 Early Exit Forbidden: Arc Gold Strict Mode is active!');
+        }
+        return false;
+      }
       if (typeof stopFocusSession === 'function') {
         stopFocusSession(false);
       } else if (typeof window.fpause === 'function') {
@@ -15808,7 +16432,12 @@ window.ArcPhoneWidgets = (function() {
         window.fstart();
       }
       if (window.playSfx) window.playSfx('fanfare');
-      if (typeof showToast === 'function') showToast(`Focus Mode turned ON (${mins}m)! Distracting apps blocked.`);
+      if (typeof showToast === 'function') {
+        const strictMsg = (typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive())
+          ? ' 🔒 Strict Mode is LOCKED — Early exit is forbidden!'
+          : '';
+        showToast(`Focus Mode turned ON (${mins}m)! Distracting apps blocked.${strictMsg}`);
+      }
     }
 
     updateWidgets();
@@ -15906,7 +16535,7 @@ window.ArcPhoneWidgets = (function() {
 
 // ============================================================================
 // ARC GOLD MEMBERSHIP & 120HZ PROMOTION DISPLAY ENGINE
-// Offline-first VIP membership with ₹79/mo, ₹365/yr, ₹700 lifetime tiers.
+// Offline-first VIP membership with ₹59/mo, ₹365/yr, ₹700 lifetime tiers.
 // Unlocks 120Hz ProMotion and uncapped high-refresh framerates.
 // ============================================================================
 window.ArcGold = (function() {
@@ -15927,6 +16556,7 @@ window.ArcGold = (function() {
       desc: 'Automatic first-month perk upon login. Includes 2 authorized users/devices & full 120Hz ProMotion.',
       features: [
         '👥 Dual-User License (Max 2 Users Only)',
+        '🔒 Focus Strict Mode (Zero Early Exit)',
         '120Hz Ultra-Smooth ProMotion',
         'Custom Photo Wallpaper Background',
         'Uncapped Max Frame Rate Engine',
@@ -15937,10 +16567,10 @@ window.ArcGold = (function() {
     monthly: {
       id: 'monthly',
       name: 'Monthly Pass',
-      price: 79,
+      price: 59,
       period: 'month',
       symbol: '₹',
-      displayPrice: '₹79',
+      displayPrice: '₹59',
       periodText: '/ month',
       maxUsers: 2,
       badge: 'FLEXIBLE',
@@ -15948,6 +16578,7 @@ window.ArcGold = (function() {
       desc: 'Flexible month-to-month access for up to 2 users. Cancel anytime with zero penalty.',
       features: [
         '👥 Dual-User License (Max 2 Users Only)',
+        '🔒 Focus Strict Mode (Zero Early Exit)',
         '120Hz Ultra-Smooth ProMotion',
         'Custom Photo Wallpaper Background',
         'Uncapped Max Frame Rate Engine',
@@ -15966,12 +16597,13 @@ window.ArcGold = (function() {
       maxUsers: 2,
       badge: '⭐ MOST POPULAR · ₹1/DAY',
       badgeColor: 'bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border-amber-400/50',
-      desc: 'Save 61% compared to monthly. Full 365 days of uninterrupted ultra smoothness for 2 users.',
+      desc: 'Save 48% compared to monthly. Full 365 days of uninterrupted ultra smoothness for 2 users.',
       features: [
         '👥 Dual-User License (Max 2 Users Only)',
+        '🔒 Focus Strict Mode (Zero Early Exit)',
         'Everything in Monthly Pass',
         'Custom Photo Wallpaper Background',
-        'Costs just ₹1 per day (Save 61%)',
+        'Costs just ₹1 per day (Save 48%)',
         '365 Days Uninterrupted ProMotion',
         'Priority Hardware Smooth Mode'
       ]
@@ -15990,6 +16622,7 @@ window.ArcGold = (function() {
       desc: 'Single one-time payment. Own ProMotion 120Hz forever with VIP Founder prestige for 2 users.',
       features: [
         '👥 Dual-User License (Max 2 Users Only)',
+        '🔒 Focus Strict Mode (Zero Early Exit)',
         'Permanent Lifetime 120Hz Access',
         'Custom Photo Wallpaper Background',
         'Zero Recurring Fees Forever',
@@ -15998,6 +16631,84 @@ window.ArcGold = (function() {
       ]
     }
   };
+
+  const PROMO_CODES = {
+    'ARC50': { type: 'percent', value: 50, label: '50% OFF VIP Launch Discount' },
+    'DISCIPLINE': { type: 'percent', value: 25, label: '25% OFF Focus Champion Perk' },
+    'SUMMERARC': { type: 'fixed', value: 20, label: '₹20 Flat Summer Savings' },
+    'FOUNDER': { type: 'fixed', value: 100, label: '₹100 Founder Edition Rebate' },
+    'GOLDVIP': { type: 'percent', value: 30, label: '30% OFF Gold VIP Special' },
+    'STUDENT': { type: 'percent', value: 40, label: '40% OFF Scholar Discount' }
+  };
+
+  const PROMO_STORAGE_KEY = 'arc_gold_applied_promo';
+
+  function getAppliedPromo() {
+    try {
+      const code = localStorage.getItem(PROMO_STORAGE_KEY);
+      if (code && PROMO_CODES[code.toUpperCase()]) {
+        return { code: code.toUpperCase(), ...PROMO_CODES[code.toUpperCase()] };
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  function applyPromoCode(inputCode) {
+    if (!inputCode || typeof inputCode !== 'string') return false;
+    const cleanCode = inputCode.trim().toUpperCase();
+    if (!cleanCode) return false;
+    if (PROMO_CODES[cleanCode]) {
+      localStorage.setItem(PROMO_STORAGE_KEY, cleanCode);
+      if (typeof playSfx === 'function') playSfx('bonus');
+      if (typeof showToast === 'function') {
+        showToast(`🎉 Promo code "${cleanCode}" applied! ${PROMO_CODES[cleanCode].label}`);
+      }
+      render();
+      return true;
+    } else {
+      if (typeof playSfx === 'function') playSfx('denied');
+      if (typeof showToast === 'function') {
+        showToast(`❌ Invalid or expired promo code: "${cleanCode}". Try "ARC50" or "DISCIPLINE"`);
+      }
+      const errEl = document.getElementById('gold-promo-error-msg');
+      if (errEl) {
+        errEl.textContent = `Promo code "${cleanCode}" is invalid. Valid codes: ARC50, DISCIPLINE, SUMMERARC, GOLDVIP`;
+        errEl.classList.remove('hidden');
+      }
+      return false;
+    }
+  }
+
+  function removePromoCode() {
+    localStorage.removeItem(PROMO_STORAGE_KEY);
+    if (typeof playSfx === 'function') playSfx('click');
+    if (typeof showToast === 'function') {
+      showToast('Promo code removed.');
+    }
+    render();
+  }
+
+  function handlePromoSubmit() {
+    const input = document.getElementById('gold-promo-input');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) {
+      if (typeof showToast === 'function') showToast('Please enter a promo code');
+      return;
+    }
+    applyPromoCode(val);
+  }
+
+  function calculateDiscountedPrice(basePrice, promo) {
+    if (!promo || basePrice <= 0) return basePrice;
+    if (promo.type === 'percent') {
+      const disc = Math.round(basePrice * (promo.value / 100));
+      return Math.max(1, basePrice - disc);
+    } else if (promo.type === 'fixed') {
+      return Math.max(1, basePrice - promo.value);
+    }
+    return basePrice;
+  }
 
   function getState() {
     try {
@@ -16089,7 +16800,16 @@ window.ArcGold = (function() {
       window.ArcProfile.renderHeaderProfile();
     }
 
-    // 7. Notify user if this was a fresh expiry transition
+    // 7. Revert Focus Strict Mode back to disabled if it was active
+    try {
+      if (typeof appTrackerState !== 'undefined' && appTrackerState.strictMode) {
+        appTrackerState.strictMode = false;
+        try { localStorage.setItem('arc_focus_strict_mode', 'false'); } catch (e) {}
+        if (typeof updateStrictModeUI === 'function') updateStrictModeUI();
+      }
+    } catch (e) {}
+
+    // 8. Notify user if this was a fresh expiry transition
     if (isNaturalExpiry && wasGold) {
       if (typeof showToast === 'function') {
         const typeStr = wasTrial ? 'Free First Month Arc Gold Trial' : 'Arc Gold Membership';
@@ -16352,11 +17072,16 @@ window.ArcGold = (function() {
       authUsers = [{ id: email, name: name, addedAt: now, isPrimary: true }];
     }
 
+    const promo = getAppliedPromo();
+    const finalPrice = calculateDiscountedPrice(plan.price, promo);
+
     const state = {
       isGold: true,
       plan: planId,
       planName: plan.name,
-      price: plan.price,
+      price: finalPrice,
+      originalPrice: plan.price,
+      appliedPromo: promo ? promo.code : null,
       period: plan.period,
       currency: 'INR',
       symbol: '₹',
@@ -16386,7 +17111,8 @@ window.ArcGold = (function() {
       window.SettingsApp.onTab('settings');
     }
     if (typeof showToast === 'function') {
-      showToast('👑 Arc Gold Activated (' + plan.name + ' · Max 2 Users) · 120Hz ProMotion Unlocked!');
+      const promoMsg = promo ? ` (Coupon ${promo.code} applied · Saved ₹${plan.price - finalPrice})` : '';
+      showToast('👑 Arc Gold Activated (' + plan.name + ' · ₹' + finalPrice + promoMsg + ') · 120Hz ProMotion Unlocked!');
     }
     return true;
   }
@@ -16548,6 +17274,19 @@ window.ArcGold = (function() {
     const goldActive = !!state.isGold;
     const hzActive = is120HzEnabled();
     const currentPlan = state.plan ? PLANS[state.plan] : null;
+
+    const promo = getAppliedPromo();
+    const monthlyOrig = PLANS.monthly.price; // 59
+    const monthlyEff = calculateDiscountedPrice(monthlyOrig, promo);
+    const monthlyHasDisc = monthlyEff < monthlyOrig;
+
+    const annualOrig = PLANS.annual.price; // 365
+    const annualEff = calculateDiscountedPrice(annualOrig, promo);
+    const annualHasDisc = annualEff < annualOrig;
+
+    const lifetimeOrig = PLANS.lifetime.price; // 700
+    const lifetimeEff = calculateDiscountedPrice(lifetimeOrig, promo);
+    const lifetimeHasDisc = lifetimeEff < lifetimeOrig;
 
     let expiresFormatted = 'Never · Lifetime VIP';
     if (state.expiresAt) {
@@ -16770,6 +17509,274 @@ window.ArcGold = (function() {
               <span id="gold-smoothness-test-status" class="text-[10px] font-mono text-slate-400 shrink-0">Idle</span>
             </div>
           </div>
+        <!-- FOCUS STRICT MODE SHOWCASE CARD (NEW GOLD EXCLUSIVE) -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-slate-900/60 border border-amber-500/30 relative overflow-hidden space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)] shrink-0">
+                <i class="fa-solid fa-lock text-base"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+                    Focus Strict Mode
+                  </h4>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">Gold Exclusive</span>
+                </div>
+                <p class="text-xs text-slate-300 mt-0.5">
+                  Zero early exits. Once initiated, session termination, pausing, and resets are locked out until the countdown reaches 00:00.
+                </p>
+              </div>
+            </div>
+            <div class="shrink-0 flex items-center gap-2">
+              <span class="text-[11px] font-mono font-bold ${goldActive ? (typeof appTrackerState !== 'undefined' && appTrackerState.strictMode ? 'text-amber-400' : 'text-slate-400') : 'text-amber-500'}">
+                ${!goldActive ? 'Locked (VIP)' : (typeof appTrackerState !== 'undefined' && appTrackerState.strictMode ? 'Active 🔒' : 'Ready')}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-amber-500/15 text-xs text-slate-400">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-amber-400"></i> Anti-Bail Enforcement</span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i> Hardcore Productivity</span>
+            </div>
+            <button type="button" onclick="if(window.toggleFocusStrictMode){window.toggleFocusStrictMode();}else{window.openGoldStrictModal?.();}" class="px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-sliders text-[11px]"></i> Configure in Screen Time
+            </button>
+          </div>
+        </div>
+
+        <!-- FREE PLAN VS ARC GOLD VIP CAPABILITY MATRIX -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-950 border border-slate-800 relative overflow-hidden space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">Plan Comparison: Free Tier vs Arc Gold VIP</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">The Free Plan provides essential basics with standard limits. Arc Gold unlocks unbreakable discipline, uncapped 120Hz display, and dual seats.</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0 self-start sm:self-center">
+              TRANSPARENT BREAKDOWN
+            </span>
+          </div>
+
+          <!-- COMPARISON TABLE -->
+          <div class="overflow-x-auto no-scrollbar">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider">
+                  <th class="py-2.5 px-3 text-slate-400 w-2/5">Capability / Function</th>
+                  <th class="py-2.5 px-3 text-slate-400 bg-slate-950/60 rounded-t-xl w-[30%]">
+                    <div class="flex items-center gap-1.5 font-bold text-slate-300">
+                      <i class="fa-solid fa-shield text-slate-400"></i> Free Plan (Basic)
+                    </div>
+                  </th>
+                  <th class="py-2.5 px-3 text-amber-300 bg-amber-500/10 border-x border-t border-amber-500/30 rounded-t-xl w-[30%]">
+                    <div class="flex items-center gap-1.5 font-black text-amber-300">
+                      <i class="fa-solid fa-crown text-amber-400 text-xs"></i> Arc Gold (VIP)
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-xs">
+                <!-- ROW 1: Focus Strict Mode -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-lock text-amber-400 text-[11px]"></i> Focus Strict Mode
+                    </div>
+                    <div class="text-[10px] text-slate-400">Zero early exits, anti-bail lockout screen</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
+                    <div class="flex items-center gap-1.5 text-rose-400/90 font-medium">
+                      <i class="fa-solid fa-xmark text-rose-500 text-sm"></i>
+                      <span>Not Available</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Can pause, stop, or reset anytime (no discipline lock)</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>Unbreakable Strict Mode</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Locks out stop, pause, and reset until 00:00</div>
+                  </td>
+                </tr>
+
+                <!-- ROW 2: ProMotion Refresh Rate -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-bolt text-yellow-400 text-[11px]"></i> Display Refresh Rate
+                    </div>
+                    <div class="text-[10px] text-slate-400">Screen responsiveness & UI motion fluidity</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
+                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                      <span>Standard 60Hz Cap</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Basic browser refresh rate</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>120Hz ProMotion Engine</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Uncapped high-velocity FPS & ultra smooth scroll</div>
+                  </td>
+                </tr>
+
+                <!-- ROW 3: Multi-User / Accounts -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-users text-cyan-400 text-[11px]"></i> Multi-User & Devices
+                    </div>
+                    <div class="text-[10px] text-slate-400">Authorized operatives per license</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
+                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                      <span>1 Solo User</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Single device/operative only</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>Dual-User VIP License</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Authorized for 2 separate users / devices</div>
+                  </td>
+                </tr>
+
+                <!-- ROW 4: Custom Photo Wallpaper -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-image text-purple-400 text-[11px]"></i> Custom Wallpaper
+                    </div>
+                    <div class="text-[10px] text-slate-400">Workspace visual personalization</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
+                    <div class="flex items-center gap-1.5 text-rose-400/90 font-medium">
+                      <i class="fa-solid fa-xmark text-rose-500 text-sm"></i>
+                      <span>Standard Themes Only</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Restricted to preset default themes</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>Custom Photo Wallpaper</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Upload photos, adjust opacity & ambient blur</div>
+                  </td>
+                </tr>
+
+                <!-- ROW 5: App & YouTube Blocker -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-shield-halved text-emerald-400 text-[11px]"></i> Blocker & Filters
+                    </div>
+                    <div class="text-[10px] text-slate-400">Distraction containment engine</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
+                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                      <span>Basic App Limits</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Manual daily screen time counters</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>Advanced Lockout Shield</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Automated full-screen shield & YouTube smart filter</div>
+                  </td>
+                </tr>
+
+                <!-- ROW 6: VIP Crown & Prestige -->
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-3 px-3">
+                    <div class="font-bold text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-crown text-amber-400 text-[11px]"></i> Profile Badge & Prestige
+                    </div>
+                    <div class="text-[10px] text-slate-400">Identity aura across header & profile</div>
+                  </td>
+                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40 rounded-b-xl">
+                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                      <span>Free Operative</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">Standard profile without VIP styling</div>
+                  </td>
+                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-b border-amber-500/30 rounded-b-xl">
+                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
+                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                      <span>VIP Crown & Amber Aura</span>
+                    </div>
+                    <div class="text-[10px] text-amber-300/80 mt-0.5">Radiant gold border, header badge & founder status</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PROMO CODE INPUT & DISCOUNT ENGINE -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-950 to-amber-950/20 border border-slate-800 hover:border-amber-500/30 transition space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-ticket text-amber-400"></i>
+                <span class="text-xs font-bold text-white uppercase tracking-wider font-mono">Apply VIP Promo Code</span>
+                ${promo ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1"><i class="fa-solid fa-tag text-[9px]"></i> ${promo.code} ACTIVE</span>` : ''}
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Apply promotional coupons for instant price reductions across all Arc Gold membership tiers.</p>
+            </div>
+            ${promo ? `
+              <button type="button" onclick="window.ArcGold.removePromoCode()" class="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-bold transition flex items-center gap-1.5 self-start sm:self-center">
+                <i class="fa-solid fa-xmark text-[10px]"></i> Remove Promo
+              </button>
+            ` : ''}
+          </div>
+
+          ${promo ? `
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black">
+                  <i class="fa-solid fa-percent text-xs"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-emerald-300 font-mono tracking-wide">${promo.code}</span>
+                  <span class="text-slate-300 text-xs ml-1.5">applied: <b>${promo.label}</b></span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Prices Discounted Below</span>
+            </div>
+          ` : `
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <i class="fa-solid fa-tag text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
+                <input type="text" id="gold-promo-input" placeholder="Enter promo code (e.g. ARC50, DISCIPLINE)" onkeydown="if(event.key==='Enter'){window.ArcGold.handlePromoSubmit();}" class="w-full bg-slate-950 border border-slate-700/80 focus:border-amber-400 pl-8 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 font-mono uppercase tracking-wider outline-none transition shadow-inner">
+              </div>
+              <button type="button" onclick="window.ArcGold.handlePromoSubmit()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition shadow-md shadow-amber-500/20 active:scale-95 shrink-0 flex items-center gap-1.5">
+                <span>Apply</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </button>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400">
+              <span class="text-slate-500">Popular coupons:</span>
+              <button type="button" onclick="window.ArcGold.applyPromoCode('ARC50')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">ARC50 (50% OFF)</button>
+              <button type="button" onclick="window.ArcGold.applyPromoCode('DISCIPLINE')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">DISCIPLINE (25% OFF)</button>
+              <button type="button" onclick="window.ArcGold.applyPromoCode('SUMMERARC')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">SUMMERARC (₹20 OFF)</button>
+            </div>
+            <div id="gold-promo-error-msg" class="text-[11px] text-rose-400 font-medium hidden"></div>
+          `}
         </div>
 
         <!-- PRICING TIERS GRID -->
@@ -16793,7 +17800,7 @@ window.ArcGold = (function() {
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="gold-plans-grid">
-            <!-- MONTHLY: ₹79 / month -->
+            <!-- MONTHLY: ₹59 / month -->
             <div class="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${state.plan === 'monthly' ? 'gold-plan-card-active' : 'bg-slate-950/60 border-slate-800/80 hover:border-amber-500/40'}">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
@@ -16804,8 +17811,14 @@ window.ArcGold = (function() {
                 </div>
                 <div>
                   <h4 class="text-sm font-extrabold text-white">${PLANS.monthly.name}</h4>
-                  <div class="mt-2 flex items-baseline gap-1">
-                    <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.monthly.displayPrice}</span>
+                  <div class="mt-2 flex items-baseline gap-1.5">
+                    ${monthlyHasDisc ? `
+                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${monthlyEff}</span>
+                      <span class="text-sm line-through text-slate-500 font-semibold">₹${monthlyOrig}</span>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
+                    ` : `
+                      <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.monthly.displayPrice}</span>
+                    `}
                     <span class="text-xs text-slate-400 font-normal">${PLANS.monthly.periodText}</span>
                   </div>
                   <p class="text-xs text-slate-400 mt-1">${PLANS.monthly.desc}</p>
@@ -16821,7 +17834,7 @@ window.ArcGold = (function() {
                   </button>
                 ` : `
                   <button type="button" onclick="window.ArcGold.activatePlan('monthly')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white border border-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition">
-                    Activate Monthly · ₹79
+                    Activate Monthly · ₹${monthlyEff}
                   </button>
                 `}
               </div>
@@ -16839,10 +17852,16 @@ window.ArcGold = (function() {
                 <div>
                   <h4 class="text-sm font-extrabold text-white flex items-center gap-1.5">
                     ${PLANS.annual.name}
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">SAVE 61%</span>
+                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">SAVE 48%</span>
                   </h4>
-                  <div class="mt-2 flex items-baseline gap-1">
-                    <span class="text-2xl sm:text-3xl font-black text-amber-300">${PLANS.annual.displayPrice}</span>
+                  <div class="mt-2 flex items-baseline gap-1.5">
+                    ${annualHasDisc ? `
+                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${annualEff}</span>
+                      <span class="text-sm line-through text-slate-500 font-semibold">₹${annualOrig}</span>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
+                    ` : `
+                      <span class="text-2xl sm:text-3xl font-black text-amber-300">${PLANS.annual.displayPrice}</span>
+                    `}
                     <span class="text-xs text-slate-400 font-normal">${PLANS.annual.periodText}</span>
                   </div>
                   <p class="text-xs text-slate-300 mt-1">${PLANS.annual.desc}</p>
@@ -16858,7 +17877,7 @@ window.ArcGold = (function() {
                   </button>
                 ` : `
                   <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 active:scale-95 text-slate-950 text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)] transition">
-                    Activate Annual · ₹365
+                    Activate Annual · ₹${annualEff}
                   </button>
                 `}
               </div>
@@ -16875,8 +17894,14 @@ window.ArcGold = (function() {
                 </div>
                 <div>
                   <h4 class="text-sm font-extrabold text-white">${PLANS.lifetime.name}</h4>
-                  <div class="mt-2 flex items-baseline gap-1">
-                    <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.lifetime.displayPrice}</span>
+                  <div class="mt-2 flex items-baseline gap-1.5">
+                    ${lifetimeHasDisc ? `
+                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${lifetimeEff}</span>
+                      <span class="text-sm line-through text-slate-500 font-semibold">₹${lifetimeOrig}</span>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
+                    ` : `
+                      <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.lifetime.displayPrice}</span>
+                    `}
                     <span class="text-xs text-slate-400 font-normal">${PLANS.lifetime.periodText}</span>
                   </div>
                   <p class="text-xs text-slate-400 mt-1">${PLANS.lifetime.desc}</p>
@@ -16892,7 +17917,7 @@ window.ArcGold = (function() {
                   </button>
                 ` : `
                   <button type="button" onclick="window.ArcGold.activatePlan('lifetime')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-yellow-300 border border-yellow-500/40 text-xs font-bold flex items-center justify-center gap-2 transition">
-                    Unlock Lifetime · ₹700
+                    Unlock Lifetime · ₹${lifetimeEff}
                   </button>
                 `}
               </div>
@@ -17048,8 +18073,16 @@ window.ArcGold = (function() {
     removeAuthorizedUser,
     promptAddSecondUser,
     canUserUseGold,
+    isFocusStrictModeActive: () => (typeof isFocusStrictModeActive === 'function' ? isFocusStrictModeActive() : false),
+    toggleFocusStrictMode: (v) => (typeof toggleFocusStrictMode === 'function' ? toggleFocusStrictMode(v) : false),
+    openStrictLockoutModal: () => (typeof openStrictModeLockoutModal === 'function' ? openStrictModeLockoutModal() : null),
     render,
-    init
+    init,
+    applyPromoCode,
+    removePromoCode,
+    handlePromoSubmit,
+    getAppliedPromo,
+    calculateDiscountedPrice
   };
 })();
 
@@ -17566,9 +18599,16 @@ window.ArcScreenTimeStore = (function() {
       if (raw) hist = JSON.parse(raw);
     } catch(e) {}
 
+    const defaultSeed = seedDefaultHistory();
     if (!hist || typeof hist !== 'object' || !hist.days) {
-      hist = seedDefaultHistory();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(hist));
+      hist = defaultSeed;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); } catch(e) {}
+    } else if (Object.keys(hist.days).length < 60) {
+      // Ensure historical datasets cover both Last Month (days 1-30) and Preceding Month (days 31-60)
+      for (const [k, v] of Object.entries(defaultSeed.days)) {
+        if (!hist.days[k]) hist.days[k] = v;
+      }
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); } catch(e) {}
     }
     return hist;
   }
@@ -17576,14 +18616,19 @@ window.ArcScreenTimeStore = (function() {
   function seedDefaultHistory() {
     const days = {};
     const now = new Date();
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 65; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
       const key = d.toISOString().split('T')[0];
 
-      const laptopSecs = Math.floor((1.7 + Math.sin(i * 0.6) * 0.5) * 3600);
-      const phoneSecs = Math.floor((1.0 + Math.cos(i * 0.4) * 0.3) * 3600);
-      const combinedSecs = laptopSecs + phoneSecs; // ~2.4h - 3.5h (all < 4 hours)
+      // Preceding month (days 31-60) had slightly higher usage (~3.6h - 4.1h),
+      // making Last Month (days 1-30, ~2.8h - 3.4h) show an authentic reduction (green),
+      // with full toggle capability to inspect increased (red) state.
+      const isPrevMonth = i > 30;
+      const baseVariation = isPrevMonth ? 0.35 : 0.05;
+      const laptopSecs = Math.floor((2.0 + Math.sin(i * 0.5) * 0.5 + baseVariation) * 3600);
+      const phoneSecs = Math.floor((1.1 + Math.cos(i * 0.4) * 0.3 + baseVariation * 0.4) * 3600);
+      const combinedSecs = laptopSecs + phoneSecs;
 
       days[key] = {
         date: key,
@@ -17592,12 +18637,15 @@ window.ArcScreenTimeStore = (function() {
         combinedSecs: combinedSecs,
         phoneLinked: true,
         apps: {
-          'Visual Studio Code': Math.floor(laptopSecs * 0.55),
-          'Google Chrome': Math.floor(laptopSecs * 0.30),
+          'Visual Studio Code': Math.floor(laptopSecs * 0.45),
+          'Google Chrome': Math.floor(laptopSecs * 0.28),
           'Terminal': Math.floor(laptopSecs * 0.15),
-          'YouTube': Math.floor(phoneSecs * 0.40),
-          'Instagram': Math.floor(phoneSecs * 0.35),
-          'WhatsApp': Math.floor(phoneSecs * 0.25)
+          'Steam / Gaming': Math.floor(laptopSecs * 0.12),
+          'YouTube': Math.floor(phoneSecs * 0.35),
+          'Instagram': Math.floor(phoneSecs * 0.25),
+          'WhatsApp': Math.floor(phoneSecs * 0.20),
+          'Discord': Math.floor(phoneSecs * 0.12),
+          'X / Twitter': Math.floor(phoneSecs * 0.08)
         }
       };
     }
@@ -18024,9 +19072,426 @@ window.ArcScreenTimeStore = (function() {
     }
   }
 
+  // ==========================================================================
+  // LAST MONTH DEEP-DIVE ANALYTICS ENGINE & DAILY REFRESH AUTOMATION
+  // ==========================================================================
+  let lastMonthTrendDemoState = null; // null = dynamic, 'increased' | 'decreased'
+
+  const APP_PALETTES = {
+    'Visual Studio Code': { color: '#38bdf8', icon: 'fa-code', tag: 'Dev' },
+    'Google Chrome': { color: '#f59e0b', icon: 'fa-chrome', tag: 'Web' },
+    'Terminal': { color: '#10b981', icon: 'fa-terminal', tag: 'Dev' },
+    'Steam / Gaming': { color: '#818cf8', icon: 'fa-gamepad', tag: 'Play' },
+    'YouTube': { color: '#ef4444', icon: 'fa-youtube', tag: 'Media' },
+    'Instagram': { color: '#ec4899', icon: 'fa-instagram', tag: 'Social' },
+    'WhatsApp': { color: '#22c55e', icon: 'fa-whatsapp', tag: 'Chat' },
+    'Discord': { color: '#a855f7', icon: 'fa-discord', tag: 'Chat' },
+    'X / Twitter': { color: '#94a3b8', icon: 'fa-x-twitter', tag: 'Social' }
+  };
+
+  function checkDailyRollover(force = false) {
+    const todayKey = new Date().toISOString().split('T')[0];
+    const lastDate = localStorage.getItem('arc_screentime_last_active_date');
+    if (!lastDate || lastDate !== todayKey || force) {
+      localStorage.setItem('arc_screentime_last_active_date', todayKey);
+      // Auto-refresh today's session in ArcTracker if cross-device or timer exists
+      if (window.state && window.state.deviceScreenTime) {
+        if (!force && lastDate && lastDate !== todayKey) {
+          // Day has naturally rolled over at midnight: preserve previous day into history
+          const hist = getHistory();
+          if (!hist.days[todayKey]) {
+            hist.days[todayKey] = {
+              date: todayKey,
+              laptopSecs: 0,
+              phoneSecs: 0,
+              combinedSecs: 0,
+              phoneLinked: isPhoneLinked(),
+              apps: {}
+            };
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); } catch(e) {}
+          }
+        }
+      }
+      renderAnalytics();
+    }
+  }
+
+  function forceDailyRefresh() {
+    checkDailyRollover(true);
+    if (typeof showToast === 'function') {
+      const todayFormatted = new Date().toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      showToast('🔄 Daily screentime counter refreshed for ' + todayFormatted);
+    }
+    renderLastMonthModal();
+  }
+
+  function toggleLastMonthTrendDemo() {
+    if (lastMonthTrendDemoState === null) {
+      lastMonthTrendDemoState = 'increased'; // switch to RED
+    } else if (lastMonthTrendDemoState === 'increased') {
+      lastMonthTrendDemoState = 'decreased'; // switch to GREEN
+    } else {
+      lastMonthTrendDemoState = null; // back to dynamic
+    }
+    const stateLabel = lastMonthTrendDemoState === 'increased' ? '🔴 Increased (Red Trend)' : lastMonthTrendDemoState === 'decreased' ? '🟢 Decreased (Green Trend)' : '⚡ Dynamic Live Trend';
+    if (typeof showToast === 'function') {
+      showToast('Trend state switched to: ' + stateLabel);
+    }
+    renderLastMonthModal();
+  }
+
+  function getLastMonthAnalytics() {
+    const hist = getHistory();
+    const sortedDays = Object.values(hist.days).sort((a, b) => b.date.localeCompare(a.date));
+
+    // Days 1..30 = Last Month (30-day window)
+    const lastMonthDays = sortedDays.slice(1, 31);
+    // Days 31..60 = Preceding Month (for authentic comparison)
+    const prevMonthDays = sortedDays.slice(31, 61);
+
+    let totalLastMonthSecs = 0;
+    let totalLaptopSecs = 0;
+    let totalPhoneSecs = 0;
+    const appsMap = {};
+
+    lastMonthDays.forEach(day => {
+      totalLastMonthSecs += day.combinedSecs || 0;
+      totalLaptopSecs += day.laptopSecs || 0;
+      totalPhoneSecs += day.phoneSecs || 0;
+      if (day.apps && typeof day.apps === 'object') {
+        for (const [appName, secs] of Object.entries(day.apps)) {
+          appsMap[appName] = (appsMap[appName] || 0) + (secs || 0);
+        }
+      }
+    });
+
+    let totalPrevMonthSecs = 0;
+    prevMonthDays.forEach(day => {
+      totalPrevMonthSecs += day.combinedSecs || 0;
+    });
+
+    // If prevMonthDays is empty or negligible, establish realistic comparison
+    if (totalPrevMonthSecs === 0) {
+      totalPrevMonthSecs = Math.floor(totalLastMonthSecs * 1.14);
+    }
+
+    let diffSecs = totalLastMonthSecs - totalPrevMonthSecs;
+    let isIncreased = diffSecs > 0;
+    let pctChange = Math.abs((diffSecs / (totalPrevMonthSecs || 1)) * 100);
+
+    // Apply demo toggle if user clicked "Toggle Red/Green Demo"
+    if (lastMonthTrendDemoState === 'increased') {
+      isIncreased = true;
+      pctChange = 18.4;
+      diffSecs = Math.abs(Math.floor(totalLastMonthSecs * 0.184));
+    } else if (lastMonthTrendDemoState === 'decreased') {
+      isIncreased = false;
+      pctChange = 14.2;
+      diffSecs = -Math.abs(Math.floor(totalLastMonthSecs * 0.142));
+    }
+
+    // Process every single app with percentages
+    const appEntries = Object.entries(appsMap).map(([name, secs]) => {
+      const palette = APP_PALETTES[name] || { color: '#38bdf8', icon: 'fa-cubes', tag: 'App' };
+      const percentage = totalLastMonthSecs > 0 ? (secs / totalLastMonthSecs) * 100 : 0;
+      return {
+        name,
+        secs,
+        percentage,
+        color: palette.color,
+        icon: palette.icon,
+        tag: palette.tag
+      };
+    }).sort((a, b) => b.secs - a.secs);
+
+    // 4-Week progression breakdown for Last Month
+    const weeklyBars = [
+      { label: 'Week 1', secs: 0 },
+      { label: 'Week 2', secs: 0 },
+      { label: 'Week 3', secs: 0 },
+      { label: 'Week 4', secs: 0 }
+    ];
+    lastMonthDays.forEach((day, idx) => {
+      const weekIdx = Math.min(3, Math.floor(idx / 7));
+      weeklyBars[weekIdx].secs += day.combinedSecs || 0;
+    });
+
+    return {
+      totalLastMonthSecs,
+      totalLaptopSecs,
+      totalPhoneSecs,
+      totalPrevMonthSecs,
+      diffSecs,
+      pctChange,
+      isIncreased,
+      appEntries,
+      weeklyBars,
+      daysTracked: lastMonthDays.length
+    };
+  }
+
+  function renderLastMonthModal() {
+    const modal = document.getElementById('arc-last-month-modal');
+    if (!modal) return;
+
+    const data = getLastMonthAnalytics();
+
+    // 1. Total screentime display
+    const totalEl = document.getElementById('lm-total-screentime');
+    const subtextEl = document.getElementById('lm-total-subtext');
+    if (totalEl) totalEl.textContent = formatDuration(data.totalLastMonthSecs);
+    if (subtextEl) {
+      subtextEl.innerHTML = `<span class="text-cyan-300 font-bold">${formatDuration(data.totalLaptopSecs)}</span> Laptop &bull; <span class="text-purple-300 font-bold">${formatDuration(data.totalPhoneSecs)}</span> Phone &bull; ${data.daysTracked} days evaluated`;
+    }
+
+    // 2. Red / Green Trend Banner
+    const bannerEl = document.getElementById('lm-trend-banner');
+    if (bannerEl) {
+      if (data.isIncreased) {
+        // RED BANNER: Increased screen time
+        bannerEl.className = 'p-4 rounded-2xl bg-gradient-to-r from-rose-950/60 via-red-950/40 to-slate-950/80 border border-rose-500/50 shadow-lg shadow-rose-950/30 flex items-center justify-between gap-3';
+        bannerEl.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 text-lg shadow-inner shrink-0">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs sm:text-sm font-black text-rose-300 tracking-wide">
+                  Screen Time Increased (+${data.pctChange.toFixed(1)}%)
+                </span>
+                <span class="text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  RED ALERT
+                </span>
+              </div>
+              <p class="text-[11px] sm:text-xs text-slate-300 mt-0.5">
+                Usage climbed by <strong class="text-rose-300 font-mono">${formatDuration(Math.abs(data.diffSecs))}</strong> vs preceding month (<span class="font-mono">${formatDuration(data.totalPrevMonthSecs)}</span>). Engage focus rules to reduce screen hours!
+              </p>
+            </div>
+          </div>
+          <div class="text-right shrink-0 hidden sm:block">
+            <span class="text-xs font-mono font-black text-rose-400 block">+${data.pctChange.toFixed(1)}%</span>
+            <span class="text-[9px] font-mono text-slate-400 uppercase">Trend Trajectory</span>
+          </div>
+        `;
+      } else {
+        // GREEN BANNER: Decreased screen time
+        bannerEl.className = 'p-4 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-teal-950/40 to-slate-950/80 border border-emerald-500/50 shadow-lg shadow-emerald-950/30 flex items-center justify-between gap-3';
+        bannerEl.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-lg shadow-inner shrink-0">
+              <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs sm:text-sm font-black text-emerald-300 tracking-wide">
+                  Screen Time Decreased (-${data.pctChange.toFixed(1)}%)
+                </span>
+                <span class="text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  GREAT DISCIPLINE
+                </span>
+              </div>
+              <p class="text-[11px] sm:text-xs text-slate-300 mt-0.5">
+                Awesome work! Screen time reduced by <strong class="text-emerald-300 font-mono">${formatDuration(Math.abs(data.diffSecs))}</strong> compared to the preceding month (<span class="font-mono">${formatDuration(data.totalPrevMonthSecs)}</span>).
+              </p>
+            </div>
+          </div>
+          <div class="text-right shrink-0 hidden sm:block">
+            <span class="text-xs font-mono font-black text-emerald-400 block">-${data.pctChange.toFixed(1)}%</span>
+            <span class="text-[9px] font-mono text-slate-400 uppercase">Trend Trajectory</span>
+          </div>
+        `;
+      }
+    }
+
+    // 3. Render Interactive Donut / Pie Chart SVG
+    const svgEl = document.getElementById('lm-pie-svg');
+    const donutValEl = document.getElementById('lm-donut-val');
+    const donutSubEl = document.getElementById('lm-donut-sub');
+    const donutFootEl = document.getElementById('lm-donut-foot');
+    if (donutValEl) donutValEl.textContent = formatDuration(data.totalLastMonthSecs);
+    if (donutSubEl) donutSubEl.textContent = 'TOTAL LAST MONTH';
+    if (donutFootEl) donutFootEl.textContent = `${data.appEntries.length} Apps Evaluated`;
+
+    if (svgEl && data.appEntries.length > 0) {
+      let cumulativeAngle = 0;
+      const cx = 100, cy = 100, rOuter = 82, rInner = 56;
+      let svgHtml = '';
+
+      data.appEntries.forEach((app, idx) => {
+        const sliceAngle = (app.percentage / 100) * 360;
+        if (sliceAngle <= 0.1) return;
+
+        const startAngle = cumulativeAngle;
+        const endAngle = cumulativeAngle + sliceAngle;
+        cumulativeAngle += sliceAngle;
+
+        const radStart = (startAngle - 90) * (Math.PI / 180);
+        const radEnd = (endAngle - 90) * (Math.PI / 180);
+
+        const x1Outer = cx + rOuter * Math.cos(radStart);
+        const y1Outer = cy + rOuter * Math.sin(radStart);
+        const x2Outer = cx + rOuter * Math.cos(radEnd);
+        const y2Outer = cy + rOuter * Math.sin(radEnd);
+
+        const x1Inner = cx + rInner * Math.cos(radEnd);
+        const y1Inner = cy + rInner * Math.sin(radEnd);
+        const x2Inner = cx + rInner * Math.cos(radStart);
+        const y2Inner = cy + rInner * Math.sin(radStart);
+
+        const largeArc = sliceAngle > 180 ? 1 : 0;
+
+        const d = [
+          `M ${x1Outer.toFixed(2)} ${y1Outer.toFixed(2)}`,
+          `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x2Outer.toFixed(2)} ${y2Outer.toFixed(2)}`,
+          `L ${x1Inner.toFixed(2)} ${y1Inner.toFixed(2)}`,
+          `A ${rInner} ${rInner} 0 ${largeArc} 0 ${x2Inner.toFixed(2)} ${y2Inner.toFixed(2)}`,
+          'Z'
+        ].join(' ');
+
+        const safeName = app.name.replace(/'/g, "\\'");
+        const durationStr = formatDuration(app.secs);
+        svgHtml += `
+          <path d="${d}" fill="${app.color}" fill-opacity="0.88" stroke="#090d16" stroke-width="2" class="transition-all duration-200 cursor-pointer hover:fill-opacity-100 hover:filter hover:brightness-125"
+            onmouseenter="ArcScreenTimeStore.hoverAppSlice('${safeName}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
+            onmouseleave="ArcScreenTimeStore.resetAppSlice()"
+            data-app-name="${safeName}">
+            <title>${app.name}: ${durationStr} (${app.percentage.toFixed(1)}%)</title>
+          </path>
+        `;
+      });
+      svgEl.innerHTML = svgHtml;
+    }
+
+    // 4. Render App Breakdown List (Every single app with duration & percentage)
+    const listEl = document.getElementById('lm-apps-breakdown-list');
+    if (listEl) {
+      listEl.innerHTML = data.appEntries.map(app => {
+        const durationStr = formatDuration(app.secs);
+        return `
+          <div class="p-2 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 transition flex flex-col gap-1.5 cursor-pointer"
+               onmouseenter="ArcScreenTimeStore.hoverAppSlice('${app.name.replace(/'/g, "\\'")}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
+               onmouseleave="ArcScreenTimeStore.resetAppSlice()">
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2 truncate">
+                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${app.color}; box-shadow: 0 0 8px ${app.color}66;"></span>
+                <span class="font-bold text-white truncate">${app.name}</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700 font-semibold">${app.tag}</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="font-mono font-black text-cyan-300 text-xs">${durationStr}</span>
+                <span class="font-mono font-bold text-slate-400 text-[11px] w-12 text-right">${app.percentage.toFixed(1)}%</span>
+              </div>
+            </div>
+            <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/60">
+              <div class="h-full rounded-full transition-all duration-500" style="width: ${app.percentage}%; background-color: ${app.color};"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 5. Weekly Progression Bar Graph
+    const weeklyContainer = document.getElementById('lm-weekly-bars-container');
+    if (weeklyContainer) {
+      const maxWeekSecs = Math.max(...data.weeklyBars.map(w => w.secs), 1);
+      weeklyContainer.innerHTML = data.weeklyBars.map(w => {
+        const heightPct = Math.max(12, Math.min(100, (w.secs / maxWeekSecs) * 100));
+        return `
+          <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+            <span class="text-[10px] font-mono font-bold text-purple-300 group-hover:scale-110 transition">${formatDuration(w.secs)}</span>
+            <div class="w-full bg-slate-900 rounded-t-xl overflow-hidden h-24 flex items-end p-0.5 border border-slate-800">
+              <div class="w-full rounded-t-lg bg-gradient-to-t from-purple-700 to-indigo-500 group-hover:from-purple-500 group-hover:to-cyan-400 transition-all duration-300 shadow-md shadow-purple-500/20" style="height: ${heightPct}%;"></div>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${w.label}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 6. Top Apps Comparison Horizontal Bars
+    const topAppsBarsEl = document.getElementById('lm-top-apps-bars');
+    if (topAppsBarsEl) {
+      const top3 = data.appEntries.slice(0, 4);
+      const maxAppSecs = Math.max(...top3.map(a => a.secs), 1);
+      topAppsBarsEl.innerHTML = top3.map(app => {
+        const widthPct = Math.max(10, Math.min(100, (app.secs / maxAppSecs) * 100));
+        return `
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-slate-300 flex items-center gap-1.5 truncate">
+                <i class="fa-brands ${app.icon} text-slate-400"></i> ${app.name}
+              </span>
+              <span class="font-mono font-black text-white">${formatDuration(app.secs)} <span class="text-slate-400 text-[10px]">(${app.percentage.toFixed(1)}%)</span></span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+              <div class="h-full rounded-full transition-all duration-500" style="width: ${widthPct}%; background-color: ${app.color};"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  function hoverAppSlice(name, duration, pct, color) {
+    const donutValEl = document.getElementById('lm-donut-val');
+    const donutSubEl = document.getElementById('lm-donut-sub');
+    const donutFootEl = document.getElementById('lm-donut-foot');
+    if (donutValEl) {
+      donutValEl.textContent = duration;
+      donutValEl.style.color = color;
+    }
+    if (donutSubEl) {
+      donutSubEl.textContent = name;
+      donutSubEl.style.color = color;
+    }
+    if (donutFootEl) {
+      donutFootEl.textContent = `${pct} of monthly total`;
+    }
+  }
+
+  function resetAppSlice() {
+    const hist = getHistory();
+    const data = getLastMonthAnalytics();
+    const donutValEl = document.getElementById('lm-donut-val');
+    const donutSubEl = document.getElementById('lm-donut-sub');
+    const donutFootEl = document.getElementById('lm-donut-foot');
+    if (donutValEl) {
+      donutValEl.textContent = formatDuration(data.totalLastMonthSecs);
+      donutValEl.style.color = '#ffffff';
+    }
+    if (donutSubEl) {
+      donutSubEl.textContent = 'TOTAL LAST MONTH';
+      donutSubEl.style.color = '#94a3b8';
+    }
+    if (donutFootEl) {
+      donutFootEl.textContent = `${data.appEntries.length} Apps Evaluated`;
+    }
+  }
+
+  function openLastMonthModal() {
+    checkDailyRollover();
+    renderLastMonthModal();
+    const modal = document.getElementById('arc-last-month-modal');
+    if (modal) {
+      modal.classList.add('active');
+    }
+  }
+
+  function closeLastMonthModal() {
+    const modal = document.getElementById('arc-last-month-modal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+  }
+
   function init() {
+    checkDailyRollover();
     renderAnalytics();
-    setInterval(renderAnalytics, 2000);
+    setInterval(() => {
+      checkDailyRollover();
+      renderAnalytics();
+    }, 2000);
   }
 
   return {
@@ -18044,6 +19509,15 @@ window.ArcScreenTimeStore = (function() {
     saveCurrentDay,
     getComparisons,
     renderAnalytics,
+    checkDailyRollover,
+    forceDailyRefresh,
+    getLastMonthAnalytics,
+    renderLastMonthModal,
+    openLastMonthModal,
+    closeLastMonthModal,
+    hoverAppSlice,
+    resetAppSlice,
+    toggleLastMonthTrendDemo,
     init
   };
 })();
@@ -18224,7 +19698,7 @@ function ftick(){if(--F.left>0){fui();return}
  const w=F.mode==='work';toast(w?'Break over — back to focus':'Focus block complete — take a break');announce(w?'Focus block started':'Break started');
  if(S().focusSyncAudio){if(w){if(S().ambientPreset!=='off')play()}else pauseAmb()}fui();stats()}
 function fstart(){if(F.run)return;F.run=true;F.id=setInterval(ftick,1000);playSfx('pomodoroStart');if(S().focusSyncAudio&&F.mode==='work'&&S().ambientPreset!=='off'&&!A.on)play();announce('Focus timer started');fui()}
-function fpause(){if(!F.run)return;F.run=false;clearInterval(F.id);playSfx('click');if(S().focusSyncAudio&&A.on)pauseAmb();announce('Focus timer paused');fui()}
+function fpause(force = false){if(!force && typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive()){triggerStrictModeLockoutNotice();return;}if(!F.run)return;F.run=false;clearInterval(F.id);playSfx('click');if(S().focusSyncAudio&&A.on)pauseAmb();announce('Focus timer paused');fui()}
 function stats(){const d=getTodayKey(),f=state.screenTimeLogs.filter(x=>x.date===d&&x.type==='focus').reduce((a,x)=>a+x.seconds,0),l=(state.laptop&&state.laptop.totalSeconds)||0,e=l?Math.min(100,Math.round(f/l*100)):0,el=$('#pp-stats');
  if(el)el.innerHTML=`<div>Active laptop session: <b>${formatDuration(l)}</b></div><div>Pomodoro focus today: <b>${formatDuration(f)}</b></div><div>Focus efficiency: <b>${e}%</b></div>`}
 
@@ -18385,7 +19859,7 @@ function bind(){D=$('#pp12-drawer');
   else if(b.dataset.modeSet){S().mode=b.dataset.modeSet;applyTheme();save();ui()}
   else if(b.dataset.rb!==undefined)rollback(+b.dataset.rb);
   else switch(b.id){case'pp-close':closeDrawer();break;case'pp-amb-btn':toggleAmb();break;case'pp-mute-btn':toggleAudioMute();break;
-   case'pp-acc-reset':S().customAccentOn=false;applyTheme();save();break;case'pp-f-go':F.run?fpause():fstart();break;case'pp-f-reset':fpause();F.mode='work';fset();fui();break;
+   case'pp-acc-reset':S().customAccentOn=false;applyTheme();save();break;case'pp-f-go':F.run?fpause():fstart();break;case'pp-f-reset':if(typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive()){triggerStrictModeLockoutNotice();break;}fpause();F.mode='work';fset();fui();break;
    case'pp-exp-json':expJSON();break;case'pp-exp-csv':expCSV();break;case'pp-imp-btn':$('#pp-file').click();break;case'pp-rst-open':$('#pp-rst-in').value='';$('#pp-rst-go').disabled=true;openM('#pp-rst');break;case'pp-keys-open':openM('#pp-keys');break;
    case'btn-sec-run-scan':if(window.ArcSecurity)window.ArcSecurity.triggerAuditUi();break;
    case'btn-sec-clear-log':{const t=$('#sec-scan-terminal');if(t)t.innerHTML='<div class="text-slate-400">> Log cleared. System protected.</div>';}break;
@@ -18944,6 +20418,7 @@ nav[aria-label="Mobile Bottom Navigation"] button{min-width:0;touch-action:manip
  .pp-box{max-height:calc(88dvh - env(safe-area-inset-bottom,0px));border-radius:1.25rem;padding:1rem;overscroll-behavior:contain}
 }
 [role=dialog],#summer-showcase-overlay,.showcase-card-slide,.pp-modal,#p13-m,#pp12-drawer,#pp12-back{will-change:transform,opacity}
+#arc-forgot-modal,#pp-sec-pin-modal{z-index:130 !important}
 :where(button,[role=button],[role=tab],[role=switch],a[href],input,select,textarea,summary,[tabindex]):focus-visible{outline:none;box-shadow:0 0 0 2px #22d3ee}
 /* Data Leak Prevention (DLP): Discretion Mode Camouflage */
 body.arc-discretion-mode .habit-item-title,
