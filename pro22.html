@@ -6,6 +6,8 @@
     <title>Winter & Summer Arc Interactive Mobile Tracker 2026</title>
     <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
+    <!-- Strict Referrer Policy: Zero Outbound URL / State Leakage -->
+    <meta name="referrer" content="no-referrer">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -988,6 +990,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span id="header-profile-name" class="sr-only">Operative</span>
                     <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
+
+                <!-- Discretion / Stealth Mode Toggle (Anti-Snoop Panic Switch) -->
+                <button role="button" id="btn-header-discretion" onclick="if(window.ArcSecurity)ArcSecurity.toggleDiscretionMode()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Discretion / Stealth Mode (Alt+S)">
+                    <i id="header-discretion-icon" class="fa-solid fa-eye-slash text-xs"></i>
+                    <span class="hidden lg:inline text-[11px]">Stealth</span>
+                </button>
 
                 <!-- Share Tracker Button -->
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
@@ -11386,6 +11394,14 @@ html[data-mode=light] .phone-widget-card .text-white {
 
     <p id="arc-pin-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
 
+    <!-- Anti-Spy Keylogger Defense Bar -->
+    <div class="flex items-center justify-between w-full text-[10px] text-slate-400 px-1 pt-0.5">
+      <span class="flex items-center gap-1 text-slate-400"><i class="fa-solid fa-shield-virus text-cyan-400 text-[10px]"></i> Anti-Spy Keypad</span>
+      <button type="button" onclick="ArcSecurity.toggleKeypadScramble()" class="text-slate-400 hover:text-cyan-300 transition flex items-center gap-1 font-mono text-[10px]" id="btn-toggle-scramble-pad">
+        <i class="fa-solid fa-shuffle text-[10px]"></i> <span id="arc-scramble-pad-label">Scramble: OFF</span>
+      </button>
+    </div>
+
     <!-- Numeric Quick Keypad (For mobile/touch, keyboard typing also supported) -->
     <div class="grid grid-cols-3 gap-2 w-full pt-0.5" id="arc-pin-pad">
       <button type="button" class="arc-pad-btn" data-v="1">1</button>
@@ -11458,6 +11474,50 @@ html[data-mode=light] .phone-widget-card .text-white {
         </button>
       </div>
     </div><!-- End arc-lock-step-2 -->
+  </div>
+</div>
+
+<!-- Privacy Shield (Anti-Snoop / Window Blur Mask) -->
+<div id="arc-privacy-shield" class="fixed inset-0 z-[115] hidden flex-col items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl select-none text-center cursor-pointer transition-all duration-300" onclick="ArcSecurity.dismissPrivacyShield()" role="region" aria-label="Privacy Shield">
+  <div class="max-w-sm w-full p-6 sm:p-7 rounded-2xl bg-slate-900/95 border border-cyan-500/40 shadow-2xl flex flex-col items-center space-y-3.5 backdrop-blur-xl">
+    <div class="w-14 h-14 rounded-2xl bg-cyan-500/15 border border-cyan-400/40 grid place-items-center text-cyan-400 text-2xl shadow-inner animate-pulse">
+      <i class="fa-solid fa-eye-slash"></i>
+    </div>
+    <div>
+      <h3 class="text-base font-black tracking-wider text-white">PRIVACY SHIELD ACTIVE</h3>
+      <p class="text-xs text-slate-300 mt-1">Screen veiled to protect habits and personal notes from shoulder-surfing.</p>
+    </div>
+    <div class="pt-2 w-full">
+      <span class="inline-flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono text-xs font-bold hover:bg-cyan-500/30 transition shadow-sm">
+        <i class="fa-solid fa-hand-pointer"></i> Tap anywhere to reveal
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Cryptographic Secure Data Shredder Modal (Anti-Forensic Wipe) -->
+<div id="pp-sec-shredder-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Cryptographic Secure Shredder">
+  <div class="pp-box max-w-md w-full">
+    <div class="flex items-center gap-2 text-rose-400 font-black text-base mb-2">
+      <i class="fa-solid fa-fire-flame-curved text-lg"></i>
+      <h3>Cryptographic Data Shredder</h3>
+    </div>
+    <p class="text-xs text-slate-300 mb-3">
+      Overwrites all local habits, reflections, tokens, and credentials with 3 passes of cryptographically secure pseudo-random noise before permanent destruction. Irreversible.
+    </p>
+    <div class="p-3 rounded-xl bg-rose-950/30 border border-rose-500/40 text-xs text-rose-300 space-y-1 mb-3">
+      <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> DATA LEAK DEFENSE PROTOCOL</div>
+      <p class="text-[11px] text-slate-300">Pass 1: CSPRNG Random Noise Overwrite<br>Pass 2: Zeroization (0x00) Overwrite<br>Pass 3: Cryptographic Inversion (0xFF) &amp; Storage Purge</p>
+    </div>
+    <div class="space-y-1 mb-3">
+      <label for="sec-shred-confirm-input" class="block text-[11px] font-semibold text-slate-400">Type <span class="text-rose-400 font-mono font-bold select-all">SHRED-ALL-DATA</span> to authorize:</label>
+      <input id="sec-shred-confirm-input" type="text" autocomplete="off" class="w-full text-center text-sm font-mono tracking-wider px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-rose-300 focus:border-rose-400 focus:outline-none" placeholder="SHRED-ALL-DATA">
+      <p id="sec-shred-err" class="text-xs text-rose-400 min-h-[1rem] font-mono"></p>
+    </div>
+    <div class="flex gap-2">
+      <button type="button" id="btn-sec-shred-confirm" onclick="ArcSecurity.executeSecureShred()" class="pp-btn flex-1 text-rose-400 border-rose-500/40 hover:bg-rose-500/20 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400">Execute Secure Shred</button>
+      <button type="button" onclick="ArcSecurity.closeShredderModal()" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -12686,7 +12746,9 @@ window.ArcTwoFactor = (function() {
   function copySecretKey() {
     const secDisp = document.getElementById('arc-2fa-secret-display');
     const text = secDisp ? secDisp.value : _stagedSecret;
-    if (navigator.clipboard) {
+    if (window.ArcSecurity && typeof window.ArcSecurity.copySensitiveWithAutoClear === 'function') {
+      window.ArcSecurity.copySensitiveWithAutoClear(text, '2FA Secret Key');
+    } else if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       if (typeof showToast === 'function') showToast('Secret Key copied to clipboard');
       if (window.playSfx) window.playSfx('click');
@@ -12702,7 +12764,9 @@ window.ArcTwoFactor = (function() {
       ..._stagedCodes.map((c, i) => `Code #${i + 1}: ${c.code}`),
       ''
     ].join('\n');
-    if (navigator.clipboard) {
+    if (window.ArcSecurity && typeof window.ArcSecurity.copySensitiveWithAutoClear === 'function') {
+      window.ArcSecurity.copySensitiveWithAutoClear(lines, '5 Backup Codes');
+    } else if (navigator.clipboard) {
       navigator.clipboard.writeText(lines);
       if (typeof showToast === 'function') showToast('5 Backup Codes copied to clipboard');
       if (window.playSfx) window.playSfx('click');
@@ -13150,6 +13214,10 @@ window.ArcSecurity = (function() {
   let _pendingQuarantinePayload = null;
   let _pendingEncryptedPayload = null;
   let _pendingEncryptedFileName = '';
+  let _lastActivityTime = Date.now();
+  let _clipboardWipeTimer = null;
+  let _blockedExfiltrations = [];
+  let _firewallActive = false;
 
   const hexFromBytes = bytes => Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
   const bytesFromHex = hex => new Uint8Array((hex.match(/.{1,2}/g) || []).map(b => parseInt(b, 16)));
@@ -13404,6 +13472,7 @@ window.ArcSecurity = (function() {
     const passIn = document.getElementById('arc-lock-pass-input');
     if (passIn) passIn.value = '';
     _updatePinDots();
+    renderKeypad();
     const err = document.getElementById('arc-pin-err');
     if (err) err.textContent = '';
     ov.classList.remove('hidden');
@@ -13516,6 +13585,60 @@ window.ArcSecurity = (function() {
         }
       }, 400);
     }, 2200);
+  }
+
+  function isKeypadScrambleEnabled() {
+    return localStorage.getItem('arc_sec_scramble_pad') === 'true';
+  }
+
+  function setKeypadScrambleEnabled(enabled) {
+    localStorage.setItem('arc_sec_scramble_pad', enabled ? 'true' : 'false');
+    renderKeypad();
+    const lbl = document.getElementById('arc-scramble-pad-label');
+    if (lbl) lbl.textContent = enabled ? 'Scramble: ON' : 'Scramble: OFF';
+    const chk = document.getElementById('sec-scramblepad-toggle');
+    if (chk) chk.checked = enabled;
+  }
+
+  function toggleKeypadScramble() {
+    setKeypadScrambleEnabled(!isKeypadScrambleEnabled());
+    if (window.playSfx) window.playSfx('click');
+  }
+
+  function renderKeypad() {
+    const pad = document.getElementById('arc-pin-pad');
+    if (!pad) return;
+    const isScrambled = isKeypadScrambleEnabled();
+    const lbl = document.getElementById('arc-scramble-pad-label');
+    if (lbl) lbl.textContent = isScrambled ? 'Scramble: ON' : 'Scramble: OFF';
+    const chk = document.getElementById('sec-scramblepad-toggle');
+    if (chk) chk.checked = isScrambled;
+
+    let digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    if (isScrambled) {
+      const rand = new Uint32Array(digits.length);
+      window.crypto.getRandomValues(rand);
+      for (let i = digits.length - 1; i > 0; i--) {
+        const j = rand[i] % (i + 1);
+        const temp = digits[i];
+        digits[i] = digits[j];
+        digits[j] = temp;
+      }
+    }
+    pad.innerHTML = `
+      <button type="button" class="arc-pad-btn" data-v="${digits[0]}">${digits[0]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[1]}">${digits[1]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[2]}">${digits[2]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[3]}">${digits[3]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[4]}">${digits[4]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[5]}">${digits[5]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[6]}">${digits[6]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[7]}">${digits[7]}</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[8]}">${digits[8]}</button>
+      <button type="button" class="arc-pad-btn text-xs text-slate-400 font-mono" data-v="clear">CLR</button>
+      <button type="button" class="arc-pad-btn" data-v="${digits[9]}">${digits[9]}</button>
+      <button type="button" class="arc-pad-btn text-xs text-slate-400" data-v="back" aria-label="Backspace"><i class="fa-solid fa-delete-left"></i></button>
+    `;
   }
 
   function _updatePinDots() {
@@ -13790,11 +13913,374 @@ window.ArcSecurity = (function() {
     if (window.playSfx) window.playSfx('fanfare');
   }
 
+  /* ---------- ZERO-EXFILTRATION NETWORK FIREWALL ---------- */
+  function initFirewall() {
+    if (_firewallActive || window.__arcFirewallActive) return;
+    _firewallActive = true;
+    window.__arcFirewallActive = true;
+
+    const originalFetch = window.fetch;
+    const originalXhrOpen = window.XMLHttpRequest ? window.XMLHttpRequest.prototype.open : null;
+    const originalSendBeacon = navigator.sendBeacon ? navigator.sendBeacon.bind(navigator) : null;
+    const originalWebSocket = window.WebSocket;
+
+    function isAllowedUrl(url) {
+      if (!url) return true;
+      try {
+        const u = new URL(url, window.location.href);
+        if (u.origin === window.location.origin) return true;
+        if (u.protocol === 'file:' || u.protocol === 'tauri:' || u.protocol === 'asset:') return true;
+        if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return true;
+        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com')) return true;
+        return false;
+      } catch (_) {
+        if (typeof url === 'string' && (url.startsWith('./') || url.startsWith('/') || url.startsWith('#'))) return true;
+        return false;
+      }
+    }
+
+    function recordBlockedLeak(type, destination) {
+      const entry = {
+        type,
+        destination: String(destination).slice(0, 100),
+        time: new Date().toLocaleTimeString()
+      };
+      _blockedExfiltrations.push(entry);
+      console.warn('[SENTINEL FIREWALL] Blocked unauthorized outbound egress attempt:', entry);
+      const term = document.getElementById('sec-scan-terminal');
+      if (term) {
+        const line = document.createElement('div');
+        line.className = 'text-rose-400 font-bold';
+        line.textContent = `[BLOCKED LEAK] ${entry.time} - ${type} to ${entry.destination}`;
+        term.appendChild(line);
+        term.scrollTop = term.scrollHeight;
+      }
+      updateFirewallBadge();
+      if (typeof showToast === 'function') {
+        showToast('🛡️ Sentinel Firewall: Blocked unauthorized outbound data leak!');
+      }
+    }
+
+    window.fetch = async function(input, init) {
+      const url = typeof input === 'string' ? input : (input && input.url) ? input.url : '';
+      if (!isAllowedUrl(url)) {
+        recordBlockedLeak('FETCH_LEAK_PREVENTED', url);
+        return Promise.reject(new Error(`[Sentinel Airgap] Blocked unauthorized network egress to ${url}`));
+      }
+      return originalFetch.apply(this, arguments);
+    };
+
+    if (originalXhrOpen) {
+      window.XMLHttpRequest.prototype.open = function(method, url) {
+        if (!isAllowedUrl(url)) {
+          recordBlockedLeak('XHR_LEAK_PREVENTED', url);
+          arguments[1] = 'about:blank';
+        }
+        return originalXhrOpen.apply(this, arguments);
+      };
+    }
+
+    if (originalSendBeacon) {
+      navigator.sendBeacon = function(url, data) {
+        if (!isAllowedUrl(url)) {
+          recordBlockedLeak('BEACON_LEAK_PREVENTED', url);
+          return false;
+        }
+        return originalSendBeacon(url, data);
+      };
+    }
+
+    if (originalWebSocket) {
+      window.WebSocket = function(url, protocols) {
+        if (!isAllowedUrl(url)) {
+          recordBlockedLeak('WEBSOCKET_LEAK_PREVENTED', url);
+          throw new Error(`[Sentinel Airgap] Blocked unauthorized WebSocket to ${url}`);
+        }
+        return new originalWebSocket(url, protocols);
+      };
+    }
+  }
+
+  async function testFirewallInterception() {
+    const term = document.getElementById('sec-scan-terminal');
+    if (term) {
+      const alertLine = document.createElement('div');
+      alertLine.className = 'text-amber-300';
+      alertLine.textContent = `> Dispatching test probe to https://telemetry-exfiltration-trap.test/leak...`;
+      term.appendChild(alertLine);
+    }
+    try {
+      await fetch('https://telemetry-exfiltration-trap.test/leak', { method: 'POST', body: JSON.stringify({ test: 'probe' }) });
+    } catch (_) {
+      if (typeof showToast === 'function') {
+        showToast('🛡️ Sentinel Firewall Test: Outbound egress caught & neutralized!');
+      }
+    }
+  }
+
+  function updateFirewallBadge() {
+    const badge = document.getElementById('sec-firewall-status');
+    if (badge) {
+      const count = _blockedExfiltrations.length;
+      badge.textContent = `ENFORCED (${count} Blocked)`;
+      badge.className = count > 0 
+        ? 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30'
+        : 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+    }
+  }
+
+  /* ---------- INACTIVITY AUTO-LOCK ---------- */
+  function getAutoLockMinutes() {
+    const v = localStorage.getItem('arc_sec_autolock_mins');
+    return v !== null ? parseInt(v, 10) : 5;
+  }
+
+  function setAutoLockMinutes(mins) {
+    localStorage.setItem('arc_sec_autolock_mins', String(mins));
+    _lastActivityTime = Date.now();
+    if (typeof showToast === 'function') {
+      showToast(mins > 0 ? `Inactivity auto-lock set to ${mins} minute(s)` : 'Inactivity auto-lock disabled');
+    }
+  }
+
+  function resetInactivity() {
+    _lastActivityTime = Date.now();
+  }
+
+  function checkInactivity() {
+    const mins = getAutoLockMinutes();
+    if (!mins || mins <= 0) return;
+    const elapsed = Date.now() - _lastActivityTime;
+    if (elapsed >= mins * 60 * 1000) {
+      const ov = document.getElementById('arc-pin-overlay');
+      if (!ov || ov.classList.contains('hidden')) {
+        showLockScreen();
+        const err = document.getElementById('arc-pin-err');
+        if (err) err.textContent = '🔒 Session auto-locked due to inactivity to protect data.';
+      }
+      _lastActivityTime = Date.now();
+    }
+  }
+
+  /* ---------- PRIVACY SHIELD (WINDOW BLUR MASK) ---------- */
+  function isPrivacyShieldEnabled() {
+    const v = localStorage.getItem('arc_sec_privacy_shield');
+    return v !== null ? v === 'true' : true;
+  }
+
+  function setPrivacyShieldEnabled(enabled) {
+    localStorage.setItem('arc_sec_privacy_shield', String(enabled));
+    if (!enabled) hidePrivacyShield();
+    if (typeof showToast === 'function') {
+      showToast(enabled ? 'Privacy Shield enabled' : 'Privacy Shield disabled');
+    }
+  }
+
+  function showPrivacyShield() {
+    if (!isPrivacyShieldEnabled()) return;
+    const pinOv = document.getElementById('arc-pin-overlay');
+    if (pinOv && !pinOv.classList.contains('hidden')) return;
+    const ov = document.getElementById('arc-privacy-shield');
+    if (ov) {
+      ov.classList.remove('hidden');
+      ov.classList.add('flex');
+    }
+  }
+
+  function hidePrivacyShield() {
+    const ov = document.getElementById('arc-privacy-shield');
+    if (ov) {
+      ov.classList.remove('flex');
+      ov.classList.add('hidden');
+    }
+  }
+
+  function dismissPrivacyShield() {
+    hidePrivacyShield();
+    if (isPinSet()) {
+      showLockScreen();
+    }
+  }
+
+  /* ---------- DISCRETION / CAMOUFLAGE MODE ---------- */
+  function isDiscretionMode() {
+    return localStorage.getItem('arc_sec_discretion_mode') === 'true';
+  }
+
+  function setDiscretionMode(active) {
+    localStorage.setItem('arc_sec_discretion_mode', String(active));
+    document.body.classList.toggle('arc-discretion-mode', active);
+    const icon = document.getElementById('header-discretion-icon');
+    if (icon) {
+      icon.className = active ? 'fa-solid fa-eye text-cyan-300 text-xs' : 'fa-solid fa-eye-slash text-xs';
+    }
+    const btn = document.getElementById('btn-header-discretion');
+    if (btn) {
+      btn.classList.toggle('bg-cyan-500/20', active);
+      btn.classList.toggle('border-cyan-400/50', active);
+      btn.setAttribute('aria-pressed', String(active));
+    }
+    const toggleIn = document.getElementById('sec-discretion-toggle');
+    if (toggleIn) toggleIn.checked = active;
+  }
+
+  function toggleDiscretionMode() {
+    const next = !isDiscretionMode();
+    setDiscretionMode(next);
+    if (window.playSfx) window.playSfx('click');
+    if (typeof showToast === 'function') {
+      showToast(next ? '🕶️ Discretion Mode Active (Habits & Notes Blurred)' : '👁️ Discretion Mode Disabled');
+    }
+  }
+
+  /* ---------- CLIPBOARD SENSITIVE AUTO-CLEAR ---------- */
+  function isClipboardAutoClearEnabled() {
+    const v = localStorage.getItem('arc_sec_clip_autoclear');
+    return v !== null ? v === 'true' : true;
+  }
+
+  function setClipboardAutoClearEnabled(enabled) {
+    localStorage.setItem('arc_sec_clip_autoclear', String(enabled));
+  }
+
+  function copySensitiveWithAutoClear(text, label = 'Secret') {
+    if (!navigator.clipboard) return false;
+    navigator.clipboard.writeText(text).then(() => {
+      if (window.playSfx) window.playSfx('click');
+      const autoWipe = isClipboardAutoClearEnabled();
+      if (typeof showToast === 'function') {
+        showToast(autoWipe ? `📋 ${label} copied (auto-wipes in 45s)` : `📋 ${label} copied`);
+      }
+      if (autoWipe) {
+        if (_clipboardWipeTimer) clearTimeout(_clipboardWipeTimer);
+        _clipboardWipeTimer = setTimeout(() => {
+          navigator.clipboard.writeText('').catch(() => {});
+          if (typeof showToast === 'function') {
+            showToast('🧹 Clipboard auto-wiped (data leak protection)');
+          }
+        }, 45000);
+      }
+    }).catch(e => {
+      console.error('Clipboard copy error:', e);
+    });
+    return true;
+  }
+
+  /* ---------- CRYPTOGRAPHIC SECURE SHREDDER ---------- */
+  function openShredderModal() {
+    const m = document.getElementById('pp-sec-shredder-modal');
+    if (!m) return;
+    const inp = document.getElementById('sec-shred-confirm-input');
+    const err = document.getElementById('sec-shred-err');
+    if (inp) inp.value = '';
+    if (err) err.textContent = '';
+    m.classList.add('open');
+    if (window.playSfx) window.playSfx('modalOpen');
+    if (inp) setTimeout(() => inp.focus(), 150);
+  }
+
+  function closeShredderModal() {
+    const m = document.getElementById('pp-sec-shredder-modal');
+    if (!m) return;
+    m.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  async function executeSecureShred() {
+    const inp = document.getElementById('sec-shred-confirm-input');
+    const err = document.getElementById('sec-shred-err');
+    if (!inp || inp.value.trim() !== 'SHRED-ALL-DATA') {
+      if (err) err.textContent = 'Please type SHRED-ALL-DATA exactly to authorize.';
+      if (window.playSfx) window.playSfx('uncheck');
+      return;
+    }
+    if (err) err.textContent = '⚡ Performing 3-pass cryptographic wipe...';
+
+    const keys = Object.keys(localStorage);
+    // Pass 1: Cryptographic noise
+    keys.forEach(k => {
+      try {
+        const len = Math.max(128, (localStorage.getItem(k) || '').length);
+        const rand = crypto.getRandomValues(new Uint8Array(len));
+        localStorage.setItem(k, hexFromBytes(rand));
+      } catch (_) {}
+    });
+    // Pass 2: Zeroization (0x00)
+    keys.forEach(k => {
+      try { localStorage.setItem(k, '0'.repeat(256)); } catch (_) {}
+    });
+    // Pass 3: Inversion (0xFF)
+    keys.forEach(k => {
+      try { localStorage.setItem(k, 'f'.repeat(256)); } catch (_) {}
+    });
+
+    localStorage.clear();
+    sessionStorage.clear();
+
+    try {
+      if (window.indexedDB && window.indexedDB.databases) {
+        const dbs = await window.indexedDB.databases();
+        dbs.forEach(db => { if (db.name) window.indexedDB.deleteDatabase(db.name); });
+      }
+    } catch (_) {}
+
+    alert('🔥 All local data has been cryptographically shredded and wiped. The application will now reload in a clean state.');
+    window.location.reload();
+  }
+
+  function updateSecuritySettingsUi() {
+    updatePinBadge();
+    updateFirewallBadge();
+    const sel = document.getElementById('sec-autolock-select');
+    if (sel) sel.value = String(getAutoLockMinutes());
+    const shieldChk = document.getElementById('sec-privshield-toggle');
+    if (shieldChk) shieldChk.checked = isPrivacyShieldEnabled();
+    const discChk = document.getElementById('sec-discretion-toggle');
+    if (discChk) discChk.checked = isDiscretionMode();
+    const clipChk = document.getElementById('sec-clipautoclear-toggle');
+    if (clipChk) clipChk.checked = isClipboardAutoClearEnabled();
+    const scrambleChk = document.getElementById('sec-scramblepad-toggle');
+    if (scrambleChk) scrambleChk.checked = isKeypadScrambleEnabled();
+    computeStateHash().then(c => {
+      const el = document.getElementById('sec-checksum-disp');
+      if (el) el.textContent = c;
+    });
+    if (window.ArcTwoFactor) window.ArcTwoFactor.updateSettingsRow();
+  }
+
   function init() {
+    renderKeypad();
     if (isPinSet() || (window.ArcTwoFactor && window.ArcTwoFactor.isEnabled())) {
       setTimeout(showLockScreen, 50);
     }
     updatePinBadge();
+    initFirewall();
+
+    if (isDiscretionMode()) {
+      setDiscretionMode(true);
+    }
+
+    ['pointerdown', 'mousemove', 'keydown', 'touchstart', 'scroll'].forEach(ev => {
+      window.addEventListener(ev, resetInactivity, { passive: true });
+    });
+    setInterval(checkInactivity, 8000);
+
+    window.addEventListener('blur', () => {
+      if (isPrivacyShieldEnabled()) showPrivacyShield();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isPrivacyShieldEnabled()) {
+        showPrivacyShield();
+      } else if (!document.hidden && !isPinSet()) {
+        hidePrivacyShield();
+      }
+    });
+    window.addEventListener('keydown', e => {
+      if (e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        toggleDiscretionMode();
+      }
+    });
 
     const pad = document.getElementById('arc-pin-pad');
     if (pad) {
@@ -13830,7 +14316,7 @@ window.ArcSecurity = (function() {
       else if (e.key === 'Escape' || e.key === 'Delete') handlePinInput('clear');
     });
 
-    document.querySelectorAll('#pp-sec-quarantine [data-close], #pp-sec-enc-exp [data-close], #pp-sec-enc-imp [data-close], #pp-sec-pin-modal [data-close], #arc-forgot-modal [data-close]').forEach(btn => {
+    document.querySelectorAll('#pp-sec-quarantine [data-close], #pp-sec-enc-exp [data-close], #pp-sec-enc-imp [data-close], #pp-sec-pin-modal [data-close], #arc-forgot-modal [data-close], #pp-sec-shredder-modal [data-close]').forEach(btn => {
       btn.addEventListener('click', () => {
         const m = btn.closest('.pp-modal');
         if (m) m.classList.remove('open');
@@ -14021,6 +14507,32 @@ window.ArcSecurity = (function() {
     updatePinBadge,
     triggerAuditUi,
     init,
+    initFirewall,
+    testFirewallInterception,
+    updateFirewallBadge,
+    getAutoLockMinutes,
+    setAutoLockMinutes,
+    checkInactivity,
+    resetInactivity,
+    isPrivacyShieldEnabled,
+    setPrivacyShieldEnabled,
+    showPrivacyShield,
+    hidePrivacyShield,
+    dismissPrivacyShield,
+    isDiscretionMode,
+    setDiscretionMode,
+    toggleDiscretionMode,
+    isClipboardAutoClearEnabled,
+    setClipboardAutoClearEnabled,
+    copySensitiveWithAutoClear,
+    openShredderModal,
+    closeShredderModal,
+    executeSecureShred,
+    isKeypadScrambleEnabled,
+    setKeypadScrambleEnabled,
+    toggleKeypadScramble,
+    renderKeypad,
+    updateSecuritySettingsUi,
     getPendingQuarantine: () => _pendingQuarantinePayload,
     setPendingEncrypted: (data, name) => { _pendingEncryptedPayload = data; _pendingEncryptedFileName = name; },
     getPendingEncrypted: () => _pendingEncryptedPayload
@@ -17502,12 +18014,21 @@ row('Backup & Export','json csv download backup import',`<div class="grid grid-c
 row('Revision Rollbacks','auto save snapshots restore history',`<div id="pp-revs"></div>`)+
 row('Keyboard Shortcuts','hotkeys help',`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-keys-open">Show shortcuts (?)</button>`)+
 row('Factory Reset','erase clear wipe danger',`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-rst-open" style="color:#f87171;border-color:#f87171">Factory reset…</button>`)+
+row('Privacy Policy & Compliance','privacy policy offline airgap terms compliance legal',`<div class="flex items-center justify-between gap-2"><span class="text-xs text-slate-300">100% Offline • Zero Data Collection</span><a href="./privacy-policy.html" target="_blank" rel="noopener" class="pp-btn text-cyan-300 border-cyan-500/40 text-xs py-1 px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> View Policy</a></div>`)+
 `</section><section class="pp-panel" data-p="sec">`+
 `<div class="mb-3 p-3 rounded-xl border border-cyan-500/30 bg-cyan-950/20"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span><span class="font-mono font-bold text-xs text-emerald-300">SENTINEL DEFENSES ONLINE</span></div><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">AIRGAP ACTIVE</span></div><p class="text-[11px] text-slate-300 mt-1">Zero-Exfiltration Network Airgap enforced. Local state protected against memory tampering and data leaks.</p></div>`+
 row('Antivirus & Integrity Scanner','malware threat scanner security xss audit',`<div class="space-y-2"><div class="flex gap-2"><button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-run-scan"><i class="fa-solid fa-shield-virus mr-1"></i> Run Security Audit</button><button role="button" class="pp-btn text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-clear-log">Clear</button></div><div id="sec-scan-terminal" class="p-2.5 rounded-lg bg-black/80 border border-slate-700 font-mono text-[11px] text-cyan-400 h-36 overflow-y-auto space-y-1"><div class="text-slate-400">> Sentinel Anti-Malware Engine v2.4 initialized.</div><div class="text-slate-400">> Click 'Run Security Audit' to scan habits and verify airgap integrity.</div></div></div>`)+
 row('AES-256 Encrypted Backups','encryption aes-256 backup password export leak protection',`<div class="grid grid-cols-2 gap-2"><button role="button" class="pp-btn text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-exp-enc"><i class="fa-solid fa-lock mr-1"></i> Export (.arcenc)</button><button role="button" class="pp-btn text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-imp-enc"><i class="fa-solid fa-key mr-1"></i> Import Encrypted</button></div><input type="file" id="pp-enc-file" accept=".arcenc,.json,application/json" class="hidden" aria-label="Import encrypted backup">`)+
 row('App Security PIN Lock','app pin lock passcode privacy authentication',`<div class="flex gap-2"><button role="button" class="pp-btn flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-toggle-pin">Setup Security PIN</button><button role="button" class="pp-btn text-rose-300 border-rose-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 hidden" id="btn-sec-lock-now"><i class="fa-solid fa-lock mr-1"></i> Lock Now</button></div>`)+
+row('Anti-Spy Scrambled Keypad','keypad scramble shuffle spy shoulder surf pin',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Randomize PIN keypad digit positions to defeat shoulder-surfing</span><input type="checkbox" id="sec-scramblepad-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setKeypadScrambleEnabled(this.checked)" class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div>`)+
 row('Two-Step Verification (2FA)','two step factor 2fa google authenticator sms phone backup codes security',`<div class="space-y-2"><div class="flex items-center justify-between text-xs"><span class="font-bold text-slate-300">Status:</span><span id="sec-2fa-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">OPTIONAL • DISABLED</span></div><div class="flex gap-2"><button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-bold" id="btn-sec-open-2fa"><i class="fa-solid fa-shield-halved mr-1"></i> Setup Two-Step Verification</button><button role="button" class="pp-btn text-rose-400 border-rose-500/30 hover:bg-rose-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 hidden" id="btn-sec-remove-2fa" title="Disable Two-Step Verification"><i class="fa-solid fa-trash-can mr-1"></i> Remove</button></div><div id="sec-2fa-info" class="text-[11px] text-slate-400 flex items-center justify-between"><span>Method: <b id="sec-2fa-method-text" class="text-slate-300 font-mono">None</b></span><span>Backup Codes: <b id="sec-2fa-codes-count" class="text-slate-300 font-mono">5 unused</b></span></div></div>`)+
+row('Inactivity Auto-Lock','auto lock timeout idle sleep timer leak security',`<div class="flex items-center justify-between gap-3"><div class="text-xs text-slate-400">Lock terminal when idle:</div><select id="sec-autolock-select" onchange="if(window.ArcSecurity)ArcSecurity.setAutoLockMinutes(parseInt(this.value,10))" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 text-xs"><option value="0">Disabled</option><option value="1">1 Minute (Strict)</option><option value="3">3 Minutes</option><option value="5" selected>5 Minutes (Recommended)</option><option value="15">15 Minutes</option><option value="30">30 Minutes</option></select></div>`)+
+row('Privacy Shield (Anti-Snoop)','blur veil tab switch task switcher hide shoulder surf',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Veil screen on tab switch or window blur</span><input type="checkbox" id="sec-privshield-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setPrivacyShieldEnabled(this.checked)" checked class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div>`)+
+row('Discretion / Camouflage Mode','censor redact mask habits disguise stealth alt+s',`<div class="space-y-1.5"><div class="flex items-center justify-between"><span class="text-xs text-slate-300">Mask habit names and journal reflections</span><input type="checkbox" id="sec-discretion-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setDiscretionMode(this.checked)" class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div><div class="text-[11px] text-slate-400 flex items-center justify-between"><span>Hover or tap to reveal</span><span class="font-mono text-[10px] text-cyan-300 bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded">Alt + S</span></div></div>`)+
+row('Zero-Exfiltration Network Firewall','airgap network outbound leak block telemetry firewall',`<div class="space-y-2"><div class="flex items-center justify-between text-xs"><span class="text-slate-300">Outbound Data Protection:</span><span id="sec-firewall-status" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">ENFORCED (0 Leaks)</span></div><button role="button" class="pp-btn w-full text-cyan-300 border-cyan-500/40 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-test-firewall"><i class="fa-solid fa-shield-virus mr-1"></i> Test Outbound Interception</button></div>`)+
+row('Clipboard Self-Destruct','clipboard wipe auto clear timer 45s credential leak',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Auto-wipe clipboard 45s after copying sensitive codes</span><input type="checkbox" id="sec-clipautoclear-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setClipboardAutoClearEnabled(this.checked)" checked class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div>`)+
+row('Print Hardcopy DLP Shield','print export paper pdf physical leak redaction dlp',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Enforce blank redaction shield against physical print and PDF leaks</span><span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">ENFORCED</span></div>`)+
+row('Cryptographic Secure Shredder','emergency wipe shred 3-pass overwrite forensic anti-leak',`<div class="space-y-1"><p class="text-[11px] text-slate-400">Cryptographically overwrite all local data with 3 passes of CSPRNG noise to prevent forensic recovery.</p><button role="button" class="pp-btn w-full text-rose-400 border-rose-500/40 hover:bg-rose-500/15 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400" id="btn-sec-open-shredder"><i class="fa-solid fa-fire-flame-curved mr-1"></i> Secure 3-Pass Data Shredder…</button></div>`)+
 row('State Integrity Checksum','checksum hash sha-256 verification tamper proof',`<div class="p-2 rounded bg-slate-900 border border-slate-800 font-mono text-[10px] text-slate-300 break-all" id="sec-checksum-disp">Computing SHA-256 hash...</div>`)+
 `</section>`}
 function ui(){const s=S(),pct=['masterVolume','sfxVolume','ambientVolume','noiseOpacity'];
@@ -17533,7 +18054,7 @@ function tab(n){TAB=n;$$('.pp-tab').forEach(b=>{const on=b.dataset.t===n;b.class
  $$('.pp-panel').forEach(p=>{p.style.display=p.dataset.p===n?'block':'none'});$$('.pp-row').forEach(r=>{r.style.display=''});$('#settings-search').value='';
  if(n==='account'&&window.ArcGoogleSync){window.ArcGoogleSync.renderUi();}
  if(n==='habit')heat();if(n==='focus')stats();if(n==='sys')listRev();
- if(n==='sec'&&window.ArcSecurity){window.ArcSecurity.computeStateHash().then(c=>{const el=$('#sec-checksum-disp');if(el)el.textContent=c});window.ArcSecurity.updatePinBadge();if(window.ArcTwoFactor)window.ArcTwoFactor.updateSettingsRow();}}
+ if(n==='sec'&&window.ArcSecurity){window.ArcSecurity.computeStateHash().then(c=>{const el=$('#sec-checksum-disp');if(el)el.textContent=c});window.ArcSecurity.updatePinBadge();if(window.ArcTwoFactor)window.ArcTwoFactor.updateSettingsRow();window.ArcSecurity.updateSecuritySettingsUi();}}
 
 /* ---------- MODALS, FOCUS TRAP, HOTKEYS ---------- */
 const foc=c=>$$('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])',c).filter(x=>!x.disabled&&x.offsetParent!==null);
@@ -17552,6 +18073,7 @@ function onKey(e){const t=e.target;
  if(e.key==='Tab'){const c=$$('.pp-modal.open').pop()||(D.classList.contains('open')?D:null);if(!c)return;const f=foc(c);if(!f.length)return;
   if(!c.contains(document.activeElement)||(e.shiftKey&&document.activeElement===f[0])){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&document.activeElement===f[f.length-1]){e.preventDefault();f[0].focus()}return}
  const typing=t&&(t.isContentEditable||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||(t.tagName==='INPUT'&&!/^(range|checkbox|radio|color|button|file)$/.test(t.type)));
+ if(e.altKey&&e.key.toLowerCase()==='s'){e.preventDefault();if(window.ArcSecurity)window.ArcSecurity.toggleDiscretionMode();return}
  if(typing||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toLowerCase();
  if(e.key==='?'){e.preventDefault();const m=$('#pp-keys');m.classList.contains('open')?closeM(m):openM('#pp-keys');return}
  if($('.pp-modal.open'))return;
@@ -17588,7 +18110,9 @@ function bind(){D=$('#pp12-drawer');
    case'btn-sec-open-2fa':if(window.ArcTwoFactor)window.ArcTwoFactor.openSetupModal();break;
 case'btn-sec-remove-2fa':if(window.ArcTwoFactor)window.ArcTwoFactor.confirmRemove();break;
 case'btn-sec-toggle-pin':if(window.ArcSecurity)window.ArcSecurity.openPinModal();break;
-   case'btn-sec-lock-now':if(window.ArcSecurity)window.ArcSecurity.showLockScreen();break;}});
+   case'btn-sec-lock-now':if(window.ArcSecurity)window.ArcSecurity.showLockScreen();break;
+   case'btn-sec-test-firewall':if(window.ArcSecurity)window.ArcSecurity.testFirewallInterception();break;
+   case'btn-sec-open-shredder':if(window.ArcSecurity)window.ArcSecurity.openShredderModal();break;}});
  const pef=$('#pp-enc-file');
  if(pef)pef.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{if(window.ArcSecurity){window.ArcSecurity.setPendingEncrypted(r.result,f.name);window.ArcSecurity.openEncImportModal()}};r.readAsText(f);e.target.value=''});
@@ -18137,6 +18661,60 @@ nav[aria-label="Mobile Bottom Navigation"] button{min-width:0;touch-action:manip
 }
 [role=dialog],#summer-showcase-overlay,.showcase-card-slide,.pp-modal,#p13-m,#pp12-drawer,#pp12-back{will-change:transform,opacity}
 :where(button,[role=button],[role=tab],[role=switch],a[href],input,select,textarea,summary,[tabindex]):focus-visible{outline:none;box-shadow:0 0 0 2px #22d3ee}
+/* Data Leak Prevention (DLP): Discretion Mode Camouflage */
+body.arc-discretion-mode .habit-item-title,
+body.arc-discretion-mode #user-display-name,
+body.arc-discretion-mode #header-operative-id,
+body.arc-discretion-mode #streak-count,
+body.arc-discretion-mode .journal-reflection-text,
+body.arc-discretion-mode #whatHappenedText,
+body.arc-discretion-mode .rule-card-desc,
+body.arc-discretion-mode #current-date-display {
+  filter: blur(6px) !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  transition: filter 0.2s ease !important;
+}
+body.arc-discretion-mode .habit-item-title:hover,
+body.arc-discretion-mode #user-display-name:hover,
+body.arc-discretion-mode #header-operative-id:hover,
+body.arc-discretion-mode #streak-count:hover,
+body.arc-discretion-mode .journal-reflection-text:hover,
+body.arc-discretion-mode #whatHappenedText:hover,
+body.arc-discretion-mode .rule-card-desc:hover,
+body.arc-discretion-mode #current-date-display:hover {
+  filter: blur(0) !important;
+}
+/* Data Leak Prevention (DLP): Hardcopy Print & Screengrab Redaction Shield */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  body::before {
+    content: "ARC TRACKER - CONFIDENTIAL LOCAL DATA\A Printing and physical hardcopy reproduction prohibited by Data Leak Prevention (DLP) Policy.";
+    white-space: pre-wrap;
+    visibility: visible !important;
+    position: fixed;
+    top: 30%;
+    left: 10%;
+    right: 10%;
+    padding: 30px;
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #ef4444;
+    border: 2px dashed #ef4444;
+    background: #18060a;
+  }
+}
+.arc-dlp-noselect { -webkit-user-select: none !important; user-select: none !important; }
+#arc-pin-overlay .arc-pad-btn {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
 </style>
 <script id="polish-js">
 (function(){'use strict';

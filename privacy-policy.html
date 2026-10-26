@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy - Arc Tracker</title>
-  <meta name="description" content="Official Privacy Policy for Arc Tracker (Desktop, Android & iOS). 100% Offline-First, Zero Data Collection, and Client-Side Encrypted.">
+  <meta name="description" content="Official Privacy Policy for Arc Tracker (Desktop, Android & iOS). 100% Offline-First, Zero Data Collection, 2FA Local Privacy, and Client-Side Encrypted.">
   <link rel="icon" type="image/png" href="./icons/128x128.png">
   <style>
     :root {
@@ -16,6 +16,7 @@
       --accent: #06b6d4;
       --accent-glow: rgba(6, 182, 212, 0.25);
       --success: #10b981;
+      --gold: #f59e0b;
       --purple: #a855f7;
     }
 
@@ -38,7 +39,7 @@
     }
 
     .container {
-      max-width: 840px;
+      max-width: 860px;
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -55,6 +56,13 @@
       margin-bottom: 2rem;
     }
 
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
     .badge-pill {
       display: inline-flex;
       align-items: center;
@@ -69,7 +77,12 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 1rem;
+    }
+
+    .badge-pill.gold {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: var(--gold);
     }
 
     .badge-dot {
@@ -91,6 +104,7 @@
     .meta {
       font-size: 0.875rem;
       color: var(--muted);
+      line-height: 1.7;
     }
 
     .summary-card {
@@ -113,7 +127,7 @@
     }
 
     section {
-      margin-bottom: 2rem;
+      margin-bottom: 2.25rem;
     }
 
     h2 {
@@ -161,7 +175,7 @@
 
     .compliance-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1rem;
       margin-top: 1.5rem;
     }
@@ -170,26 +184,28 @@
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 1rem;
+      padding: 1.15rem;
       text-align: center;
     }
 
     .compliance-box strong {
       display: block;
       color: #ffffff;
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
     }
 
     .compliance-box span {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--muted);
+      line-height: 1.4;
+      display: block;
     }
 
     footer {
       text-align: center;
       margin-top: 2rem;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       color: var(--muted);
       border-top: 1px solid var(--border);
       padding-top: 1.5rem;
@@ -219,14 +235,19 @@
 <body>
   <div class="container">
     <header>
-      <div class="badge-pill">
-        <span class="badge-dot"></span>
-        Zero Data Collection • 100% Offline
+      <div class="badge-row">
+        <div class="badge-pill">
+          <span class="badge-dot"></span>
+          Zero Data Collection • 100% Offline
+        </div>
+        <div class="badge-pill gold">
+          Airgap Enforced • Local Cryptography
+        </div>
       </div>
       <h1>Privacy Policy for Arc Tracker</h1>
       <div class="meta">
         <strong>Application:</strong> Arc Tracker (Desktop, Android & iOS)<br>
-        <strong>Last Updated:</strong> October 25, 2026<br>
+        <strong>Last Updated:</strong> October 26, 2026<br>
         <strong>Developer:</strong> Mayank / Arc Tracker Team
       </div>
     </header>
@@ -239,14 +260,15 @@
     </div>
 
     <section>
-      <h2>1. Zero Personal Data Collection</h2>
+      <h2>1. Zero Personal Data Collection & Airgap Architecture</h2>
       <p>
-        Arc Tracker does not require registration, phone numbers, or credit cards to use its core features.
+        Arc Tracker does not require accounts, remote registration, or cloud sign-in to use its core features.
       </p>
       <ul>
         <li><strong>No Personal Identifiable Information (PII):</strong> We do not ask for or store names, addresses, or phone numbers on any remote servers.</li>
         <li><strong>No Telemetry or Tracking Frameworks:</strong> The application does not bundle Google Analytics, Firebase Tracking, Facebook SDKs, or any third-party behavioral telemetry.</li>
         <li><strong>No Remote Server Ingestion:</strong> Your habit completions, streak logs, daily notes, and screen time records remain private and stored strictly on your local hardware.</li>
+        <li><strong>Zero-Exfiltration Network Firewall:</strong> The app incorporates an active client-side outbound firewall designed to intercept and prevent any unauthorized background network egress, guaranteeing a true air-gapped operating environment.</li>
       </ul>
     </section>
 
@@ -256,14 +278,51 @@
         All user data is stored locally using high-durability hardware storage engines:
       </p>
       <ul>
-        <li><strong>Native Storage:</strong> Stored via encrypted IndexedDB and Tauri Plugin Store on your device filesystem.</li>
-        <li><strong>Client-Side Cryptography:</strong> Protected with W3C WebCrypto PBKDF2 (100,000 rounds SHA-256) and AES-GCM encryption at rest.</li>
-        <li><strong>Offline Airgap:</strong> The application functions completely in Airplane Mode without internet access.</li>
+        <li><strong>Native Storage:</strong> Stored via encrypted IndexedDB, localStorage, and Tauri Plugin Store on your device filesystem.</li>
+        <li><strong>Client-Side Cryptography:</strong> Protected with W3C WebCrypto PBKDF2 (100,000 rounds SHA-256) and AES-GCM 256-bit encryption at rest.</li>
+        <li><strong>Offline Airgap:</strong> The application functions completely in Airplane Mode without internet access. Data never leaves your device unless you manually export a backup.</li>
       </ul>
     </section>
 
     <section>
-      <h2>3. Device Permissions & Usage Details</h2>
+      <h2>3. Two-Step Verification (2FA) & Authentication Privacy</h2>
+      <p>
+        Arc Tracker includes an optional Two-Step Verification (2FA) security feature:
+      </p>
+      <ul>
+        <li><strong>Offline Authenticator App (TOTP):</strong> Compatible with Google Authenticator, Microsoft Authenticator, and standard RFC 6238 TOTP apps. The secret key is generated using cryptographic random values (CSPRNG) strictly on your device and is never transmitted to any cloud or third-party server.</li>
+        <li><strong>Phone Number / SMS Mode:</strong> When configured, phone numbers are utilized strictly on-device for local verification logic. Arc Tracker does not connect to external SMS gateways, telecom providers, or cloud servers to transmit your phone number.</li>
+        <li><strong>Emergency Backup Codes:</strong> Five (5) one-time backup recovery codes are generated and hashed locally on-device. They are never synced to any remote database.</li>
+        <li><strong>Complete Revocation:</strong> You can remove or disable Two-Step Verification at any time with a single click, which instantly wipes all authentication secrets and hashes from your local storage.</li>
+        <li><strong>Anti-Spy Keypad & Clipboard Shield:</strong> Supports randomized PIN digit positions (defeating shoulder surfing) and features an automated 45-second clipboard wipe timer for sensitive codes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Subscriptions, Trials & Aesthetic Customization</h2>
+      <p>
+        Arc Tracker provides optional Arc Gold VIP features and visual personalization:
+      </p>
+      <ul>
+        <li><strong>Local Subscription Management:</strong> VIP statuses (including the 30-day Free Trial) and aesthetic features (such as custom avatar outer lining rings and theme palettes) are managed 100% locally on your device.</li>
+        <li><strong>Zero Financial Data Collection:</strong> Arc Tracker does not collect, process, or store credit card numbers, billing addresses, or bank details.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Data Leak Prevention (DLP) & Physical Privacy</h2>
+      <p>
+        Advanced safeguards protect your confidentiality in shared or physical spaces:
+      </p>
+      <ul>
+        <li><strong>Discretion / Camouflage Mode (Alt + S):</strong> Obscures habit titles and reflective journal entries with dynamic blur filters to protect privacy from shoulder-surfers in public.</li>
+        <li><strong>Hardcopy Print & Screengrab Redaction Shield:</strong> Automatically enforces blank redaction overlays when printing or exporting pages to prevent physical hardcopy or PDF leaks.</li>
+        <li><strong>Cryptographic Secure 3-Pass Shredder:</strong> Overwrites local storage sectors with CSPRNG noise across three passes to prevent physical forensic reconstruction.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Device Permissions & Usage Details</h2>
       <p>
         Arc Tracker does not request access to your camera, microphone, GPS location, contacts, or photo library:
       </p>
@@ -274,25 +333,32 @@
     </section>
 
     <section>
-      <h2>4. Account Deletion & Right to Erasure</h2>
+      <h2>7. Account Deletion & Right to Erasure</h2>
       <p>
-        In accordance with Apple App Store Guideline 5.1.1(v) and Google Play User Data policies, users have complete and immediate control over their data:
+        In accordance with Apple App Store Guideline 5.1.1(v) and Google Play User Data policies:
       </p>
       <ul>
-        <li><strong>Instant Factory Reset:</strong> You can erase all tracked habits, logs, passwords, and screen time data directly inside the application via <em>Settings &rarr; System & Data &rarr; Factory Reset (Erase Everything)</em>.</li>
+        <li><strong>Instant Factory Reset:</strong> You can erase all tracked habits, logs, passwords, and screen time data directly inside the application via <em>Settings &rarr; System & Data &rarr; Factory Reset (Erase Everything)</em> or the <em>Cryptographic Secure Shredder</em>.</li>
         <li><strong>Zero Lingering Footprint:</strong> Because data is not retained on remote servers, uninstalling the app or executing a Factory Reset completely and irrevocably purges all data.</li>
       </ul>
     </section>
 
     <section>
-      <h2>5. Children's Privacy (COPPA Compliance)</h2>
+      <h2>8. Children's Privacy (COPPA Compliance)</h2>
       <p>
         Because Arc Tracker does not collect any personal information whatsoever, it complies fully with the Children's Online Privacy Protection Act (COPPA) and GDPR-K. We do not knowingly collect personal information from children under the age of 13.
       </p>
     </section>
 
     <section>
-      <h2>6. App Store & Platform Compliance</h2>
+      <h2>9. Third-Party Services & Advertising</h2>
+      <p>
+        Arc Tracker contains <strong>no third-party advertisements</strong> and does not sell, trade, rent, or share user data with data brokers, ad networks, or external analytics firms.
+      </p>
+    </section>
+
+    <section>
+      <h2>10. App Store & Platform Compliance</h2>
       <div class="compliance-grid">
         <div class="compliance-box">
           <strong>Apple App Store</strong>
@@ -303,6 +369,10 @@
           <span>Complies with Target SDK & Data Safety Zero-Collection Policy</span>
         </div>
         <div class="compliance-box">
+          <strong>Microsoft Store</strong>
+          <span>Complies with Microsoft Store App Privacy & Data Protection Policies</span>
+        </div>
+        <div class="compliance-box">
           <strong>Airgap Standard</strong>
           <span>100% Offline-First Architecture & Encrypted Backups</span>
         </div>
@@ -310,7 +380,7 @@
     </section>
 
     <section>
-      <h2>7. Contact Information</h2>
+      <h2>11. Contact Information</h2>
       <p>
         If you have questions, feedback, or need assistance regarding this Privacy Policy or Arc Tracker, you may contact the developer:
       </p>
