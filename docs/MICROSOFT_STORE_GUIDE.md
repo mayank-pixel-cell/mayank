@@ -29,7 +29,8 @@ Both options are officially certified and accepted by Microsoft.
    - Microsoft requires a publicly accessible HTTPS privacy policy URL.
    - Arc Tracker already has a complete offline privacy policy in `docs/privacy-policy.html` and `PRIVACY_POLICY.md`.
    - If hosting on GitHub Pages, your URL is:
-     ```
+
+     ```text
      https://mayank-pixel-cell.github.io/mayank/privacy-policy.html
      ```
 
@@ -61,6 +62,7 @@ PWABuilder is an open-source, Microsoft-backed service that wraps your PWA into 
 If you prefer publishing the standalone native Rust/C++ Windows binary:
 
 1. In `src-tauri/tauri.conf.json`, ensure your bundle settings target Windows:
+
    ```json
    "bundle": {
      "active": true,
@@ -69,15 +71,20 @@ If you prefer publishing the standalone native Rust/C++ Windows binary:
      "category": "Productivity"
    }
    ```
+
 2. Build the desktop production bundle:
+
    ```bash
    npm run build
    npx tauri build
    ```
+
 3. The compiled `.msi` or `.exe` will be located under:
-   ```
+
+   ```text
    src-tauri/target/release/bundle/
    ```
+
 4. Note: Microsoft Store now accepts standard Win32 `.msi` and `.exe` installers directly via Partner Center without requiring MSIX conversion!
 
 ---
@@ -129,11 +136,14 @@ If you prefer publishing the standalone native Rust/C++ Windows binary:
 
 Once approved, Microsoft gives you a **Product ID** (e.g., `9NXXXXXXXXXX`).
 Users on Windows can open or install it directly using the protocol:
-```
+
+```text
 ms-windows-store://pdp/?productid=<Your-Product-Id>
 ```
+
 Or via web URL:
-```
+
+```text
 https://apps.microsoft.com/detail/<Your-Product-Id>
 ```
 

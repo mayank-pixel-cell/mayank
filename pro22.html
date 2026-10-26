@@ -952,42 +952,41 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
 
             <!-- DESKTOP TOP NAV (PRIMARY NAVIGATION - ALWAYS VISIBLE, NEVER CUT OFF) -->
-            <nav role="tablist" aria-label="Desktop Navigation" class="hidden md:flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 shadow-inner shrink-0">
-                <button id="tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onmouseenter="playSfx('hover')" onclick="switchTab('tracker')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-list-check"></i>
+            <nav role="tablist" aria-label="Desktop Navigation" class="hidden md:flex items-center space-x-1.5 bg-slate-900/95 p-1 rounded-2xl border border-slate-800/90 shadow-inner shrink-0 backdrop-blur-md">
+                <button id="tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onmouseenter="playSfx('hover')" onclick="switchTab('tracker')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-md shadow-emerald-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
+                    <i class="fa-solid fa-list-check text-slate-950"></i>
                     <span>Tracker</span>
                 </button>
-                <button id="tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onmouseenter="playSfx('hover')" onclick="switchTab('screentime')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-hourglass-half text-cyan-400"></i>
+                <button id="tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onmouseenter="playSfx('hover')" onclick="switchTab('screentime')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400">
+                    <i class="fa-solid fa-hourglass-half text-purple-400"></i>
                     <span>Screen Time</span>
                 </button>
-                <button id="tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onmouseenter="playSfx('hover')" onclick="switchTab('rules')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-shield-halved"></i>
+                <button id="tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onmouseenter="playSfx('hover')" onclick="switchTab('rules')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i>
                     <span>Rules</span>
                 </button>
-                <button id="tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onmouseenter="playSfx('hover')" onclick="switchTab('progression')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-crown text-amber-400"></i>
+                <button id="tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onmouseenter="playSfx('hover')" onclick="switchTab('progression')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-yellow-300 hover:bg-yellow-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                    <i class="fa-solid fa-crown text-yellow-400"></i>
                     <span>Level/KB</span>
                 </button>
-                <button id="tab-results" role="tab" aria-selected="false" aria-controls="view-results" onmouseenter="playSfx('hover')" onclick="switchTab('results')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-diagram-project"></i>
+                <button id="tab-results" role="tab" aria-selected="false" aria-controls="view-results" onmouseenter="playSfx('hover')" onclick="switchTab('results')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-diagram-project text-cyan-400"></i>
                     <span>Results</span>
                 </button>
-                <button id="tab-settings" title="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onmouseenter="playSfx('hover')" onclick="switchTab('settings')" class="px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-gear"></i>
+                <button id="tab-settings" title="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onmouseenter="playSfx('hover')" onclick="switchTab('settings')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-pink-300 hover:bg-pink-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400">
+                    <i class="fa-solid fa-gear text-pink-400"></i>
                     <span>Settings</span>
                 </button>
             </nav>
 
             <!-- ACTION BUTTONS -->
-            <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-                <!-- User Profile Capsule -->
-                <div role="button" tabindex="0" id="header-profile-pill" onclick="ArcProfile.openSetupModal()" class="cursor-pointer flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-400/50 transition-all text-xs text-slate-200 shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Customize Operative Profile & Handle">
-                    <div id="header-avatar-circle" class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/50 grid place-items-center text-[10px] overflow-hidden shrink-0">O</div>
-                    <div class="hidden sm:flex flex-col text-left leading-none">
-                        <span id="header-profile-name" class="font-bold text-[11px] text-white truncate max-w-[100px]">Operative</span>
-                        <span id="header-profile-user" class="text-[9px] text-cyan-400 font-mono truncate max-w-[100px]">@operative</span>
-                    </div>
+            <div class="flex items-center space-x-2 shrink-0">
+                <!-- User Profile Capsule (Compact PFP Only) -->
+                <div role="button" tabindex="0" id="header-profile-pill" onclick="ArcProfile.openSetupModal()" class="cursor-pointer relative p-0.5 rounded-full bg-slate-900 border-2 border-cyan-400/50 hover:border-cyan-300 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Customize Operative Profile & Handle">
+                    <div id="header-avatar-circle" class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500/20 to-indigo-500/30 text-cyan-300 font-bold border border-cyan-400/40 grid place-items-center text-xs overflow-hidden shrink-0 shadow-inner">O</div>
+                    <span id="header-profile-status-dot" class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-950 shadow-sm" title="Connected"></span>
+                    <span id="header-profile-name" class="sr-only">Operative</span>
+                    <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
 
                 <!-- Share Tracker Button -->
@@ -1318,6 +1317,41 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </h3>
                 <p class="text-[11px] text-slate-400 mt-1 mb-3">Add, rename, reorder, reweight or delete at any time. Past check-ins are never erased; past scores use the current weights.</p>
                 <div id="p20-hm" class="space-y-2"></div>
+            </section>
+
+            <!-- STREAK FREEZE RULE & MISSED DAY PROTECTION -->
+            <section id="rules-streak-freeze-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 space-y-3" aria-label="Streak Freeze Rule">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-lg shrink-0 shadow-inner">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-extrabold text-sm sm:text-base text-white">Streak Freeze Rule</h3>
+                                <span id="rules-freeze-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">OFF</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-0.5">Protect your hard-earned streak against unexpected life events or rest days.</p>
+                        </div>
+                    </div>
+
+                    <!-- Toggle Switch -->
+                    <label class="flex items-center gap-2.5 cursor-pointer select-none bg-slate-900/80 px-3.5 py-2 rounded-xl border border-slate-800 hover:border-slate-700 transition active:scale-95 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-200">Free Miss Protection</span>
+                        <input type="checkbox" id="rules-freeze-toggle" onchange="toggleStreakFreezeFromRules(this.checked)" class="accent-cyan-400 rounded w-4 h-4 cursor-pointer">
+                    </label>
+                </div>
+
+                <!-- Status & Rule Explanation -->
+                <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2 text-slate-300">
+                        <i class="fa-solid fa-shield-heart text-cyan-400"></i>
+                        <span>Allowance: <b class="text-cyan-300">1 forgiven missed day</b> per calendar month.</span>
+                    </div>
+                    <div id="rules-freeze-status" class="text-[11px] font-mono text-slate-400">
+                        Off. A missed day resets your streak to 0.
+                    </div>
+                </div>
             </section>
 
             <div id="rules-pillar-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
@@ -3106,8 +3140,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
     <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800 bg-slate-950/95 backdrop-blur-lg px-2 py-1.5 flex items-center justify-around shadow-2xl">
-        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-cyan-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-list-check text-lg"></i>
+        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-emerald-400 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
+            <i class="fa-solid fa-list-check text-lg text-emerald-400"></i>
             <span class="text-[10px] font-semibold mt-0.5">Tracker</span>
         </button>
         <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
@@ -5333,6 +5367,57 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             }
         }
 
+        window.ARC_TAB_THEMES = {
+            tracker: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-md shadow-emerald-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-list-check text-slate-950",
+                iconInactive: "fa-solid fa-list-check text-emerald-400",
+                mobileActive: "text-emerald-400",
+                mobileInactive: "text-slate-400"
+            },
+            screentime: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md shadow-purple-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-hourglass-half text-white",
+                iconInactive: "fa-solid fa-hourglass-half text-purple-400",
+                mobileActive: "text-purple-400",
+                mobileInactive: "text-slate-400"
+            },
+            rules: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-amber-500 to-orange-400 text-slate-950 shadow-md shadow-amber-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-shield-halved text-slate-950",
+                iconInactive: "fa-solid fa-shield-halved text-amber-400",
+                mobileActive: "text-amber-400",
+                mobileInactive: "text-slate-400"
+            },
+            progression: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 shadow-md shadow-yellow-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-yellow-300 hover:bg-yellow-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-crown text-slate-950",
+                iconInactive: "fa-solid fa-crown text-yellow-400",
+                mobileActive: "text-yellow-400",
+                mobileInactive: "text-slate-400"
+            },
+            results: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-md shadow-cyan-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-diagram-project text-slate-950",
+                iconInactive: "fa-solid fa-diagram-project text-cyan-400",
+                mobileActive: "text-cyan-400",
+                mobileInactive: "text-slate-400"
+            },
+            settings: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md shadow-pink-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-pink-300 hover:bg-pink-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-gear text-white",
+                iconInactive: "fa-solid fa-gear text-pink-400",
+                mobileActive: "text-pink-400",
+                mobileInactive: "text-slate-400"
+            }
+        };
+
         function switchTab(tabName) {
             playSfx('tab');
             state.activeTab = tabName;
@@ -5341,6 +5426,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const view = document.getElementById(`view-${t}`);
                 const desktopTab = document.getElementById(`tab-${t}`);
                 const mobileTab = document.getElementById(`mobile-tab-${t}`);
+                const theme = window.ARC_TAB_THEMES && window.ARC_TAB_THEMES[t];
 
                 if (view) {
                     const isTarget = (t === tabName);
@@ -5352,22 +5438,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     }
                 }
 
-                if (desktopTab) {
-                    desktopTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
-                    if (t === tabName) {
-                        desktopTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
-                    } else {
-                        desktopTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
-                    }
+                if (desktopTab && theme) {
+                    const isTarget = (t === tabName);
+                    desktopTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+                    desktopTab.className = isTarget ? theme.active : theme.inactive;
+                    const icon = desktopTab.querySelector('i');
+                    if (icon) icon.className = isTarget ? theme.iconActive : theme.iconInactive;
                 }
 
-                if (mobileTab) {
-                    mobileTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
-                    if (t === tabName) {
-                        mobileTab.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-cyan-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]";
-                    } else {
-                        mobileTab.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]";
-                    }
+                if (mobileTab && theme) {
+                    const isTarget = (t === tabName);
+                    mobileTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+                    mobileTab.className = `flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out ${isTarget ? theme.mobileActive : theme.mobileInactive} hover:scale-[1.02] active:scale-95`;
                 }
             });
 
@@ -5586,7 +5668,68 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             showToast("Today's progress reset.");
         }
 
+        
+// --- RULES TAB STREAK FREEZE HELPERS ---
+function updateRulesFreezeUI() {
+    let freezeOn = false;
+    if (window.SettingsApp && typeof window.SettingsApp.get === 'function') {
+        const cfg = window.SettingsApp.get();
+        freezeOn = !!(cfg && cfg.freeze && cfg.freeze.on);
+    }
+    const toggle = document.getElementById('rules-freeze-toggle');
+    const badge = document.getElementById('rules-freeze-badge');
+    const status = document.getElementById('rules-freeze-status');
+
+    if (toggle) toggle.checked = freezeOn;
+
+    if (badge) {
+        badge.textContent = freezeOn ? 'ACTIVE' : 'OFF';
+        badge.className = freezeOn
+            ? 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+            : 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700';
+    }
+
+    if (status) {
+        const memo = window.__sfzMemo || {};
+        const ym = (new Date()).toISOString().slice(0, 7);
+        const usedDate = memo[ym];
+        if (!freezeOn) {
+            status.textContent = 'Off. A missed day resets your streak to 0.';
+            status.className = 'text-[11px] font-mono text-slate-400';
+        } else if (usedDate) {
+            status.textContent = 'Free miss used on ' + usedDate + ' this month.';
+            status.className = 'text-[11px] font-mono text-amber-400';
+        } else {
+            status.textContent = '1 free miss available this month.';
+            status.className = 'text-[11px] font-mono text-emerald-400';
+        }
+    }
+}
+
+function toggleStreakFreezeFromRules(checked) {
+    if (window.SettingsApp && typeof window.SettingsApp.get === 'function') {
+        const cfg = window.SettingsApp.get();
+        if (cfg && cfg.freeze) {
+            cfg.freeze.on = checked;
+            if (typeof window.SettingsApp.save === 'function') window.SettingsApp.save();
+        }
+    }
+    const sxToggle = document.getElementById('sx-fz');
+    if (sxToggle) sxToggle.checked = checked;
+
+    if (typeof refreshApp === 'function') refreshApp();
+    else if (typeof window.renderHabits === 'function') window.renderHabits();
+
+    updateRulesFreezeUI();
+
+    if (window.playSfx) window.playSfx(checked ? 'click' : 'uncheck');
+    if (typeof showToast === 'function') {
+        showToast(checked ? '❄️ Streak Freeze enabled: 1 free miss allowed per month!' : 'Streak Freeze turned off.');
+    }
+}
+
         function renderRulesBlueprint() {
+            updateRulesFreezeUI();
             const grid = document.getElementById('rules-pillar-grid');
             if (!grid) return;
 
@@ -10930,6 +11073,226 @@ html[data-mode=light] .phone-widget-card .text-white {
   </div>
 </div>
 
+<!-- Two-Step Verification (2FA) Setup & Management Modal -->
+<div id="pp-sec-2fa-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Two-Step Verification settings">
+  <div class="pp-box max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2 text-cyan-400 font-black text-base">
+        <i class="fa-solid fa-shield-halved text-lg"></i>
+        <h3>Two-Step Verification (2FA)</h3>
+      </div>
+      <button type="button" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition" data-close>
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Overview Banner -->
+    <div class="p-3 my-3 rounded-xl border border-cyan-500/30 bg-cyan-950/20 text-xs text-slate-300">
+      <div class="flex items-center justify-between mb-1">
+        <span class="font-bold text-cyan-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-lock text-cyan-400"></i> Optional Extra Security Layer
+        </span>
+        <span id="arc-2fa-modal-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">
+          INACTIVE
+        </span>
+      </div>
+      <p class="text-[11px] text-slate-300 leading-relaxed">
+        Add a second verification step to guard your habits and data. Choose between <b>Google Authenticator</b> or <b>SMS Phone Number</b>, accompanied by 5 emergency single-use backup codes.
+      </p>
+    </div>
+
+    <!-- Active Management Card (Shown when 2FA is currently active) -->
+    <div id="arc-2fa-active-view" class="space-y-4 hidden">
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs font-bold text-white">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Active Method:</span>
+            <span id="arc-2fa-active-method-name" class="font-mono text-cyan-300 uppercase">Google Authenticator</span>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">PROTECTED</span>
+        </div>
+        <div id="arc-2fa-active-method-detail" class="text-xs text-slate-400 font-mono"></div>
+      </div>
+
+      <!-- Backup Codes Box -->
+      <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="font-bold text-xs text-white flex items-center gap-2">
+            <i class="fa-solid fa-key text-cyan-400"></i>
+            <span>5 Emergency Backup Codes</span>
+          </div>
+          <span id="arc-2fa-active-codes-badge" class="text-[10px] font-mono text-cyan-300">5 of 5 Available</span>
+        </div>
+        <p class="text-[11px] text-slate-400">
+          Each backup code can be used once to unlock if your phone or authenticator app is unavailable.
+        </p>
+        <div id="arc-2fa-active-codes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs">
+          <!-- Rendered dynamically -->
+        </div>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button type="button" onclick="ArcTwoFactor.copyBackupCodes()" class="pp-btn text-xs text-cyan-300 border-cyan-500/40 flex items-center gap-1.5">
+            <i class="fa-solid fa-copy"></i> Copy Codes
+          </button>
+          <button type="button" onclick="ArcTwoFactor.downloadBackupCodes()" class="pp-btn text-xs text-slate-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Download (.txt)
+          </button>
+          <button type="button" onclick="ArcTwoFactor.regenerateBackupCodes()" class="pp-btn text-xs text-amber-300 border-amber-500/40 flex items-center gap-1.5">
+            <i class="fa-solid fa-arrows-rotate"></i> Regenerate 5 Codes
+          </button>
+        </div>
+      </div>
+
+      <!-- Danger Zone / Removal -->
+      <div class="p-3.5 rounded-xl border border-rose-500/30 bg-rose-950/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-bold text-rose-300">Remove Two-Step Verification</div>
+          <div class="text-[11px] text-slate-400">Turn off 2FA security checks. You can re-enable it at any time.</div>
+        </div>
+        <button type="button" onclick="ArcTwoFactor.confirmRemove()" class="px-3.5 py-2 rounded-xl text-xs font-bold border border-rose-500/50 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 transition shrink-0 active:scale-95 shadow-sm">
+          <i class="fa-solid fa-trash-can mr-1"></i> Remove 2FA
+        </button>
+      </div>
+    </div>
+
+    <!-- Inactive Setup View (Shown when 2FA is being configured) -->
+    <div id="arc-2fa-setup-view" class="space-y-4">
+      <!-- Step 1: Choose Method -->
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-2">1. Choose Your Verification Method:</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button type="button" id="arc-2fa-choice-authenticator" onclick="ArcTwoFactor.selectMethod('authenticator')" class="p-3 rounded-xl border-2 border-cyan-400 bg-cyan-950/40 text-left transition relative select-none">
+            <div class="flex items-center gap-2 mb-1">
+              <i class="fa-solid fa-mobile-screen text-cyan-400 text-base"></i>
+              <span class="font-bold text-xs text-white">Google Authenticator</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-tight">Time-based 6-digit codes generated on your phone. Works completely offline.</p>
+            <div class="absolute top-2.5 right-2.5 text-cyan-400 text-xs check-icon"><i class="fa-solid fa-circle-check"></i></div>
+          </button>
+
+          <button type="button" id="arc-2fa-choice-phone" onclick="ArcTwoFactor.selectMethod('phone')" class="p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-600 text-left transition relative select-none">
+            <div class="flex items-center gap-2 mb-1">
+              <i class="fa-solid fa-comment-sms text-indigo-400 text-base"></i>
+              <span class="font-bold text-xs text-white">Phone Number (SMS)</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-tight">Receive 6-digit verification codes sent directly to your mobile phone.</p>
+            <div class="absolute top-2.5 right-2.5 text-slate-500 text-xs check-icon hidden"><i class="fa-solid fa-circle-check"></i></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Method Configuration -->
+      <div id="arc-2fa-config-authenticator" class="space-y-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+        <div class="font-bold text-xs text-cyan-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-qrcode"></i> Scan QR Code in Google Authenticator
+        </div>
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <div id="arc-2fa-qr-code-box" class="w-36 h-36 shrink-0 bg-white rounded-xl p-2 flex items-center justify-center shadow-lg">
+            <!-- Injected QR SVG -->
+          </div>
+          <div class="space-y-2 flex-1 w-full text-xs">
+            <p class="text-slate-300 text-[11px]">
+              Scan with <b>Google Authenticator</b> or compatible app. Or enter the setup key manually:
+            </p>
+            <div>
+              <label class="block text-[10px] uppercase font-mono text-slate-400 mb-0.5">Secret Key (Base32)</label>
+              <div class="flex gap-1.5">
+                <input id="arc-2fa-secret-display" type="text" readonly class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-mono text-cyan-300 font-bold select-all focus:outline-none">
+                <button type="button" onclick="ArcTwoFactor.copySecretKey()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition" title="Copy Key">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button type="button" onclick="ArcTwoFactor.fillCurrentTOTP()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-semibold">
+                ⚡ Auto-fill Current Code for Instant Test
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Code Entry -->
+        <div class="pt-2 border-t border-slate-800">
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Enter 6-digit Code from Authenticator to Confirm:</label>
+          <div class="flex gap-2">
+            <input id="arc-2fa-setup-totp-input" type="text" maxlength="6" inputmode="numeric" placeholder="123456" class="w-36 text-center tracking-widest font-mono font-bold text-base bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-cyan-400">
+            <button type="button" onclick="ArcTwoFactor.verifySetupCode()" class="px-3.5 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs transition active:scale-95">
+              Verify Code
+            </button>
+          </div>
+          <p id="arc-2fa-setup-totp-err" class="text-xs text-rose-400 font-mono mt-1 min-h-[1rem]"></p>
+        </div>
+      </div>
+
+      <!-- Step 2: Phone Number Configuration -->
+      <div id="arc-2fa-config-phone" class="space-y-3 p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hidden">
+        <div class="font-bold text-xs text-indigo-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-phone"></i> Mobile Phone Number Setup
+        </div>
+        <p class="text-[11px] text-slate-300">
+          Enter your mobile phone number. Arc Tracker will dispatch verification codes via secure SMS.
+        </p>
+        <div>
+          <label class="block text-[10px] uppercase font-mono text-slate-400 mb-1">Phone Number (with country code)</label>
+          <div class="flex gap-2">
+            <input id="arc-2fa-setup-phone-input" type="tel" placeholder="+1 (555) 234-5678" value="+1 (555) 234-5678" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400 font-mono">
+            <button type="button" onclick="ArcTwoFactor.sendSetupSms()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition active:scale-95 shrink-0 flex items-center gap-1.5">
+              <i class="fa-solid fa-paper-plane"></i> Send SMS Code
+            </button>
+          </div>
+        </div>
+
+        <div id="arc-2fa-phone-verify-wrap" class="pt-2 border-t border-slate-800 space-y-2">
+          <label class="block text-[11px] font-semibold text-slate-300">Enter 6-digit SMS Code:</label>
+          <div class="flex gap-2">
+            <input id="arc-2fa-setup-sms-input" type="text" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-36 text-center tracking-widest font-mono font-bold text-base bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-cyan-400">
+            <button type="button" onclick="ArcTwoFactor.verifySetupSms()" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs transition active:scale-95">
+              Verify SMS
+            </button>
+          </div>
+          <p id="arc-2fa-setup-sms-err" class="text-xs text-rose-400 font-mono min-h-[1rem]"></p>
+        </div>
+      </div>
+
+      <!-- Step 3: 5 Emergency Backup Codes Display -->
+      <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-key"></i> Step 2: Save Your 5 Emergency Backup Codes
+          </div>
+          <span class="text-[10px] font-mono text-slate-400">5 Single-Use Codes</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          If you lose access to your authenticator app or phone, each single-use backup code allows you to unlock your account. Save them now in a safe place.
+        </p>
+        <div id="arc-2fa-setup-codes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs">
+          <!-- 5 codes rendered here -->
+        </div>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button type="button" onclick="ArcTwoFactor.copySetupBackupCodes()" class="pp-btn text-xs text-cyan-300 border-cyan-500/40 flex items-center gap-1.5">
+            <i class="fa-solid fa-copy"></i> Copy All 5 Codes
+          </button>
+          <button type="button" onclick="ArcTwoFactor.downloadSetupBackupCodes()" class="pp-btn text-xs text-slate-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Download Codes (.txt)
+          </button>
+        </div>
+        <label class="flex items-center gap-2 pt-1 text-xs text-slate-300 cursor-pointer select-none">
+          <input id="arc-2fa-confirm-saved-chk" type="checkbox" onchange="ArcTwoFactor.onConfirmSavedChange()" class="accent-cyan-400 rounded w-4 h-4">
+          <span>I have securely saved these 5 backup codes.</span>
+        </label>
+      </div>
+
+      <!-- Enable / Activate Button -->
+      <div class="pt-2 flex gap-2">
+        <button type="button" id="btn-arc-2fa-activate" onclick="ArcTwoFactor.activateTwoFactor()" class="pp-btn flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-black border-none font-extrabold text-xs uppercase tracking-wider disabled:opacity-40 disabled:pointer-events-none" disabled>
+          <i class="fa-solid fa-shield-check mr-1.5"></i> Activate Two-Step Verification
+        </button>
+        <button type="button" class="pp-btn" data-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- App Security Password / PIN Configuration Modal -->
 <div id="pp-sec-pin-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Configure app security password">
   <div class="pp-box max-w-md w-full">
@@ -10976,6 +11339,8 @@ html[data-mode=light] .phone-widget-card .text-white {
 <!-- Full-Screen App Security Password & PIN Lock Overlay -->
 <div id="arc-pin-overlay" class="fixed inset-0 z-[120] hidden flex-col items-center justify-center p-4 bg-slate-950/95 select-none" role="dialog" aria-modal="true" aria-label="Security password verification">
   <div class="max-w-xs sm:max-w-sm w-full p-6 sm:p-7 rounded-2xl border border-cyan-500/30 bg-slate-900/95 shadow-2xl flex flex-col items-center space-y-3.5 text-center backdrop-blur-xl">
+    <!-- STEP 1: PASSWORD / PIN -->
+    <div id="arc-lock-step-1" class="w-full flex flex-col items-center space-y-3.5">
     <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 grid place-items-center text-cyan-400 text-2xl shadow-inner shrink-0">
       <i class="fa-solid fa-shield-halved"></i>
     </div>
@@ -11026,6 +11391,51 @@ html[data-mode=light] .phone-widget-card .text-white {
         <i class="fa-solid fa-envelope-open-text text-[11px]"></i> Forgot Password? (Email Recovery)
       </button>
     </div>
+    </div><!-- End arc-lock-step-1 -->
+
+    <!-- STEP 2: TWO-STEP VERIFICATION CHALLENGE -->
+    <div id="arc-lock-step-2" class="w-full hidden flex-col items-center space-y-3.5">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 border border-cyan-400/50 grid place-items-center text-cyan-300 text-2xl shadow-inner shrink-0">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black tracking-wider text-white">TWO-STEP VERIFICATION</h3>
+        <p id="arc-2fa-challenge-desc" class="text-xs text-slate-300 mt-0.5">Enter 6-digit code from Google Authenticator</p>
+      </div>
+
+      <!-- 6-Digit Challenge Input -->
+      <div id="arc-2fa-digit-wrap" class="w-full space-y-2">
+        <input id="arc-2fa-challenge-input" type="text" maxlength="6" inputmode="numeric" autocomplete="one-time-code" class="w-full text-center text-2xl font-mono font-black tracking-[0.4em] px-4 py-2.5 rounded-xl bg-slate-950/90 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none transition shadow-inner" placeholder="••••••">
+        <div id="arc-2fa-sms-resend-wrap" class="hidden">
+          <button type="button" onclick="ArcTwoFactor.resendChallengeSms()" class="text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold underline">
+            <i class="fa-solid fa-rotate-right mr-1"></i> Resend SMS Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Emergency Backup Code Input (Hidden by default) -->
+      <div id="arc-2fa-backup-wrap" class="w-full space-y-1.5 hidden">
+        <input id="arc-2fa-backup-input" type="text" maxlength="9" class="w-full text-center text-lg font-mono font-bold tracking-widest uppercase px-4 py-2.5 rounded-xl bg-slate-950/90 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none transition shadow-inner" placeholder="XXXX-XXXX">
+        <p class="text-[10px] text-slate-400 font-mono">Enter 1 of your 5 single-use emergency backup codes</p>
+      </div>
+
+      <p id="arc-2fa-challenge-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
+
+      <!-- Verify & Unlock Action Button -->
+      <button type="button" id="arc-2fa-challenge-btn" onclick="ArcTwoFactor.submitChallengeUnlock()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 active:scale-95 text-black font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-lock-open"></i> Verify &amp; Unlock
+      </button>
+
+      <!-- Challenge Option Links -->
+      <div class="pt-1.5 border-t border-slate-800/80 w-full space-y-1.5">
+        <button type="button" id="btn-arc-2fa-toggle-mode" onclick="ArcTwoFactor.toggleChallengeMode()" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold transition hover:underline flex items-center justify-center gap-1.5 mx-auto">
+          <i class="fa-solid fa-key text-[11px]"></i> <span id="arc-2fa-toggle-mode-text">Use an Emergency Backup Code</span>
+        </button>
+        <button type="button" onclick="ArcTwoFactor.backToPasswordStep()" class="text-[11px] text-slate-400 hover:text-slate-200 transition hover:underline flex items-center justify-center gap-1 mx-auto">
+          <i class="fa-solid fa-arrow-left text-[10px]"></i> Back to Password
+        </button>
+      </div>
+    </div><!-- End arc-lock-step-2 -->
   </div>
 </div>
 
@@ -11573,6 +11983,1077 @@ html[data-mode=light] .phone-widget-card .text-white {
   </div>
 </div>
 
+<script id="arc-two-factor-js">
+window.ArcTwoFactor = (function() {
+  'use strict';
+
+  // Storage Keys
+  const KEY_ENABLED = 'arc_sec_2fa_enabled';
+  const KEY_METHOD = 'arc_sec_2fa_method'; // 'authenticator' | 'phone'
+  const KEY_SECRET = 'arc_sec_2fa_secret';
+  const KEY_PHONE = 'arc_sec_2fa_phone';
+  const KEY_BACKUP_CODES = 'arc_sec_2fa_backup_codes';
+  const KEY_SMS_CODE = 'arc_sec_2fa_sms_code';
+  const KEY_SMS_EXP = 'arc_sec_2fa_sms_exp';
+
+  // Internal state for setup modal
+  let _stagedMethod = 'authenticator';
+  let _stagedSecret = '';
+  let _stagedCodes = [];
+  let _stagedVerified = false;
+  let _challengeIsBackupMode = false;
+
+  // --- CRYPTOGRAPHY & ENCODING ---
+  const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+  function base32Decode(base32) {
+    const clean = base32.toUpperCase().replace(/[\s=-]/g, '');
+    let bits = 0, value = 0;
+    const bytes = [];
+    for (let i = 0; i < clean.length; i++) {
+      const idx = BASE32_ALPHABET.indexOf(clean[i]);
+      if (idx === -1) continue;
+      value = (value << 5) | idx;
+      bits += 5;
+      if (bits >= 8) {
+        bytes.push((value >>> (bits - 8)) & 255);
+        bits -= 8;
+      }
+    }
+    return new Uint8Array(bytes);
+  }
+
+  function generateSecretBase32() {
+    let secret = '';
+    const rand = crypto.getRandomValues(new Uint8Array(16));
+    for (let i = 0; i < 16; i++) {
+      secret += BASE32_ALPHABET[rand[i] % BASE32_ALPHABET.length];
+    }
+    return secret;
+  }
+
+  function generate5BackupCodes() {
+    const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const codes = [];
+    for (let i = 0; i < 5; i++) {
+      const bytes = crypto.getRandomValues(new Uint8Array(8));
+      let p1 = '', p2 = '';
+      for (let j = 0; j < 4; j++) p1 += chars[bytes[j] % chars.length];
+      for (let j = 4; j < 8; j++) p2 += chars[bytes[j] % chars.length];
+      codes.push({
+        code: `${p1}-${p2}`,
+        used: false,
+        usedAt: null
+      });
+    }
+    return codes;
+  }
+
+  async function generateTOTP(secretBase32, timeMs = Date.now()) {
+    const keyBytes = base32Decode(secretBase32);
+    const epoch = Math.floor(timeMs / 1000);
+    const timeStep = Math.floor(epoch / 30);
+    const counterBuffer = new ArrayBuffer(8);
+    const counterView = new DataView(counterBuffer);
+    counterView.setUint32(0, 0, false);
+    counterView.setUint32(4, timeStep, false);
+
+    const key = await crypto.subtle.importKey(
+      'raw',
+      keyBytes,
+      { name: 'HMAC', hash: 'SHA-1' },
+      false,
+      ['sign']
+    );
+    const hmac = await crypto.subtle.sign('HMAC', key, counterBuffer);
+    const hmacBytes = new Uint8Array(hmac);
+    const offset = hmacBytes[hmacBytes.length - 1] & 0x0f;
+    const code =
+      ((hmacBytes[offset] & 0x7f) << 24) |
+      ((hmacBytes[offset + 1] & 0xff) << 16) |
+      ((hmacBytes[offset + 2] & 0xff) << 8) |
+      (hmacBytes[offset + 3] & 0xff);
+    return (code % 1000000).toString().padStart(6, '0');
+  }
+
+  async function verifyTOTP(secretBase32, codeToTest) {
+    if (!codeToTest || codeToTest.length !== 6) return false;
+    const now = Date.now();
+    for (let offset = -1; offset <= 1; offset++) {
+      const candidate = await generateTOTP(secretBase32, now + offset * 30000);
+      if (candidate === codeToTest) return true;
+    }
+    return false;
+  }
+
+  // --- COMPACT PURE JS QR CODE GENERATOR (100% OFFLINE) ---
+  const QR = (function() {
+    const EXP = new Uint8Array(512);
+    const LOG = new Uint8Array(256);
+    for (let i = 0, x = 1; i < 255; i++) {
+      EXP[i] = x;
+      EXP[i + 255] = x;
+      LOG[x] = i;
+      x = (x << 1) ^ (x >= 128 ? 0x11d : 0);
+    }
+    function gfMul(a, b) { return (a === 0 || b === 0) ? 0 : EXP[LOG[a] + LOG[b]]; }
+    function rsPoly(n) {
+      let p = [1];
+      for (let i = 0; i < n; i++) {
+        const next = new Array(p.length + 1).fill(0);
+        for (let j = 0; j < p.length; j++) {
+          next[j] ^= gfMul(p[j], EXP[i]);
+          next[j + 1] ^= p[j];
+        }
+        p = next;
+      }
+      return p;
+    }
+    function rsEncode(data, ecLen) {
+      const poly = rsPoly(ecLen);
+      const msg = data.concat(new Array(ecLen).fill(0));
+      for (let i = 0; i < data.length; i++) {
+        const coef = msg[i];
+        if (coef !== 0) {
+          for (let j = 0; j < poly.length; j++) msg[i + j] ^= gfMul(poly[j], coef);
+        }
+      }
+      return msg.slice(data.length);
+    }
+    const VERSIONS = [
+      null,
+      { v: 1, sz: 21, total: 26, ec: 7, cap: 17, align: [] },
+      { v: 2, sz: 25, total: 44, ec: 10, cap: 32, align: [6, 18] },
+      { v: 3, sz: 29, total: 70, ec: 15, cap: 53, align: [6, 22] },
+      { v: 4, sz: 33, total: 100, ec: 20, cap: 78, align: [6, 26] },
+      { v: 5, sz: 37, total: 134, ec: 26, cap: 106, align: [6, 30] },
+      { v: 6, sz: 41, total: 172, ec: 36, cap: 134, align: [6, 34] }
+    ];
+    function getVersion(len) {
+      for (let i = 1; i < VERSIONS.length; i++) {
+        if (len <= VERSIONS[i].cap) return VERSIONS[i];
+      }
+      return VERSIONS[VERSIONS.length - 1];
+    }
+    function encodeData(str, ver) {
+      const utf8 = [];
+      for (let i = 0; i < str.length; i++) {
+        const c = str.charCodeAt(i);
+        if (c < 128) utf8.push(c);
+        else if (c < 2048) utf8.push(192 | (c >> 6), 128 | (c & 63));
+        else utf8.push(224 | (c >> 12), 128 | ((c >> 6) & 63), 128 | (c & 63));
+      }
+      const dataCodewords = ver.total - ver.ec;
+      let bits = '0100' + utf8.length.toString(2).padStart(8, '0');
+      for (let b of utf8) bits += b.toString(2).padStart(8, '0');
+      const termLen = Math.min(4, dataCodewords * 8 - bits.length);
+      bits += '0'.repeat(termLen);
+      while (bits.length % 8 !== 0) bits += '0';
+      const pad = ['11101100', '00010001'];
+      let pIdx = 0;
+      while (bits.length < dataCodewords * 8) {
+        bits += pad[pIdx % 2];
+        pIdx++;
+      }
+      const data = [];
+      for (let i = 0; i < bits.length; i += 8) data.push(parseInt(bits.substr(i, 8), 2));
+      const ec = rsEncode(data, ver.ec);
+      return data.concat(ec);
+    }
+    function createMatrix(ver, codewords) {
+      const sz = ver.sz;
+      const mat = Array.from({ length: sz }, () => Array(sz).fill(null));
+      const reserved = Array.from({ length: sz }, () => Array(sz).fill(false));
+      function setPattern(r, c, pattern) {
+        for (let i = 0; i < pattern.length; i++) {
+          for (let j = 0; j < pattern[i].length; j++) {
+            mat[r + i][c + j] = pattern[i][j];
+            reserved[r + i][c + j] = true;
+          }
+        }
+      }
+      const finder = [
+        [1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1]
+      ];
+      setPattern(0, 0, finder);
+      setPattern(0, sz - 7, finder);
+      setPattern(sz - 7, 0, finder);
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          if (!reserved[i][j]) { mat[i][j] = 0; reserved[i][j] = true; }
+          if (!reserved[i][sz - 1 - j]) { mat[i][sz - 1 - j] = 0; reserved[i][sz - 1 - j] = true; }
+          if (!reserved[sz - 1 - i][j]) { mat[sz - 1 - i][j] = 0; reserved[sz - 1 - i][j] = true; }
+        }
+      }
+      if (ver.align && ver.align.length) {
+        const alignPattern = [
+          [1,1,1,1,1],
+          [1,0,0,0,1],
+          [1,0,1,0,1],
+          [1,0,0,0,1],
+          [1,1,1,1,1]
+        ];
+        for (let r of ver.align) {
+          for (let c of ver.align) {
+            if (reserved[r][c]) continue;
+            setPattern(r - 2, c - 2, alignPattern);
+          }
+        }
+      }
+      for (let i = 8; i < sz - 8; i++) {
+        if (!reserved[6][i]) { mat[6][i] = (i % 2 === 0 ? 1 : 0); reserved[6][i] = true; }
+        if (!reserved[i][6]) { mat[i][6] = (i % 2 === 0 ? 1 : 0); reserved[i][6] = true; }
+      }
+      mat[sz - 8][8] = 1; reserved[sz - 8][8] = true;
+      for (let i = 0; i < 9; i++) { if (!reserved[8][i]) reserved[8][i] = true; if (!reserved[i][8]) reserved[i][8] = true; }
+      for (let i = sz - 8; i < sz; i++) { if (!reserved[8][i]) reserved[8][i] = true; if (!reserved[i][8]) reserved[i][8] = true; }
+      let bitIdx = 0;
+      const allBits = codewords.map(b => b.toString(2).padStart(8, '0')).join('');
+      let upward = true;
+      for (let right = sz - 1; right > 0; right -= 2) {
+        if (right === 6) right--;
+        const cols = [right, right - 1];
+        const rows = [];
+        if (upward) { for (let r = sz - 1; r >= 0; r--) rows.push(r); }
+        else { for (let r = 0; r < sz; r++) rows.push(r); }
+        for (let r of rows) {
+          for (let c of cols) {
+            if (!reserved[r][c]) {
+              const bit = bitIdx < allBits.length ? (allBits[bitIdx++] === '1' ? 1 : 0) : 0;
+              const mask = ((r + c) % 2 === 0);
+              mat[r][c] = mask ? (bit ^ 1) : bit;
+            }
+          }
+        }
+        upward = !upward;
+      }
+      const formatBits = [1,1,1,0,1,1,1,1,1,0,0,0,1,0,0];
+      for (let i = 0; i < 6; i++) mat[8][i] = formatBits[i];
+      mat[8][7] = formatBits[6];
+      mat[8][8] = formatBits[7];
+      mat[7][8] = formatBits[8];
+      for (let i = 0; i < 6; i++) mat[5 - i][8] = formatBits[9 + i];
+      for (let i = 0; i < 8; i++) mat[8][sz - 1 - i] = formatBits[i];
+      for (let i = 0; i < 7; i++) mat[sz - 7 + i][8] = formatBits[8 + i];
+      return mat;
+    }
+    function toSVG(str, size = 140) {
+      const ver = getVersion(str.length);
+      const codewords = encodeData(str, ver);
+      const mat = createMatrix(ver, codewords);
+      const sz = mat.length;
+      const pad = 2;
+      const totalSz = sz + pad * 2;
+      let paths = '';
+      for (let r = 0; r < sz; r++) {
+        for (let c = 0; c < sz; c++) {
+          if (mat[r][c] === 1) paths += `M${c + pad},${r + pad}h1v1h-1z `;
+        }
+      }
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalSz} ${totalSz}" width="${size}" height="${size}" class="w-full h-full">
+        <rect width="${totalSz}" height="${totalSz}" fill="#ffffff"/>
+        <path d="${paths}" fill="#090d16" shape-rendering="crispEdges"/>
+      </svg>`;
+    }
+    return { toSVG };
+  })();
+
+  // --- STATE ACCESSORS ---
+  function isEnabled() {
+    return localStorage.getItem(KEY_ENABLED) === 'true';
+  }
+
+  function getMethod() {
+    return localStorage.getItem(KEY_METHOD) || 'authenticator';
+  }
+
+  function getSecret() {
+    return localStorage.getItem(KEY_SECRET) || '';
+  }
+
+  function getPhone() {
+    return localStorage.getItem(KEY_PHONE) || '';
+  }
+
+  function getBackupCodes() {
+    try {
+      const raw = localStorage.getItem(KEY_BACKUP_CODES);
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function getRemainingCodesCount() {
+    const codes = getBackupCodes();
+    return codes.filter(c => !c.used).length;
+  }
+
+  // --- NOTIFICATION BANNER (SMS SIMULATION) ---
+  function showSmsNotification(phone, code) {
+    // Show top notification toast banner
+    const existing = document.getElementById('arc-sms-toast');
+    if (existing) existing.remove();
+
+    const banner = document.createElement('div');
+    banner.id = 'arc-sms-toast';
+    banner.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-[200] max-w-md w-[92vw] p-4 rounded-2xl bg-slate-900/95 border-2 border-indigo-500/80 shadow-2xl text-white backdrop-blur-xl animate-bounce-short select-none';
+    banner.innerHTML = `
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 grid place-items-center text-lg shrink-0">
+          <i class="fa-solid fa-comment-sms"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-indigo-300">📱 SMS Dispatch (2FA)</span>
+            <span class="text-[10px] font-mono text-slate-400">Just now</span>
+          </div>
+          <div class="text-[11px] text-slate-300 mt-0.5">
+            To: <b class="text-white font-mono">${phone}</b>
+          </div>
+          <div class="mt-2 p-2 rounded-lg bg-black/60 border border-indigo-500/30 flex items-center justify-between gap-2">
+            <div>
+              <span class="text-[10px] text-slate-400 block">Verification Code:</span>
+              <span class="font-mono text-lg font-black tracking-widest text-cyan-300">${code}</span>
+            </div>
+            <button type="button" id="btn-arc-sms-autofill" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition active:scale-95">
+              Copy &amp; Fill
+            </button>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1">Valid for 10 minutes. Click to auto-fill into verification field.</div>
+        </div>
+        <button type="button" onclick="this.closest('#arc-sms-toast').remove()" class="text-slate-400 hover:text-white text-xs p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    const btn = banner.querySelector('#btn-arc-sms-autofill');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        // Auto fill into setup sms input or challenge input
+        const setupIn = document.getElementById('arc-2fa-setup-sms-input');
+        if (setupIn && setupIn.offsetParent !== null) {
+          setupIn.value = code;
+          verifySetupSms();
+        }
+        const chalIn = document.getElementById('arc-2fa-challenge-input');
+        if (chalIn && chalIn.offsetParent !== null) {
+          chalIn.value = code;
+          submitChallengeUnlock();
+        }
+        banner.remove();
+      });
+    }
+
+    if (window.playSfx) window.playSfx('chime');
+
+    setTimeout(() => {
+      if (document.body.contains(banner)) banner.remove();
+    }, 12000);
+  }
+
+  // --- SMS DISPATCH HELPER ---
+  function dispatchSms(phoneNumber) {
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    localStorage.setItem(KEY_SMS_CODE, code);
+    localStorage.setItem(KEY_SMS_EXP, String(Date.now() + 10 * 60 * 1000));
+    showSmsNotification(phoneNumber, code);
+    return code;
+  }
+
+  // --- MODAL CONTROLS ---
+  function openSetupModal() {
+    const modal = document.getElementById('pp-sec-2fa-modal');
+    if (!modal) return;
+
+    const activeView = document.getElementById('arc-2fa-active-view');
+    const setupView = document.getElementById('arc-2fa-setup-view');
+    const badge = document.getElementById('arc-2fa-modal-status-badge');
+
+    if (isEnabled()) {
+      // Show active management
+      if (badge) {
+        badge.textContent = 'ACTIVE';
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      }
+      if (activeView) activeView.classList.remove('hidden');
+      if (setupView) setupView.classList.add('hidden');
+      renderActiveManagementView();
+    } else {
+      // Show setup wizard
+      if (badge) {
+        badge.textContent = 'OPTIONAL • INACTIVE';
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700';
+      }
+      if (activeView) activeView.classList.add('hidden');
+      if (setupView) setupView.classList.remove('hidden');
+      startSetupFlow();
+    }
+
+    modal.classList.add('open');
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function closeSetupModal() {
+    const modal = document.getElementById('pp-sec-2fa-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    if (window.playSfx) window.playSfx('modalClose');
+  }
+
+  function startSetupFlow() {
+    _stagedMethod = 'authenticator';
+    _stagedSecret = generateSecretBase32();
+    _stagedCodes = generate5BackupCodes();
+    _stagedVerified = false;
+
+    selectMethod('authenticator');
+
+    // Populate Authenticator QR and Secret Key
+    const qrBox = document.getElementById('arc-2fa-qr-code-box');
+    const secDisp = document.getElementById('arc-2fa-secret-display');
+    const totpIn = document.getElementById('arc-2fa-setup-totp-input');
+    const err = document.getElementById('arc-2fa-setup-totp-err');
+
+    if (totpIn) totpIn.value = '';
+    if (err) err.textContent = '';
+    if (secDisp) secDisp.value = _stagedSecret;
+
+    if (qrBox) {
+      const uri = `otpauth://totp/ArcTracker:Operative?secret=${_stagedSecret}&issuer=ArcTracker&algorithm=SHA1&digits=6&period=30`;
+      qrBox.innerHTML = QR.toSVG(uri, 140);
+    }
+
+    // Render 5 Backup Codes in Setup
+    renderSetupBackupCodes();
+
+    const chk = document.getElementById('arc-2fa-confirm-saved-chk');
+    if (chk) chk.checked = false;
+
+    updateActivateButtonState();
+  }
+
+  function renderSetupBackupCodes() {
+    const grid = document.getElementById('arc-2fa-setup-codes-grid');
+    if (!grid) return;
+    grid.innerHTML = _stagedCodes.map((item, idx) => `
+      <div class="p-2 rounded-lg bg-black/70 border border-slate-800 flex items-center justify-between">
+        <span class="text-slate-400 text-[10px]">#${idx + 1}</span>
+        <span class="text-cyan-300 font-bold font-mono tracking-wider">${item.code}</span>
+        <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">VALID</span>
+      </div>
+    `).join('');
+  }
+
+  function selectMethod(method) {
+    _stagedMethod = method;
+    _stagedVerified = false;
+
+    const btnAuth = document.getElementById('arc-2fa-choice-authenticator');
+    const btnPhone = document.getElementById('arc-2fa-choice-phone');
+    const cfgAuth = document.getElementById('arc-2fa-config-authenticator');
+    const cfgPhone = document.getElementById('arc-2fa-config-phone');
+
+    if (method === 'authenticator') {
+      if (btnAuth) {
+        btnAuth.className = 'p-3 rounded-xl border-2 border-cyan-400 bg-cyan-950/40 text-left transition relative select-none';
+        const chk = btnAuth.querySelector('.check-icon');
+        if (chk) chk.classList.remove('hidden');
+      }
+      if (btnPhone) {
+        btnPhone.className = 'p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-600 text-left transition relative select-none';
+        const chk = btnPhone.querySelector('.check-icon');
+        if (chk) chk.classList.add('hidden');
+      }
+      if (cfgAuth) cfgAuth.classList.remove('hidden');
+      if (cfgPhone) cfgPhone.classList.add('hidden');
+    } else {
+      if (btnPhone) {
+        btnPhone.className = 'p-3 rounded-xl border-2 border-indigo-400 bg-indigo-950/40 text-left transition relative select-none';
+        const chk = btnPhone.querySelector('.check-icon');
+        if (chk) chk.classList.remove('hidden');
+      }
+      if (btnAuth) {
+        btnAuth.className = 'p-3 rounded-xl border-2 border-slate-700 bg-slate-900/60 hover:border-slate-600 text-left transition relative select-none';
+        const chk = btnAuth.querySelector('.check-icon');
+        if (chk) chk.classList.add('hidden');
+      }
+      if (cfgAuth) cfgAuth.classList.add('hidden');
+      if (cfgPhone) cfgPhone.classList.remove('hidden');
+    }
+
+    updateActivateButtonState();
+    if (window.playSfx) window.playSfx('click');
+  }
+
+  async function fillCurrentTOTP() {
+    const code = await generateTOTP(_stagedSecret);
+    const inEl = document.getElementById('arc-2fa-setup-totp-input');
+    if (inEl) {
+      inEl.value = code;
+      verifySetupCode();
+    }
+  }
+
+  async function verifySetupCode() {
+    const inEl = document.getElementById('arc-2fa-setup-totp-input');
+    const err = document.getElementById('arc-2fa-setup-totp-err');
+    if (err) err.textContent = '';
+    const val = (inEl ? inEl.value : '').trim();
+    if (!val || val.length !== 6) {
+      if (err) err.textContent = 'Please enter a 6-digit code from Google Authenticator.';
+      return;
+    }
+
+    const ok = await verifyTOTP(_stagedSecret, val);
+    if (ok) {
+      _stagedVerified = true;
+      if (err) {
+        err.className = 'text-xs text-emerald-400 font-mono mt-1 min-h-[1rem]';
+        err.textContent = '✓ Google Authenticator code verified successfully!';
+      }
+      if (window.playSfx) window.playSfx('fanfare');
+      updateActivateButtonState();
+    } else {
+      _stagedVerified = false;
+      if (err) {
+        err.className = 'text-xs text-rose-400 font-mono mt-1 min-h-[1rem]';
+        err.textContent = 'Incorrect code. Please make sure phone time is synchronized.';
+      }
+      if (window.playSfx) window.playSfx('uncheck');
+      updateActivateButtonState();
+    }
+  }
+
+  function sendSetupSms() {
+    const phoneIn = document.getElementById('arc-2fa-setup-phone-input');
+    const phone = (phoneIn ? phoneIn.value : '').trim();
+    const err = document.getElementById('arc-2fa-setup-sms-err');
+    if (err) err.textContent = '';
+    if (!phone || phone.length < 6) {
+      if (err) err.textContent = 'Please enter a valid mobile phone number.';
+      return;
+    }
+    dispatchSms(phone);
+    if (err) {
+      err.className = 'text-xs text-cyan-400 font-mono min-h-[1rem]';
+      err.textContent = `SMS dispatched to ${phone}. Enter the code below.`;
+    }
+  }
+
+  function verifySetupSms() {
+    const inEl = document.getElementById('arc-2fa-setup-sms-input');
+    const err = document.getElementById('arc-2fa-setup-sms-err');
+    if (err) err.textContent = '';
+    const val = (inEl ? inEl.value : '').trim();
+    const stored = localStorage.getItem(KEY_SMS_CODE);
+    const exp = parseInt(localStorage.getItem(KEY_SMS_EXP) || '0', 10);
+
+    if (!val) {
+      if (err) err.textContent = 'Please enter the 6-digit SMS code.';
+      return;
+    }
+    if (Date.now() > exp) {
+      if (err) err.textContent = 'SMS code has expired. Click Send SMS Code again.';
+      return;
+    }
+    if (val !== stored) {
+      if (err) err.textContent = 'Incorrect SMS verification code.';
+      if (window.playSfx) window.playSfx('uncheck');
+      _stagedVerified = false;
+      updateActivateButtonState();
+      return;
+    }
+
+    _stagedVerified = true;
+    if (err) {
+      err.className = 'text-xs text-emerald-400 font-mono min-h-[1rem]';
+      err.textContent = '✓ Mobile phone verified successfully!';
+    }
+    if (window.playSfx) window.playSfx('fanfare');
+    updateActivateButtonState();
+  }
+
+  function onConfirmSavedChange() {
+    updateActivateButtonState();
+  }
+
+  function updateActivateButtonState() {
+    const chk = document.getElementById('arc-2fa-confirm-saved-chk');
+    const btn = document.getElementById('btn-arc-2fa-activate');
+    if (!btn) return;
+    const isSavedConfirmed = chk ? chk.checked : false;
+    btn.disabled = !(_stagedVerified && isSavedConfirmed);
+  }
+
+  function copySecretKey() {
+    const secDisp = document.getElementById('arc-2fa-secret-display');
+    const text = secDisp ? secDisp.value : _stagedSecret;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      if (typeof showToast === 'function') showToast('Secret Key copied to clipboard');
+      if (window.playSfx) window.playSfx('click');
+    }
+  }
+
+  function copySetupBackupCodes() {
+    const lines = [
+      'ARC TRACKER - EMERGENCY BACKUP CODES',
+      `Generated: ${new Date().toISOString()}`,
+      'Keep these 5 single-use codes in a secure offline location.',
+      '',
+      ..._stagedCodes.map((c, i) => `Code #${i + 1}: ${c.code}`),
+      ''
+    ].join('\n');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(lines);
+      if (typeof showToast === 'function') showToast('5 Backup Codes copied to clipboard');
+      if (window.playSfx) window.playSfx('click');
+    }
+  }
+
+  function downloadSetupBackupCodes() {
+    const lines = [
+      'ARC TRACKER - EMERGENCY BACKUP CODES',
+      `Generated: ${new Date().toISOString()}`,
+      'Keep these 5 single-use codes in a secure offline location.',
+      '',
+      ..._stagedCodes.map((c, i) => `Code #${i + 1}: ${c.code}`),
+      ''
+    ].join('\n');
+    const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'arc-tracker-backup-codes.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    if (typeof showToast === 'function') showToast('Backup codes saved to arc-tracker-backup-codes.txt');
+  }
+
+  function activateTwoFactor() {
+    if (!_stagedVerified) return;
+    const phoneIn = document.getElementById('arc-2fa-setup-phone-input');
+    const phone = (phoneIn ? phoneIn.value : '').trim();
+
+    localStorage.setItem(KEY_ENABLED, 'true');
+    localStorage.setItem(KEY_METHOD, _stagedMethod);
+    localStorage.setItem(KEY_SECRET, _stagedSecret);
+    localStorage.setItem(KEY_PHONE, phone || '+1 (555) 234-5678');
+    localStorage.setItem(KEY_BACKUP_CODES, JSON.stringify(_stagedCodes));
+
+    closeSetupModal();
+    updateSettingsRow();
+
+    if (window.playSfx) window.playSfx('victory');
+    if (typeof showToast === 'function') {
+      showToast('🛡️ Two-Step Verification is now ACTIVE and protecting your app!');
+    }
+  }
+
+  // --- ACTIVE MANAGEMENT VIEW ---
+  function renderActiveManagementView() {
+    const method = getMethod();
+    const nameEl = document.getElementById('arc-2fa-active-method-name');
+    const detailEl = document.getElementById('arc-2fa-active-method-detail');
+    const codesBadge = document.getElementById('arc-2fa-active-codes-badge');
+    const grid = document.getElementById('arc-2fa-active-codes-grid');
+
+    if (nameEl) {
+      nameEl.textContent = method === 'phone' ? 'Phone Number (SMS)' : 'Google Authenticator';
+    }
+    if (detailEl) {
+      detailEl.textContent = method === 'phone'
+        ? `Verified Mobile: ${getPhone()}`
+        : 'Time-Based One-Time Passwords (RFC 6238 Standard)';
+    }
+
+    const codes = getBackupCodes();
+    const unused = codes.filter(c => !c.used).length;
+    if (codesBadge) {
+      codesBadge.textContent = `${unused} of 5 Available`;
+      codesBadge.className = unused > 0 ? 'text-[10px] font-mono text-cyan-300' : 'text-[10px] font-mono text-rose-400 font-bold';
+    }
+
+    if (grid) {
+      grid.innerHTML = codes.map((item, idx) => `
+        <div class="p-2 rounded-lg bg-black/70 border ${item.used ? 'border-slate-800 opacity-60' : 'border-slate-700'} flex items-center justify-between">
+          <span class="text-slate-400 text-[10px]">#${idx + 1}</span>
+          <span class="${item.used ? 'text-slate-500 line-through' : 'text-cyan-300 font-bold'} font-mono tracking-wider">${item.code}</span>
+          <span class="text-[9px] uppercase px-1.5 py-0.5 rounded ${item.used ? 'bg-slate-800 text-slate-400 border border-slate-700' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'}">
+            ${item.used ? 'USED' : 'AVAILABLE'}
+          </span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function copyBackupCodes() {
+    const codes = getBackupCodes();
+    const lines = [
+      'ARC TRACKER - EMERGENCY BACKUP CODES',
+      `Generated: ${new Date().toISOString()}`,
+      ...codes.map((c, i) => `Code #${i + 1}: ${c.code} [${c.used ? 'USED' : 'AVAILABLE'}]`)
+    ].join('\n');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(lines);
+      if (typeof showToast === 'function') showToast('Backup codes copied');
+      if (window.playSfx) window.playSfx('click');
+    }
+  }
+
+  function downloadBackupCodes() {
+    const codes = getBackupCodes();
+    const lines = [
+      'ARC TRACKER - EMERGENCY BACKUP CODES',
+      `Generated: ${new Date().toISOString()}`,
+      ...codes.map((c, i) => `Code #${i + 1}: ${c.code} [${c.used ? 'USED' : 'AVAILABLE'}]`)
+    ].join('\n');
+    const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'arc-tracker-backup-codes.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    if (typeof showToast === 'function') showToast('Backup codes downloaded');
+  }
+
+  function regenerateBackupCodes() {
+    if (!confirm('Regenerate 5 new backup codes? Any previously issued backup codes will become invalid.')) return;
+    const newCodes = generate5BackupCodes();
+    localStorage.setItem(KEY_BACKUP_CODES, JSON.stringify(newCodes));
+    renderActiveManagementView();
+    updateSettingsRow();
+    if (window.playSfx) window.playSfx('fanfare');
+    if (typeof showToast === 'function') showToast('5 fresh backup codes generated');
+  }
+
+  // --- REMOVAL OF 2FA ---
+  function confirmRemove() {
+    const msg = 'Are you sure you want to remove Two-Step Verification?\n\nYour account will no longer require a second authentication step to unlock.';
+    if (!confirm(msg)) return;
+
+    removeTwoFactor();
+  }
+
+  function removeTwoFactor() {
+    localStorage.removeItem(KEY_ENABLED);
+    localStorage.removeItem(KEY_METHOD);
+    localStorage.removeItem(KEY_SECRET);
+    localStorage.removeItem(KEY_PHONE);
+    localStorage.removeItem(KEY_BACKUP_CODES);
+    localStorage.removeItem(KEY_SMS_CODE);
+    localStorage.removeItem(KEY_SMS_EXP);
+
+    closeSetupModal();
+    updateSettingsRow();
+
+    if (window.playSfx) window.playSfx('modalClose');
+    if (typeof showToast === 'function') {
+      showToast('Two-Step Verification removed successfully.');
+    }
+  }
+
+  // --- SETTINGS DRAWER ROW UPDATE ---
+  function updateSettingsRow() {
+    const badge = document.getElementById('sec-2fa-badge');
+    const btnOpen = document.getElementById('btn-sec-open-2fa');
+    const btnRemove = document.getElementById('btn-sec-remove-2fa');
+    const methodText = document.getElementById('sec-2fa-method-text');
+    const codesCount = document.getElementById('sec-2fa-codes-count');
+
+    const active = isEnabled();
+    const method = getMethod();
+    const remaining = getRemainingCodesCount();
+
+    if (badge) {
+      if (active) {
+        badge.textContent = `ACTIVE (${method === 'phone' ? 'SMS' : 'AUTHENTICATOR'})`;
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      } else {
+        badge.textContent = 'OPTIONAL • DISABLED';
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700';
+      }
+    }
+
+    if (btnOpen) {
+      btnOpen.innerHTML = active
+        ? '<i class="fa-solid fa-gear mr-1"></i> Manage 2FA &amp; Codes'
+        : '<i class="fa-solid fa-shield-halved mr-1"></i> Setup Two-Step Verification';
+    }
+
+    if (btnRemove) {
+      btnRemove.classList.toggle('hidden', !active);
+    }
+
+    if (methodText) {
+      methodText.textContent = active
+        ? (method === 'phone' ? 'SMS Phone' : 'Google Authenticator')
+        : 'None';
+    }
+
+    if (codesCount) {
+      codesCount.textContent = active ? `${remaining} of 5 available` : '5 unused';
+    }
+  }
+
+  // --- LOCK OVERLAY STEP 2 CHALLENGE ---
+  function resetOverlaySteps() {
+    const s1 = document.getElementById('arc-lock-step-1');
+    const s2 = document.getElementById('arc-lock-step-2');
+    _challengeIsBackupMode = false;
+
+    if (s1) s1.classList.remove('hidden');
+    if (s2) s2.classList.add('hidden');
+
+    const err = document.getElementById('arc-2fa-challenge-err');
+    if (err) err.textContent = '';
+    const inEl = document.getElementById('arc-2fa-challenge-input');
+    if (inEl) inEl.value = '';
+    const bIn = document.getElementById('arc-2fa-backup-input');
+    if (bIn) bIn.value = '';
+  }
+
+  function showChallengeInOverlay() {
+    const s1 = document.getElementById('arc-lock-step-1');
+    const s2 = document.getElementById('arc-lock-step-2');
+    const desc = document.getElementById('arc-2fa-challenge-desc');
+    const smsWrap = document.getElementById('arc-2fa-sms-resend-wrap');
+    const digitWrap = document.getElementById('arc-2fa-digit-wrap');
+    const backupWrap = document.getElementById('arc-2fa-backup-wrap');
+    const inEl = document.getElementById('arc-2fa-challenge-input');
+    const err = document.getElementById('arc-2fa-challenge-err');
+
+    if (err) err.textContent = '';
+    if (inEl) inEl.value = '';
+
+    if (s1) s1.classList.add('hidden');
+    if (s2) {
+      s2.classList.remove('hidden');
+      s2.classList.add('flex');
+    }
+
+    _challengeIsBackupMode = false;
+    if (digitWrap) digitWrap.classList.remove('hidden');
+    if (backupWrap) backupWrap.classList.add('hidden');
+
+    const method = getMethod();
+    if (method === 'phone') {
+      const phone = getPhone();
+      if (desc) desc.textContent = `Enter 6-digit SMS code sent to ${phone}`;
+      if (smsWrap) smsWrap.classList.remove('hidden');
+      // Dispatch fresh SMS on challenge show
+      dispatchSms(phone);
+    } else {
+      if (desc) desc.textContent = 'Enter 6-digit code from Google Authenticator';
+      if (smsWrap) smsWrap.classList.add('hidden');
+    }
+
+    if (inEl) setTimeout(() => inEl.focus(), 150);
+    if (window.playSfx) window.playSfx('modalOpen');
+  }
+
+  function backToPasswordStep() {
+    resetOverlaySteps();
+    const passIn = document.getElementById('arc-lock-pass-input');
+    if (passIn) setTimeout(() => passIn.focus(), 150);
+    if (window.playSfx) window.playSfx('click');
+  }
+
+  function resendChallengeSms() {
+    const phone = getPhone();
+    dispatchSms(phone);
+    if (typeof showToast === 'function') showToast(`SMS resent to ${phone}`);
+  }
+
+  function toggleChallengeMode() {
+    _challengeIsBackupMode = !_challengeIsBackupMode;
+    const digitWrap = document.getElementById('arc-2fa-digit-wrap');
+    const backupWrap = document.getElementById('arc-2fa-backup-wrap');
+    const toggleText = document.getElementById('arc-2fa-toggle-mode-text');
+    const err = document.getElementById('arc-2fa-challenge-err');
+    if (err) err.textContent = '';
+
+    if (_challengeIsBackupMode) {
+      if (digitWrap) digitWrap.classList.add('hidden');
+      if (backupWrap) backupWrap.classList.remove('hidden');
+      if (toggleText) toggleText.textContent = 'Use 6-Digit Authenticator Code';
+      const bIn = document.getElementById('arc-2fa-backup-input');
+      if (bIn) setTimeout(() => bIn.focus(), 150);
+    } else {
+      if (digitWrap) digitWrap.classList.remove('hidden');
+      if (backupWrap) backupWrap.classList.add('hidden');
+      if (toggleText) toggleText.textContent = 'Use an Emergency Backup Code';
+      const inEl = document.getElementById('arc-2fa-challenge-input');
+      if (inEl) setTimeout(() => inEl.focus(), 150);
+    }
+
+    if (window.playSfx) window.playSfx('click');
+  }
+
+  async function submitChallengeUnlock() {
+    const err = document.getElementById('arc-2fa-challenge-err');
+    if (err) err.textContent = '';
+
+    if (_challengeIsBackupMode) {
+      // Validate emergency backup code
+      const bIn = document.getElementById('arc-2fa-backup-input');
+      const val = (bIn ? bIn.value : '').trim().toUpperCase().replace(/[\s-]/g, '');
+      if (!val) {
+        if (err) err.textContent = 'Please enter an 8-character backup code.';
+        return;
+      }
+
+      const codes = getBackupCodes();
+      const match = codes.find(c => c.code.replace('-', '') === val);
+      if (!match) {
+        if (err) err.textContent = 'Invalid backup code. Please check and try again.';
+        if (window.playSfx) window.playSfx('uncheck');
+        return;
+      }
+      if (match.used) {
+        if (err) err.textContent = 'This backup code has already been redeemed.';
+        if (window.playSfx) window.playSfx('uncheck');
+        return;
+      }
+
+      // Mark code used
+      match.used = true;
+      match.usedAt = Date.now();
+      localStorage.setItem(KEY_BACKUP_CODES, JSON.stringify(codes));
+      const remaining = codes.filter(c => !c.used).length;
+
+      // Unlock
+      if (window.ArcSecurity && typeof window.ArcSecurity.hideLockScreen === 'function') {
+        window.ArcSecurity.hideLockScreen();
+      }
+      if (window.ArcSecurity && typeof window.ArcSecurity.showUnlockLoadingScreen === 'function') {
+        window.ArcSecurity.showUnlockLoadingScreen();
+      }
+      if (typeof showToast === 'function') {
+        showToast(`🔑 Backup code verified! (${remaining} of 5 remaining)`);
+      }
+      return;
+    }
+
+    // Validate 6-digit TOTP or SMS code
+    const inEl = document.getElementById('arc-2fa-challenge-input');
+    const val = (inEl ? inEl.value : '').trim();
+    if (!val || val.length !== 6) {
+      if (err) err.textContent = 'Please enter a 6-digit verification code.';
+      return;
+    }
+
+    const method = getMethod();
+    let isOk = false;
+
+    if (method === 'phone') {
+      const stored = localStorage.getItem(KEY_SMS_CODE);
+      const exp = parseInt(localStorage.getItem(KEY_SMS_EXP) || '0', 10);
+      if (Date.now() > exp) {
+        if (err) err.textContent = 'SMS code has expired. Click Resend SMS Code.';
+        return;
+      }
+      isOk = (val === stored);
+    } else {
+      const secret = getSecret();
+      isOk = await verifyTOTP(secret, val);
+    }
+
+    if (isOk) {
+      if (window.ArcSecurity && typeof window.ArcSecurity.hideLockScreen === 'function') {
+        window.ArcSecurity.hideLockScreen();
+      }
+      if (window.ArcSecurity && typeof window.ArcSecurity.showUnlockLoadingScreen === 'function') {
+        window.ArcSecurity.showUnlockLoadingScreen();
+      }
+    } else {
+      if (err) err.textContent = 'Incorrect verification code. Please try again.';
+      if (window.playSfx) window.playSfx('uncheck');
+      if (inEl) {
+        inEl.classList.add('border-rose-500');
+        setTimeout(() => inEl.classList.remove('border-rose-500'), 1000);
+      }
+    }
+  }
+
+  function init() {
+    updateSettingsRow();
+
+    // Listen for Enter on 2FA challenge input
+    const chalIn = document.getElementById('arc-2fa-challenge-input');
+    if (chalIn) {
+      chalIn.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitChallengeUnlock();
+        }
+      });
+    }
+
+    const backupIn = document.getElementById('arc-2fa-backup-input');
+    if (backupIn) {
+      backupIn.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitChallengeUnlock();
+        }
+      });
+    }
+  }
+
+  return {
+    isEnabled,
+    getMethod,
+    getSecret,
+    getPhone,
+    getBackupCodes,
+    getRemainingCodesCount,
+    openSetupModal,
+    closeSetupModal,
+    selectMethod,
+    fillCurrentTOTP,
+    verifySetupCode,
+    sendSetupSms,
+    verifySetupSms,
+    onConfirmSavedChange,
+    copySecretKey,
+    copySetupBackupCodes,
+    downloadSetupBackupCodes,
+    activateTwoFactor,
+    copyBackupCodes,
+    downloadBackupCodes,
+    regenerateBackupCodes,
+    confirmRemove,
+    removeTwoFactor,
+    updateSettingsRow,
+    resetOverlaySteps,
+    showChallengeInOverlay,
+    backToPasswordStep,
+    resendChallengeSms,
+    toggleChallengeMode,
+    submitChallengeUnlock,
+    init
+  };
+})();
+
+// Auto-initialize on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.ArcTwoFactor.init);
+} else {
+  window.ArcTwoFactor.init();
+}
+</script>
+
 <script id="arc-security-js">
 window.ArcSecurity = (function() {
   'use strict';
@@ -11828,6 +13309,9 @@ window.ArcSecurity = (function() {
     const ov = document.getElementById('arc-pin-overlay');
     if (!ov) return;
     _pinBuffer = '';
+    if (window.ArcTwoFactor) {
+      window.ArcTwoFactor.resetOverlaySteps();
+    }
     const passIn = document.getElementById('arc-lock-pass-input');
     if (passIn) passIn.value = '';
     _updatePinDots();
@@ -11982,6 +13466,10 @@ window.ArcSecurity = (function() {
     }
     const ok = await verifyPin(val);
     if (ok) {
+      if (window.ArcTwoFactor && window.ArcTwoFactor.isEnabled()) {
+        window.ArcTwoFactor.showChallengeInOverlay();
+        return true;
+      }
       hideLockScreen();
       showUnlockLoadingScreen();
       return true;
@@ -12214,7 +13702,7 @@ window.ArcSecurity = (function() {
   }
 
   function init() {
-    if (isPinSet()) {
+    if (isPinSet() || (window.ArcTwoFactor && window.ArcTwoFactor.isEnabled())) {
       setTimeout(showLockScreen, 50);
     }
     updatePinBadge();
@@ -12591,6 +14079,15 @@ window.ArcProfile = (function() {
 
     if (nameEl) nameEl.textContent = p.displayName;
     if (userEl) userEl.textContent = '@' + p.username;
+    const pill = document.getElementById('header-profile-pill');
+    if (pill) {
+      let authUser = null;
+      if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+        authUser = window.ArcGoogleSync.getUser();
+      }
+      const syncInfo = (authUser && authUser.email) ? ` • ${authUser.email}` : '';
+      pill.title = `${p.displayName} (@${p.username})${syncInfo} — Click to customize profile`;
+    }
     if (avatarEl) {
       let authUser = null;
       if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
@@ -15723,6 +17220,7 @@ row('Factory Reset','erase clear wipe danger',`<button role="button" class="pp-b
 row('Antivirus & Integrity Scanner','malware threat scanner security xss audit',`<div class="space-y-2"><div class="flex gap-2"><button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-run-scan"><i class="fa-solid fa-shield-virus mr-1"></i> Run Security Audit</button><button role="button" class="pp-btn text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-clear-log">Clear</button></div><div id="sec-scan-terminal" class="p-2.5 rounded-lg bg-black/80 border border-slate-700 font-mono text-[11px] text-cyan-400 h-36 overflow-y-auto space-y-1"><div class="text-slate-400">> Sentinel Anti-Malware Engine v2.4 initialized.</div><div class="text-slate-400">> Click 'Run Security Audit' to scan habits and verify airgap integrity.</div></div></div>`)+
 row('AES-256 Encrypted Backups','encryption aes-256 backup password export leak protection',`<div class="grid grid-cols-2 gap-2"><button role="button" class="pp-btn text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-exp-enc"><i class="fa-solid fa-lock mr-1"></i> Export (.arcenc)</button><button role="button" class="pp-btn text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-imp-enc"><i class="fa-solid fa-key mr-1"></i> Import Encrypted</button></div><input type="file" id="pp-enc-file" accept=".arcenc,.json,application/json" class="hidden" aria-label="Import encrypted backup">`)+
 row('App Security PIN Lock','app pin lock passcode privacy authentication',`<div class="flex gap-2"><button role="button" class="pp-btn flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-toggle-pin">Setup Security PIN</button><button role="button" class="pp-btn text-rose-300 border-rose-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 hidden" id="btn-sec-lock-now"><i class="fa-solid fa-lock mr-1"></i> Lock Now</button></div>`)+
+row('Two-Step Verification (2FA)','two step factor 2fa google authenticator sms phone backup codes security',`<div class="space-y-2"><div class="flex items-center justify-between text-xs"><span class="font-bold text-slate-300">Status:</span><span id="sec-2fa-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">OPTIONAL • DISABLED</span></div><div class="flex gap-2"><button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-bold" id="btn-sec-open-2fa"><i class="fa-solid fa-shield-halved mr-1"></i> Setup Two-Step Verification</button><button role="button" class="pp-btn text-rose-400 border-rose-500/30 hover:bg-rose-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 hidden" id="btn-sec-remove-2fa" title="Disable Two-Step Verification"><i class="fa-solid fa-trash-can mr-1"></i> Remove</button></div><div id="sec-2fa-info" class="text-[11px] text-slate-400 flex items-center justify-between"><span>Method: <b id="sec-2fa-method-text" class="text-slate-300 font-mono">None</b></span><span>Backup Codes: <b id="sec-2fa-codes-count" class="text-slate-300 font-mono">5 unused</b></span></div></div>`)+
 row('State Integrity Checksum','checksum hash sha-256 verification tamper proof',`<div class="p-2 rounded bg-slate-900 border border-slate-800 font-mono text-[10px] text-slate-300 break-all" id="sec-checksum-disp">Computing SHA-256 hash...</div>`)+
 `</section>`}
 function ui(){const s=S(),pct=['masterVolume','sfxVolume','ambientVolume','noiseOpacity'];
@@ -15748,7 +17246,7 @@ function tab(n){TAB=n;$$('.pp-tab').forEach(b=>{const on=b.dataset.t===n;b.class
  $$('.pp-panel').forEach(p=>{p.style.display=p.dataset.p===n?'block':'none'});$$('.pp-row').forEach(r=>{r.style.display=''});$('#settings-search').value='';
  if(n==='account'&&window.ArcGoogleSync){window.ArcGoogleSync.renderUi();}
  if(n==='habit')heat();if(n==='focus')stats();if(n==='sys')listRev();
- if(n==='sec'&&window.ArcSecurity){window.ArcSecurity.computeStateHash().then(c=>{const el=$('#sec-checksum-disp');if(el)el.textContent=c});window.ArcSecurity.updatePinBadge();}}
+ if(n==='sec'&&window.ArcSecurity){window.ArcSecurity.computeStateHash().then(c=>{const el=$('#sec-checksum-disp');if(el)el.textContent=c});window.ArcSecurity.updatePinBadge();if(window.ArcTwoFactor)window.ArcTwoFactor.updateSettingsRow();}}
 
 /* ---------- MODALS, FOCUS TRAP, HOTKEYS ---------- */
 const foc=c=>$$('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])',c).filter(x=>!x.disabled&&x.offsetParent!==null);
@@ -15800,7 +17298,9 @@ function bind(){D=$('#pp12-drawer');
    case'btn-sec-clear-log':{const t=$('#sec-scan-terminal');if(t)t.innerHTML='<div class="text-slate-400">> Log cleared. System protected.</div>';}break;
    case'btn-sec-exp-enc':if(window.ArcSecurity)window.ArcSecurity.openEncExportModal();break;
    case'btn-sec-imp-enc':$('#pp-enc-file').click();break;
-   case'btn-sec-toggle-pin':if(window.ArcSecurity)window.ArcSecurity.openPinModal();break;
+   case'btn-sec-open-2fa':if(window.ArcTwoFactor)window.ArcTwoFactor.openSetupModal();break;
+case'btn-sec-remove-2fa':if(window.ArcTwoFactor)window.ArcTwoFactor.confirmRemove();break;
+case'btn-sec-toggle-pin':if(window.ArcSecurity)window.ArcSecurity.openPinModal();break;
    case'btn-sec-lock-now':if(window.ArcSecurity)window.ArcSecurity.showLockScreen();break;}});
  const pef=$('#pp-enc-file');
  if(pef)pef.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
@@ -16592,8 +18092,8 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   row('Summer Arc quotes','',sw('sx-q-summer',Q.touched?Q.summer:sum,'Summer Arc quotes'))+
   row('My quotes','Shown alongside the categories above',sw('sx-q-custom',Q.custom,'My quotes'))+
   '<div class="space-y-2"><textarea id="sx-qt" rows="2" maxlength="240" class="sx-in w-full" placeholder="Write your own quote" aria-label="Custom quote"></textarea><div class="flex gap-2"><input id="sx-qa" maxlength="60" class="sx-in flex-1 min-w-0" placeholder="Author (optional)" aria-label="Quote author"><button class="sx-btn sx-pri shrink-0" data-a="qadd"><i class="fa-solid fa-plus"></i> Add</button></div></div><ul id="sx-ql" class="space-y-1">'+quotesHtml()+'</ul>')+
- card('fa-scale-balanced','Habit rules & scoring','Weight categories, reorder the checklist and protect your streak.',
-  sub('Category weights')+'<div id="sx-w">'+weightsHtml()+'</div>'+sub('Checklist order')+'<ul id="sx-ho" class="space-y-1">'+habitsHtml()+'</ul>'+
+ card('fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.',
+  sub('Category weights')+'<div id="sx-w">'+weightsHtml()+'</div>'+
   sub('Streak freeze')+row('Free miss','One missed day per calendar month keeps your streak',sw('sx-fz',cfg.freeze.on,'Streak freeze'))+'<div id="sx-fzs" class="text-[11px] text-slate-500"></div>');
  arcLabels();gauge();fzStatus()}
 
@@ -16643,7 +18143,7 @@ function wire(){const r=q('#sx-root');if(!r)return;
   else if(id==='sx-start'||id==='sx-end')setArc(q('#sx-start').value,q('#sx-end').value);
   else if(id.startsWith('sx-q-')){const w=q('#sx-q-winter').checked,s=q('#sx-q-summer').checked,c=q('#sx-q-custom').checked;
    if(!w&&!s&&!c){t.checked=true;return bad('Keep at least one quote category on')}Object.assign(cfg.quotes,{touched:true,winter:w,summer:s,custom:c});save();requote()}
-  else if(id==='sx-fz'){cfg.freeze.on=t.checked;save();refreshApp();fzStatus();ok(t.checked?'Streak freeze on':'Streak freeze off')}
+  else if(id==='sx-fz'){cfg.freeze.on=t.checked;save();refreshApp();fzStatus();if(typeof window.updateRulesFreezeUI==='function')window.updateRulesFreezeUI();ok(t.checked?'Streak freeze on':'Streak freeze off')}
   else if(t.dataset&&t.dataset.w){const w=+t.value,c=t.dataset.w;if(!w)return;cfg.weights[c]=w;applyWeights();save();refreshApp();q('#sx-w').innerHTML=weightsHtml();q('#sx-ho').innerHTML=habitsHtml();ok(c+' habits now '+w+'x')}});
  r.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v,i=+b.dataset.i;sfx('click');
   if(a==='export')exportBackup();
@@ -19172,21 +20672,18 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
           v.classList.add('tab-view-enter');
         }
       }
-      if (dTab) {
-        dTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
-        if (t === tabName) {
-          dTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5 bg-cyan-500 text-black shadow-md shadow-cyan-500/20";
-        } else {
-          dTab.className = "px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] flex items-center space-x-1.5";
-        }
+      const theme = window.ARC_TAB_THEMES && window.ARC_TAB_THEMES[t];
+      if (dTab && theme) {
+        const isTarget = (t === tabName);
+        dTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        dTab.className = isTarget ? theme.active : theme.inactive;
+        const icon = dTab.querySelector('i');
+        if (icon) icon.className = isTarget ? theme.iconActive : theme.iconInactive;
       }
-      if (mTab) {
-        mTab.setAttribute('aria-selected', t === tabName ? 'true' : 'false');
-        if (t === tabName) {
-          mTab.className = "flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-cyan-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]";
-        } else {
-          mTab.className = "flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]";
-        }
+      if (mTab && theme) {
+        const isTarget = (t === tabName);
+        mTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        mTab.className = `flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out ${isTarget ? theme.mobileActive : theme.mobileInactive} hover:scale-[1.02] active:scale-95`;
       }
     });
 
