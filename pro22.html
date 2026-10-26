@@ -10679,11 +10679,12 @@ html[data-mode=light] .phone-widget-card .text-white {
 /* Smartphone Simulator Frame */
 .arc-phone-frame {
     width: 100%;
-    max-width: 380px;
+    max-width: min(380px, calc(100vw - 2rem));
     height: 720px;
-    border-radius: 46px;
+    max-height: min(720px, calc(100dvh - 5rem - env(safe-area-inset-bottom, 0px)));
+    border-radius: clamp(24px, 6vw, 46px);
     background: #000000;
-    border: 8px solid #27272a;
+    border: 6px solid #27272a;
     box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
@@ -15858,6 +15859,7 @@ window.ArcPhoneWidgets = (function() {
 // ============================================================================
 window.ArcGold = (function() {
   const STORAGE_KEY = 'arc_gold_membership';
+  const MAX_AUTHORIZED_USERS = 2; // Strict 2 users maximum per Gold license to prevent account sharing
   const PLANS = {
     trial: {
       id: 'trial',
@@ -15867,10 +15869,12 @@ window.ArcGold = (function() {
       symbol: '₹',
       displayPrice: 'FREE',
       periodText: 'first month',
+      maxUsers: 2,
       badge: '🎁 30-DAY FREE TRIAL',
       badgeColor: 'bg-gradient-to-r from-emerald-500/20 to-teal-500/30 text-emerald-300 border-emerald-400/50',
-      desc: 'Automatic first-month perk upon login. Includes full 120Hz ProMotion & Custom Wallpaper.',
+      desc: 'Automatic first-month perk upon login. Includes 2 authorized users/devices & full 120Hz ProMotion.',
       features: [
+        '👥 Dual-User License (Max 2 Users Only)',
         '120Hz Ultra-Smooth ProMotion',
         'Custom Photo Wallpaper Background',
         'Uncapped Max Frame Rate Engine',
@@ -15886,10 +15890,12 @@ window.ArcGold = (function() {
       symbol: '₹',
       displayPrice: '₹79',
       periodText: '/ month',
+      maxUsers: 2,
       badge: 'FLEXIBLE',
       badgeColor: 'bg-slate-700 text-slate-300 border-slate-600',
-      desc: 'Flexible month-to-month access. Cancel anytime with zero penalty.',
+      desc: 'Flexible month-to-month access for up to 2 users. Cancel anytime with zero penalty.',
       features: [
+        '👥 Dual-User License (Max 2 Users Only)',
         '120Hz Ultra-Smooth ProMotion',
         'Custom Photo Wallpaper Background',
         'Uncapped Max Frame Rate Engine',
@@ -15905,10 +15911,12 @@ window.ArcGold = (function() {
       symbol: '₹',
       displayPrice: '₹365',
       periodText: '/ year',
+      maxUsers: 2,
       badge: '⭐ MOST POPULAR · ₹1/DAY',
       badgeColor: 'bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border-amber-400/50',
-      desc: 'Save 61% compared to monthly. Full 365 days of uninterrupted ultra smoothness.',
+      desc: 'Save 61% compared to monthly. Full 365 days of uninterrupted ultra smoothness for 2 users.',
       features: [
+        '👥 Dual-User License (Max 2 Users Only)',
         'Everything in Monthly Pass',
         'Custom Photo Wallpaper Background',
         'Costs just ₹1 per day (Save 61%)',
@@ -15924,10 +15932,12 @@ window.ArcGold = (function() {
       symbol: '₹',
       displayPrice: '₹700',
       periodText: 'one-time',
+      maxUsers: 2,
       badge: '👑 FOUNDER EDITION',
       badgeColor: 'bg-gradient-to-r from-yellow-500/20 via-amber-500/30 to-yellow-500/20 text-yellow-300 border-yellow-400/50',
-      desc: 'Single one-time payment. Own ProMotion 120Hz forever with VIP Founder prestige.',
+      desc: 'Single one-time payment. Own ProMotion 120Hz forever with VIP Founder prestige for 2 users.',
       features: [
+        '👥 Dual-User License (Max 2 Users Only)',
         'Permanent Lifetime 120Hz Access',
         'Custom Photo Wallpaper Background',
         'Zero Recurring Fees Forever',
@@ -16088,14 +16098,128 @@ window.ArcGold = (function() {
     }
   }
 
+  function getAuthorizedUsers() {
+    const s = getState();
+    if (!s || !s.isGold) return [];
+    if (Array.isArray(s.authorizedUsers) && s.authorizedUsers.length > 0) {
+      return s.authorizedUsers.slice(0, MAX_AUTHORIZED_USERS);
+    }
+    const loggedIn = window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function' ? window.ArcGoogleSync.getUser() : null;
+    const id = (loggedIn && loggedIn.email) ? loggedIn.email.toLowerCase().trim() : (s.trialUser || 'primary_operative');
+    const name = (loggedIn && loggedIn.name) ? loggedIn.name : 'Primary Operative';
+    return [{ id: id, name: name, addedAt: s.activatedAt || Date.now(), isPrimary: true }];
+  }
+
+  function registerUser(userOrId) {
+    const s = getState();
+    if (!s || !s.isGold) {
+      if (typeof showToast === 'function') showToast('Arc Gold membership required to add authorized users.');
+      return { success: false, reason: 'No active Gold membership' };
+    }
+    let users = getAuthorizedUsers();
+    const userId = typeof userOrId === 'object' && userOrId ? (userOrId.email || userOrId.id || userOrId.name) : String(userOrId || '');
+    const userName = typeof userOrId === 'object' && userOrId ? (userOrId.name || userOrId.email || 'Operative') : String(userOrId || 'Operative');
+
+    if (!userId || !userId.trim()) return { success: false, reason: 'Invalid user identification' };
+
+    const cleanId = userId.toLowerCase().trim();
+    if (users.some(u => (u.id || '').toLowerCase() === cleanId)) {
+      if (typeof showToast === 'function') showToast(`User "${userName}" is already registered on this Arc Gold plan.`);
+      return { success: true, alreadyRegistered: true, users: users };
+    }
+
+    if (users.length >= MAX_AUTHORIZED_USERS) {
+      const msg = '🔒 Arc Gold Account Limit Reached: Only 2 users are allowed per Gold plan to prevent multiple users using one account.';
+      if (typeof showToast === 'function') showToast(msg);
+      return {
+        success: false,
+        reason: 'Maximum of 2 users allowed per Arc Gold account to prevent account sharing.',
+        users: users
+      };
+    }
+
+    users.push({
+      id: cleanId,
+      name: userName.trim(),
+      addedAt: Date.now(),
+      isPrimary: false
+    });
+
+    s.authorizedUsers = users;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    render();
+    if (typeof showToast === 'function') {
+      showToast(`✅ Added ${userName} as 2nd authorized user on Arc Gold (2/2 slots filled).`);
+    }
+    return { success: true, users: users };
+  }
+
+  function removeAuthorizedUser(userId) {
+    const s = getState();
+    if (!s || !s.isGold) return false;
+    let users = getAuthorizedUsers();
+    const cleanId = (userId || '').toLowerCase().trim();
+    const target = users.find(u => (u.id || '').toLowerCase() === cleanId);
+    if (!target) return false;
+
+    if (target.isPrimary || users.indexOf(target) === 0) {
+      if (typeof showToast === 'function') {
+        showToast('⚠️ Cannot remove Primary Account Holder. Slot 1 is reserved for the primary user.');
+      }
+      return false;
+    }
+
+    users = users.filter(u => (u.id || '').toLowerCase() !== cleanId);
+    s.authorizedUsers = users;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    render();
+    if (typeof showToast === 'function') {
+      showToast('Removed authorized user. 1 slot is now open on your Arc Gold account.');
+    }
+    return true;
+  }
+
+  function promptAddSecondUser() {
+    const s = getState();
+    if (!s.isGold) {
+      scrollToGoldCard();
+      return;
+    }
+    const input = prompt("Enter Name or Email for the 2nd Authorized User:\n\nNote: Arc Gold is strictly limited to 2 users to prevent account sharing.", "");
+    if (input && input.trim()) {
+      registerUser({ id: input.trim(), name: input.trim() });
+    }
+  }
+
+  function canUserUseGold(userOrId) {
+    if (!isGold()) return false;
+    if (!userOrId) return true;
+    const users = getAuthorizedUsers();
+    if (users.length === 0) return true;
+    const id = (typeof userOrId === 'object' ? (userOrId.email || userOrId.id) : String(userOrId)).toLowerCase().trim();
+    return users.some(u => (u.id || '').toLowerCase() === id);
+  }
+
   function claimFirstMonthTrial(user, isSilent = false) {
     const current = getState();
     if (current.isGold && (current.plan === 'lifetime' || current.plan === 'annual')) {
       return false;
     }
     const email = (user && user.email) ? user.email.toLowerCase().trim() : 'active_user';
+    const userName = (user && user.name) ? user.name : 'Primary Operative';
     const TRIAL_CLAIM_KEY = 'arc_gold_trial_granted_' + email;
     const GLOBAL_TRIAL_CLAIM_KEY = 'arc_gold_first_month_claimed';
+
+    // Anti-account sharing check: If Gold is already active with 2 users and user is not one of them
+    if (current.isGold && Array.isArray(current.authorizedUsers) && current.authorizedUsers.length >= MAX_AUTHORIZED_USERS) {
+      const isAlreadyAuth = current.authorizedUsers.some(u => (u.id || '').toLowerCase() === email.toLowerCase());
+      if (!isAlreadyAuth) {
+        if (!isSilent && typeof showToast === 'function') {
+          showToast('🔒 Arc Gold Account Limit Reached: Max 2 users allowed per plan to prevent account sharing.');
+        }
+        return false;
+      }
+    }
 
     if (localStorage.getItem(TRIAL_CLAIM_KEY) === 'true' || localStorage.getItem(GLOBAL_TRIAL_CLAIM_KEY) === 'true') {
       return false;
@@ -16117,6 +16241,10 @@ window.ArcGold = (function() {
       activatedAt: now,
       expiresAt: expiresAt,
       maxHzEnabled: true,
+      maxUsers: MAX_AUTHORIZED_USERS,
+      authorizedUsers: [
+        { id: email, name: userName, addedAt: now, isPrimary: true }
+      ],
       orderId: 'ARC-FREE-TRIAL-' + Math.random().toString(36).substring(2, 9).toUpperCase()
     };
 
@@ -16142,13 +16270,13 @@ window.ArcGold = (function() {
     if (!isSilent) {
       if (typeof playSfx === 'function') playSfx('victory');
       if (typeof showToast === 'function') {
-        showToast('🎁 Welcome! Your 30-Day Free Arc Gold VIP trial has been automatically activated!');
+        showToast('🎁 Welcome! Your 30-Day Free Arc Gold VIP trial (Dual-User) has been activated!');
       }
     }
     return true;
   }
 
-  function activatePlan(planId) {
+  function activatePlan(planId, user) {
     const plan = PLANS[planId];
     if (!plan) return false;
     const now = Date.now();
@@ -16159,6 +16287,17 @@ window.ArcGold = (function() {
       expiresAt = now + (365 * 24 * 60 * 60 * 1000);
     } else {
       expiresAt = null; // Lifetime
+    }
+
+    const current = getState();
+    let authUsers = [];
+    if (current && Array.isArray(current.authorizedUsers) && current.authorizedUsers.length > 0) {
+      authUsers = current.authorizedUsers.slice(0, MAX_AUTHORIZED_USERS);
+    } else {
+      const loggedIn = user || (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function' ? window.ArcGoogleSync.getUser() : null);
+      const email = (loggedIn && loggedIn.email) ? loggedIn.email.toLowerCase().trim() : 'primary_operative';
+      const name = (loggedIn && loggedIn.name) ? loggedIn.name : 'Primary Operative';
+      authUsers = [{ id: email, name: name, addedAt: now, isPrimary: true }];
     }
 
     const state = {
@@ -16172,6 +16311,8 @@ window.ArcGold = (function() {
       activatedAt: now,
       expiresAt: expiresAt,
       maxHzEnabled: true,
+      maxUsers: MAX_AUTHORIZED_USERS,
+      authorizedUsers: authUsers,
       orderId: 'ARC-GOLD-' + Math.random().toString(36).substring(2, 9).toUpperCase()
     };
 
@@ -16193,7 +16334,7 @@ window.ArcGold = (function() {
       window.SettingsApp.onTab('settings');
     }
     if (typeof showToast === 'function') {
-      showToast('👑 Arc Gold Activated (' + plan.name + ') · 120Hz ProMotion Unlocked!');
+      showToast('👑 Arc Gold Activated (' + plan.name + ' · Max 2 Users) · 120Hz ProMotion Unlocked!');
     }
     return true;
   }
@@ -16590,6 +16731,15 @@ window.ArcGold = (function() {
             </span>
           </div>
 
+          <!-- 2-USER MAXIMUM POLICY NOTICE -->
+          <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-200">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-users text-amber-400 text-sm shrink-0"></i>
+              <span><b>Strict 2-User Guarantee:</b> Every Arc Gold membership is strictly capped at 2 authorized users/devices to prevent multiple users using one account.</span>
+            </div>
+            <span class="font-mono text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/40 font-bold self-start sm:self-center shrink-0">MAX 2 USERS ONLY</span>
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="gold-plans-grid">
             <!-- MONTHLY: ₹79 / month -->
             <div class="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${state.plan === 'monthly' ? 'gold-plan-card-active' : 'bg-slate-950/60 border-slate-800/80 hover:border-amber-500/40'}">
@@ -16700,28 +16850,104 @@ window.ArcGold = (function() {
 
         <!-- ACTIVE SUBSCRIPTION DETAILS (IF ACTIVE) -->
         ${goldActive ? `
-          <div id="gold-active-details" class="p-4 rounded-2xl ${state.isTrial ? 'bg-gradient-to-r from-emerald-950/30 via-slate-900/90 to-amber-950/20 border-emerald-500/40' : 'bg-amber-950/20 border-amber-500/30'} border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-            <div class="space-y-1">
-              <div class="font-bold ${state.isTrial ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-2">
-                <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
-                ${state.isTrial ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase">First Month Free</span>' : ''}
+          <div id="gold-active-details" class="p-4 sm:p-5 rounded-2xl ${state.isTrial ? 'bg-gradient-to-r from-emerald-950/30 via-slate-900/90 to-amber-950/20 border-emerald-500/40' : 'bg-amber-950/20 border-amber-500/30'} border space-y-4 text-xs">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="space-y-1">
+                <div class="font-bold ${state.isTrial ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-2">
+                  <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
+                  ${state.isTrial ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase">First Month Free</span>' : ''}
+                </div>
+                <div class="text-[11px] text-slate-400">
+                  Plan: <b class="text-white">${state.isTrial ? '30-Day Free First Month Pass' : (currentPlan ? currentPlan.name : 'VIP')}</b> (${state.symbol}${state.price}) · Status: <span class="text-emerald-400 font-bold">Active</span> · Expiry: ${expiresFormatted}
+                  ${(function() {
+                    const n = getExpiryNotice();
+                    if (n && n.urgent) {
+                      return ' · <span class="text-amber-400 font-bold animate-pulse">⚠️ Expires in ' + n.daysLeft + ' day' + (n.daysLeft > 1 ? 's' : '') + '!</span>';
+                    }
+                    return '';
+                  })()}
+                </div>
               </div>
-              <div class="text-[11px] text-slate-400">
-                Plan: <b class="text-white">${state.isTrial ? '30-Day Free First Month Pass' : (currentPlan ? currentPlan.name : 'VIP')}</b> (${state.symbol}${state.price}) · Status: <span class="text-emerald-400 font-bold">Active</span> · Expiry: ${expiresFormatted}
-                ${(function() {
-                  const n = getExpiryNotice();
-                  if (n && n.urgent) {
-                    return ' · <span class="text-amber-400 font-bold animate-pulse">⚠️ Expires in ' + n.daysLeft + ' day' + (n.daysLeft > 1 ? 's' : '') + '!</span>';
-                  }
-                  return '';
-                })()}
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="window.ArcGold.cancelPlan()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold transition">
+                  ${state.isTrial ? 'End Trial Early' : 'Downgrade to Free'}
+                </button>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="window.ArcGold.cancelPlan()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold transition">
-                ${state.isTrial ? 'End Trial Early' : 'Downgrade to Free'}
-              </button>
-            </div>
+
+            <!-- 2-USER ACCOUNT ENFORCER WIDGET -->
+            ${(function() {
+              const users = getAuthorizedUsers();
+              return `
+                <div class="pt-3 border-t border-slate-800/80 space-y-2.5">
+                  <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                      <i class="fa-solid fa-users text-amber-400"></i>
+                      <span class="font-bold text-white text-xs uppercase tracking-wide font-mono">Authorized Users &amp; Devices</span>
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${users.length >= 2 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'}">
+                        ${users.length} / ${MAX_AUTHORIZED_USERS} Slots Used
+                      </span>
+                    </div>
+                    <span class="text-[10px] text-slate-400">Strictly 2 users allowed to prevent multiple users using one account</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <!-- User Slot 1 (Primary) -->
+                    <div class="p-2.5 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center justify-between gap-2">
+                      <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0 border border-amber-500/40">
+                          <i class="fa-solid fa-user-check text-[11px]"></i>
+                        </div>
+                        <div class="min-w-0">
+                          <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                            <span>${users[0] ? users[0].name : 'Primary User'}</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">Slot 1</span>
+                          </div>
+                          <div class="text-[10px] text-slate-400 truncate">${users[0] ? users[0].id : 'Primary Device'}</div>
+                        </div>
+                      </div>
+                      <span class="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">Primary</span>
+                    </div>
+
+                    <!-- User Slot 2 (Secondary or Available) -->
+                    ${users[1] ? `
+                      <div class="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                          <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-xs shrink-0 border border-cyan-500/40">
+                            <i class="fa-solid fa-user-check text-[11px]"></i>
+                          </div>
+                          <div class="min-w-0">
+                            <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                              <span>${users[1].name}</span>
+                              <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-mono">Slot 2</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400 truncate">${users[1].id}</div>
+                          </div>
+                        </div>
+                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${users[1].id}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
+                          <i class="fa-solid fa-xmark mr-1"></i> Remove
+                        </button>
+                      </div>
+                    ` : `
+                      <div class="p-2.5 rounded-xl bg-slate-950/40 border border-dashed border-slate-700 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                          <div class="w-7 h-7 rounded-lg bg-slate-800 text-slate-500 flex items-center justify-center font-bold text-xs shrink-0">
+                            <i class="fa-solid fa-user-plus text-[11px]"></i>
+                          </div>
+                          <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-300">Slot 2: Empty</div>
+                            <div class="text-[10px] text-slate-500">Add 1 second user or device</div>
+                          </div>
+                        </div>
+                        <button type="button" onclick="window.ArcGold.promptAddSecondUser()" class="text-[10px] font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 px-2.5 py-1 rounded-lg transition shrink-0">
+                          <i class="fa-solid fa-plus mr-1"></i> Add User
+                        </button>
+                      </div>
+                    `}
+                  </div>
+                </div>
+              `;
+            })()}
           </div>
         ` : ''}
       </div>
@@ -16745,6 +16971,7 @@ window.ArcGold = (function() {
 
   return {
     STORAGE_KEY,
+    MAX_AUTHORIZED_USERS,
     PLANS,
     getState,
     isGold,
@@ -16764,6 +16991,11 @@ window.ArcGold = (function() {
     checkExpiryNotification,
     revertToFree,
     startExpiryWatcher,
+    getAuthorizedUsers,
+    registerUser,
+    removeAuthorizedUser,
+    promptAddSecondUser,
+    canUserUseGold,
     render,
     init
   };
