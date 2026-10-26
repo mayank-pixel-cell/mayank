@@ -967,7 +967,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
     </div>
 
     <!-- HEADER (OPTIMIZED FOR MOBILE) -->
-    <header class="sticky top-0 z-40 glass-card border-b border-slate-800/80 px-3 py-2.5 sm:px-6 sm:py-3.5 transition-all duration-300">
+    <header class="arc-safe-header sticky top-0 z-40 glass-card border-b border-slate-800/80 px-3 py-2.5 sm:px-6 sm:py-3.5 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
                 <div role="button" tabindex="0" aria-label="Arc logo icon" id="arc-logo-icon" onmouseenter="playSfx('hover')" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-black font-black text-lg sm:text-xl shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" onclick="handleLogoIconClick(event)">
@@ -1020,7 +1020,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
 
                 <!-- Share Tracker Button -->
-                <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
+                <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
                     <i class="fa-solid fa-share-nodes text-xs"></i>
                     <span class="hidden md:inline">Share</span>
                 </button>
@@ -1073,7 +1073,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </div>
 
         <!-- VIEW 1: DAILY TRACKER VIEW -->
-        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter">
+        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
             <!-- DAILY MINDSET QUOTE -->
             <div id="quote-card-container" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all duration-300">
                 <div class="space-y-1 max-w-3xl">
@@ -1338,7 +1338,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 2: NON-NEGOTIABLES & RULES VIEW -->
-        <section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter">
+        <section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
             <div class="glass-card rounded-2xl p-4 sm:p-6">
                 <h2 id="blueprint-title" class="text-lg sm:text-xl font-extrabold text-white mb-1 flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-cyan-400"></i> Winter Arc Master Blueprint
@@ -1394,7 +1394,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 3: RESULTS & ANALYTICS VIEW -->
-        <section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter">
+        <section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter pb-24 md:pb-8">
             <div class="glass-card rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 border-l-cyan-400">
                 <div class="space-y-1 text-center md:text-left">
                     <span class="text-[10px] sm:text-xs font-bold text-cyan-400 tracking-wider uppercase">Analytics Breakdown</span>
@@ -1802,8 +1802,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
-                <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
-                <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden">
+                <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden pb-24 md:pb-8">
             <!-- TOP HERO BANNER & STATS -->
             <div class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
@@ -3175,30 +3174,48 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 </main>
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
-    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800 bg-slate-950/95 backdrop-blur-lg px-2 py-1.5 flex items-center justify-around shadow-2xl">
-        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-emerald-400 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400">
-            <i class="fa-solid fa-list-check text-lg text-emerald-400"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Tracker</span>
+    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1.5 sm:px-3 pt-1 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] flex items-center justify-between gap-1 shadow-2xl">
+        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-list-check text-base"></i>
+                <span class="mobile-active-dot absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Tracker</span>
         </button>
-        <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-hourglass-half text-lg text-cyan-400"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Screen Time</span>
+        <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-hourglass-half text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_rgba(168,85,247,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Screen</span><span class="hidden sm:inline">Screen Time</span></span>
         </button>
-        <button id="mobile-tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onclick="switchTab('rules')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-shield-halved text-lg"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Rules</span>
+        <button id="mobile-tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onclick="switchTab('rules')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-shield-halved text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Rules</span>
         </button>
-        <button id="mobile-tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onclick="switchTab('progression')" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-crown text-lg text-amber-400"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Level/KB</span>
+        <button id="mobile-tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onclick="switchTab('progression')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-crown text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(234,179,8,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Level</span><span class="hidden sm:inline">Level/KB</span></span>
         </button>
-        <button id="mobile-tab-results" role="tab" aria-selected="false" aria-controls="view-results" onclick="switchTab('results')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-diagram-project text-lg"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Analytics</span>
+        <button id="mobile-tab-results" role="tab" aria-selected="false" aria-controls="view-results" onclick="switchTab('results')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-diagram-project text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Analytics</span>
         </button>
-        <button id="mobile-tab-settings" aria-label="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onclick="switchTab('settings')" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-300 ease-out text-slate-400 hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-            <i class="fa-solid fa-gear text-lg"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Settings</span>
+        <button id="mobile-tab-settings" aria-label="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onclick="switchTab('settings')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-gear text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_6px_rgba(236,72,153,1)]"></span>
+            </div>
+            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Settings</span>
         </button>
     </nav>
 
@@ -3209,9 +3226,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
     </footer>
 
     <!-- PERMANENT FLOATING LIVE SCREEN TIME HUD PILL -->
-    <div id="arc-screentime-hud" class="fixed bottom-20 md:bottom-6 left-4 sm:left-6 z-40 select-none transition-all duration-300">
+    <div id="arc-screentime-hud" class="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:bottom-6 left-3 sm:left-6 z-40 select-none transition-all duration-300">
         <!-- Floating Pill Trigger -->
-        <div id="arc-hud-pill" onclick="ArcScreenTimeNotifier.toggleHudCard()" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-cyan-500/40 hover:border-cyan-400 text-white shadow-2xl backdrop-blur-xl transition hover:scale-105 active:scale-95 group">
+        <div id="arc-hud-pill" onclick="ArcScreenTimeNotifier.toggleHudCard()" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-cyan-500/40 hover:border-cyan-400 text-white shadow-2xl backdrop-blur-xl transition hover:scale-105 active:scale-95 group touch-manipulation">
             <span class="relative flex h-2 w-2">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -3225,7 +3242,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </div>
 
         <!-- Expandable Quick Control Popup -->
-        <div id="arc-hud-card" class="hidden absolute bottom-11 left-0 w-72 sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 shadow-2xl backdrop-blur-2xl space-y-3 mb-2 animate-in fade-in zoom-in-95 duration-200">
+        <div id="arc-hud-card" class="hidden absolute bottom-11 left-0 max-w-[calc(100vw-1.5rem)] w-72 sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 shadow-2xl backdrop-blur-2xl space-y-3 mb-2 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between pb-2 border-b border-slate-800">
                 <div class="flex items-center gap-2">
                     <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs">
@@ -5424,48 +5441,48 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-list-check text-slate-950",
                 iconInactive: "fa-solid fa-list-check text-emerald-400",
-                mobileActive: "text-emerald-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             },
             screentime: {
                 active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-md shadow-purple-500/30",
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-hourglass-half text-white",
                 iconInactive: "fa-solid fa-hourglass-half text-purple-400",
-                mobileActive: "text-purple-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-purple-500/15 text-purple-300 border border-purple-500/30 shadow-[0_0_12px_rgba(168,85,247,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             },
             rules: {
                 active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-amber-500 to-orange-400 text-slate-950 shadow-md shadow-amber-500/30",
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-shield-halved text-slate-950",
                 iconInactive: "fa-solid fa-shield-halved text-amber-400",
-                mobileActive: "text-amber-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             },
             progression: {
                 active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 shadow-md shadow-yellow-500/30",
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-yellow-300 hover:bg-yellow-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-crown text-slate-950",
                 iconInactive: "fa-solid fa-crown text-yellow-400",
-                mobileActive: "text-yellow-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-yellow-500/15 text-yellow-300 border border-yellow-500/30 shadow-[0_0_12px_rgba(234,179,8,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             },
             results: {
                 active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-md shadow-cyan-500/30",
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-diagram-project text-slate-950",
                 iconInactive: "fa-solid fa-diagram-project text-cyan-400",
-                mobileActive: "text-cyan-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             },
             settings: {
                 active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md shadow-pink-500/30",
                 inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-pink-300 hover:bg-pink-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
                 iconActive: "fa-solid fa-gear text-white",
                 iconInactive: "fa-solid fa-gear text-pink-400",
-                mobileActive: "text-pink-400",
-                mobileInactive: "text-slate-400"
+                mobileActive: "bg-pink-500/15 text-pink-300 border border-pink-500/30 shadow-[0_0_12px_rgba(236,72,153,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             }
         };
 
@@ -5500,7 +5517,11 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (mobileTab && theme) {
                     const isTarget = (t === tabName);
                     mobileTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
-                    mobileTab.className = `flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out ${isTarget ? theme.mobileActive : theme.mobileInactive} hover:scale-[1.02] active:scale-95`;
+                    mobileTab.className = `flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 active:scale-95 select-none touch-manipulation ${isTarget ? theme.mobileActive : theme.mobileInactive}`;
+                    const dot = mobileTab.querySelector('.mobile-active-dot');
+                    if (dot) {
+                        dot.style.display = isTarget ? '' : 'none';
+                    }
                 }
             });
 
@@ -5586,18 +5607,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 const catInfo = CATEGORIES[habit.category] || { color: '#00F0FF', icon: 'fa-solid fa-star' };
 
                 return `
-                    <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-4 habit-row flex items-center justify-between transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] ${habit.completed ? 'border-l-4 border-l-emerald-400 bg-emerald-950/20' : 'border-l-4 border-l-slate-700'}">
-                        <div class="flex items-center space-x-3">
-                            <input type="checkbox" id="habit-check-${habit.id}" ${habit.completed ? 'checked' : ''} onchange="toggleHabit('${habit.id}')" aria-label="${habit.name}" class="habit-checkbox w-5 h-5 sm:w-6 sm:h-6 border-2 border-slate-600 bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                            <label for="habit-check-${habit.id}" class="cursor-pointer">
-                                <div class="text-xs sm:text-sm font-bold ${habit.completed ? 'line-through text-slate-400' : 'text-white'}">${habit.name}</div>
+                    <div class="glass-card glass-card-hover rounded-2xl p-3 sm:p-4 habit-row flex items-center justify-between gap-3 transition-all duration-300 ease-out hover:scale-[1.01] active:scale-[0.99] hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] ${habit.completed ? 'border-l-4 border-l-emerald-400 bg-emerald-950/20' : 'border-l-4 border-l-slate-700'}">
+                        <div class="flex items-center space-x-3 flex-1 min-w-0">
+                            <input type="checkbox" id="habit-check-${habit.id}" ${habit.completed ? 'checked' : ''} onchange="toggleHabit('${habit.id}')" aria-label="${habit.name}" class="habit-checkbox w-6 h-6 rounded-lg border-2 border-slate-600 bg-slate-900 cursor-pointer shrink-0 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                            <label for="habit-check-${habit.id}" class="cursor-pointer flex-1 min-w-0 select-none py-1">
+                                <div class="text-xs sm:text-sm font-bold truncate ${habit.completed ? 'line-through text-slate-400' : 'text-white'}">${habit.name}</div>
                                 <div class="flex items-center gap-2 mt-0.5">
-                                    <span class="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded" style="background:${catInfo.color}20; color:${catInfo.color}">${habit.category}</span>
-                                    <span class="text-[9px] font-mono text-slate-400">${habit.weight}x Priority</span>
+                                    <span class="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded shrink-0" style="background:${catInfo.color}20; color:${catInfo.color}">${habit.category}</span>
+                                    <span class="text-[9px] font-mono text-slate-400 shrink-0">${habit.weight}x Priority</span>
                                 </div>
                             </label>
                         </div>
-                        <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 transition text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
+                        <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2 sm:p-1.5 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[38px] min-h-[38px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -11585,6 +11606,73 @@ html[data-mode=light] .phone-widget-card .text-white {
         <label for="arc-input-motto" class="block text-[11px] font-semibold text-slate-400 mb-1">Personal Lock-In Motto</label>
         <input id="arc-input-motto" type="text" maxlength="80" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 text-xs" placeholder="Transform in Silence.">
       </div>
+
+      <!-- VIP Avatar Outer Ring Lining (Arc Gold Exclusive) -->
+      <div id="arc-pfp-ring-section" class="p-3 rounded-xl border border-slate-700/60 bg-slate-900/60 transition-all">
+        <div class="flex items-center justify-between mb-1.5">
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-notch text-amber-400 text-xs"></i>
+            <span class="text-[11px] font-bold text-slate-200">Avatar Outer Lining Ring</span>
+          </div>
+          <span id="arc-pfp-ring-badge" class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1">
+            <i class="fa-solid fa-crown text-[8px]"></i> Arc Gold VIP
+          </span>
+        </div>
+        <p id="arc-pfp-ring-desc" class="text-[10px] text-slate-400 mb-2.5">
+          Arc Gold default is Royal Gold. Customize your outer lining ring and glow below.
+        </p>
+
+        <!-- Ring Options Grid -->
+        <div id="arc-pfp-ring-options" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-2">
+          <button type="button" onclick="ArcProfile.selectRingStyle('gold')" data-ring="gold" class="arc-ring-option p-1.5 rounded-xl border border-amber-400/50 bg-amber-500/10 hover:bg-amber-500/20 flex flex-col items-center justify-center gap-1 transition-all" title="Royal Gold (VIP Default)">
+            <span class="w-4 h-4 rounded-full border-2 border-amber-400 bg-amber-400/30 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
+            <span class="text-[9px] font-bold text-amber-300">Gold</span>
+          </button>
+          <button type="button" onclick="ArcProfile.selectRingStyle('diamond')" data-ring="diamond" class="arc-ring-option p-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/50 flex flex-col items-center justify-center gap-1 transition-all" title="Diamond Ice">
+            <span class="w-4 h-4 rounded-full border-2 border-sky-300 bg-sky-400/30 shadow-[0_0_8px_rgba(56,189,248,0.8)]"></span>
+            <span class="text-[9px] font-bold text-slate-300">Diamond</span>
+          </button>
+          <button type="button" onclick="ArcProfile.selectRingStyle('amethyst')" data-ring="amethyst" class="arc-ring-option p-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/50 flex flex-col items-center justify-center gap-1 transition-all" title="Neon Amethyst">
+            <span class="w-4 h-4 rounded-full border-2 border-purple-400 bg-purple-400/30 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></span>
+            <span class="text-[9px] font-bold text-slate-300">Amethyst</span>
+          </button>
+          <button type="button" onclick="ArcProfile.selectRingStyle('emerald')" data-ring="emerald" class="arc-ring-option p-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/50 flex flex-col items-center justify-center gap-1 transition-all" title="Emerald Matrix">
+            <span class="w-4 h-4 rounded-full border-2 border-emerald-400 bg-emerald-400/30 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+            <span class="text-[9px] font-bold text-slate-300">Emerald</span>
+          </button>
+          <button type="button" onclick="ArcProfile.selectRingStyle('ruby')" data-ring="ruby" class="arc-ring-option p-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/50 flex flex-col items-center justify-center gap-1 transition-all" title="Crimson Flame">
+            <span class="w-4 h-4 rounded-full border-2 border-rose-500 bg-rose-500/30 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+            <span class="text-[9px] font-bold text-slate-300">Crimson</span>
+          </button>
+          <button type="button" onclick="ArcProfile.selectRingStyle('aurora')" data-ring="aurora" class="arc-ring-option p-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/50 flex flex-col items-center justify-center gap-1 transition-all" title="Cosmic Aurora">
+            <span class="w-4 h-4 rounded-full border-2 border-pink-400 bg-pink-400/30 shadow-[0_0_8px_rgba(236,72,153,0.8)]"></span>
+            <span class="text-[9px] font-bold text-slate-300">Aurora</span>
+          </button>
+        </div>
+
+        <!-- Custom Color Picker Row -->
+        <div id="arc-pfp-custom-color-row" class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+          <label for="arc-input-ring-custom-color" class="text-[10px] font-medium text-slate-300 flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-palette text-amber-400 text-xs"></i>
+            <span>Custom Lining Color</span>
+          </label>
+          <div class="flex items-center gap-2">
+            <span id="arc-ring-color-preview-hex" class="text-[10px] font-mono text-amber-300 font-bold">#F59E0B</span>
+            <input type="color" id="arc-input-ring-custom-color" value="#F59E0B" onchange="ArcProfile.setCustomRingColor(this.value)" oninput="ArcProfile.setCustomRingColor(this.value)" class="w-7 h-7 rounded-lg cursor-pointer bg-transparent border border-slate-700 p-0.5">
+          </div>
+        </div>
+
+        <!-- Non-Gold Lock Notice -->
+        <div id="arc-pfp-ring-locked-banner" class="hidden mt-2 p-2 rounded-lg bg-amber-950/30 border border-amber-500/30 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 text-[10px] text-amber-200">
+            <i class="fa-solid fa-lock text-amber-400"></i>
+            <span>Outer lining unlocks with Arc Gold. Standard cyan active.</span>
+          </div>
+          <button type="button" onclick="ArcProfile.closeSetupModal(); if(window.ArcGold) window.ArcGold.scrollToGoldCard();" class="px-2 py-1 rounded bg-amber-500 text-slate-950 font-black text-[9px] hover:bg-amber-400 shrink-0">
+            Get Gold
+          </button>
+        </div>
+      </div>
       <p id="arc-profile-modal-err" class="text-xs text-rose-400 min-h-[1.25rem] font-mono"></p>
     </div>
 
@@ -13994,6 +14082,32 @@ window.ArcProfile = (function() {
   'use strict';
   const STORAGE_KEY = 'arc_user_profile';
 
+  let activeRingStyle = 'gold';
+  let activeRingColor = '#F59E0B';
+
+  const PFP_RING_STYLES = {
+    gold: { id: 'gold', name: 'Royal Gold', color: '#F59E0B', shadow: '0 0 16px rgba(245, 158, 11, 0.65)' },
+    diamond: { id: 'diamond', name: 'Diamond Ice', color: '#38BDF8', shadow: '0 0 16px rgba(56, 189, 248, 0.65)' },
+    amethyst: { id: 'amethyst', name: 'Neon Amethyst', color: '#A855F7', shadow: '0 0 16px rgba(168, 85, 247, 0.65)' },
+    emerald: { id: 'emerald', name: 'Emerald Matrix', color: '#10B981', shadow: '0 0 16px rgba(16, 185, 129, 0.65)' },
+    ruby: { id: 'ruby', name: 'Crimson Flame', color: '#EF4444', shadow: '0 0 16px rgba(239, 68, 68, 0.65)' },
+    aurora: { id: 'aurora', name: 'Cosmic Aurora', color: '#EC4899', shadow: '0 0 16px rgba(236, 72, 153, 0.65)' },
+    custom: { id: 'custom', name: 'Custom Hue', color: '#F59E0B', shadow: '0 0 16px rgba(245, 158, 11, 0.65)' }
+  };
+
+  function getRingConfig(styleKey, customColor) {
+    const key = (styleKey && PFP_RING_STYLES[styleKey]) ? styleKey : 'gold';
+    if (key === 'custom') {
+      const color = customColor || '#F59E0B';
+      return {
+        id: 'custom',
+        color: color,
+        shadow: '0 0 16px ' + color + 'aa'
+      };
+    }
+    return PFP_RING_STYLES[key];
+  }
+
   function getDefaultProfile() {
     let authUser = null;
     if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
@@ -14009,6 +14123,8 @@ window.ArcProfile = (function() {
       motto: 'Transform in Silence.',
       email: email,
       avatar: name.charAt(0).toUpperCase() || 'O',
+      pfpRingStyle: 'gold',
+      pfpRingColor: '#F59E0B',
       isCustomized: false
     };
   }
@@ -14057,6 +14173,8 @@ window.ArcProfile = (function() {
       title,
       motto,
       avatar: displayName.charAt(0).toUpperCase(),
+      pfpRingStyle: activeRingStyle || 'gold',
+      pfpRingColor: activeRingColor || '#F59E0B',
       isCustomized: true,
       updatedAt: new Date().toISOString()
     };
@@ -14069,6 +14187,90 @@ window.ArcProfile = (function() {
       showToast(`Identity saved: ${displayName} (@${username})`);
     }
     return true;
+  }
+
+  function updateRingUI(isGold) {
+    const badge = document.getElementById('arc-pfp-ring-badge');
+    const desc = document.getElementById('arc-pfp-ring-desc');
+    const lockBanner = document.getElementById('arc-pfp-ring-locked-banner');
+    const customInput = document.getElementById('arc-input-ring-custom-color');
+    const hexPreview = document.getElementById('arc-ring-color-preview-hex');
+    const optionBtns = document.querySelectorAll('.arc-ring-option');
+
+    if (customInput) customInput.value = activeRingColor;
+    if (hexPreview) {
+      hexPreview.textContent = activeRingColor;
+      hexPreview.style.color = activeRingColor;
+    }
+
+    if (isGold) {
+      if (badge) {
+        badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1';
+        badge.innerHTML = '<i class="fa-solid fa-crown text-[8px]"></i> Arc Gold VIP';
+      }
+      if (desc) desc.textContent = 'Arc Gold VIP active. Outer lining defaults to Royal Gold, or customize your preferred style.';
+      if (lockBanner) lockBanner.classList.add('hidden');
+      if (customInput) customInput.disabled = false;
+
+      optionBtns.forEach(btn => {
+        const ringId = btn.getAttribute('data-ring');
+        if (ringId === activeRingStyle) {
+          btn.classList.add('ring-2', 'ring-white/90', 'bg-slate-800');
+          btn.classList.remove('border-slate-800');
+        } else {
+          btn.classList.remove('ring-2', 'ring-white/90', 'bg-slate-800');
+          btn.classList.add('border-slate-800');
+        }
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+      });
+    } else {
+      if (badge) {
+        badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1';
+        badge.innerHTML = '<i class="fa-solid fa-lock text-[8px]"></i> VIP Exclusive';
+      }
+      if (desc) desc.textContent = 'Custom avatar outer lining is an Arc Gold VIP feature. Standard cyan border is currently active.';
+      if (lockBanner) lockBanner.classList.remove('hidden');
+      if (customInput) customInput.disabled = true;
+
+      optionBtns.forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-white/90', 'bg-slate-800');
+        btn.style.opacity = '0.55';
+        btn.style.cursor = 'not-allowed';
+      });
+    }
+  }
+
+  function selectRingStyle(styleId) {
+    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+    if (!isGold) {
+      if (typeof showToast === 'function') {
+        showToast('🔒 Outer lining customization is an Arc Gold VIP exclusive feature.');
+      }
+      return;
+    }
+    activeRingStyle = styleId;
+    if (styleId !== 'custom') {
+      const cfg = PFP_RING_STYLES[styleId];
+      if (cfg) activeRingColor = cfg.color;
+    }
+    updateRingUI(true);
+    handleLivePreview();
+    if (window.playSfx) window.playSfx('click');
+  }
+
+  function setCustomRingColor(hex) {
+    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+    if (!isGold) {
+      if (typeof showToast === 'function') {
+        showToast('🔒 Custom outer lining color is an Arc Gold VIP exclusive feature.');
+      }
+      return;
+    }
+    activeRingStyle = 'custom';
+    activeRingColor = hex || '#F59E0B';
+    updateRingUI(true);
+    handleLivePreview();
   }
 
   function handleLivePreview() {
@@ -14085,7 +14287,27 @@ window.ArcProfile = (function() {
     const pUser = document.getElementById('arc-preview-username');
     const pRank = document.getElementById('arc-preview-rank-tag');
 
-    if (pAvatar) pAvatar.textContent = name.charAt(0).toUpperCase() || 'O';
+    if (pAvatar) {
+      let authUser = null;
+      if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
+        authUser = window.ArcGoogleSync.getUser();
+      }
+      if (authUser && authUser.picture) {
+        pAvatar.innerHTML = `<img src="${authUser.picture}" class="w-full h-full object-cover rounded-full">`;
+      } else {
+        pAvatar.textContent = name.charAt(0).toUpperCase() || 'O';
+      }
+
+      const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+      if (isGold) {
+        const ringCfg = getRingConfig(activeRingStyle, activeRingColor);
+        pAvatar.style.borderColor = ringCfg.color;
+        pAvatar.style.boxShadow = ringCfg.shadow;
+      } else {
+        pAvatar.style.borderColor = '';
+        pAvatar.style.boxShadow = '';
+      }
+    }
     if (pName) pName.textContent = name;
     if (pUser) pUser.textContent = '@' + handle;
     if (pRank) pRank.textContent = title;
@@ -14109,7 +14331,13 @@ window.ArcProfile = (function() {
     if (emailDisp) emailDisp.textContent = p.email || 'synced.user@gmail.com';
     if (err) err.textContent = '';
 
+    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+    activeRingStyle = p.pfpRingStyle || 'gold';
+    activeRingColor = p.pfpRingColor || '#F59E0B';
+
+    updateRingUI(isGold);
     handleLivePreview();
+
     modal.classList.add('open');
     if (nameIn) setTimeout(() => nameIn.focus(), 150);
     if (window.playSfx) window.playSfx('modalOpen');
@@ -14127,10 +14355,11 @@ window.ArcProfile = (function() {
     const nameEl = document.getElementById('header-profile-name');
     const userEl = document.getElementById('header-profile-user');
     const avatarEl = document.getElementById('header-avatar-circle');
+    const pill = document.getElementById('header-profile-pill');
 
     if (nameEl) nameEl.textContent = p.displayName;
     if (userEl) userEl.textContent = '@' + p.username;
-    const pill = document.getElementById('header-profile-pill');
+
     if (pill) {
       let authUser = null;
       if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
@@ -14138,7 +14367,51 @@ window.ArcProfile = (function() {
       }
       const syncInfo = (authUser && authUser.email) ? ` • ${authUser.email}` : '';
       pill.title = `${p.displayName} (@${p.username})${syncInfo} — Click to customize profile`;
+
+      const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+
+      if (isGold) {
+        // Gold subscriber: Outer lining is Gold by default, or user's customized style
+        const ringStyle = p.pfpRingStyle || 'gold';
+        const ringCfg = getRingConfig(ringStyle, p.pfpRingColor);
+        pill.style.borderColor = ringCfg.color;
+        pill.style.boxShadow = ringCfg.shadow;
+        pill.setAttribute('data-gold-ring', ringStyle);
+
+        pill.onmouseenter = function() {
+          pill.style.boxShadow = `0 0 22px ${ringCfg.color}`;
+        };
+        pill.onmouseleave = function() {
+          pill.style.boxShadow = ringCfg.shadow;
+        };
+
+        // VIP Crown mini indicator
+        let crown = document.getElementById('header-profile-vip-crown');
+        if (!crown) {
+          crown = document.createElement('span');
+          crown.id = 'header-profile-vip-crown';
+          crown.className = 'absolute -top-1.5 -left-1.5 w-4 h-4 rounded-full bg-slate-950 border border-amber-400 text-amber-300 text-[8px] flex items-center justify-center shadow-[0_0_8px_rgba(245,158,11,0.6)] pointer-events-none select-none z-10';
+          crown.innerHTML = '<i class="fa-solid fa-crown"></i>';
+          crown.title = 'Arc Gold VIP Active';
+          pill.appendChild(crown);
+        } else {
+          crown.style.display = 'flex';
+        }
+      } else {
+        // Gold ended or inactive: Keep it back to normal default
+        pill.style.borderColor = '';
+        pill.style.boxShadow = '';
+        pill.removeAttribute('data-gold-ring');
+        pill.onmouseenter = null;
+        pill.onmouseleave = null;
+
+        const crown = document.getElementById('header-profile-vip-crown');
+        if (crown) {
+          crown.style.display = 'none';
+        }
+      }
     }
+
     if (avatarEl) {
       let authUser = null;
       if (window.ArcGoogleSync && typeof window.ArcGoogleSync.getUser === 'function') {
@@ -14189,6 +14462,8 @@ window.ArcProfile = (function() {
     closeSetupModal,
     handleLivePreview,
     renderHeaderProfile,
+    selectRingStyle,
+    setCustomRingColor,
     onLoginSuccess
   };
 })();
@@ -15285,7 +15560,12 @@ window.ArcGold = (function() {
     // 5. Re-render Arc Gold card with expired notice
     render();
 
-    // 6. Notify user if this was a fresh expiry transition
+    // 6. Revert profile picture outer lining back to normal default
+    if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+      window.ArcProfile.renderHeaderProfile();
+    }
+
+    // 7. Notify user if this was a fresh expiry transition
     if (isNaturalExpiry && wasGold) {
       if (typeof showToast === 'function') {
         const typeStr = wasTrial ? 'Free First Month Arc Gold Trial' : 'Arc Gold Membership';
@@ -15393,6 +15673,9 @@ window.ArcGold = (function() {
       window.ArcCustomBackground.apply();
       window.ArcCustomBackground.renderCard();
     }
+    if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+      window.ArcProfile.renderHeaderProfile();
+    }
 
     if (!isSilent) {
       if (typeof playSfx === 'function') playSfx('victory');
@@ -15440,6 +15723,9 @@ window.ArcGold = (function() {
     if (window.ArcCustomBackground && typeof window.ArcCustomBackground.apply === 'function') {
       window.ArcCustomBackground.apply();
       window.ArcCustomBackground.renderCard();
+    }
+    if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+      window.ArcProfile.renderHeaderProfile();
     }
     if (window.SettingsApp && typeof window.SettingsApp.onTab === 'function') {
       window.SettingsApp.onTab('settings');
@@ -17880,18 +18166,25 @@ document.readyState==='loading'?document.addEventListener('DOMContentLoaded',all
 <!-- ===== POLISH MODULE: mobile ergonomics, a11y, resilience ===== -->
 <style id="polish-css">
 body{min-height:100vh;min-height:100dvh;padding-bottom:calc(5rem + env(safe-area-inset-bottom,0px))}
+.arc-safe-header{padding-top:max(0.625rem, calc(0.625rem + env(safe-area-inset-top, 0px)))}
 @media (min-width:640px){body{padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px))}}
 button,[role=button],[role=tab],[role=switch],[onclick],select,summary,label,.calendar-day-card{touch-action:manipulation}
 @media (pointer:coarse),(max-width:767px){
- button:not(#showcase-dots-container button),[role=button],[role=tab],[role=switch],select,summary{min-height:44px;min-width:44px}
+ button:not(#showcase-dots-container button):not(nav[aria-label="Mobile Bottom Navigation"] button),[role=button]:not(nav[aria-label="Mobile Bottom Navigation"] *),[role=tab]:not(nav[aria-label="Mobile Bottom Navigation"] *),[role=switch],select,summary{min-height:44px;min-width:44px}
  label:has(>input[type=checkbox]),label:has(>input[type=radio]){min-height:44px}
 }
 @media (min-width:375px){.calendar-day-card{min-width:44px}}
 #showcase-dots-container{min-height:44px;overflow-y:hidden}
 #showcase-dots-container button{position:relative}
 #showcase-dots-container button::after{content:'';position:absolute;inset:-17px -3px}
-nav[aria-label="Mobile Bottom Navigation"]{padding-bottom:calc(.375rem + env(safe-area-inset-bottom,0px))}
-@media (max-width:639px){#summer-showcase-overlay{padding-top:max(1rem,env(safe-area-inset-top));padding-bottom:max(1rem,env(safe-area-inset-bottom))}}
+nav[aria-label="Mobile Bottom Navigation"]{padding-bottom:max(0.5rem, calc(0.375rem + env(safe-area-inset-bottom,0px)));padding-left:max(0.5rem, env(safe-area-inset-left,0px));padding-right:max(0.5rem, env(safe-area-inset-right,0px))}
+nav[aria-label="Mobile Bottom Navigation"] button{min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media (max-width:639px){
+ #summer-showcase-overlay{padding-top:max(1rem,env(safe-area-inset-top));padding-bottom:max(1rem,env(safe-area-inset-bottom))}
+ input[type="text"],input[type="number"],input[type="email"],input[type="password"],select,textarea{font-size:16px !important}
+ .pp-modal{padding:0.75rem;padding-bottom:max(1rem,env(safe-area-inset-bottom,0px));align-items:flex-end}
+ .pp-box{max-height:calc(88dvh - env(safe-area-inset-bottom,0px));border-radius:1.25rem;padding:1rem;overscroll-behavior:contain}
+}
 [role=dialog],#summer-showcase-overlay,.showcase-card-slide,.pp-modal,#p13-m,#pp12-drawer,#pp12-back{will-change:transform,opacity}
 :where(button,[role=button],[role=tab],[role=switch],a[href],input,select,textarea,summary,[tabindex]):focus-visible{outline:none;box-shadow:0 0 0 2px #22d3ee}
 </style>
@@ -20734,7 +21027,11 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
       if (mTab && theme) {
         const isTarget = (t === tabName);
         mTab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
-        mTab.className = `flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-300 ease-out ${isTarget ? theme.mobileActive : theme.mobileInactive} hover:scale-[1.02] active:scale-95`;
+        mTab.className = `flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 active:scale-95 select-none touch-manipulation ${isTarget ? theme.mobileActive : theme.mobileInactive}`;
+        const dot = mTab.querySelector('.mobile-active-dot');
+        if (dot) {
+          dot.style.display = isTarget ? '' : 'none';
+        }
       }
     });
 
