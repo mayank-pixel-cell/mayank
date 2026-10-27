@@ -423,6 +423,16 @@
             background-size: 250% 100%;
             animation: shimmer 2s infinite linear;
         }
+        .animate-shimmer-desktop {
+            background: linear-gradient(90deg, #818cf8 0%, #3b82f6 25%, #06b6d4 50%, #00f0ff 75%, #818cf8 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        .animate-shimmer-mobile {
+            background: linear-gradient(90deg, #a855f7 0%, #d946ef 25%, #ec4899 50%, #f43f5e 75%, #a855f7 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
 
         #fx-canvas {
             position: fixed;
@@ -1909,6 +1919,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <span class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i>Checking account...</span>
                         </div>
 
+                        <button role="button" onclick="ArcCrossDeviceComparison.openModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition active:scale-95" title="Open Phone vs. Laptop App Comparison Dashboard">
+                            <i class="fa-solid fa-code-compare text-cyan-300"></i> Compare Devices
+                        </button>
+
                         <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('quantumHum'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'A');}" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Sync latest screen time across devices">
                             <i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Sync Now
                         </button>
@@ -2027,20 +2041,22 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
 
                 <!-- PROPORTIONAL SPLIT PROGRESS BAR (DESKTOP VS MOBILE) -->
-                <div class="bg-slate-950/70 p-3 sm:p-3.5 rounded-xl border border-slate-800 space-y-2">
+                <div onclick="ArcCrossDeviceComparison.openModal(); playSfx('modalOpen')" class="bg-slate-950/70 p-3 sm:p-3.5 rounded-xl border border-slate-800 hover:border-indigo-500/60 transition cursor-pointer group space-y-2 shadow-md" title="Tap to compare app usage and screen time between Phone and Laptop">
                     <div class="flex items-center justify-between text-[11px] font-mono">
                         <span id="st-combined-desktop-pct" class="text-cyan-400 font-bold flex items-center gap-1">
                             <i class="fa-solid fa-laptop"></i> Desktop 50%
                         </span>
-                        <span class="text-slate-400 text-[10px] font-sans">DUAL-DEVICE RATIO</span>
+                        <span class="text-slate-400 text-[10px] font-sans group-hover:text-indigo-300 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-code-compare text-indigo-400"></i> TAP TO COMPARE APPS &rarr;
+                        </span>
                         <span id="st-combined-mobile-pct" class="text-purple-400 font-bold flex items-center gap-1">
                             <i class="fa-solid fa-mobile-screen"></i> Mobile 50%
                         </span>
                     </div>
 
-                    <div class="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden flex p-0.5">
-                        <div id="st-combined-bar-desktop" class="h-full rounded-l-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 shadow-sm w-1/2"></div>
-                        <div id="st-combined-bar-mobile" class="h-full rounded-r-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 shadow-sm w-1/2"></div>
+                    <div class="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden flex p-0.5 group-hover:ring-2 group-hover:ring-indigo-500/50 transition">
+                        <div id="st-combined-bar-desktop" class="h-full rounded-l-full animate-shimmer-desktop transition-all duration-500 shadow-sm w-1/2"></div>
+                        <div id="st-combined-bar-mobile" class="h-full rounded-r-full animate-shimmer-mobile transition-all duration-500 shadow-sm w-1/2"></div>
                     </div>
                 </div>
             </div>
@@ -10094,6 +10110,13 @@ html[data-transition=bounce] .tab-view-enter{animation:pp-bounce .5s ease both}
 #arc-last-month-modal{padding:0!important;margin:0!important;align-items:stretch!important;justify-content:stretch!important;background:#030712!important;z-index:9999!important;width:100vw!important;height:100vh!important;max-width:100vw!important;max-height:100vh!important;border:none!important}
 #arc-last-month-modal.open{display:flex!important}
 #arc-last-month-modal .arc-last-month-fullscreen-wrap{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;border:none!important;margin:0!important;display:flex!important;flex-direction:column!important;background:radial-gradient(circle at 50% 0%,rgba(30,27,75,0.45) 0%,#030712 75%)!important}
+#arc-cross-device-comparison-modal{padding:0!important;margin:0!important;align-items:stretch!important;justify-content:stretch!important;background:#030712!important;z-index:9999!important;width:100vw!important;height:100vh!important;max-width:100vw!important;max-height:100vh!important;border:none!important}
+#arc-cross-device-comparison-modal.open{display:flex!important}
+#arc-cross-device-comparison-modal .arc-cross-device-wrap{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;border:none!important;margin:0!important;display:flex!important;flex-direction:column!important;background:radial-gradient(circle at 50% 0%,rgba(49,46,129,0.45) 0%,#030712 75%)!important}
+.cxd-subview-hidden{display:none}
+.cxd-bar-w-41{width:41%}
+.cxd-bar-w-42{width:42%}
+.cxd-bar-w-58{width:58%}
 .pp-box{max-width:28rem;width:100%;border-radius:1rem;padding:1.2rem;background:var(--pp-panel);color:var(--pp-fg);border:1px solid var(--pp-line);font-size:.85rem;max-height:90vh;overflow:auto}
 .pp-box h3{font-weight:900;font-size:1rem;margin-bottom:.6rem}
 .pp-box kbd{font:700 .75rem monospace;padding:.1rem .45rem;border-radius:.35rem;border:1px solid var(--pp-line);background:rgba(127,127,127,.2)}
@@ -11397,10 +11420,15 @@ html[data-mode=light] .phone-widget-card .text-white {
         </div>
 
         <!-- Cross-Device Distribution -->
-        <div class="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner flex flex-col justify-between space-y-2">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <i class="fa-solid fa-laptop text-purple-400"></i> Cross-Device Balance
-          </span>
+        <div onclick="ArcCrossDeviceComparison.openModal(); playSfx('modalOpen')" class="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-indigo-500/60 shadow-inner flex flex-col justify-between space-y-2 cursor-pointer group transition" title="Tap to compare screen time and app usage between Phone and Laptop">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-laptop text-purple-400"></i> Cross-Device Balance
+            </span>
+            <span class="text-[9px] font-mono font-bold text-indigo-300 group-hover:text-indigo-200 group-hover:translate-x-0.5 transition flex items-center gap-0.5">
+              Compare &rarr;
+            </span>
+          </div>
           <div class="flex items-baseline gap-2">
             <span class="text-xl font-black font-mono text-cyan-300">63%</span>
             <span class="text-xs text-slate-400">Laptop</span>
@@ -11408,7 +11436,7 @@ html[data-mode=light] .phone-widget-card .text-white {
             <span class="text-xl font-black font-mono text-purple-300">37%</span>
             <span class="text-xs text-slate-400">Phone</span>
           </div>
-          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden flex border border-slate-800 mt-1">
+          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden flex border border-slate-800 mt-1 group-hover:ring-1 group-hover:ring-indigo-500/50 transition">
             <div class="h-full bg-cyan-400 w-[63%]"></div>
             <div class="h-full bg-purple-400 w-[37%]"></div>
           </div>
@@ -11529,6 +11557,529 @@ html[data-mode=light] .phone-widget-card .text-white {
           Done
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     CROSS-DEVICE SCREEN TIME & APP USAGE COMPARISON MODAL (PHONE VS LAPTOP)
+     Modes: Day, Week, Month (with interactive calendar, week comparison & trending)
+     ========================================================================== -->
+<div id="arc-cross-device-comparison-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Cross-Device Phone vs. Laptop Comparison">
+  <div class="arc-cross-device-wrap w-screen h-screen flex flex-col bg-slate-950 text-white overflow-hidden animate-zoom-in">
+    <!-- TOP FULL-WIDTH NAVBAR -->
+    <div class="shrink-0 px-4 sm:px-8 py-3.5 border-b border-indigo-500/20 bg-slate-950/90 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 z-20 shadow-lg shadow-black/40">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 text-xl shadow-lg shadow-indigo-500/20 shrink-0">
+          <i class="fa-solid fa-code-compare"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-base sm:text-xl font-black text-white tracking-tight">Cross-Device Screen Time &amp; App Usage</h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold uppercase tracking-wider">Dual-Device Telemetry</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold uppercase tracking-wider hidden sm:inline-flex items-center gap-1">
+              <i class="fa-solid fa-laptop text-[9px]"></i> Laptop vs. <i class="fa-solid fa-mobile-screen text-[9px]"></i> Phone
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5 hidden sm:block">Side-by-side app usage breakdown, duration hierarchy, and cross-platform screen time trends.</p>
+        </div>
+      </div>
+
+      <!-- CENTER / MODES SWITCHER -->
+      <div class="flex items-center bg-slate-900/90 p-1 rounded-2xl border border-slate-800 shadow-inner gap-1">
+        <button id="cxd-btn-mode-day" type="button" onclick="ArcCrossDeviceComparison.setMode('day')" class="px-3.5 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition active:scale-95 text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400 shadow-md shadow-indigo-600/30">
+          ☀️ Day
+        </button>
+        <button id="cxd-btn-mode-week" type="button" onclick="ArcCrossDeviceComparison.setMode('week')" class="px-3.5 py-1.5 rounded-xl font-extrabold text-xs uppercase tracking-wider transition active:scale-95 text-slate-400 hover:text-white bg-slate-900 border border-slate-800">
+          📅 Week
+        </button>
+        <button id="cxd-btn-mode-month" type="button" onclick="ArcCrossDeviceComparison.setMode('month')" class="px-3.5 py-1.5 rounded-xl font-extrabold text-xs uppercase tracking-wider transition active:scale-95 text-slate-400 hover:text-white bg-slate-900 border border-slate-800">
+          🗓️ Month
+        </button>
+      </div>
+
+      <!-- RIGHT ACTIONS & DEVICE FILTER -->
+      <div class="flex items-center gap-2">
+        <div class="hidden md:flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 font-mono uppercase">Filter:</span>
+          <select id="cxd-device-select" onchange="ArcCrossDeviceComparison.setDeviceFilter(this.value)" class="bg-transparent text-slate-200 text-xs font-bold focus:outline-none cursor-pointer">
+            <option value="all" class="bg-slate-900 text-white">All Devices</option>
+            <option value="phone" class="bg-slate-900 text-white">📱 Phone Only</option>
+            <option value="laptop" class="bg-slate-900 text-white">💻 Laptop Only</option>
+            <option value="homePhone" class="bg-slate-900 text-white">☎️ Home Phone / Tablet</option>
+          </select>
+        </div>
+
+        <button type="button" onclick="ArcCrossDeviceComparison.closeModal()" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-purple-600/30 transition active:scale-95" title="Exit Fullscreen (Esc)">
+          <i class="fa-solid fa-xmark text-sm"></i>
+          <span>Close</span>
+          <span class="text-[9px] font-mono opacity-60 hidden lg:inline bg-black/30 px-1.5 py-0.5 rounded">ESC</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN SCROLLABLE DASHBOARD VIEWPORT -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar px-4 sm:px-8 lg:px-12 py-6 space-y-6 max-w-7xl mx-auto w-full">
+      <!-- ==========================================
+           1. DAY MODE SUBVIEW
+           ========================================== -->
+      <div id="cxd-view-day" class="space-y-6">
+        <!-- Day Navigation Bar -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-950/80 border border-slate-800 shadow-inner">
+          <div class="flex items-center gap-2">
+            <button id="cxd-day-prev-btn" type="button" onclick="ArcCrossDeviceComparison.prevDay()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1 active:scale-95 disabled:opacity-30 disabled:pointer-events-none">
+              <i class="fa-solid fa-chevron-left"></i> Previous Day
+            </button>
+            <button id="cxd-day-next-btn" type="button" onclick="ArcCrossDeviceComparison.nextDay()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1 active:scale-95 disabled:opacity-30 disabled:pointer-events-none">
+              Next Day <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="text-center">
+            <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Day Telemetry Inspector</span>
+            <h4 class="text-sm sm:text-base font-black text-white" id="cxd-day-title">Tuesday, Oct 27, 2026</h4>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="ArcCrossDeviceComparison.setDay(0)" class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[11px] font-bold transition active:scale-95">
+              Today
+            </button>
+            <button type="button" onclick="ArcCrossDeviceComparison.setDay(1)" class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 text-[11px] font-bold transition active:scale-95">
+              Yesterday
+            </button>
+          </div>
+        </div>
+
+        <!-- Head-to-Head Split Summary Card -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-950/90 to-cyan-950/40 border border-indigo-500/30 shadow-xl space-y-3">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <div>
+              <span class="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold block">📱 Phone Screen Time</span>
+              <div class="text-2xl sm:text-3xl font-black font-mono text-purple-300" id="cxd-day-sum-phone-val">4h 18m (44%)</div>
+            </div>
+
+            <div id="cxd-day-diff-badge" class="px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-mono font-black flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-laptop text-cyan-400"></i> LAPTOP HIGHER (+1h 14m)
+            </div>
+
+            <div class="text-center sm:text-right">
+              <span class="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-bold block">💻 Laptop Screen Time</span>
+              <div class="text-2xl sm:text-3xl font-black font-mono text-cyan-300" id="cxd-day-sum-laptop-val">5h 32m (56%)</div>
+            </div>
+          </div>
+
+          <!-- Dual-color comparative progress bar -->
+          <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden flex border border-slate-800 p-0.5">
+            <div id="cxd-day-bar-phone" class="h-full rounded-l-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 w-[44%] shadow-sm"></div>
+            <div id="cxd-day-bar-laptop" class="h-full rounded-r-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 w-[56%] shadow-sm"></div>
+          </div>
+        </div>
+
+        <!-- 2-COLUMN SPLIT VIEW: PHONE VS LAPTOP -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          <!-- LEFT: 📱 MOBILE PHONE PANEL -->
+          <div class="p-6 rounded-2xl bg-slate-950/80 border-2 border-purple-500/40 shadow-xl shadow-purple-950/20 space-y-4">
+            <div class="flex items-center justify-between border-b border-purple-500/20 pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-lg shadow-sm">
+                  <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white flex items-center gap-2">
+                    Mobile Phone
+                    <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase font-bold">Android 15</span>
+                  </h4>
+                  <span class="text-xs text-purple-300/80">Pixel 9 Pro &bull; Linked Tracker</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xl sm:text-2xl font-black font-mono text-purple-300 block" id="cxd-phone-total-time">4h 18m</span>
+                <span class="text-[10px] text-slate-400 font-mono uppercase">Daily Phone Time</span>
+              </div>
+            </div>
+
+            <!-- Spotlight: #1 Top Mobile App (Instagram) -->
+            <div class="p-4 rounded-xl bg-gradient-to-br from-purple-950/60 via-slate-900 to-pink-950/40 border border-purple-500/40 space-y-2 shadow-inner">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-pink-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-crown text-amber-400"></i> #1 Top Mobile App Today
+                </span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30 font-bold uppercase">Highest Mobile Time</span>
+              </div>
+              <div class="flex items-center justify-between pt-1">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fa-brands fa-instagram"></i>
+                  </div>
+                  <div>
+                    <h5 class="text-sm font-black text-white" id="cxd-phone-spotlight-name">Instagram</h5>
+                    <span class="text-xs text-slate-300 font-mono" id="cxd-phone-spotlight-pct">41% of mobile usage</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-lg font-black font-mono text-pink-300" id="cxd-phone-spotlight-time">1h 45m</span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                <div id="cxd-phone-spotlight-bar" class="h-full rounded-full animate-shimmer-mobile cxd-bar-w-41"></div>
+              </div>
+            </div>
+
+            <!-- Top Apps List for Phone -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-400 px-1">
+                <span>Every Top Mobile App</span>
+                <span>Duration (% of Phone)</span>
+              </div>
+              <div id="cxd-phone-apps-list" class="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-purple-500/20 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+              <span>Primary Category: <b class="text-purple-300">Social &amp; Entertainment</b></span>
+              <span class="text-purple-300 font-bold">&check; Fully Tracked</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: 💻 LAPTOP / WORKSTATION PANEL -->
+          <div class="p-6 rounded-2xl bg-slate-950/80 border-2 border-cyan-500/40 shadow-xl shadow-cyan-950/20 space-y-4">
+            <div class="flex items-center justify-between border-b border-cyan-500/20 pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 text-lg shadow-sm">
+                  <i class="fa-solid fa-laptop"></i>
+                </div>
+                <div>
+                  <h4 class="text-base font-black text-white flex items-center gap-2">
+                    Laptop / Workstation
+                    <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase font-bold">macOS &amp; Win 11</span>
+                  </h4>
+                  <span class="text-xs text-cyan-300/80">Primary Desktop &bull; Active Workstation</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xl sm:text-2xl font-black font-mono text-cyan-300 block" id="cxd-laptop-total-time">5h 32m</span>
+                <span class="text-[10px] text-slate-400 font-mono uppercase">Daily Laptop Time</span>
+              </div>
+            </div>
+
+            <!-- Spotlight: #1 Top Laptop App (Google Chrome) -->
+            <div class="p-4 rounded-xl bg-gradient-to-br from-cyan-950/60 via-slate-900 to-blue-950/40 border border-cyan-500/40 space-y-2 shadow-inner">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-crown text-amber-400"></i> #1 Top Laptop App Today
+                </span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold uppercase">Highest Laptop Time</span>
+              </div>
+              <div class="flex items-center justify-between pt-1">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fa-brands fa-chrome"></i>
+                  </div>
+                  <div>
+                    <h5 class="text-sm font-black text-white" id="cxd-laptop-spotlight-name">Google Chrome</h5>
+                    <span class="text-xs text-slate-300 font-mono" id="cxd-laptop-spotlight-pct">42% of laptop usage</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-lg font-black font-mono text-cyan-300" id="cxd-laptop-spotlight-time">2h 20m</span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                <div id="cxd-laptop-spotlight-bar" class="h-full rounded-full animate-shimmer-desktop cxd-bar-w-42"></div>
+              </div>
+            </div>
+
+            <!-- Top Apps List for Laptop -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-400 px-1">
+                <span>Every Top Laptop App</span>
+                <span>Duration (% of Laptop)</span>
+              </div>
+              <div id="cxd-laptop-apps-list" class="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-cyan-500/20 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+              <span>Primary Category: <b class="text-cyan-300">Web Research &amp; Development</b></span>
+              <span class="text-cyan-300 font-bold">&check; Fully Tracked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           2. WEEK MODE SUBVIEW
+           ========================================== -->
+      <div id="cxd-view-week" class="space-y-6 cxd-subview-hidden">
+        <!-- Week Navigator & Day Strip -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Week View Telemetry</span>
+              <h4 class="text-base font-black text-white" id="cxd-week-title">Week 4 (Oct 21 - Oct 27, 2026)</h4>
+            </div>
+            <span class="text-xs text-indigo-300 font-mono">Select entire week or choose a specific day below:</span>
+          </div>
+
+          <div id="cxd-week-pills-container" class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-800">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Panel A: Entire Week Overview -->
+        <div id="cxd-week-overview-panel" class="space-y-6">
+          <!-- 7-Day Total Summary Card -->
+          <div class="p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-950/90 to-cyan-950/40 border border-indigo-500/30 shadow-xl space-y-3">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-bold block">📱 7-Day Phone Total</span>
+                <div class="text-2xl sm:text-3xl font-black font-mono text-purple-300" id="cxd-week-phone-total">28h 15m (42%)</div>
+              </div>
+              <div id="cxd-week-diff-badge" class="px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-mono font-black shadow-sm">
+                Laptop +11h 25m higher across 7 days
+              </div>
+              <div class="text-center sm:text-right">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-bold block">💻 7-Day Laptop Total</span>
+                <div class="text-2xl sm:text-3xl font-black font-mono text-cyan-300" id="cxd-week-laptop-total">39h 40m (58%)</div>
+              </div>
+            </div>
+            <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden flex border border-slate-800 p-0.5">
+              <div id="cxd-week-bar-phone" class="h-full rounded-l-full animate-shimmer-mobile cxd-bar-w-42"></div>
+              <div id="cxd-week-bar-laptop" class="h-full rounded-r-full animate-shimmer-desktop cxd-bar-w-58"></div>
+            </div>
+          </div>
+
+          <!-- 7-Day Dual Bar Chart (Side-by-side comparative bars) -->
+          <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h5 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-indigo-400"></i> Daily Head-to-Head Progression (Mon - Sun)
+              </h5>
+              <div class="flex items-center gap-3 text-xs font-mono">
+                <span class="flex items-center gap-1.5 text-purple-300"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Phone</span>
+                <span class="flex items-center gap-1.5 text-cyan-300"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Laptop</span>
+              </div>
+            </div>
+            <div id="cxd-week-bars-chart" class="grid grid-cols-7 gap-2 items-end h-44 pt-4 border-b border-slate-800/80 pb-2">
+              <!-- Rendered dynamically -->
+            </div>
+            <p class="text-[11px] text-slate-500 font-mono text-center">Hover bars to inspect exact duration for each day</p>
+          </div>
+
+          <!-- Weekly Top Apps Side-by-Side -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="p-5 rounded-2xl bg-slate-950/80 border border-purple-500/30 space-y-3">
+              <h5 class="text-xs font-bold uppercase text-purple-300 flex items-center gap-2">
+                <i class="fa-solid fa-mobile-screen"></i> Top Mobile Apps Across Full Week
+              </h5>
+              <div id="cxd-week-phone-apps" class="space-y-2">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-950/80 border border-cyan-500/30 space-y-3">
+              <h5 class="text-xs font-bold uppercase text-cyan-300 flex items-center gap-2">
+                <i class="fa-solid fa-laptop"></i> Top Laptop Apps Across Full Week
+              </h5>
+              <div id="cxd-week-laptop-apps" class="space-y-2">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel B: Selected Single Day from Week -->
+        <div id="cxd-week-singleday-panel" class="space-y-4 cxd-subview-hidden">
+          <div class="p-6 rounded-2xl bg-slate-950/80 border border-indigo-500/40 text-center space-y-3">
+            <h4 class="text-lg font-black text-white" id="cxd-week-singleday-title">Single Day Telemetry</h4>
+            <div class="flex items-center justify-center gap-8 text-xl font-mono font-black">
+              <span class="text-purple-300">📱 Phone: <span id="cxd-week-singleday-phone">--</span></span>
+              <span class="text-slate-600">&bull;</span>
+              <span class="text-cyan-300">💻 Laptop: <span id="cxd-week-singleday-laptop">--</span></span>
+            </div>
+            <button type="button" onclick="ArcCrossDeviceComparison.setMode('day')" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition active:scale-95 inline-flex items-center gap-2">
+              <i class="fa-solid fa-magnifying-glass"></i> View Full App Breakdown in Day Mode
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           3. MONTH MODE (IN-PAGE SUBVIEW WITH CALENDAR & TRENDS)
+           ========================================== -->
+      <div id="cxd-view-month" class="space-y-6 cxd-subview-hidden">
+        <!-- In-page subview banner -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-indigo-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[10px] font-mono font-bold uppercase">MONTHLY IN-PAGE SUBVIEW</span>
+              <span class="text-xs text-slate-400 font-mono">October 2026 Cycle</span>
+            </div>
+            <h4 class="text-base sm:text-lg font-black text-white mt-1">Cross-Device Monthly Breakdown &amp; Interactive Calendar</h4>
+          </div>
+
+          <!-- Device Selector Filters -->
+          <div id="cxd-month-device-filters" class="flex flex-wrap items-center gap-1.5">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- 2-PANEL MONTH LAYOUT: PANEL 1 (STATS & TRENDS) + PANEL 2 (CALENDAR & INSPECTOR) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- PANEL 1: MONTHLY SCREEN TIME & WEEK-OVER-WEEK TRENDS (COL 7) -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Monthly Total Screen Time Card -->
+            <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3 shadow-inner">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-calendar-check text-indigo-400"></i> Total Monthly Screen Time
+                </span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">Laptop Dominant</span>
+              </div>
+              <div class="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight" id="cxd-month-total-screentime">146h 35m</div>
+              <p class="text-xs text-slate-400" id="cxd-month-total-subtext">💻 92h 10m Laptop (63%) &bull; 📱 54h 25m Phone (37%) &bull; 30 Days Evaluated</p>
+            </div>
+
+            <!-- Detailed Statistics Grid for Selected Period -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+                <span class="text-[10px] font-mono text-slate-400 uppercase">Daily Average</span>
+                <div class="text-lg font-mono font-black text-cyan-300">4h 53m / day</div>
+                <span class="text-[10px] text-slate-500">Across both devices</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+                <span class="text-[10px] font-mono text-slate-400 uppercase">Peak Consumption Day</span>
+                <div class="text-lg font-mono font-black text-rose-300">Oct 14 (7h 12m)</div>
+                <span class="text-[10px] text-slate-500">High laptop dev sprint</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+                <span class="text-[10px] font-mono text-slate-400 uppercase">Most Disciplined Day</span>
+                <div class="text-lg font-mono font-black text-emerald-300">Oct 22 (2h 18m)</div>
+                <span class="text-[10px] text-slate-500">Minimal phone distractions</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+                <span class="text-[10px] font-mono text-slate-400 uppercase">Dominant Device Gap</span>
+                <div class="text-lg font-mono font-black text-indigo-300">+37h 45m Laptop</div>
+                <span class="text-[10px] text-slate-500">Workstation prioritized</span>
+              </div>
+            </div>
+
+            <!-- WEEK-OVER-WEEK COMPARISON (WEEK 1 vs WEEK 2 vs WEEK 3 vs WEEK 4) -->
+            <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4 shadow-inner">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h5 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-indigo-400"></i> Week-Over-Week Telemetry Comparison
+                  </h5>
+                  <span class="text-[11px] text-slate-400">Comparing Week 1 vs Week 2 vs Week 3 vs Week 4</span>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold">4-Week Matrix</span>
+              </div>
+
+              <!-- 4 Week Cards with Progress Bars -->
+              <div id="cxd-month-weeks-comparison" class="space-y-3">
+                <!-- Populated dynamically -->
+              </div>
+
+              <!-- PERCENTAGE TRENDING INSIGHT BANNER -->
+              <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/50 via-slate-900 to-indigo-950/50 border border-emerald-500/40 space-y-1.5 shadow-md">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span class="text-xs font-black text-emerald-300 uppercase tracking-wide">Percentage Trending Trajectory</span>
+                </div>
+                <p id="cxd-month-trend-banner" class="text-xs font-mono text-white font-bold">
+                  Laptop usage rose +12.0% (52% &rarr; 64%) while Phone usage fell -12.0% (48% &rarr; 36%)
+                </p>
+                <p class="text-[11px] text-slate-400">
+                  Great digital discipline! Screen time is actively migrating from passive mobile entertainment toward productive laptop development and research.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 2: INTERACTIVE CALENDAR & DATE INSPECTOR (COL 5) -->
+          <div class="lg:col-span-5 space-y-6">
+            <!-- Calendar Card -->
+            <div class="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4 shadow-inner">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h5 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                    <i class="fa-solid fa-calendar text-cyan-400"></i> October 2026 Calendar
+                  </h5>
+                  <span class="text-[10px] text-slate-400">Select any date to view exact screen time</span>
+                </div>
+                <div class="flex items-center gap-2 text-[10px] font-mono">
+                  <span class="flex items-center gap-1 text-cyan-300"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Laptop</span>
+                  <span class="flex items-center gap-1 text-purple-300"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Phone</span>
+                </div>
+              </div>
+
+              <!-- Days of week header -->
+              <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-mono text-slate-400 font-bold uppercase pb-1">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+              </div>
+
+              <!-- Calendar Grid (1 - 31) -->
+              <div id="cxd-calendar-grid" class="grid grid-cols-7 gap-1.5">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- SELECTED DATE TELEMETRY INSPECTOR CARD -->
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-slate-900 to-purple-950/40 border border-indigo-500/40 space-y-3.5 shadow-xl">
+              <div class="flex items-center justify-between border-b border-indigo-500/20 pb-2">
+                <span class="text-xs font-black text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-crosshairs text-cyan-400"></i> Date Telemetry Inspector
+                </span>
+                <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200 border border-indigo-500/30">Exact Telemetry</span>
+              </div>
+
+              <div>
+                <h4 id="cxd-inspector-date" class="text-sm font-black text-white">October 27, 2026 Telemetry Snapshot</h4>
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                  <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                    <span class="text-[10px] font-mono text-cyan-400 uppercase block">💻 Laptop Time</span>
+                    <span id="cxd-inspector-laptop-val" class="text-base font-black font-mono text-white">5h 32m</span>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                    <span class="text-[10px] font-mono text-purple-400 uppercase block">📱 Phone Time</span>
+                    <span id="cxd-inspector-phone-val" class="text-base font-black font-mono text-white">4h 18m</span>
+                  </div>
+                </div>
+                <div class="mt-2 text-xs font-mono text-slate-300 flex items-center justify-between px-1">
+                  <span>Combined Total:</span>
+                  <span id="cxd-inspector-comb-val" class="font-bold text-amber-300">9h 50m</span>
+                </div>
+              </div>
+
+              <!-- Top apps snapshot for this date -->
+              <div id="cxd-inspector-top-apps" class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                <!-- Rendered dynamically -->
+              </div>
+
+              <button type="button" onclick="ArcCrossDeviceComparison.jumpToDayFromCalendar()" class="w-full py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 transition active:scale-95">
+                <i class="fa-solid fa-magnifying-glass text-cyan-300"></i> Open Day Split View for this Date &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM FULL-WIDTH STATUS BAR -->
+    <div class="shrink-0 px-4 sm:px-8 py-3 border-t border-slate-800 bg-slate-950/90 backdrop-blur-md flex items-center justify-between text-xs shadow-lg">
+      <div class="flex items-center gap-2 text-slate-400 font-mono">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Cross-Device Comparison Engine: <b class="text-white">Active</b></span>
+      </div>
+      <div class="hidden md:flex items-center gap-2 text-[11px] text-slate-500 font-mono">
+        <span>Mock Telemetry Engine &bull; Press <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">ESC</kbd> to return</span>
+      </div>
+      <button type="button" onclick="ArcCrossDeviceComparison.closeModal()" class="px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase tracking-wider transition active:scale-95">
+        Done
+      </button>
     </div>
   </div>
 </div>
@@ -17787,6 +18338,54 @@ window.ArcGold = (function() {
             </div>
             <div id="gold-promo-error-msg" class="text-[11px] text-rose-400 font-medium hidden"></div>
           `}
+        </div>
+
+        <!-- ARC GOLD VIP FEATURE SPOTLIGHT: FOCUS STRICT MODE -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900/90 to-amber-950/20 border border-amber-500/40 shadow-lg space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center text-lg shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-black text-white">Focus Strict Mode</h4>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1 shadow-sm">
+                    <i class="fa-solid fa-crown text-[8px] text-amber-400"></i> VIP EXCLUSIVE
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">Zero early exit. Enforces absolute discipline by locking early cancellation until 00:00.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 self-start sm:self-center">
+              ${goldActive ? `
+                <button type="button" onclick="handleFocusStrictModeToggle()" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 ${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 hover:bg-amber-500/30 shadow-md shadow-amber-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'}">
+                  <i class="fa-solid ${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'fa-lock text-amber-400' : 'fa-lock-open text-slate-400'}"></i>
+                  <span>${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'Strict Mode: ACTIVE' : 'Strict Mode: OFF'}</span>
+                </button>
+              ` : `
+                <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5">
+                  <i class="fa-solid fa-lock text-amber-400 text-[11px]"></i>
+                  <span>Included with Gold</span>
+                </div>
+              `}
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 font-mono">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-halved text-amber-400 text-xs"></i>
+              <span>Blocks "End Focus" button</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-ban text-amber-400 text-xs"></i>
+              <span>Guards pause &amp; shortcuts ('p')</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-bell text-amber-400 text-xs"></i>
+              <span>Lockout warning modal &amp; audio</span>
+            </div>
+          </div>
         </div>
 
         <!-- PRICING TIERS GRID -->
@@ -25133,6 +25732,669 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
     window.ArcGoogleSync.init();
   }
 })();
+
+// ============================================================================
+// ARC CROSS-DEVICE SCREEN TIME & APP USAGE COMPARISON ENGINE
+// Side-by-side app usage breakdown, Day/Week/Month telemetry with interactive
+// calendar, week-over-week comparison and percentage trending insight.
+// ============================================================================
+window.ArcCrossDeviceComparison = (function() {
+  const state = {
+    mode: 'day', // 'day' | 'week' | 'month'
+    dayIndex: 0,
+    weekSubView: 'overview',
+    deviceFilter: 'all',
+    selectedCalendarDate: 27
+  };
+
+  const telemetry = {
+    days: [
+      {
+        dateStr: 'Tuesday, Oct 27, 2026',
+        shortDate: 'Tue Oct 27',
+        dayName: 'Today',
+        dateNum: 27,
+        laptopSecs: 19920, // 5h 32m
+        phoneSecs: 15480,  // 4h 18m
+        homePhoneSecs: 1500, // 25m
+        higherDevice: 'laptop',
+        diffText: 'Laptop +1h 14m higher',
+        phoneTopApp: { name: 'Instagram', time: '1h 45m', pct: 41, category: 'Social', icon: 'fa-instagram', color: '#e879f9' },
+        laptopTopApp: { name: 'Google Chrome', time: '2h 20m', pct: 42, category: 'Web Research', icon: 'fa-chrome', color: '#38bdf8' },
+        phoneApps: [
+          { name: 'Instagram', time: '1h 45m', pct: 41, category: 'Social', icon: 'fa-brands fa-instagram', color: '#e879f9' },
+          { name: 'WhatsApp', time: '52m', pct: 20, category: 'Chat', icon: 'fa-brands fa-whatsapp', color: '#4ade80' },
+          { name: 'YouTube Shorts', time: '48m', pct: 19, category: 'Media', icon: 'fa-brands fa-youtube', color: '#f87171' },
+          { name: 'Spotify', time: '35m', pct: 14, category: 'Audio', icon: 'fa-brands fa-spotify', color: '#10b981' },
+          { name: 'X / Twitter', time: '18m', pct: 6, category: 'News', icon: 'fa-brands fa-x-twitter', color: '#94a3b8' }
+        ],
+        laptopApps: [
+          { name: 'Google Chrome', time: '2h 20m', pct: 42, category: 'Web Research', icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+          { name: 'Visual Studio Code', time: '1h 55m', pct: 35, category: 'Development', icon: 'fa-solid fa-code', color: '#0ea5e9' },
+          { name: 'Terminal / PowerShell', time: '45m', pct: 14, category: 'DevOps', icon: 'fa-solid fa-terminal', color: '#22d3ee' },
+          { name: 'Slack / Discord', time: '22m', pct: 6, category: 'Work Chat', icon: 'fa-brands fa-slack', color: '#818cf8' },
+          { name: 'Notion / Docs', time: '10m', pct: 3, category: 'Productivity', icon: 'fa-solid fa-book-bookmark', color: '#a78bfa' }
+        ]
+      },
+      {
+        dateStr: 'Monday, Oct 26, 2026',
+        shortDate: 'Mon Oct 26',
+        dayName: 'Yesterday',
+        dateNum: 26,
+        laptopSecs: 22500, // 6h 15m
+        phoneSecs: 13500,  // 3h 45m
+        homePhoneSecs: 1200, // 20m
+        higherDevice: 'laptop',
+        diffText: 'Laptop +2h 30m higher',
+        phoneTopApp: { name: 'Instagram', time: '1h 30m', pct: 40, category: 'Social', icon: 'fa-brands fa-instagram', color: '#e879f9' },
+        laptopTopApp: { name: 'Visual Studio Code', time: '2h 45m', pct: 44, category: 'Development', icon: 'fa-solid fa-code', color: '#0ea5e9' },
+        phoneApps: [
+          { name: 'Instagram', time: '1h 30m', pct: 40, category: 'Social', icon: 'fa-brands fa-instagram', color: '#e879f9' },
+          { name: 'WhatsApp', time: '45m', pct: 20, category: 'Chat', icon: 'fa-brands fa-whatsapp', color: '#4ade80' },
+          { name: 'YouTube', time: '40m', pct: 18, category: 'Media', icon: 'fa-brands fa-youtube', color: '#f87171' },
+          { name: 'Spotify', time: '30m', pct: 13, category: 'Audio', icon: 'fa-brands fa-spotify', color: '#10b981' },
+          { name: 'Reddit', time: '20m', pct: 9, category: 'Social', icon: 'fa-brands fa-reddit', color: '#fb923c' }
+        ],
+        laptopApps: [
+          { name: 'Visual Studio Code', time: '2h 45m', pct: 44, category: 'Development', icon: 'fa-solid fa-code', color: '#0ea5e9' },
+          { name: 'Google Chrome', time: '2h 10m', pct: 35, category: 'Web Research', icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+          { name: 'Terminal', time: '50m', pct: 13, category: 'DevOps', icon: 'fa-solid fa-terminal', color: '#22d3ee' },
+          { name: 'Slack', time: '20m', pct: 5, category: 'Work Chat', icon: 'fa-brands fa-slack', color: '#818cf8' },
+          { name: 'Figma', time: '10m', pct: 3, category: 'Design', icon: 'fa-brands fa-figma', color: '#ec4899' }
+        ]
+      },
+      {
+        dateStr: 'Sunday, Oct 25, 2026',
+        shortDate: 'Sun Oct 25',
+        dayName: 'Sunday',
+        dateNum: 25,
+        laptopSecs: 14400, // 4h 00m
+        phoneSecs: 18000,  // 5h 00m
+        homePhoneSecs: 2400, // 40m
+        higherDevice: 'phone',
+        diffText: 'Phone +1h 00m higher',
+        phoneTopApp: { name: 'YouTube', time: '2h 10m', pct: 43, category: 'Media', icon: 'fa-brands fa-youtube', color: '#f87171' },
+        laptopTopApp: { name: 'Google Chrome', time: '1h 50m', pct: 46, category: 'Web Research', icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+        phoneApps: [
+          { name: 'YouTube', time: '2h 10m', pct: 43, category: 'Media', icon: 'fa-brands fa-youtube', color: '#f87171' },
+          { name: 'Instagram', time: '1h 20m', pct: 27, category: 'Social', icon: 'fa-brands fa-instagram', color: '#e879f9' },
+          { name: 'WhatsApp', time: '50m', pct: 17, category: 'Chat', icon: 'fa-brands fa-whatsapp', color: '#4ade80' },
+          { name: 'Netflix', time: '30m', pct: 10, category: 'Streaming', icon: 'fa-solid fa-film', color: '#e11d48' },
+          { name: 'Spotify', time: '10m', pct: 3, category: 'Audio', icon: 'fa-brands fa-spotify', color: '#10b981' }
+        ],
+        laptopApps: [
+          { name: 'Google Chrome', time: '1h 50m', pct: 46, category: 'Web Research', icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+          { name: 'Visual Studio Code', time: '1h 10m', pct: 29, category: 'Development', icon: 'fa-solid fa-code', color: '#0ea5e9' },
+          { name: 'Discord', time: '35m', pct: 15, category: 'Gaming/Chat', icon: 'fa-brands fa-discord', color: '#6366f1' },
+          { name: 'Spotify Desktop', time: '15m', pct: 6, category: 'Audio', icon: 'fa-brands fa-spotify', color: '#10b981' },
+          { name: 'Settings/System', time: '10m', pct: 4, category: 'Utility', icon: 'fa-solid fa-gear', color: '#64748b' }
+        ]
+      }
+    ],
+    week: {
+      label: 'Week 4 (Oct 21 - Oct 27, 2026)',
+      totalLaptop: '39h 40m',
+      totalPhone: '28h 15m',
+      totalHomePhone: '2h 45m',
+      totalCombined: '67h 55m',
+      higherDevice: 'laptop',
+      diffText: 'Laptop +11h 25m higher across 7 days',
+      laptopPct: 58.4,
+      phonePct: 41.6,
+      topPhoneApp: { name: 'Instagram', time: '11h 40m', pct: 41, icon: 'fa-brands fa-instagram', color: '#e879f9' },
+      topLaptopApp: { name: 'Google Chrome', time: '16h 20m', pct: 41, icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+      daysPill: [
+        { dayName: 'Mon', dateNum: 21, laptop: '5h 10m', phone: '4h 05m' },
+        { dayName: 'Tue', dateNum: 22, laptop: '5h 45m', phone: '3h 50m' },
+        { dayName: 'Wed', dateNum: 23, laptop: '6h 15m', phone: '3h 30m' },
+        { dayName: 'Thu', dateNum: 24, laptop: '5h 20m', phone: '4h 10m' },
+        { dayName: 'Fri', dateNum: 25, laptop: '6h 30m', phone: '4h 45m' },
+        { dayName: 'Sat', dateNum: 26, laptop: '4h 10m', phone: '4h 30m' },
+        { dayName: 'Sun', dateNum: 27, laptop: '6h 30m', phone: '3h 25m' }
+      ],
+      topPhoneApps: [
+        { name: 'Instagram', time: '11h 40m', pct: 41, category: 'Social', icon: 'fa-brands fa-instagram', color: '#e879f9' },
+        { name: 'WhatsApp', time: '6h 15m', pct: 22, category: 'Chat', icon: 'fa-brands fa-whatsapp', color: '#4ade80' },
+        { name: 'YouTube Shorts', time: '5h 30m', pct: 20, category: 'Media', icon: 'fa-brands fa-youtube', color: '#f87171' },
+        { name: 'Spotify', time: '3h 20m', pct: 12, category: 'Audio', icon: 'fa-brands fa-spotify', color: '#10b981' },
+        { name: 'X / Twitter', time: '1h 30m', pct: 5, category: 'News', icon: 'fa-brands fa-x-twitter', color: '#94a3b8' }
+      ],
+      topLaptopApps: [
+        { name: 'Google Chrome', time: '16h 20m', pct: 41, category: 'Web Research', icon: 'fa-brands fa-chrome', color: '#38bdf8' },
+        { name: 'Visual Studio Code', time: '14h 10m', pct: 36, category: 'Development', icon: 'fa-solid fa-code', color: '#0ea5e9' },
+        { name: 'Terminal / PowerShell', time: '5h 15m', pct: 13, category: 'DevOps', icon: 'fa-solid fa-terminal', color: '#22d3ee' },
+        { name: 'Slack / Discord', time: '2h 30m', pct: 6, category: 'Work Chat', icon: 'fa-brands fa-slack', color: '#818cf8' },
+        { name: 'Notion / Docs', time: '1h 25m', pct: 4, category: 'Productivity', icon: 'fa-solid fa-book-bookmark', color: '#a78bfa' }
+      ]
+    },
+    month: {
+      label: 'October 2026',
+      totalLaptop: '92h 10m',
+      totalPhone: '54h 25m',
+      totalHomePhone: '7h 50m',
+      totalCombined: '146h 35m',
+      laptopPct: 62.9,
+      phonePct: 37.1,
+      dailyAverage: '4h 53m / day',
+      peakDay: 'Oct 14 (7h 12m combined)',
+      disciplinedDay: 'Oct 22 (2h 18m combined)',
+      dominantDevice: 'Laptop (+37h 45m higher than phone)',
+      weeks: [
+        { label: 'Week 1 (Oct 1 - Oct 7)', laptopTime: '21h 10m', phoneTime: '19h 30m', laptopPct: 52, phonePct: 48, status: 'Balanced (52% / 48%)' },
+        { label: 'Week 2 (Oct 8 - Oct 14)', laptopTime: '23h 45m', phoneTime: '18h 15m', laptopPct: 56, phonePct: 44, status: 'Laptop Rising (+4%)' },
+        { label: 'Week 3 (Oct 15 - Oct 21)', laptopTime: '25h 20m', phoneTime: '16h 30m', laptopPct: 61, phonePct: 39, status: 'Laptop Rising (+5%)' },
+        { label: 'Week 4 (Oct 22 - Oct 28)', laptopTime: '27h 15m', phoneTime: '15h 10m', laptopPct: 64, phonePct: 36, status: 'Laptop Rising (+3%)' }
+      ],
+      trendingShift: 'Laptop usage rose +12.0% (52% → 64%) while Phone usage fell -12.0% (48% → 36%)',
+      calendarDays: Array.from({ length: 31 }, (_, i) => {
+        const d = i + 1;
+        const baseLaptopMin = 140 + ((d * 17) % 180);
+        const basePhoneMin = 90 + ((d * 13) % 160);
+        const lH = Math.floor(baseLaptopMin / 60);
+        const lM = baseLaptopMin % 60;
+        const pH = Math.floor(basePhoneMin / 60);
+        const pM = basePhoneMin % 60;
+        const totMin = baseLaptopMin + basePhoneMin;
+        const totH = Math.floor(totMin / 60);
+        const totM = totMin % 60;
+        return {
+          dayNum: d,
+          laptopTime: `${lH}h ${lM}m`,
+          phoneTime: `${pH}h ${pM}m`,
+          combinedTime: `${totH}h ${totM}m`,
+          laptopMins: baseLaptopMin,
+          phoneMins: basePhoneMin,
+          higher: baseLaptopMin >= basePhoneMin ? 'laptop' : 'phone',
+          topLaptopApp: baseLaptopMin > 240 ? 'Visual Studio Code' : 'Google Chrome',
+          topPhoneApp: basePhoneMin > 180 ? 'Instagram' : 'WhatsApp'
+        };
+      })
+    }
+  };
+
+  function openModal(mode = 'day') {
+    state.mode = mode;
+    const modal = document.getElementById('arc-cross-device-comparison-modal');
+    if (modal) {
+      modal.classList.add('open');
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+      renderAll();
+      if (typeof playSfx === 'function') playSfx('modalOpen');
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('arc-cross-device-comparison-modal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+      if (typeof playSfx === 'function') playSfx('click');
+    }
+  }
+
+  function setMode(newMode) {
+    state.mode = newMode;
+    renderAll();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function setDay(idx) {
+    state.dayIndex = Math.max(0, Math.min(telemetry.days.length - 1, idx));
+    renderDayView();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function prevDay() {
+    if (state.dayIndex < telemetry.days.length - 1) {
+      setDay(state.dayIndex + 1);
+    }
+  }
+
+  function nextDay() {
+    if (state.dayIndex > 0) {
+      setDay(state.dayIndex - 1);
+    }
+  }
+
+  function setWeekSubView(view) {
+    state.weekSubView = view;
+    renderWeekView();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function setDeviceFilter(filter) {
+    state.deviceFilter = filter;
+    renderAll();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function selectCalendarDate(dateNum) {
+    state.selectedCalendarDate = dateNum;
+    renderCalendar();
+    renderCalendarInspector();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function jumpToDayFromCalendar() {
+    state.mode = 'day';
+    state.dayIndex = 0;
+    renderAll();
+    if (typeof playSfx === 'function') playSfx('modalOpen');
+  }
+
+  function renderAll() {
+    updateModePills();
+    updateDeviceFilterUI();
+
+    const dayView = document.getElementById('cxd-view-day');
+    const weekView = document.getElementById('cxd-view-week');
+    const monthView = document.getElementById('cxd-view-month');
+
+    if (dayView) dayView.style.display = state.mode === 'day' ? 'block' : 'none';
+    if (weekView) weekView.style.display = state.mode === 'week' ? 'block' : 'none';
+    if (monthView) monthView.style.display = state.mode === 'month' ? 'block' : 'none';
+
+    if (state.mode === 'day') renderDayView();
+    else if (state.mode === 'week') renderWeekView();
+    else if (state.mode === 'month') renderMonthView();
+  }
+
+  function updateModePills() {
+    const btnDay = document.getElementById('cxd-btn-mode-day');
+    const btnWeek = document.getElementById('cxd-btn-mode-week');
+    const btnMonth = document.getElementById('cxd-btn-mode-month');
+
+    [btnDay, btnWeek, btnMonth].forEach(btn => {
+      if (!btn) return;
+      btn.className = 'px-3.5 py-1.5 rounded-xl font-extrabold text-xs uppercase tracking-wider transition active:scale-95 text-slate-400 hover:text-white bg-slate-900 border border-slate-800';
+    });
+
+    const activeBtn = state.mode === 'day' ? btnDay : (state.mode === 'week' ? btnWeek : btnMonth);
+    if (activeBtn) {
+      activeBtn.className = 'px-3.5 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider transition active:scale-95 text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400 shadow-md shadow-indigo-600/30';
+    }
+  }
+
+  function updateDeviceFilterUI() {
+    const sel = document.getElementById('cxd-device-select');
+    if (sel && sel.value !== state.deviceFilter) {
+      sel.value = state.deviceFilter;
+    }
+  }
+
+  function renderDayView() {
+    const day = telemetry.days[state.dayIndex] || telemetry.days[0];
+    const prevBtn = document.getElementById('cxd-day-prev-btn');
+    const nextBtn = document.getElementById('cxd-day-next-btn');
+    const titleEl = document.getElementById('cxd-day-title');
+
+    if (prevBtn) prevBtn.disabled = state.dayIndex >= telemetry.days.length - 1;
+    if (nextBtn) nextBtn.disabled = state.dayIndex <= 0;
+    if (titleEl) titleEl.textContent = day.dateStr;
+
+    // Head-to-Head Split Summary
+    const laptopH = Math.floor(day.laptopSecs / 3600);
+    const laptopM = Math.floor((day.laptopSecs % 3600) / 60);
+    const phoneH = Math.floor(day.phoneSecs / 3600);
+    const phoneM = Math.floor((day.phoneSecs % 3600) / 60);
+    const totSecs = day.laptopSecs + day.phoneSecs;
+    const laptopPct = Math.round((day.laptopSecs / totSecs) * 100);
+    const phonePct = 100 - laptopPct;
+
+    const summaryPhoneVal = document.getElementById('cxd-day-sum-phone-val');
+    const summaryLaptopVal = document.getElementById('cxd-day-sum-laptop-val');
+    const diffBadge = document.getElementById('cxd-day-diff-badge');
+    const barPhone = document.getElementById('cxd-day-bar-phone');
+    const barLaptop = document.getElementById('cxd-day-bar-laptop');
+
+    if (summaryPhoneVal) summaryPhoneVal.textContent = `${phoneH}h ${phoneM}m (${phonePct}%)`;
+    if (summaryLaptopVal) summaryLaptopVal.textContent = `${laptopH}h ${laptopM}m (${laptopPct}%)`;
+    if (diffBadge) {
+      if (day.higherDevice === 'laptop') {
+        diffBadge.className = 'px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs font-mono font-black flex items-center gap-1.5 shadow-sm';
+        diffBadge.innerHTML = `<i class="fa-solid fa-laptop text-cyan-400"></i> LAPTOP HIGHER (${day.diffText})`;
+      } else {
+        diffBadge.className = 'px-3.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/40 text-xs font-mono font-black flex items-center gap-1.5 shadow-sm';
+        diffBadge.innerHTML = `<i class="fa-solid fa-mobile-screen text-purple-400"></i> PHONE HIGHER (${day.diffText})`;
+      }
+    }
+    if (barPhone) barPhone.style.width = `${phonePct}%`;
+    if (barLaptop) barLaptop.style.width = `${laptopPct}%`;
+
+    // Phone Panel
+    const phoneTimeEl = document.getElementById('cxd-phone-total-time');
+    if (phoneTimeEl) phoneTimeEl.textContent = `${phoneH}h ${phoneM}m`;
+    const phoneSpotlightName = document.getElementById('cxd-phone-spotlight-name');
+    const phoneSpotlightTime = document.getElementById('cxd-phone-spotlight-time');
+    const phoneSpotlightPct = document.getElementById('cxd-phone-spotlight-pct');
+    const phoneSpotlightBar = document.getElementById('cxd-phone-spotlight-bar');
+
+    if (phoneSpotlightName) phoneSpotlightName.textContent = day.phoneTopApp.name;
+    if (phoneSpotlightTime) phoneSpotlightTime.textContent = day.phoneTopApp.time;
+    if (phoneSpotlightPct) phoneSpotlightPct.textContent = `${day.phoneTopApp.pct}% of mobile usage`;
+    if (phoneSpotlightBar) phoneSpotlightBar.style.width = `${day.phoneTopApp.pct}%`;
+
+    const phoneListEl = document.getElementById('cxd-phone-apps-list');
+    if (phoneListEl) {
+      phoneListEl.innerHTML = day.phoneApps.map(app => `
+        <div class="p-2.5 rounded-xl bg-slate-900/70 border border-purple-500/20 flex flex-col gap-1.5 hover:bg-slate-900 transition">
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300 text-xs shrink-0">
+                <i class="${app.icon}"></i>
+              </span>
+              <span class="font-bold text-white">${app.name}</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-purple-950/60 text-purple-300 border border-purple-800">${app.category}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-black text-purple-300">${app.time}</span>
+              <span class="font-mono font-bold text-slate-400 text-[11px] w-10 text-right">${app.pct}%</span>
+            </div>
+          </div>
+          <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
+            <div class="h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300" style="width: ${app.pct}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Laptop Panel
+    const laptopTimeEl = document.getElementById('cxd-laptop-total-time');
+    if (laptopTimeEl) laptopTimeEl.textContent = `${laptopH}h ${laptopM}m`;
+    const laptopSpotlightName = document.getElementById('cxd-laptop-spotlight-name');
+    const laptopSpotlightTime = document.getElementById('cxd-laptop-spotlight-time');
+    const laptopSpotlightPct = document.getElementById('cxd-laptop-spotlight-pct');
+    const laptopSpotlightBar = document.getElementById('cxd-laptop-spotlight-bar');
+
+    if (laptopSpotlightName) laptopSpotlightName.textContent = day.laptopTopApp.name;
+    if (laptopSpotlightTime) laptopSpotlightTime.textContent = day.laptopTopApp.time;
+    if (laptopSpotlightPct) laptopSpotlightPct.textContent = `${day.laptopTopApp.pct}% of laptop usage`;
+    if (laptopSpotlightBar) laptopSpotlightBar.style.width = `${day.laptopTopApp.pct}%`;
+
+    const laptopListEl = document.getElementById('cxd-laptop-apps-list');
+    if (laptopListEl) {
+      laptopListEl.innerHTML = day.laptopApps.map(app => `
+        <div class="p-2.5 rounded-xl bg-slate-900/70 border border-cyan-500/20 flex flex-col gap-1.5 hover:bg-slate-900 transition">
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-300 text-xs shrink-0">
+                <i class="${app.icon}"></i>
+              </span>
+              <span class="font-bold text-white">${app.name}</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-800">${app.category}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-black text-cyan-300">${app.time}</span>
+              <span class="font-mono font-bold text-slate-400 text-[11px] w-10 text-right">${app.pct}%</span>
+            </div>
+          </div>
+          <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
+            <div class="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300" style="width: ${app.pct}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function renderWeekView() {
+    const w = telemetry.week;
+    const weekTitleEl = document.getElementById('cxd-week-title');
+    if (weekTitleEl) weekTitleEl.textContent = w.label;
+
+    // Week navigation pills
+    const pillsContainer = document.getElementById('cxd-week-pills-container');
+    if (pillsContainer) {
+      const isOverview = state.weekSubView === 'overview';
+      let html = `
+        <button type="button" onclick="ArcCrossDeviceComparison.setWeekSubView('overview')" class="px-3 py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition ${isOverview ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 border border-indigo-400' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}">
+          📊 Entire Week Overview
+        </button>
+      `;
+
+      w.daysPill.forEach((d, idx) => {
+        const isSelected = state.weekSubView === idx;
+        html += `
+          <button type="button" onclick="ArcCrossDeviceComparison.setWeekSubView(${idx})" class="px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition flex items-center gap-1.5 ${isSelected ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400 ring-1 ring-cyan-400 shadow-sm' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}">
+            <span>${d.dayName}</span>
+            <span class="text-[10px] opacity-70">${d.dateNum}</span>
+          </button>
+        `;
+      });
+      pillsContainer.innerHTML = html;
+    }
+
+    const weekOverviewPanel = document.getElementById('cxd-week-overview-panel');
+    const weekSingleDayPanel = document.getElementById('cxd-week-singleday-panel');
+
+    if (state.weekSubView === 'overview') {
+      if (weekOverviewPanel) weekOverviewPanel.style.display = 'block';
+      if (weekSingleDayPanel) weekSingleDayPanel.style.display = 'none';
+
+      const wPhoneVal = document.getElementById('cxd-week-phone-total');
+      const wLaptopVal = document.getElementById('cxd-week-laptop-total');
+      const wDiff = document.getElementById('cxd-week-diff-badge');
+      const wBarPhone = document.getElementById('cxd-week-bar-phone');
+      const wBarLaptop = document.getElementById('cxd-week-bar-laptop');
+
+      if (wPhoneVal) wPhoneVal.textContent = `${w.totalPhone} (${w.phonePct}%)`;
+      if (wLaptopVal) wLaptopVal.textContent = `${w.totalLaptop} (${w.laptopPct}%)`;
+      if (wDiff) wDiff.textContent = w.diffText;
+      if (wBarPhone) wBarPhone.style.width = `${w.phonePct}%`;
+      if (wBarLaptop) wBarLaptop.style.width = `${w.laptopPct}%`;
+
+      // 7-Day comparative bar chart
+      const chartContainer = document.getElementById('cxd-week-bars-chart');
+      if (chartContainer) {
+        chartContainer.innerHTML = w.daysPill.map(d => {
+          const lH = Math.min(100, Math.max(15, (parseInt(d.laptop) / 8) * 100));
+          const pH = Math.min(100, Math.max(15, (parseInt(d.phone) / 8) * 100));
+          return `
+            <div class="flex flex-col items-center gap-1 h-full justify-end group">
+              <div class="flex items-end gap-1.5 h-32 w-full justify-center">
+                <!-- Phone Bar -->
+                <div class="w-3.5 sm:w-4 rounded-t-md bg-gradient-to-t from-purple-700 to-pink-500 shadow-sm relative group/phone" style="height: ${pH}%;">
+                  <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-mono text-purple-300 font-bold opacity-0 group-hover/phone:opacity-100 transition whitespace-nowrap bg-slate-900 px-1 rounded border border-purple-500/40 z-10">${d.phone}</span>
+                </div>
+                <!-- Laptop Bar -->
+                <div class="w-3.5 sm:w-4 rounded-t-md bg-gradient-to-t from-cyan-600 to-blue-400 shadow-sm relative group/laptop" style="height: ${lH}%;">
+                  <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-mono text-cyan-300 font-bold opacity-0 group-hover/laptop:opacity-100 transition whitespace-nowrap bg-slate-900 px-1 rounded border border-cyan-500/40 z-10">${d.laptop}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono font-bold text-slate-400 uppercase mt-1">${d.dayName}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Weekly Top Apps
+      const wPhoneApps = document.getElementById('cxd-week-phone-apps');
+      const wLaptopApps = document.getElementById('cxd-week-laptop-apps');
+
+      if (wPhoneApps) {
+        wPhoneApps.innerHTML = w.topPhoneApps.map(a => `
+          <div class="p-2 rounded-xl bg-slate-900/60 border border-purple-500/20 flex items-center justify-between text-xs">
+            <span class="flex items-center gap-2 font-bold text-white"><i class="${a.icon} text-purple-400"></i> ${a.name}</span>
+            <span class="font-mono font-bold text-purple-300">${a.time} <span class="text-slate-500">(${a.pct}%)</span></span>
+          </div>
+        `).join('');
+      }
+
+      if (wLaptopApps) {
+        wLaptopApps.innerHTML = w.topLaptopApps.map(a => `
+          <div class="p-2 rounded-xl bg-slate-900/60 border border-cyan-500/20 flex items-center justify-between text-xs">
+            <span class="flex items-center gap-2 font-bold text-white"><i class="${a.icon} text-cyan-400"></i> ${a.name}</span>
+            <span class="font-mono font-bold text-cyan-300">${a.time} <span class="text-slate-500">(${a.pct}%)</span></span>
+          </div>
+        `).join('');
+      }
+    } else {
+      if (weekOverviewPanel) weekOverviewPanel.style.display = 'none';
+      if (weekSingleDayPanel) weekSingleDayPanel.style.display = 'block';
+
+      const pickedDay = w.daysPill[state.weekSubView];
+      const singleDayTitle = document.getElementById('cxd-week-singleday-title');
+      const singleDayPhone = document.getElementById('cxd-week-singleday-phone');
+      const singleDayLaptop = document.getElementById('cxd-week-singleday-laptop');
+
+      if (singleDayTitle) singleDayTitle.textContent = `${pickedDay.dayName}, Oct ${pickedDay.dateNum}, 2026 Telemetry`;
+      if (singleDayPhone) singleDayPhone.textContent = pickedDay.phone;
+      if (singleDayLaptop) singleDayLaptop.textContent = pickedDay.laptop;
+    }
+  }
+
+  function renderMonthView() {
+    const m = telemetry.month;
+
+    // Filter Buttons UI
+    const filterContainer = document.getElementById('cxd-month-device-filters');
+    if (filterContainer) {
+      const filters = [
+        { id: 'all', label: 'All Devices' },
+        { id: 'phone', label: '📱 Phone Only' },
+        { id: 'laptop', label: '💻 Laptop Only' },
+        { id: 'homePhone', label: '☎️ Home Phone / Tablet' }
+      ];
+      filterContainer.innerHTML = filters.map(f => {
+        const isSel = state.deviceFilter === f.id;
+        return `
+          <button type="button" onclick="ArcCrossDeviceComparison.setDeviceFilter('${f.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${isSel ? 'bg-indigo-600 text-white border border-indigo-400 shadow-md shadow-indigo-600/30' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}">
+            ${f.label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    const mTotalDisplay = document.getElementById('cxd-month-total-screentime');
+    const mSubtext = document.getElementById('cxd-month-total-subtext');
+
+    if (state.deviceFilter === 'phone') {
+      if (mTotalDisplay) mTotalDisplay.textContent = m.totalPhone;
+      if (mSubtext) mSubtext.textContent = '📱 Mobile Phone Usage • 37.1% of combined screen time';
+    } else if (state.deviceFilter === 'laptop') {
+      if (mTotalDisplay) mTotalDisplay.textContent = m.totalLaptop;
+      if (mSubtext) mSubtext.textContent = '💻 Laptop / Workstation Usage • 62.9% of combined screen time';
+    } else if (state.deviceFilter === 'homePhone') {
+      if (mTotalDisplay) mTotalDisplay.textContent = m.totalHomePhone;
+      if (mSubtext) mSubtext.textContent = '☎️ Home Phone / Shared Tablet Usage • Auxiliary device telemetry';
+    } else {
+      if (mTotalDisplay) mTotalDisplay.textContent = m.totalCombined;
+      if (mSubtext) mSubtext.textContent = `💻 ${m.totalLaptop} Laptop (63%) • 📱 ${m.totalPhone} Phone (37%) • 30 Days Evaluated`;
+    }
+
+    // Week 1 vs Week 2 vs Week 3 vs Week 4 comparison
+    const weeksContainer = document.getElementById('cxd-month-weeks-comparison');
+    if (weeksContainer) {
+      weeksContainer.innerHTML = m.weeks.map(wk => `
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-white">${wk.label}</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${wk.status}</span>
+          </div>
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-cyan-300 font-bold flex items-center gap-1"><i class="fa-solid fa-laptop text-[10px]"></i> ${wk.laptopTime} (${wk.laptopPct}%)</span>
+            <span class="text-purple-300 font-bold flex items-center gap-1"><i class="fa-solid fa-mobile-screen text-[10px]"></i> ${wk.phoneTime} (${wk.phonePct}%)</span>
+          </div>
+          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden flex border border-slate-800">
+            <div class="h-full bg-cyan-400" style="width: ${wk.laptopPct}%;"></div>
+            <div class="h-full bg-purple-400" style="width: ${wk.phonePct}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const trendBanner = document.getElementById('cxd-month-trend-banner');
+    if (trendBanner) {
+      trendBanner.textContent = m.trendingShift;
+    }
+
+    renderCalendar();
+    renderCalendarInspector();
+  }
+
+  function renderCalendar() {
+    const calendarGrid = document.getElementById('cxd-calendar-grid');
+    if (!calendarGrid) return;
+
+    // October 2026 starts on Thursday (offset = 4 empty cells)
+    const offset = 4;
+    let html = '';
+
+    for (let i = 0; i < offset; i++) {
+      html += '<div class="h-10 sm:h-12 rounded-xl bg-slate-950/30 border border-slate-900 pointer-events-none opacity-30"></div>';
+    }
+
+    telemetry.month.calendarDays.forEach(day => {
+      const isSelected = day.dayNum === state.selectedCalendarDate;
+      html += `
+        <button type="button" onclick="ArcCrossDeviceComparison.selectCalendarDate(${day.dayNum})" class="h-10 sm:h-12 rounded-xl border flex flex-col items-center justify-between p-1.5 transition active:scale-95 group ${isSelected ? 'bg-indigo-600/30 border-indigo-400 ring-2 ring-indigo-400 shadow-md shadow-indigo-600/30' : 'bg-slate-950/80 border-slate-800 hover:border-slate-700 hover:bg-slate-900'}">
+          <span class="text-[11px] font-mono font-bold ${isSelected ? 'text-white' : 'text-slate-300'}">${day.dayNum}</span>
+          <div class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400" title="Laptop logged"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-400" title="Phone logged"></span>
+          </div>
+        </button>
+      `;
+    });
+
+    calendarGrid.innerHTML = html;
+  }
+
+  function renderCalendarInspector() {
+    const dateData = telemetry.month.calendarDays.find(d => d.dayNum === state.selectedCalendarDate) || telemetry.month.calendarDays[26];
+    const inspectorTitle = document.getElementById('cxd-inspector-date');
+    const laptopVal = document.getElementById('cxd-inspector-laptop-val');
+    const phoneVal = document.getElementById('cxd-inspector-phone-val');
+    const combVal = document.getElementById('cxd-inspector-comb-val');
+    const topAppsEl = document.getElementById('cxd-inspector-top-apps');
+
+    if (inspectorTitle) inspectorTitle.textContent = `October ${dateData.dayNum}, 2026 Telemetry Snapshot`;
+    if (laptopVal) laptopVal.textContent = dateData.laptopTime;
+    if (phoneVal) phoneVal.textContent = dateData.phoneTime;
+    if (combVal) combVal.textContent = dateData.combinedTime;
+    if (topAppsEl) {
+      topAppsEl.innerHTML = `
+        <div class="text-xs text-slate-300 space-y-1">
+          <div class="flex items-center justify-between"><span class="text-cyan-300 font-bold"><i class="fa-solid fa-laptop mr-1"></i> Top Laptop App:</span> <span class="font-mono text-white">${dateData.topLaptopApp}</span></div>
+          <div class="flex items-center justify-between"><span class="text-purple-300 font-bold"><i class="fa-solid fa-mobile-screen mr-1"></i> Top Phone App:</span> <span class="font-mono text-white">${dateData.topPhoneApp}</span></div>
+        </div>
+      `;
+    }
+  }
+
+  // Keyboard shortcut support (Escape closes comparison modal)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('arc-cross-device-comparison-modal');
+      if (modal && (modal.classList.contains('open') || modal.style.display === 'flex')) {
+        closeModal();
+      }
+    }
+  });
+
+  return {
+    state,
+    telemetry,
+    openModal,
+    closeModal,
+    setMode,
+    setDay,
+    prevDay,
+    nextDay,
+    setWeekSubView,
+    setDeviceFilter,
+    selectCalendarDate,
+    jumpToDayFromCalendar,
+    renderAll,
+    renderDayView,
+    renderWeekView,
+    renderMonthView,
+    renderCalendar,
+    renderCalendarInspector
+  };
+})();
+
 </script>
 
 </body>
