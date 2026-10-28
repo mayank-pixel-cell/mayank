@@ -1385,11 +1385,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
 
-                <!-- Chrome Desktop PWA Install Button (Omnibox & One-Click Install) -->
-                <button role="button" id="btn-header-install" onclick="ArcStoreRating.installApp()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-indigo-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-400/50 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Install Arc Tracker as a Chrome App (Computer Monitor icon in address bar or click here)">
-                    <i class="fa-solid fa-desktop text-xs text-cyan-400"></i>
-                    <span class="hidden md:inline text-[11px]">Install</span>
-                </button>
 
                 <!-- Black & White Mode Toggle (Arc Gold VIP) -->
                 <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • Arc Gold VIP)">
@@ -23312,7 +23307,6 @@ input[type="search"], input[type="date"], input[type="time"], select, textarea {
   .arc-safe-header h1 {
     font-size: 0.85rem !important;
   }
-  .arc-safe-header #btn-header-install,
   .arc-safe-header #btn-header-bw,
   .arc-safe-header #btn-header-discretion,
   .arc-safe-header #btn-share-tracker {
@@ -23376,7 +23370,6 @@ input[type="search"], input[type="date"], input[type="time"], select, textarea {
     padding: 0.35rem 0.5rem !important;
     font-size: 11px !important;
   }
-  .arc-safe-header #btn-header-install,
   .arc-safe-header #btn-header-bw,
   .arc-safe-header #btn-header-discretion,
   .arc-safe-header #btn-share-tracker {
