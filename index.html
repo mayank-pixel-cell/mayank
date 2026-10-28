@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Modern Web Guidance: Opt into native Android & OS dynamic text scaling -->
+    <meta name="text-scale" content="scale">
+    <!-- Android Chrome Dynamic Theme & Status Bar Color -->
+    <meta name="theme-color" content="#060913" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="color-scheme" content="dark light">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Arc Tracker">
     <title>Winter & Summer Arc Interactive Mobile Tracker 2026</title>
     <link rel="manifest" href="./manifest.json">
     <!-- iOS Safari & Web Clip App Support -->
@@ -10,7 +18,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Arc Tracker">
     <meta name="format-detection" content="telephone=no">
-    <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
     <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
@@ -1529,15 +1536,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start pt-1">
-                    <div class="lg:col-span-8 space-y-2">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-start pt-1">
+                    <div class="md:col-span-7 lg:col-span-8 space-y-2">
                         <div class="grid grid-cols-7 gap-1 text-center font-bold text-[10px] sm:text-[11px] text-slate-400 pb-1 uppercase tracking-wider">
                             <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
                         </div>
                         <div id="tracker-calendar-days-grid" class="grid grid-cols-7 gap-1 sm:gap-1.5 text-center text-xs"></div>
                     </div>
 
-                    <div class="lg:col-span-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 space-y-2.5">
+                    <div class="md:col-span-5 lg:col-span-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selected Day Details</span>
                             <div class="flex items-center gap-1">
@@ -1566,9 +1573,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
                 <!-- HABIT LIST & REFLECTION LOG -->
-                <div class="lg:col-span-2 space-y-4">
+                <div class="md:col-span-7 lg:col-span-8 space-y-4">
                     <div class="flex items-center justify-between glass-card p-3.5 sm:p-4 rounded-2xl">
                         <div>
                             <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
@@ -1596,7 +1603,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
 
                 <!-- SIDEBAR WIDGETS -->
-                <div class="space-y-4 sm:space-y-6">
+                <div class="md:col-span-5 lg:col-span-4 space-y-4 sm:space-y-6">
                     <!-- SCREEN TIME TRACKER WIDGET (MULTI-PLATFORM) -->
                     <div class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 space-y-3 sm:space-y-4 border-l-4 border-l-cyan-400 relative overflow-hidden">
                         <div class="flex items-center justify-between">
@@ -1872,8 +1879,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
 
             <!-- SPIDER WEB RADAR MATRIX & BREAKDOWN -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <div id="spider-web-card-container" class="lg:col-span-7 glass-card spider-web-card-container rounded-2xl sm:rounded-3xl p-4 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden group">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                <div id="spider-web-card-container" class="md:col-span-7 lg:col-span-7 glass-card spider-web-card-container rounded-2xl sm:rounded-3xl p-4 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden group">
                     <!-- Ambient Radial Halo Behind Spider Web -->
                     <div class="spider-ambient-halo absolute inset-0 m-auto w-[85%] h-[85%] rounded-full pointer-events-none -z-0"></div>
 
@@ -1910,7 +1917,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 space-y-4">
+                <div class="md:col-span-5 lg:col-span-5 space-y-4">
                     <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
                         <h3 class="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-layer-group text-purple-400"></i> Category Breakdown
@@ -2252,27 +2259,224 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </section>
 
-            <!-- ABOUT THE FOUNDER SECTION -->
+            <!-- ABOUT THE FOUNDER SECTION (Contracted by Default) -->
             <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-purple-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-4" aria-label="About the Founder">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-astronaut"></i> LEADERSHIP &amp; VISION
-                            </span>
+                <!-- CONTRACTED HEADER BAR (Clickable to Expand / Collapse) -->
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(); } else { toggleFounderPanel(); }" title="Click to read the Founder Story &amp; 100% Free Manifesto">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-lg shadow-purple-500/25 shrink-0 border border-purple-400/30">
+                            <i class="fa-solid fa-user-astronaut text-lg"></i>
                         </div>
-                        <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
-                            About the Founder
-                        </h3>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-sm sm:text-base font-black text-white tracking-wide truncate">
+                                    About the Founder
+                                </h3>
+                                <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
+                                    <i class="fa-solid fa-crown text-[9px] text-purple-300"></i> LEADERSHIP &amp; VISION
+                                </span>
+                                <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
+                                    <i class="fa-solid fa-gem text-[9px] text-emerald-300"></i> 100% FREE MANIFESTO
+                                </span>
+                            </div>
+                            <p id="founder-summary-hint" class="text-xs text-slate-400 mt-0.5 truncate">
+                                How the journey started • Goals &amp; uncompromised vision • Why Arc Tracker is 100% free • Tap to expand
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button id="founder-toggle-btn" type="button" onclick="event.stopPropagation(); if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(); } else { toggleFounderPanel(); }" class="px-3.5 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" title="Click to expand founder story">
+                            <span>Read Story</span>
+                            <i id="founder-chevron-icon" class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Blank placeholder content area ready to be updated later -->
-                <div id="founder-content-container" class="min-h-[140px] rounded-xl border-2 border-dashed border-slate-800/90 bg-slate-950/40 p-6 flex flex-col items-center justify-center text-center space-y-2">
-                    <div class="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm border border-purple-500/20">
-                        <i class="fa-solid fa-user-tie"></i>
+                <!-- EXPANDABLE DETAILS CONTENT (HIDDEN BY DEFAULT) -->
+                <div id="founder-expandable-content" class="hidden space-y-6 pt-3 border-t border-slate-800/80">
+                    <!-- SECTION 1: HOW THE JOURNEY STARTED -->
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2.5 text-purple-300 font-extrabold text-xs sm:text-sm tracking-wide uppercase font-mono">
+                            <span class="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-xs shrink-0">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </span>
+                            <span>1. The Genesis: How the Journey Started</span>
+                        </div>
+
+                        <div class="bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800/90 space-y-3.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                In late 2024, amidst the continuous hum of digital notifications and algorithmic feeds, I noticed something alarming in myself and everyone around me: <strong class="text-white">smartphones had ceased to be productivity tools and had quietly become dopamine casinos.</strong> Behavioral loops carefully tuned by tech giants were bleeding 4 to 8 hours a day from our lives, fracturing our capacity for deep, quiet concentration, and replacing real-world mastery with empty digital highs.
+                            </p>
+                            <p>
+                                When I committed to undertaking the <strong class="text-purple-300">Winter Arc</strong>—a 90-day seasonal crucible of radical discipline, rigorous workouts, cold focus, and silent self-reinvention—I searched for a software system to anchor my daily execution. What I found was unacceptable:
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                                <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                                    <i class="fa-solid fa-xmark text-rose-400 mt-0.5 shrink-0"></i>
+                                    <span><strong>Predatory Subscriptions:</strong> $10–$15 monthly paywalls just to check a basic daily habit box.</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                                    <i class="fa-solid fa-xmark text-rose-400 mt-0.5 shrink-0"></i>
+                                    <span><strong>Invasive Surveillance:</strong> Mandatory cloud accounts harvesting personal routines and screen time vulnerabilities.</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                                    <i class="fa-solid fa-xmark text-rose-400 mt-0.5 shrink-0"></i>
+                                    <span><strong>Fragile Online Apps:</strong> Cluttered interfaces that broke without internet and rewarded superficial vanity streaks.</span>
+                                </div>
+                            </div>
+                            <p>
+                                At 2:00 AM on a freezing night, frustrated with bloated apps that took more attention than they saved, I opened a clean code editor and began engineering <strong class="text-white">Arc Tracker</strong>. The thesis was uncompromising: an ironclad, local-first discipline operating system built to protect your attention as fiercely as armor protects a soldier—completely offline, zero data tracking, and brutally honest about where your time goes.
+                            </p>
+
+                            <!-- FOUNDER QUOTE CALLOUT -->
+                            <div class="p-4 rounded-xl bg-purple-950/30 border border-purple-500/30 text-purple-200 text-xs sm:text-sm italic font-medium flex items-center gap-3.5 shadow-inner">
+                                <i class="fa-solid fa-quote-left text-purple-400 text-xl shrink-0 opacity-80"></i>
+                                <span>"When you master your attention, you master your destiny. A person who commands their daily rituals in silence cannot be conquered by algorithms."</span>
+                            </div>
+                        </div>
                     </div>
-                    <span class="text-xs text-slate-400 font-mono">[ Details about the founder will be updated here ]</span>
+
+                    <!-- SECTION 2: GOALS & VISION -->
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2.5 text-cyan-300 font-extrabold text-xs sm:text-sm tracking-wide uppercase font-mono">
+                            <span class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xs shrink-0">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </span>
+                            <span>2. Goals &amp; Core Vision</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-2 flex flex-col justify-between">
+                                <div class="space-y-2">
+                                    <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-sm">
+                                        <i class="fa-solid fa-hourglass-start"></i>
+                                    </div>
+                                    <h4 class="text-xs sm:text-sm font-extrabold text-white">Reclaim 10,000,000 Hours</h4>
+                                    <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                                        Our singular metric of success is not daily active app impressions—it is how many millions of wasted hours users steal back from doomscrolling feeds to invest into their physical health, craft, businesses, and families.
+                                    </p>
+                                </div>
+                                <span class="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1 pt-1">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> Tangible Impact
+                                </span>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-2 flex flex-col justify-between">
+                                <div class="space-y-2">
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-sm">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                    </div>
+                                    <h4 class="text-xs sm:text-sm font-extrabold text-white">Absolute Data Sovereignty</h4>
+                                    <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                                        Your discipline vulnerabilities, screen time logs, and personal reflections belong exclusively to you. Arc Tracker is engineered with an airgapped privacy model: zero telemetry, zero analytics tracking, and instant raw JSON data control.
+                                    </p>
+                                </div>
+                                <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1 pt-1">
+                                    <i class="fa-solid fa-lock"></i> Zero Surveillance
+                                </span>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/90 space-y-2 flex flex-col justify-between">
+                                <div class="space-y-2">
+                                    <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-sm">
+                                        <i class="fa-solid fa-crown"></i>
+                                    </div>
+                                    <h4 class="text-xs sm:text-sm font-extrabold text-white">Elevating Human Willpower</h4>
+                                    <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                                        Motivation is an emotion that fades; systems are cold structures that endure. Our vision is to combine neuroscience-backed habit architecture with tactile RPG progression to make daily discipline visceral, engaging, and permanent.
+                                    </p>
+                                </div>
+                                <span class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1 pt-1">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Habit Architecture
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: WHY THE APP IS 100% FREE -->
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2.5 text-emerald-300 font-extrabold text-xs sm:text-sm tracking-wide uppercase font-mono">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xs shrink-0">
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+                            </span>
+                            <span>3. The Free Manifesto: Why Arc Tracker Is 100% Free Forever</span>
+                        </div>
+
+                        <div class="bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800/90 space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white">Self-Discipline Is a Human Right, Not a Luxury Subscription</h5>
+                                        <p class="text-[11px] sm:text-xs text-slate-300 mt-1 leading-relaxed">
+                                            When someone is struggling with phone addiction, feeling stagnant, or attempting to rebuild their self-respect from the ashes, the absolute last thing they need is a $12.99/month paywall blocking their ability to track their habits. Self-mastery tools should be universal weapons available to anyone with the heart to put in the work.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-microchip"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white">Zero Cloud Overhead by Architectural Design</h5>
+                                        <p class="text-[11px] sm:text-xs text-slate-300 mt-1 leading-relaxed">
+                                            Arc Tracker was deliberately designed as a 100% offline-first, client-side application. Your device's browser, IndexedDB storage engine, and local Web Workers do all the computing. Because we do not run multimillion-dollar centralized surveillance server farms tracking your daily check-ins, our server overhead is virtually zero—which means we never have a reason to bill you.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-ban"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-white">Zero Venture Capital • Zero Advertising • Zero Compromises</h5>
+                                        <p class="text-[11px] sm:text-xs text-slate-300 mt-1 leading-relaxed">
+                                            There is no board of venture capital investors demanding monthly growth targets or user attention monetization. There are no advertising SDKs selling your habits to third-party ad brokers. Arc Tracker is an independent labor of conviction created to serve your focus and sharpen your mind.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-crown"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-xs sm:text-sm font-bold text-amber-300">What is Arc Gold VIP? (Voluntary Patronage, Never Feature-Gating)</h5>
+                                        <p class="text-[11px] sm:text-xs text-slate-300 mt-1 leading-relaxed">
+                                            To support ongoing development and engineering, Arc Gold exists solely as an optional VIP patronage tier for supporters who appreciate aesthetic luxuries—such as exclusive 4K 16:9 laptop wallpapers and generative ambient audio drones. Every core productivity feature, habit tracker, rule engine, screen time matrix, and dopamine blocker is—and will always remain—100% free for everyone.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: THE FOUNDER'S PLEDGE & SIGNATURE -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-slate-950/60 to-indigo-950/40 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-600/30 border border-purple-400/50 flex items-center justify-center text-purple-300 text-xl shrink-0 shadow-inner">
+                                <i class="fa-solid fa-signature"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-black text-white">Mayank • Founder &amp; Architect</h4>
+                                <p class="text-[11px] text-purple-300 font-mono mt-0.5">
+                                    "Transform in silence. Let your daily habits and undeniable results speak for you."
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button type="button" onclick="if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(false); } else { toggleFounderPanel(false); }" class="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-2 transition cursor-pointer shadow-sm">
+                                <i class="fa-solid fa-chevron-up text-xs text-purple-400"></i>
+                                <span>Collapse Story</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -3987,48 +4191,57 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 </main>
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
-    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1.5 sm:px-3 pt-1 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] flex items-center justify-between gap-1 shadow-2xl">
-        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold active:scale-95 select-none touch-manipulation">
+    <!-- SMARTPHONE BOTTOM NAVIGATION BAR (ADAPTS ACROSS ALL ANDROID MODELS: 320px to 440px+) -->
+    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1 sm:px-2.5 pt-1 pb-[max(0.5rem,calc(0.35rem+env(safe-area-inset-bottom,0px))] flex items-center justify-between gap-0.5 sm:gap-1 shadow-2xl select-none">
+        <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-list-check text-base"></i>
+                <i class="fa-solid fa-list-check text-sm sm:text-base"></i>
                 <span class="mobile-active-dot absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Tracker</span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Tracker</span>
         </button>
-        <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+        <button id="mobile-tab-screentime" role="tab" aria-selected="false" aria-controls="view-screentime" onclick="switchTab('screentime')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-hourglass-half text-base"></i>
+                <i class="fa-solid fa-hourglass-half text-sm sm:text-base"></i>
                 <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_rgba(168,85,247,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Screen</span><span class="hidden sm:inline">Screen Time</span></span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Screen</span><span class="hidden sm:inline">Screen Time</span></span>
         </button>
-        <button id="mobile-tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onclick="switchTab('rules')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+        <button id="mobile-tab-rules" role="tab" aria-selected="false" aria-controls="view-rules" onclick="switchTab('rules')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-shield-halved text-base"></i>
+                <i class="fa-solid fa-shield-halved text-sm sm:text-base"></i>
                 <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Rules</span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Rules</span>
         </button>
-        <button id="mobile-tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onclick="switchTab('progression')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+        <button id="mobile-tab-progression" role="tab" aria-selected="false" aria-controls="view-progression" onclick="switchTab('progression')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-crown text-base"></i>
+                <i class="fa-solid fa-crown text-sm sm:text-base"></i>
                 <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(234,179,8,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Level</span><span class="hidden sm:inline">Level/KB</span></span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center"><span class="sm:hidden">Level</span><span class="hidden sm:inline">Level/KB</span></span>
         </button>
-        <button id="mobile-tab-results" role="tab" aria-selected="false" aria-controls="view-results" onclick="switchTab('results')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+        <button id="mobile-tab-results" role="tab" aria-selected="false" aria-controls="view-results" onclick="switchTab('results')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-diagram-project text-base"></i>
+                <i class="fa-solid fa-diagram-project text-sm sm:text-base"></i>
                 <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Analytics</span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Results</span>
         </button>
-        <button id="mobile-tab-settings" aria-label="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onclick="switchTab('settings')" class="flex-1 min-w-0 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation">
+        <button id="mobile-tab-settings" aria-label="Settings &amp; Controls" role="tab" aria-selected="false" aria-controls="view-settings" onclick="switchTab('settings')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-gear text-base"></i>
+                <i class="fa-solid fa-gear text-sm sm:text-base"></i>
                 <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_6px_rgba(236,72,153,1)]"></span>
             </div>
-            <span class="text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Settings</span>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Settings</span>
+        </button>
+        <button id="mobile-tab-notifications" aria-label="Updates &amp; Notifications" role="tab" aria-selected="false" aria-controls="view-notifications" onclick="switchTab('notifications')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
+            <div class="relative flex items-center justify-center">
+                <i class="fa-solid fa-bell text-sm sm:text-base"></i>
+                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,1)]"></span>
+                <span id="mobile-notif-count-badge" class="hidden absolute -top-1 -right-2 px-1 py-0.2 rounded-full text-[8px] font-black font-mono bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 leading-none shadow-sm">1</span>
+            </div>
+            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Updates</span>
         </button>
     </nav>
 
@@ -6570,10 +6783,41 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (founderCard) {
                     founderCard.style.display = '';
                     founderCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (window.ArcAboutFounder) {
+                        window.ArcAboutFounder.toggle(true);
+                    } else if (typeof toggleFounderPanel === 'function') {
+                        toggleFounderPanel(true);
+                    }
                 }
             }
         }
         window.filterSettingsView = filterSettingsView;
+
+        function toggleFounderPanel(forceState) {
+            const content = document.getElementById('founder-expandable-content');
+            const toggleBtn = document.getElementById('founder-toggle-btn');
+            const chevron = document.getElementById('founder-chevron-icon');
+            const summaryText = document.getElementById('founder-summary-hint');
+            if (!content) return;
+            const willExpand = (typeof forceState === 'boolean') ? forceState : content.classList.contains('hidden');
+            if (willExpand) {
+                content.classList.remove('hidden');
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = '<span>Collapse Story</span> <i class="fa-solid fa-chevron-up text-[10px]"></i>';
+                }
+                if (chevron) chevron.className = 'fa-solid fa-chevron-up text-[10px]';
+                if (summaryText) summaryText.textContent = 'How the journey started • Goals & uncompromised vision • Why Arc Tracker is 100% free • Tap to collapse';
+            } else {
+                content.classList.add('hidden');
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = '<span>Read Story</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>';
+                }
+                if (chevron) chevron.className = 'fa-solid fa-chevron-down text-[10px]';
+                if (summaryText) summaryText.textContent = 'How the journey started • Goals & uncompromised vision • Why Arc Tracker is 100% free • Tap to expand';
+            }
+            if (window.ArcAboutFounder) window.ArcAboutFounder.isExpanded = willExpand;
+        }
+        window.toggleFounderPanel = toggleFounderPanel;
 
         function renderHabits() {
             const container = document.getElementById('habits-container');
@@ -12145,25 +12389,50 @@ html[data-mode=light] details.faq-item[name="arc-faq"] [class*="bg-cyan-500/10"]
 
 /* 6. About the Founder Section (#settings-about-founder-card) */
 html[data-mode=light] #settings-about-founder-card {
-    background: rgba(255, 255, 255, 0.94) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
     border-color: #e2e8f0 !important;
     border-left-color: #9333ea !important;
     box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
 }
-html[data-mode=light] #settings-about-founder-card h3.text-white {
+html[data-mode=light] #settings-about-founder-card h3.text-white,
+html[data-mode=light] #settings-about-founder-card h4.text-white,
+html[data-mode=light] #settings-about-founder-card h5.text-white {
     color: #0f172a !important;
 }
-html[data-mode=light] #settings-about-founder-card [class*="bg-slate-950/60"] {
-    background: #faf5ff !important;
-    border-color: #e9d5ff !important;
+html[data-mode=light] #settings-about-founder-card [class*="bg-slate-950"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-slate-900"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-about-founder-card .text-slate-300 {
+    color: #334155 !important;
 }
 html[data-mode=light] #settings-about-founder-card .text-slate-400 {
-    color: #7e22ce !important;
+    color: #64748b !important;
 }
-html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/10"] {
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-950/30"],
+html[data-mode=light] #settings-about-founder-card [class*="from-purple-950/40"] {
+    background: #faf5ff !important;
+    border-color: #d8b4fe !important;
+    color: #581c87 !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/10"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/20"] {
     background: #f3e8ff !important;
     color: #7e22ce !important;
     border-color: #d8b4fe !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-cyan-500/15"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-cyan-500/20"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-emerald-500/15"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-emerald-500/20"] {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border-color: #bbf7d0 !important;
 }
 
 /* 7. Settings View Subtabs Navigation */
@@ -22914,31 +23183,248 @@ document.readyState==='loading'?document.addEventListener('DOMContentLoaded',all
 <!-- ===== END PRO 13 MODULE ===== -->
 
 
-<!-- ===== POLISH MODULE: mobile ergonomics, a11y, resilience ===== -->
+<!-- ===== POLISH MODULE: Android & mobile adaptive ergonomics, a11y, resilience ===== -->
 <style id="polish-css">
-body{min-height:100vh;min-height:100dvh;padding-bottom:calc(5rem + env(safe-area-inset-bottom,0px))}
-.arc-safe-header{padding-top:max(0.625rem, calc(0.625rem + env(safe-area-inset-top, 0px)))}
-@media (min-width:640px){body{padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px))}}
-button,[role=button],[role=tab],[role=switch],[onclick],select,summary,label,.calendar-day-card{touch-action:manipulation}
-@media (pointer:coarse),(max-width:767px){
- button:not(#showcase-dots-container button):not(nav[aria-label="Mobile Bottom Navigation"] button),[role=button]:not(nav[aria-label="Mobile Bottom Navigation"] *),[role=tab]:not(nav[aria-label="Mobile Bottom Navigation"] *),[role=switch],select,summary{min-height:44px;min-width:44px}
- label:has(>input[type=checkbox]),label:has(>input[type=radio]){min-height:44px}
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
-@media (min-width:375px){.calendar-day-card{min-width:44px}}
-#showcase-dots-container{min-height:44px;overflow-y:hidden}
-#showcase-dots-container button{position:relative}
-#showcase-dots-container button::after{content:'';position:absolute;inset:-17px -3px}
-nav[aria-label="Mobile Bottom Navigation"]{padding-bottom:max(0.5rem, calc(0.375rem + env(safe-area-inset-bottom,0px)));padding-left:max(0.5rem, env(safe-area-inset-left,0px));padding-right:max(0.5rem, env(safe-area-inset-right,0px))}
-nav[aria-label="Mobile Bottom Navigation"] button{min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-@media (max-width:639px){
- #summer-showcase-overlay{padding-top:max(1rem,env(safe-area-inset-top));padding-bottom:max(1rem,env(safe-area-inset-bottom))}
- input[type="text"],input[type="number"],input[type="email"],input[type="password"],select,textarea{font-size:16px !important}
- .pp-modal{padding:0.75rem;padding-bottom:max(1rem,env(safe-area-inset-bottom,0px));align-items:flex-end}
- .pp-box{max-height:calc(88dvh - env(safe-area-inset-bottom,0px));border-radius:1.25rem;padding:1rem;overscroll-behavior:contain}
+html {
+  scroll-behavior: smooth;
 }
-[role=dialog],#summer-showcase-overlay,.showcase-card-slide,.pp-modal,#p13-m,#pp12-drawer,#pp12-back{will-change:transform,opacity}
-#arc-forgot-modal,#pp-sec-pin-modal{z-index:130 !important}
-:where(button,[role=button],[role=tab],[role=switch],a[href],input,select,textarea,summary,[tabindex]):focus-visible{outline:none;box-shadow:0 0 0 2px #22d3ee}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: calc(5.5rem + var(--safe-bottom));
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+  overscroll-behavior-y: none;
+}
+@media (min-width: 768px) {
+  body {
+    padding-bottom: calc(2rem + var(--safe-bottom));
+  }
+}
+.arc-safe-header {
+  padding-top: max(0.625rem, calc(0.625rem + var(--safe-top))) !important;
+  padding-left: max(0.75rem, calc(0.75rem + var(--safe-left))) !important;
+  padding-right: max(0.75rem, calc(0.75rem + var(--safe-right))) !important;
+}
+button, [role=button], [role=tab], [role=switch], [onclick], select, summary, label, .calendar-day-card, .habit-checkbox {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+@media (pointer: coarse), (max-width: 767px) {
+  /* Android Material Accessibility: Minimum touch targets */
+  button:not(#showcase-dots-container button):not(nav[aria-label="Mobile Bottom Navigation"] button),
+  [role=button]:not(nav[aria-label="Mobile Bottom Navigation"] *),
+  [role=tab]:not(nav[aria-label="Mobile Bottom Navigation"] *),
+  [role=switch], select, summary {
+    min-height: 48px;
+    min-width: 44px;
+  }
+  label:has(>input[type=checkbox]), label:has(>input[type=radio]) {
+    min-height: 48px;
+  }
+}
+@media (min-width: 375px) {
+  .calendar-day-card {
+    min-width: 40px;
+  }
+}
+#showcase-dots-container {
+  min-height: 44px;
+  overflow-y: hidden;
+}
+#showcase-dots-container button {
+  position: relative;
+}
+#showcase-dots-container button::after {
+  content: '';
+  position: absolute;
+  inset: -17px -3px;
+}
+/* Android Bottom Navigation Bar (7 Tabs, elevated above system gesture pill & 3-button nav) */
+nav[aria-label="Mobile Bottom Navigation"] {
+  padding-bottom: max(0.5rem, calc(0.35rem + var(--safe-bottom))) !important;
+  padding-left: max(0.375rem, calc(0.375rem + var(--safe-left))) !important;
+  padding-right: max(0.375rem, calc(0.375rem + var(--safe-right))) !important;
+  min-height: calc(3.75rem + var(--safe-bottom));
+  contain: layout style paint;
+}
+nav[aria-label="Mobile Bottom Navigation"] button {
+  min-width: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+nav[aria-label="Mobile Bottom Navigation"] button:active {
+  transform: scale(0.92);
+}
+/* Android Floating HUD Pills (Screen Time & Notifications Drawer) */
+#arc-screentime-hud,
+#arc-notifications-corner {
+  bottom: calc(4.35rem + var(--safe-bottom)) !important;
+  will-change: transform, opacity;
+}
+#arc-screentime-hud {
+  left: max(0.5rem, calc(0.5rem + var(--safe-left))) !important;
+  max-width: calc(50vw - 0.75rem);
+}
+#arc-notifications-corner {
+  right: max(0.5rem, calc(0.5rem + var(--safe-right))) !important;
+  max-width: calc(50vw - 0.75rem);
+}
+/* Form Inputs & Virtual Keyboard (GBoard/Samsung Keyboard) Prevention */
+input[type="text"], input[type="number"], input[type="email"], input[type="password"],
+input[type="search"], input[type="date"], input[type="time"], select, textarea {
+  font-size: 16px !important;
+}
+:root {
+  scroll-padding-top: calc(4.75rem + var(--safe-top));
+  scroll-padding-bottom: calc(5.75rem + var(--safe-bottom));
+}
+/* Android Modals & Bottom Sheets */
+@media (max-width: 639px) {
+  #summer-showcase-overlay {
+    padding-top: max(1rem, var(--safe-top));
+    padding-bottom: max(1rem, var(--safe-bottom));
+  }
+  .pp-modal {
+    padding: 0.5rem !important;
+    padding-bottom: max(0.75rem, var(--safe-bottom)) !important;
+    align-items: flex-end !important;
+  }
+  .pp-box, [role=dialog] > div {
+    max-height: calc(88dvh - var(--safe-bottom)) !important;
+    border-radius: 1.5rem !important;
+    overscroll-behavior: contain !important;
+  }
+  #arc-notifications-drawer {
+    max-width: calc(100vw - 1rem) !important;
+    right: 0 !important;
+    left: auto !important;
+  }
+}
+/* Android Model Tier 1: Compact Android Screens (<= 360px: Galaxy A03/A14, Moto E/G, Z Fold cover) */
+@media (max-width: 360px) {
+  .arc-safe-header h1 {
+    font-size: 0.85rem !important;
+  }
+  .arc-safe-header #btn-header-install,
+  .arc-safe-header #btn-header-bw,
+  .arc-safe-header #btn-header-discretion,
+  .arc-safe-header #btn-share-tracker {
+    width: 2rem !important;
+    height: 2rem !important;
+    padding: 0 !important;
+  }
+  nav[aria-label="Mobile Bottom Navigation"] span {
+    font-size: 7.5px !important;
+  }
+  .calendar-day-card {
+    min-height: 42px !important;
+    padding: 0.25rem !important;
+  }
+  .calendar-day-card .grade-letter {
+    font-size: 8px !important;
+  }
+  #arc-hud-pill, #arc-notifications-pill {
+    transform: scale(0.9);
+    transform-origin: bottom left;
+  }
+  #arc-notifications-pill {
+    transform-origin: bottom right;
+  }
+}
+/* Android Model Tier 2: Mainstream Androids (361px to 440px: Pixel 6-9, Galaxy S21-S24, OnePlus, Xiaomi) */
+@media (min-width: 361px) and (max-width: 440px) {
+  .calendar-day-card {
+    aspect-ratio: 1 / 1.05;
+  }
+}
+/* Android Model Tier 3: Foldables & Tablets (441px to 768px: Galaxy Z Fold unfolded, Pixel Fold, tablets) */
+@media (min-width: 441px) and (max-width: 767px) {
+  .habit-row {
+    padding: 0.875rem 1rem !important;
+  }
+  #tracker-calendar-days-grid, #calendar-days-grid {
+    gap: 0.375rem !important;
+  }
+}
+/* ==========================================================================
+   TABLET & PAD ECOSYSTEM (Full Spectrum Optimization)
+   Covers:
+   - Compact / Mini Pads: iPad Mini 5/6/7, Galaxy Tab A7/A9 Lite, Lenovo Tab M8/M9 (600px - 799px)
+   - Standard Tablets: iPad 9th/10th Gen, iPad Air, iPad Pro 11", Galaxy Tab S7/S8/S9, Pixel Tablet, Xiaomi Pad (800px - 1024px)
+   - Large Pro Tablets & 2-in-1s: iPad Pro 12.9"/13" M4, Galaxy Tab S9 Ultra, Surface Pro 8/9/11 (1024px - 1366px+)
+   - iPadOS Stage Manager / Split View & Android Multi-Window (fluid reflow)
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .arc-safe-header > div {
+    gap: 0.5rem;
+  }
+  .arc-safe-header h1 {
+    font-size: 0.95rem !important;
+  }
+  .arc-safe-header nav[aria-label="Desktop Navigation"] {
+    padding: 0.25rem !important;
+    gap: 0.2rem !important;
+  }
+  .arc-safe-header nav[aria-label="Desktop Navigation"] button {
+    padding: 0.35rem 0.5rem !important;
+    font-size: 11px !important;
+  }
+  .arc-safe-header #btn-header-install,
+  .arc-safe-header #btn-header-bw,
+  .arc-safe-header #btn-header-discretion,
+  .arc-safe-header #btn-share-tracker {
+    width: 2.15rem !important;
+    height: 2.15rem !important;
+    padding: 0 !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1180px) {
+  .calendar-day-card {
+    min-height: 52px;
+  }
+  .habit-row {
+    padding: 0.75rem 1rem !important;
+  }
+  #quote-card-container {
+    padding: 1rem 1.25rem !important;
+  }
+  .spider-web-card-container {
+    padding: 1.5rem !important;
+  }
+  .pp-box, [role=dialog] > div {
+    max-width: 90vw !important;
+    max-height: 90dvh !important;
+  }
+}
+@media (min-width: 900px) and (orientation: landscape) {
+  #view-tracker, #view-rules, #view-screentime, #view-results, #view-progression, #view-settings {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media (pointer: coarse) and (min-width: 768px) {
+  button, [role=button], [role=tab], select, summary, .calendar-day-card, .habit-checkbox {
+    min-height: 44px;
+  }
+}
+[role=dialog], #summer-showcase-overlay, .showcase-card-slide, .pp-modal, #p13-m, #pp12-drawer, #pp12-back {
+  will-change: transform, opacity;
+}
+#arc-forgot-modal, #pp-sec-pin-modal {
+  z-index: 130 !important;
+}
+:where(button, [role=button], [role=tab], [role=switch], a[href], input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #22d3ee;
+}
 /* Data Leak Prevention (DLP): Discretion Mode Camouflage */
 body.arc-discretion-mode .habit-item-title,
 body.arc-discretion-mode #user-display-name,

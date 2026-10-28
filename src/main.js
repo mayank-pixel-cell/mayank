@@ -5,8 +5,9 @@ import { arcAppTracker } from './apptracker.js';
 import { arcNotifications } from './notifications.js';
 import { arcFaq } from './faq.js';
 import { arcTermsOnboarding } from './terms.js';
+import { arcAboutFounder } from './founder.js';
 
-// Auto-initialize robust offline storage, hardware profiler, screen time, app blocker, notification, FAQ and terms onboarding engine
+// Auto-initialize robust offline storage, hardware profiler, screen time, app blocker, notification, FAQ, terms onboarding and founder engine
 (async function bootstrap() {
   try {
     // 0. Hardware profiler & compatibility gatekeeper (blocks incompatible devices, optimizes low-end)
@@ -28,6 +29,10 @@ import { arcTermsOnboarding } from './terms.js';
     // Initialize Additional Settings FAQ & Help Center
     arcFaq.init();
     console.log('[Arc Tracker] Additional Settings FAQ engine online.');
+
+    // Initialize About the Founder section
+    arcAboutFounder.init();
+    console.log('[Arc Tracker] About the Founder engine online.');
 
     // Automatically initialize zero-input screen time engine
     await arcScreenTime.init();

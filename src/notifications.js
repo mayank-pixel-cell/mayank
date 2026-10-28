@@ -541,6 +541,17 @@ class ArcNotificationEngine {
       navBadge.classList.toggle('hidden', unreadCount === 0);
     }
 
+    // 3b. Update Mobile Bottom Nav Tab Badge
+    const mobileBadge = document.getElementById('mobile-notif-count-badge');
+    const mobileDot = document.getElementById('mobile-nav-notif-dot');
+    if (mobileBadge) {
+      mobileBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+      mobileBadge.classList.toggle('hidden', unreadCount === 0);
+    }
+    if (mobileDot) {
+      mobileDot.classList.toggle('hidden', unreadCount === 0);
+    }
+
     // 4. Update Filter Tabs counts
     const allCount = this.notifications.length;
     const updateCount = this.notifications.filter(n => n.type === 'update').length;
