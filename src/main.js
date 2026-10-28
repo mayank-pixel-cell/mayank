@@ -4,8 +4,9 @@ import { arcScreenTime } from './screentime.js';
 import { arcAppTracker } from './apptracker.js';
 import { arcNotifications } from './notifications.js';
 import { arcFaq } from './faq.js';
+import { arcTermsOnboarding } from './terms.js';
 
-// Auto-initialize robust offline storage, hardware profiler, screen time, app blocker, notification and FAQ engine
+// Auto-initialize robust offline storage, hardware profiler, screen time, app blocker, notification, FAQ and terms onboarding engine
 (async function bootstrap() {
   try {
     // 0. Hardware profiler & compatibility gatekeeper (blocks incompatible devices, optimizes low-end)
@@ -15,6 +16,10 @@ import { arcFaq } from './faq.js';
     await arcStorage.init();
     console.log('[Arc Tracker] High-durability storage active & ready.');
     window.dispatchEvent(new CustomEvent('arc-storage-ready'));
+
+    // Initialize Terms & Conditions / First-Time Onboarding Gate
+    arcTermsOnboarding.init();
+    console.log('[Arc Tracker] Terms & Conditions onboarding gate online.');
 
     // Initialize Real-Time Notifications & Update Detector
     await arcNotifications.init();

@@ -19164,6 +19164,16 @@ window.ArcStoreRating = (function() {
 
 window.ArcCustomBackground = (function() {
   const STORAGE_KEY = 'arc_custom_background_v1';
+  let isBoxOpen = false; // Contracted by default, expands on click
+
+  function toggleBox(forceState) {
+    if (typeof forceState === 'boolean') {
+      isBoxOpen = forceState;
+    } else {
+      isBoxOpen = !isBoxOpen;
+    }
+    renderCard();
+  }
 
   const PRESET_WALLPAPERS = [
     {
@@ -19456,6 +19466,51 @@ window.ArcCustomBackground = (function() {
     const activePresetId = (state.enabled && state.isPreset) ? state.presetId : null;
     const hasCustomBg = !!(gold && state.enabled && state.imageData && (!state.isPreset || !state.laptopOnly || isLaptop));
 
+    // Contracted / Collapsed View (Default)
+    if (!isBoxOpen) {
+      const activePreset = activePresetId ? PRESET_WALLPAPERS.find(p => p.id === activePresetId) : null;
+      card.innerHTML = `
+        <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to expand Custom &amp; 4K Wallpapers">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+              <i class="fa-solid fa-image text-lg"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-sm font-bold text-white tracking-wide truncate">Custom &amp; 4K Wallpapers</h3>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-sm shrink-0">
+                  <i class="fa-solid fa-crown text-[10px]"></i> Arc Gold VIP
+                </span>
+                ${hasCustomBg ? `
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-check"></i> Active${activePreset ? ': ' + activePreset.title : (state.fileName ? ': ' + state.fileName : '')}
+                  </span>
+                ` : ''}
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5 truncate">
+                ${hasCustomBg 
+                  ? 'Active 4K wallpaper applied (' + (state.dim || 45) + '% dim) • Tap to expand controls' 
+                  : 'Predefined 4K 16:9 masterpieces for laptop users or upload your personal photo • Tap to expand'}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 shrink-0">
+            ${hasCustomBg ? `
+              <div class="relative w-12 h-7 rounded-lg overflow-hidden border border-amber-400/50 shadow-sm shrink-0 bg-slate-950 hidden sm:block">
+                <img src="${state.imageData}" alt="Preview" class="w-full h-full object-cover" />
+              </div>
+            ` : ''}
+            <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.toggleBox();" class="px-3.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-amber-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+              <span>Open</span>
+              <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     // Preset wallpapers HTML (strictly rendered only if isLaptopUser() is true)
     let presetsHtml = '';
     if (isLaptop) {
@@ -19552,8 +19607,8 @@ window.ArcCustomBackground = (function() {
     if (gold) {
       card.innerHTML = `
         <div class="flex flex-col gap-5">
-          <!-- CARD HEADER -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <!-- CARD HEADER (EXPANDED) -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-amber-500/20 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to collapse Custom &amp; 4K Wallpapers">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
                 <i class="fa-solid fa-image text-lg"></i>
@@ -19576,19 +19631,23 @@ window.ArcCustomBackground = (function() {
               </div>
             </div>
 
-            <!-- ACTION BUTTONS -->
+            <!-- ACTION BUTTONS & CLOSE TOGGLE -->
             <div class="flex items-center gap-2 shrink-0">
               <input type="file" id="arc-custom-bg-input" accept="image/*" class="hidden" onchange="window.ArcCustomBackground.handleFileSelect(this)" />
-              <button type="button" onclick="window.ArcCustomBackground.triggerUpload()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition active:scale-95" title="Upload your own photo from device">
+              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.triggerUpload()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition active:scale-95" title="Upload your own photo from device">
                 <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-                <span>Upload Photo</span>
+                <span class="hidden sm:inline">Upload Photo</span>
               </button>
               ${hasCustomBg ? `
-                <button type="button" onclick="window.ArcCustomBackground.removeBackground()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="Revert to standard default background">
+                <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.removeBackground()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1 transition" title="Revert to standard default background">
                   <i class="fa-solid fa-trash-can text-xs"></i>
                   <span class="hidden sm:inline">Reset</span>
                 </button>
               ` : ''}
+              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="Click to collapse">
+                <span>Close</span>
+                <i class="fa-solid fa-chevron-up text-[10px]"></i>
+              </button>
             </div>
           </div>
 
@@ -19642,7 +19701,7 @@ window.ArcCustomBackground = (function() {
       card.innerHTML = `
         <div class="flex flex-col gap-4">
           <!-- CARD HEADER (LOCKED) -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-800/80 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to collapse">
             <div class="flex items-center gap-3.5">
               <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 shrink-0">
                 <i class="fa-solid fa-lock text-base"></i>
@@ -19660,9 +19719,13 @@ window.ArcCustomBackground = (function() {
               </div>
             </div>
             <div class="shrink-0 flex items-center gap-2">
-              <button type="button" onclick="window.ArcGold.scrollToGoldCard()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 border border-amber-400/50 text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
+              <button type="button" onclick="event.stopPropagation(); window.ArcGold.scrollToGoldCard()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 border border-amber-400/50 text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
                 <i class="fa-solid fa-crown text-amber-400"></i>
                 <span>Unlock with Arc Gold</span>
+              </button>
+              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+                <span>Close</span>
+                <i class="fa-solid fa-chevron-up text-[10px]"></i>
               </button>
             </div>
           </div>
@@ -19701,6 +19764,8 @@ window.ArcCustomBackground = (function() {
     handleFileSelect,
     removeBackground,
     triggerUpload,
+    toggleBox,
+    isExpanded: () => isBoxOpen,
     renderCard,
     init
   };
@@ -20703,34 +20768,43 @@ window.ArcScreenTimeStore = (function() {
   };
 })();
 
-  if (window.ArcGold && typeof window.ArcGold.init === 'function') {
-    window.ArcGold.init();
+(function() {
+  function initAllArcModules() {
+    if (window.ArcGold && typeof window.ArcGold.init === 'function') {
+      window.ArcGold.init();
+    }
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.init === 'function') {
+      window.ArcCustomBackground.init();
+    }
+    if (window.ArcStoreRating && typeof window.ArcStoreRating.init === 'function') {
+      window.ArcStoreRating.init();
+    }
+    if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.init === 'function') {
+      window.ArcScreenTimeStore.init();
+    }
+    if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
+      window.ArcSecurity.init();
+    }
+    if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
+      window.ArcProfile.init();
+    }
+    if (window.ArcAutoStart && typeof window.ArcAutoStart.init === 'function') {
+      window.ArcAutoStart.init();
+    }
+    if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
+      window.ArcScreenTimeNotifier.init();
+    }
+    if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.init === 'function') {
+      window.ArcPhoneWidgets.init();
+    }
   }
-  if (window.ArcCustomBackground && typeof window.ArcCustomBackground.init === 'function') {
-    window.ArcCustomBackground.init();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllArcModules);
+  } else {
+    initAllArcModules();
   }
-  if (window.ArcStoreRating && typeof window.ArcStoreRating.init === 'function') {
-    window.ArcStoreRating.init();
-  }
-  if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.init === 'function') {
-    window.ArcScreenTimeStore.init();
-  }
-  if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
-    window.ArcSecurity.init();
-  }
-  if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
-    window.ArcProfile.init();
-  }
-  if (window.ArcAutoStart && typeof window.ArcAutoStart.init === 'function') {
-    window.ArcAutoStart.init();
-  }
-  if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
-    window.ArcScreenTimeNotifier.init();
-  }
-  if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.init === 'function') {
-    window.ArcPhoneWidgets.init();
-  }
-});
+})();
 </script>
 
 <script id="pp12-js">
