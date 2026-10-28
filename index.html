@@ -27,13 +27,11 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <script>
-        // Early anti-FOUC check for Arc Gold Black & White Mode
+        // Early anti-FOUC check for Black & White Mode
         (function() {
             try {
-                var g = JSON.parse(localStorage.getItem('arc_gold_membership') || '{}');
-                var isGold = !!(g && g.isGold);
                 var isBw = localStorage.getItem('arc_black_white_mode') === 'true';
-                if (isBw && isGold) {
+                if (isBw) {
                     document.documentElement.classList.add('arc-bw-mode');
                 }
             } catch(e) {}
@@ -99,6 +97,37 @@
     </script>
 
     <style>
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0deg); }
+            15% { transform: rotate(14deg); }
+            30% { transform: rotate(-14deg); }
+            45% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            75% { transform: rotate(6deg); }
+            85% { transform: rotate(-4deg); }
+        }
+        .animate-bell-ring {
+            animation: bellRing 1.2s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        /* FAQ Accordion Styling (<details name="arc-faq">) */
+        details[name="arc-faq"] summary::-webkit-details-marker {
+            display: none;
+        }
+        details[name="arc-faq"] summary {
+            list-style: none;
+        }
+        details[name="arc-faq"][open] summary .faq-chevron {
+            transform: rotate(180deg);
+            background-color: rgba(0, 240, 255, 0.2);
+            color: #00F0FF;
+            border-color: rgba(0, 240, 255, 0.5);
+        }
+        details[name="arc-faq"][open] {
+            border-color: rgba(0, 240, 255, 0.45);
+            background: rgba(13, 19, 34, 0.95);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.12);
+        }
         /* iOS Safe Area & WebKit Touch Optimizations */
         :root {
             --sat: env(safe-area-inset-top, 0px);
@@ -479,24 +508,295 @@
         }
 
         /* ==========================================================================
-           ARC GOLD: BLACK & WHITE MODE (RADICAL MONOCHROME / DOPAMINE DETOX)
-           Strips 100% of saturation and renders pure high-contrast black & white.
+           ARC MONOCHROME: ULTRA-ENHANCED BLACK & WHITE MODE (NOIR & E-INK ENGINE)
+           Radical dopamine detox • 100% saturation removal • Architectural contrast
+           Preserves position:fixed coordinate system while elevating legibility
            ========================================================================== */
-        html.arc-bw-mode {
-            -webkit-filter: grayscale(100%) contrast(108%) !important;
-            filter: grayscale(100%) contrast(108%) !important;
+        html.arc-bw-mode,
+        body.arc-bw-mode {
+            --pp-accent: #ffffff !important;
+            --pp-accent2: #d4d4d8 !important;
+            --pp-accent-rgb: 255, 255, 255 !important;
+            --a: #ffffff !important;
+            --a2: #d4d4d8 !important;
+            --ar: 255, 255, 255 !important;
+            --pp-mut: #a1a1aa !important;
+            --accent-glow: 0 0 20px rgba(255, 255, 255, 0.35) !important;
+            --neon-glow: 0 0 16px rgba(255, 255, 255, 0.28) !important;
         }
 
-        html.arc-bw-mode img,
-        html.arc-bw-mode canvas,
-        html.arc-bw-mode video,
-        html.arc-bw-mode svg {
-            filter: grayscale(100%) contrast(112%) !important;
+        /* Seamless E-Ink Paper Monochrome when both Light Mode + B&W Mode are active */
+        html[data-mode="light"].arc-bw-mode,
+        html[data-mode="light"].arc-bw-mode body {
+            --pp-accent: #000000 !important;
+            --pp-accent2: #18181b !important;
+            --pp-accent-rgb: 0, 0, 0 !important;
+            --a: #000000 !important;
+            --a2: #18181b !important;
+            --ar: 0, 0, 0 !important;
+            --pp-bg: #ffffff !important;
+            --pp-panel: #ffffff !important;
+            --pp-fg: #000000 !important;
+            --pp-mut: #52525b !important;
+            --pp-line: rgba(0, 0, 0, 0.2) !important;
+            --accent-glow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
         }
 
+        /* Stark inverted text selection */
         html.arc-bw-mode ::selection {
             background: #ffffff !important;
             color: #000000 !important;
+        }
+        html[data-mode="light"].arc-bw-mode ::selection {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        /* Desaturate media, graphics, avatars, svgs, and videos safely without breaking fixed viewport elements */
+        .arc-bw-mode img,
+        .arc-bw-mode video,
+        .arc-bw-mode iframe,
+        .arc-bw-mode [class*="avatar"],
+        .arc-bw-mode canvas:not(#fx-canvas) {
+            -webkit-filter: grayscale(100%) contrast(115%) !important;
+            filter: grayscale(100%) contrast(115%) !important;
+        }
+        .arc-bw-mode svg:not([class*="text-"]) {
+            -webkit-filter: grayscale(100%) contrast(110%) !important;
+            filter: grayscale(100%) contrast(110%) !important;
+        }
+
+        /* 1. High-Contrast Noir Surfaces & Cards (Dark Mode) */
+        html.arc-bw-mode:not([data-mode="light"]) body {
+            background-color: #050507 !important;
+            background-image: radial-gradient(circle at 50% 0%, #18181b 0%, #000000 70%) !important;
+            color: #ffffff !important;
+        }
+
+        html.arc-bw-mode:not([data-mode="light"]) .glass-card,
+        html.arc-bw-mode:not([data-mode="light"]) [class*="bg-slate-900"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="bg-slate-950"] {
+            background-color: #09090b !important;
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+
+        html.arc-bw-mode:not([data-mode="light"]) .glass-card:hover,
+        html.arc-bw-mode:not([data-mode="light"]) button:hover {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* 2. High-Contrast E-Ink Surfaces & Cards (Light Mode) */
+        html[data-mode="light"].arc-bw-mode body {
+            background-color: #ffffff !important;
+            background-image: none !important;
+            color: #000000 !important;
+        }
+
+        html[data-mode="light"].arc-bw-mode .glass-card,
+        html[data-mode="light"].arc-bw-mode [class*="bg-slate-900"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-slate-950"] {
+            background-color: #ffffff !important;
+            border-color: #000000 !important;
+            border-width: 1.5px !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+            color: #000000 !important;
+        }
+
+        /* 3. Primary Buttons & Call-to-Actions in Monochrome */
+        html.arc-bw-mode:not([data-mode="light"]) .btn-primary,
+        html.arc-bw-mode:not([data-mode="light"]) [class*="bg-gradient-to-r"][class*="from-cyan-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="bg-gradient-to-r"][class*="from-amber-"],
+        html.arc-bw-mode:not([data-mode="light"]) button.bg-cyan-500,
+        html.arc-bw-mode:not([data-mode="light"]) button.bg-amber-500 {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #ffffff !important;
+            font-weight: 800 !important;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) .btn-primary:hover,
+        html.arc-bw-mode:not([data-mode="light"]) button.bg-cyan-500:hover,
+        html.arc-bw-mode:not([data-mode="light"]) button.bg-amber-500:hover {
+            background: #e4e4e7 !important;
+            color: #000000 !important;
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.45) !important;
+        }
+
+        html[data-mode="light"].arc-bw-mode .btn-primary,
+        html[data-mode="light"].arc-bw-mode [class*="bg-gradient-to-r"][class*="from-cyan-"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-gradient-to-r"][class*="from-amber-"],
+        html[data-mode="light"].arc-bw-mode button.bg-cyan-500,
+        html[data-mode="light"].arc-bw-mode button.bg-amber-500 {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        }
+        html[data-mode="light"].arc-bw-mode .btn-primary:hover,
+        html[data-mode="light"].arc-bw-mode button.bg-cyan-500:hover,
+        html[data-mode="light"].arc-bw-mode button.bg-amber-500:hover {
+            background: #27272a !important;
+            color: #ffffff !important;
+        }
+
+        /* 4. Habit Checkboxes & Progression Items */
+        html.arc-bw-mode:not([data-mode="light"]) .habit-checkbox.checked,
+        html.arc-bw-mode:not([data-mode="light"]) input[type="checkbox"]:checked,
+        html.arc-bw-mode:not([data-mode="light"]) .habit-card.completed {
+            border-color: #ffffff !important;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.25) !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) .habit-checkbox.checked {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) .habit-checkbox.checked i {
+            color: #000000 !important;
+        }
+
+        html[data-mode="light"].arc-bw-mode .habit-checkbox.checked,
+        html[data-mode="light"].arc-bw-mode input[type="checkbox"]:checked,
+        html[data-mode="light"].arc-bw-mode .habit-card.completed {
+            border-color: #000000 !important;
+            border-width: 2px !important;
+        }
+        html[data-mode="light"].arc-bw-mode .habit-checkbox.checked {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+        html[data-mode="light"].arc-bw-mode .habit-checkbox.checked i {
+            color: #ffffff !important;
+        }
+
+        /* 5. Convert Colored Badges & Category Chips to Stark Monochrome */
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-cyan-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-sky-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-purple-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-amber-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-emerald-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-rose-500/"],
+        .arc-bw-mode:not([data-mode="light"]) [class*="bg-indigo-500/"] {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.35) !important;
+        }
+        html[data-mode="light"].arc-bw-mode [class*="bg-cyan-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-sky-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-purple-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-amber-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-emerald-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-rose-500/"],
+        html[data-mode="light"].arc-bw-mode [class*="bg-indigo-500/"] {
+            background: #f4f4f5 !important;
+            color: #000000 !important;
+            border-color: #18181b !important;
+        }
+
+        /* 6. High-Contrast Typography Mapping */
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-cyan-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-sky-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-purple-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-amber-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-emerald-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-rose-"],
+        html.arc-bw-mode:not([data-mode="light"]) [class*="text-indigo-"] {
+            color: #ffffff !important;
+        }
+
+        html[data-mode="light"].arc-bw-mode [class*="text-cyan-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-sky-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-purple-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-amber-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-emerald-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-rose-"],
+        html[data-mode="light"].arc-bw-mode [class*="text-indigo-"] {
+            color: #000000 !important;
+        }
+
+        /* 7. Notifications Pill & Drawer in Monochrome */
+        html.arc-bw-mode:not([data-mode="light"]) #arc-notifications-pill {
+            background: #000000 !important;
+            border: 1.5px solid #ffffff !important;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) #arc-notifications-pill #arc-notif-bell-icon {
+            color: #ffffff !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) #arc-notif-count-badge {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) #arc-notifications-drawer {
+            background: #050507 !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 255, 255, 0.12) !important;
+        }
+
+        html[data-mode="light"].arc-bw-mode #arc-notifications-pill {
+            background: #ffffff !important;
+            border: 2px solid #000000 !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+            color: #000000 !important;
+        }
+        html[data-mode="light"].arc-bw-mode #arc-notifications-pill #arc-notif-bell-icon {
+            color: #000000 !important;
+        }
+        html[data-mode="light"].arc-bw-mode #arc-notif-count-badge {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+        html[data-mode="light"].arc-bw-mode #arc-notifications-drawer {
+            background: #ffffff !important;
+            border: 2px solid #000000 !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        /* 8. FAQ Accordion Items in Monochrome */
+        html.arc-bw-mode:not([data-mode="light"]) details.faq-item[name="arc-faq"] {
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            background: #09090b !important;
+        }
+        html.arc-bw-mode:not([data-mode="light"]) details.faq-item[name="arc-faq"][open] {
+            border-color: #ffffff !important;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.22) !important;
+        }
+        html[data-mode="light"].arc-bw-mode details.faq-item[name="arc-faq"] {
+            border: 1.5px solid #000000 !important;
+            background: #ffffff !important;
+        }
+        html[data-mode="light"].arc-bw-mode details.faq-item[name="arc-faq"][open] {
+            border: 2px solid #000000 !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        /* 9. Heatmap 5-tier Monochromatic Luminance Scale */
+        .arc-bw-mode .pq0 { background: rgba(255, 255, 255, 0.06) !important; }
+        .arc-bw-mode .pq1 { background: #27272a !important; }
+        .arc-bw-mode .pq2 { background: #52525b !important; }
+        .arc-bw-mode .pq3 { background: #a1a1aa !important; }
+        .arc-bw-mode .pq4 { background: #e4e4e7 !important; }
+        .arc-bw-mode .pq5 { background: #ffffff !important; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important; }
+
+        html[data-mode="light"].arc-bw-mode .pq0 { background: #f4f4f5 !important; }
+        html[data-mode="light"].arc-bw-mode .pq1 { background: #d4d4d8 !important; }
+        html[data-mode="light"].arc-bw-mode .pq2 { background: #a1a1aa !important; }
+        html[data-mode="light"].arc-bw-mode .pq3 { background: #52525b !important; }
+        html[data-mode="light"].arc-bw-mode .pq4 { background: #27272a !important; }
+        html[data-mode="light"].arc-bw-mode .pq5 { background: #000000 !important; box-shadow: 0 0 6px rgba(0, 0, 0, 0.35) !important; }
+
+        /* 10. Glowing Halos Replaced with Pure Silver/White */
+        .arc-bw-mode [class*="shadow-cyan"],
+        .arc-bw-mode [class*="shadow-amber"],
+        .arc-bw-mode [class*="shadow-purple"] {
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.22) !important;
+        }
+        html[data-mode="light"].arc-bw-mode [class*="shadow-cyan"],
+        html[data-mode="light"].arc-bw-mode [class*="shadow-amber"],
+        html[data-mode="light"].arc-bw-mode [class*="shadow-purple"] {
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1) !important;
         }
 
         #fx-canvas {
@@ -1054,10 +1354,22 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <i class="fa-solid fa-gear text-pink-400"></i>
                     <span>Settings</span>
                 </button>
+                <button id="tab-notifications" title="Notifications &amp; Updates (N)" role="tab" aria-selected="false" aria-controls="view-notifications" onmouseenter="playSfx('hover')" onclick="switchTab('notifications')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <i class="fa-solid fa-bell text-cyan-400"></i>
+                    <span>Updates</span>
+                    <span id="nav-notif-badge" class="hidden text-[9px] font-mono font-black px-1.5 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">1</span>
+                </button>
             </nav>
 
             <!-- ACTION BUTTONS -->
             <div class="flex items-center space-x-2 shrink-0">
+                <!-- Offline Status Pill (Revealed when network is disconnected) -->
+                <div id="arc-offline-indicator" class="hidden px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold flex items-center gap-1.5 shadow-sm" title="Arc Tracker is running in 100% Offline Mode. All habits, screen time, and rank telemetry are persisted to local storage.">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span class="hidden sm:inline">OFFLINE MODE</span>
+                    <span class="sm:hidden">OFFLINE</span>
+                </div>
+
                 <!-- User Profile Capsule (Compact PFP Only) -->
                 <div role="button" tabindex="0" id="header-profile-pill" onclick="ArcProfile.openSetupModal()" class="cursor-pointer relative p-0.5 rounded-full bg-slate-900 border-2 border-cyan-400/50 hover:border-cyan-300 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Customize Operative Profile & Handle">
                     <div id="header-avatar-circle" class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500/20 to-indigo-500/30 text-cyan-300 font-bold border border-cyan-400/40 grid place-items-center text-xs overflow-hidden shrink-0 shadow-inner">O</div>
@@ -1066,23 +1378,29 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
 
-                <!-- Discretion / Stealth Mode Toggle (Anti-Snoop Panic Switch) -->
-                <button role="button" id="btn-header-discretion" onclick="if(window.ArcSecurity)ArcSecurity.toggleDiscretionMode()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Discretion / Stealth Mode (Alt+S)">
-                    <i id="header-discretion-icon" class="fa-solid fa-eye-slash text-xs"></i>
-                    <span class="hidden lg:inline text-[11px]">Stealth</span>
+                <!-- Chrome Desktop PWA Install Button (Omnibox & One-Click Install) -->
+                <button role="button" id="btn-header-install" onclick="ArcStoreRating.installApp()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-indigo-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-400/50 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Install Arc Tracker as a Chrome App (Computer Monitor icon in address bar or click here)">
+                    <i class="fa-solid fa-desktop text-xs text-cyan-400"></i>
+                    <span class="hidden md:inline text-[11px]">Install</span>
                 </button>
 
                 <!-- Black & White Mode Toggle (Arc Gold VIP) -->
                 <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • Arc Gold VIP)">
                     <i id="header-bw-icon" class="fa-solid fa-circle-half-stroke text-xs"></i>
-                    <span class="hidden lg:inline text-[11px]">B&amp;W</span>
-                    <span class="text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
+                    <span class="hidden xl:inline text-[11px]">B&amp;W</span>
+                    <span class="hidden xl:inline text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
+                </button>
+
+                <!-- Discretion / Stealth Mode Toggle (Anti-Snoop Panic Switch) -->
+                <button role="button" id="btn-header-discretion" onclick="if(window.ArcSecurity)ArcSecurity.toggleDiscretionMode()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Discretion / Stealth Mode (Alt+S)">
+                    <i id="header-discretion-icon" class="fa-solid fa-eye-slash text-xs"></i>
+                    <span class="hidden xl:inline text-[11px]">Stealth</span>
                 </button>
 
                 <!-- Share Tracker Button -->
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
                     <i class="fa-solid fa-share-nodes text-xs"></i>
-                    <span class="hidden md:inline">Share</span>
+                    <span class="hidden xl:inline">Share</span>
                 </button>
 
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>
@@ -1758,6 +2076,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <button type="button" id="settings-subtab-account" onclick="filterSettingsView('account')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">
                         <i class="fa-solid fa-user-shield mr-1"></i> Accounts &amp; Sync
                     </button>
+                    <button type="button" id="settings-subtab-faq" onclick="filterSettingsView('faq')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-cyan-300 transition">
+                        <i class="fa-solid fa-circle-question mr-1"></i> FAQ &amp; Help
+                    </button>
+                    <button type="button" id="settings-subtab-founder" onclick="filterSettingsView('founder')" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-purple-300 transition">
+                        <i class="fa-solid fa-user-tie mr-1"></i> About Founder
+                    </button>
                 </div>
             </div>
                         <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
@@ -1856,7 +2180,101 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
             <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
-            <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
+                        <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
+
+            <!-- ADDITIONAL SETTINGS & FREQUENTLY ASKED QUESTIONS (FAQ) -->
+            <section id="settings-additional-faq-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-5" aria-label="Additional Settings & Frequently Asked Questions">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-question"></i> ADDITIONAL SETTINGS &amp; KNOWLEDGE BASE
+                            </span>
+                            <span id="faq-results-count" class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">10 of 10 questions</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                            Frequently Asked Questions (FAQ)
+                        </h3>
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Everything you need to know about habit scoring, offline airgap security, dopamine blocker rules, streak freezes, and update notifications.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-wrap shrink-0">
+                        <button type="button" onclick="ArcFaq.toggleAll(true)" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                            <i class="fa-solid fa-angles-down text-[10px]"></i>
+                            <span>Expand All</span>
+                        </button>
+                        <button type="button" onclick="ArcFaq.toggleAll(false)" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                            <i class="fa-solid fa-angles-up text-[10px]"></i>
+                            <span>Collapse All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FAQ SEARCH & CATEGORY FILTERS -->
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="search" id="faq-search-input" oninput="ArcFaq.filterSearch(this.value)" placeholder="Search any question (e.g., streak freeze, notifications, screen time, backup, airgap)..." class="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 focus:border-cyan-400 text-white placeholder-slate-500 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 transition" aria-label="Search frequently asked questions">
+                        <button type="button" onclick="document.getElementById('faq-search-input').value = ''; ArcFaq.filterSearch('')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs" title="Clear search">✕</button>
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="ArcFaq.setCategory('all')" data-faq-cat="all" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+                            All Questions
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('updates')" data-faq-cat="updates" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-bell mr-1 text-cyan-400"></i> Updates &amp; Alerts
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('habits')" data-faq-cat="habits" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-fire mr-1 text-amber-400"></i> Habits &amp; Streaks
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('screentime')" data-faq-cat="screentime" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-hourglass-half mr-1 text-purple-400"></i> Screen Time &amp; Shield
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('security')" data-faq-cat="security" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-shield-halved mr-1 text-emerald-400"></i> Security &amp; Airgap
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('rpg')" data-faq-cat="rpg" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-crown mr-1 text-yellow-400"></i> RPG &amp; XP
+                        </button>
+                        <button type="button" onclick="ArcFaq.setCategory('visuals')" data-faq-cat="visuals" class="faq-category-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            <i class="fa-solid fa-sliders mr-1 text-pink-400"></i> Audio &amp; Visuals
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ACCORDION QUESTIONS LIST (Mutually Exclusive <details name="arc-faq">) -->
+                <div id="faq-accordion-container" class="space-y-2.5 pt-1">
+                    <!-- Populated dynamically by ArcFaq.render() -->
+                </div>
+            </section>
+
+            <!-- ABOUT THE FOUNDER SECTION -->
+            <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-purple-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-4" aria-label="About the Founder">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-astronaut"></i> LEADERSHIP &amp; VISION
+                            </span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                            About the Founder
+                        </h3>
+                    </div>
+                </div>
+
+                <!-- Blank placeholder content area ready to be updated later -->
+                <div id="founder-content-container" class="min-h-[140px] rounded-xl border-2 border-dashed border-slate-800/90 bg-slate-950/40 p-6 flex flex-col items-center justify-center text-center space-y-2">
+                    <div class="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm border border-purple-500/20">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono">[ Details about the founder will be updated here ]</span>
+                </div>
+            </section>
             <!-- ARC GOLD MEMBERSHIP & 120HZ PROMOTION SECTION (AT THE BOTTOM OF SETTINGS) -->
             <div id="settings-gold-card" class="mt-6 mb-8 transition-all duration-500"></div>
         </section>
@@ -3436,6 +3854,98 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
         </div>
 
+
+        <!-- VIEW 7: NOTIFICATIONS & SYSTEM UPDATES HUB -->
+        <section id="view-notifications" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8" aria-label="Notifications & Updates Hub">
+            <!-- HERO BANNER -->
+            <div class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-300">
+                <div class="space-y-1.5 max-w-2xl">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">
+                            <i class="fa-solid fa-bell mr-1"></i> Notification Center
+                        </span>
+                        <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">v2.6.0 Stable</span>
+                    </div>
+                    <h2 class="text-lg sm:text-2xl font-black text-white">System Updates & Live Alert Feed</h2>
+                    <p class="text-xs text-slate-300">Stay informed on new features, system performance releases, dopamine lockouts, and sync telemetry.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button role="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                        <span>Check for Updates</span>
+                    </button>
+                    <button role="button" onclick="ArcNotifications.testUpdateNotification()" class="px-3.5 py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate a new update arrival">
+                        <i class="fa-solid fa-bolt text-xs"></i>
+                        <span>Test Update Alert</span>
+                    </button>
+                    <button role="button" onclick="ArcNotifications.markAllAsRead()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Mark all notifications as read">
+                        <i class="fa-solid fa-check-double text-xs"></i>
+                        <span>Mark All Read</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-cyan-400">
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Total Releases</div>
+                    <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.6.0</div>
+                    <div class="text-[10px] text-cyan-400 mt-0.5">Latest Engine Version</div>
+                </div>
+                <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-amber-400">
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Unread Alerts</div>
+                    <div id="filter-count-unread" class="text-lg sm:text-2xl font-black text-amber-300 font-mono mt-1">0</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Requiring Attention</div>
+                </div>
+                <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-emerald-400">
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Update Pipeline</div>
+                    <div class="text-lg sm:text-2xl font-black text-emerald-400 font-mono mt-1">ACTIVE</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Auto-checks every 10m</div>
+                </div>
+                <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-purple-400">
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">OS Push Alerts</div>
+                    <div id="arc-notif-full-os-stat" class="text-xs sm:text-sm font-bold text-purple-300 font-mono mt-1 flex items-center gap-1.5">
+                        <button type="button" onclick="ArcNotifications.toggleOsNotifications()" class="text-xs text-cyan-400 hover:underline">Toggle Tray Alerts</button>
+                    </div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">System Tray Sync</div>
+                </div>
+            </div>
+
+            <!-- FILTER BAR & FEED CONTAINER -->
+            <div class="glass-card rounded-2xl p-4 sm:p-6 border border-slate-800 space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+                    <!-- Filters -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="ArcNotifications.setFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+                            All (<span id="filter-count-all">0</span>)
+                        </button>
+                        <button type="button" onclick="ArcNotifications.setFilter('update')" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            Releases (<span id="filter-count-update">0</span>)
+                        </button>
+                        <button type="button" onclick="ArcNotifications.setFilter('system')" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            System (<span id="filter-count-system">0</span>)
+                        </button>
+                        <button type="button" onclick="ArcNotifications.setFilter('unread')" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition">
+                            Unread
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="ArcNotifications.clearRead()" class="text-xs text-slate-400 hover:text-rose-400 transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can text-[11px]"></i>
+                            <span>Clear Read</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- NOTIFICATIONS LIST -->
+                <div id="arc-notif-full-list" class="space-y-3">
+                    <!-- Dynamic notification items populated by ArcNotifications.renderUi() -->
+                </div>
+            </div>
+        </section>
+
 </main>
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
@@ -3553,8 +4063,87 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </div>
     </div>
 
+
+    <!-- PERMANENT FLOATING CORNER NOTIFICATIONS TAB -->
+    <div id="arc-notifications-corner" class="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:bottom-6 right-3 sm:right-6 z-40 select-none transition-all duration-300">
+        <!-- Floating Corner Tab Trigger Pill -->
+        <button type="button" id="arc-notifications-pill" onclick="ArcNotifications.toggleDrawer()" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-cyan-500/40 hover:border-cyan-300 text-white shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] backdrop-blur-xl transition-all duration-200 hover:scale-105 active:scale-95 group touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Open Notifications Center" aria-expanded="false" aria-controls="arc-notifications-drawer">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" id="arc-notif-ping"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+            <span class="text-xs text-cyan-400 group-hover:text-cyan-300 transition-transform" id="arc-notif-bell-icon">
+                <i class="fa-solid fa-bell"></i>
+            </span>
+            <span class="text-[10px] text-slate-300 font-mono font-bold uppercase tracking-wider group-hover:text-cyan-300 flex items-center gap-1">
+                <span class="hidden sm:inline">UPDATES</span>
+            </span>
+            <span id="arc-notif-count-badge" class="px-1.5 py-0.5 rounded-full text-[9px] font-black font-mono bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 shadow-sm leading-none flex items-center justify-center min-w-[18px]">1</span>
+            <i id="arc-notif-caret" class="fa-solid fa-chevron-up text-[10px] text-slate-400 transition-transform"></i>
+        </button>
+
+        <!-- Expandable Notification Center Flyout Drawer -->
+        <div id="arc-notifications-drawer" class="hidden absolute bottom-12 right-0 max-w-[calc(100vw-1.5rem)] w-80 sm:w-96 p-4 rounded-2xl bg-slate-950/98 border border-cyan-500/40 shadow-[0_12px_45px_rgba(0,240,255,0.25)] backdrop-blur-2xl space-y-3 mb-2 animate-in fade-in zoom-in-95 duration-200 select-text" role="region" aria-label="Notifications Center">
+            <!-- Drawer Header -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <span class="font-extrabold text-xs text-white">Arc Notifications</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.6.0</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn text-slate-400 hover:text-cyan-300 text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Check for updates">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                    <button type="button" onclick="ArcNotifications.toggleDrawer(false)" class="text-slate-400 hover:text-white text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Close (Esc)">✕</button>
+                </div>
+            </div>
+
+            <!-- Quick OS Push Status & Fast Actions -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 text-[11px]">
+                <div class="flex items-center gap-1.5 font-mono" id="arc-notif-os-status">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span class="text-slate-300">Push Alerts</span>
+                </div>
+                <button type="button" id="arc-notif-os-btn" onclick="ArcNotifications.toggleOsNotifications()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline">
+                    Enable
+                </button>
+            </div>
+
+            <!-- Action Buttons: Check Updates & Test Alert -->
+            <div class="flex gap-2">
+                <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn flex-1 py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+                    <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                    <span>Check Updates</span>
+                </button>
+                <button type="button" onclick="ArcNotifications.testUpdateNotification()" class="flex-1 py-1.5 px-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition shadow-sm">
+                    <i class="fa-solid fa-bolt text-[10px]"></i>
+                    <span>Test Alert</span>
+                </button>
+            </div>
+
+            <!-- Drawer Notifications Scroll Feed -->
+            <div id="arc-notif-drawer-list" class="max-h-72 overflow-y-auto space-y-2 pr-1">
+                <!-- Dynamically generated items -->
+            </div>
+
+            <!-- Drawer Footer -->
+            <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                <button type="button" onclick="switchTab('notifications'); ArcNotifications.toggleDrawer(false)" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-expand text-[10px]"></i>
+                    <span>Expand Full Hub</span>
+                </button>
+                <button type="button" onclick="ArcNotifications.markAllAsRead()" class="text-slate-400 hover:text-slate-200">
+                    Mark All Read
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-card px-3.5 py-2.5 rounded-xl border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-2 shadow-2xl max-w-[90vw]">
+    <div id="toast" class="fixed bottom-24 sm:bottom-20 right-4 sm:right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-card px-3.5 py-2.5 rounded-xl border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-2 shadow-2xl max-w-[90vw]">
         <i class="fa-solid fa-circle-check text-cyan-400" id="toast-icon"></i>
         <span id="toast-message">Notification message</span>
     </div>
@@ -5767,6 +6356,14 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 iconInactive: "fa-solid fa-gear text-pink-400",
                 mobileActive: "bg-pink-500/15 text-pink-300 border border-pink-500/30 shadow-[0_0_12px_rgba(236,72,153,0.25)] font-bold",
                 mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
+            },
+            notifications: {
+                active: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 shadow-md shadow-cyan-500/30",
+                inactive: "px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5",
+                iconActive: "fa-solid fa-bell text-slate-950",
+                iconInactive: "fa-solid fa-bell text-cyan-400",
+                mobileActive: "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.25)] font-bold",
+                mobileInactive: "text-slate-400 hover:text-slate-200 border border-transparent font-medium"
             }
         };
 
@@ -5774,7 +6371,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             playSfx('tab');
             state.activeTab = tabName;
 
-            ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime'].forEach(t => {
+            ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime', 'notifications'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const desktopTab = document.getElementById(`tab-${t}`);
                 const mobileTab = document.getElementById(`mobile-tab-${t}`);
@@ -5809,8 +6406,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 }
             });
 
-            if (tabName === 'screentime' && window.ArcAppTracker) {
-                window.ArcAppTracker.renderScreenTimeView();
+            if (tabName === 'screentime') {
+                if (typeof renderScreenTimeView === 'function') {
+                    renderScreenTimeView();
+                } else if (window.ArcAppTracker && typeof window.ArcAppTracker.renderScreenTimeView === 'function') {
+                    window.ArcAppTracker.renderScreenTimeView();
+                }
+            }
+            if (tabName === 'notifications' && window.ArcNotifications) {
+                window.ArcNotifications.renderUi();
             }
 
             if (tabName === 'results') {
@@ -5846,6 +6450,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const p20Account = document.getElementById('p20-google-account');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
+            const faqCard = document.getElementById('settings-additional-faq-card');
+            const founderCard = document.getElementById('settings-about-founder-card');
+            const autoStartCard = document.getElementById('settings-autostart-card');
+            const screenNotifCard = document.getElementById('settings-screentime-notif-card');
+            const goldCard = document.getElementById('settings-gold-card');
+            const faqBtn = document.getElementById('settings-subtab-faq');
+            const founderBtn = document.getElementById('settings-subtab-founder');
+            if (faqBtn && category !== 'faq') faqBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
+            if (founderBtn && category !== 'founder') founderBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
 
             const themeArcCard = document.getElementById('settings-theme-arc-card');
             const customBgCard = document.getElementById('settings-custom-bg-card');
@@ -5854,25 +6467,71 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (themeArcCard) themeArcCard.style.display = '';
                 if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
+                if (autoStartCard) autoStartCard.style.display = '';
+                if (screenNotifCard) screenNotifCard.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
+                if (faqCard) faqCard.style.display = '';
+                if (founderCard) founderCard.style.display = '';
+                if (goldCard) goldCard.style.display = '';
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
                 if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
+                if (autoStartCard) autoStartCard.style.display = 'none';
+                if (screenNotifCard) screenNotifCard.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
+                if (faqCard) faqCard.style.display = 'none';
+                if (founderCard) founderCard.style.display = 'none';
+                if (goldCard) goldCard.style.display = '';
             } else if (category === 'account') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (customBgCard) customBgCard.style.display = 'none';
                 if (hwCard) hwCard.style.display = 'none';
+                if (autoStartCard) autoStartCard.style.display = 'none';
+                if (screenNotifCard) screenNotifCard.style.display = 'none';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
+                if (faqCard) faqCard.style.display = 'none';
+                if (founderCard) founderCard.style.display = 'none';
+                if (goldCard) goldCard.style.display = 'none';
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
+                }
+            } else if (category === 'faq') {
+                if (themeArcCard) themeArcCard.style.display = 'none';
+                if (customBgCard) customBgCard.style.display = 'none';
+                if (hwCard) hwCard.style.display = 'none';
+                if (autoStartCard) autoStartCard.style.display = 'none';
+                if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20Account) p20Account.style.display = 'none';
+                if (p20Day) p20Day.style.display = 'none';
+                if (sxRoot) sxRoot.style.display = 'none';
+                if (goldCard) goldCard.style.display = 'none';
+                if (founderCard) founderCard.style.display = 'none';
+                if (faqCard) {
+                    faqCard.style.display = '';
+                    faqCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                if (window.ArcFaq) window.ArcFaq.render();
+            } else if (category === 'founder') {
+                if (themeArcCard) themeArcCard.style.display = 'none';
+                if (customBgCard) customBgCard.style.display = 'none';
+                if (hwCard) hwCard.style.display = 'none';
+                if (autoStartCard) autoStartCard.style.display = 'none';
+                if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20Account) p20Account.style.display = 'none';
+                if (p20Day) p20Day.style.display = 'none';
+                if (sxRoot) sxRoot.style.display = 'none';
+                if (faqCard) faqCard.style.display = 'none';
+                if (goldCard) goldCard.style.display = 'none';
+                if (founderCard) {
+                    founderCard.style.display = '';
+                    founderCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             }
         }
@@ -6905,6 +7564,9 @@ function toggleStreakFreezeFromRules(checked) {
         }
 
         function isFocusActive() {
+            if (typeof window !== 'undefined' && window.ArcAppTracker && typeof window.ArcAppTracker.isFocusActive === 'function') {
+                return window.ArcAppTracker.isFocusActive();
+            }
             if (typeof window !== 'undefined' && window.F && window.F.run && window.F.mode === 'work') {
                 return true;
             }
@@ -6912,6 +7574,9 @@ function toggleStreakFreezeFromRules(checked) {
         }
 
         function getFocusTimeRemainingFormatted() {
+            if (typeof window !== 'undefined' && window.ArcAppTracker && typeof window.ArcAppTracker.getFocusTimeRemainingFormatted === 'function') {
+                return window.ArcAppTracker.getFocusTimeRemainingFormatted();
+            }
             if (typeof window !== 'undefined' && window.F && window.F.left !== undefined && window.F.run) {
                 const mins = Math.floor(window.F.left / 60);
                 const secs = window.F.left % 60;
@@ -9616,6 +10281,8 @@ class ArcHardwareGatekeeper {
             startLaptopTimer();
             initFxCanvas();
             initAppTracker();
+            if (window.ArcNotifications) window.ArcNotifications.renderUi();
+            if (window.ArcFaq) window.ArcFaq.init();
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
@@ -11194,6 +11861,304 @@ html[data-mode=light] #arc-screentime-share-modal button.bg-slate-800 {
     background: #f1f5f9 !important;
     color: #0f172a !important;
     border-color: #cbd5e1 !important;
+}
+
+/* ==========================================================================
+   ENHANCED LIGHT MODE: NOTIFICATIONS, FAQ, FOUNDER & ELEVATED CONTROLS
+   High-contrast, frosted glass, WCAG AAA compliant, pristine modern aesthetic
+   ========================================================================== */
+
+/* 1. Header Notification Button & Badges */
+html[data-mode=light] #btn-header-notifications {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #btn-header-notifications:hover {
+    background: #f8fafc !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #header-notif-badge,
+html[data-mode=light] #nav-notif-badge {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35) !important;
+}
+
+/* 2. Header Black & White Toggle Button in Light Mode */
+html[data-mode=light] #btn-header-bw:not(.bg-white):not(.bg-black) {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #btn-header-bw:not(.bg-white):not(.bg-black):hover {
+    background: #f8fafc !important;
+    border-color: #64748b !important;
+}
+
+/* 3. Corner Floating Notifications Tab & Drawer */
+html[data-mode=light] #arc-notifications-pill {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #arc-notifications-pill:hover {
+    background: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] #arc-notifications-pill #arc-notif-bell-icon {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #arc-notif-count-badge {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #arc-notifications-drawer {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 20px 45px -8px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.04) !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer h3 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer .text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #arc-notifications-drawer .bg-slate-950\/95,
+html[data-mode=light] #arc-notifications-drawer [class*="bg-slate-950"] {
+    background: #ffffff !important;
+}
+html[data-mode=light] #arc-notifications-drawer [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer [id^="filter-btn-"]:not(.bg-cyan-500\/20) {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer [id^="filter-btn-"].bg-cyan-500\/20 {
+    background: #e0f2fe !important;
+    color: #0284c7 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* Notification Items in Drawer & Hub */
+html[data-mode=light] [data-notif-id]:hover {
+    border-color: #0284c7 !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08) !important;
+}
+html[data-mode=light] [data-notif-id] h4.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] [data-notif-id] h4.text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] [data-notif-id] p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] [data-notif-id] span.font-mono {
+    color: #64748b !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-cyan-500/15"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-purple-500/15"] {
+    background: #f3e8ff !important;
+    color: #7e22ce !important;
+    border-color: #e9d5ff !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-slate-900/90"] {
+    background: #f0f9ff !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.07) !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-slate-950/60"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* 4. Full-page Notifications Hub (#view-notifications) */
+html[data-mode=light] #view-notifications .glass-card,
+html[data-mode=light] #view-notifications [class*="bg-slate-900"],
+html[data-mode=light] #view-notifications [class*="bg-slate-950"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #view-notifications h1,
+html[data-mode=light] #view-notifications h2,
+html[data-mode=light] #view-notifications h3,
+html[data-mode=light] #view-notifications .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #view-notifications p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #view-notifications button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #view-notifications button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+}
+
+/* 5. Additional Settings FAQ & Help Center (#settings-additional-faq-card) */
+html[data-mode=light] #settings-additional-faq-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #0284c7 !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #settings-additional-faq-card h3.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-additional-faq-card p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #faq-search-input {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] #faq-search-input:focus {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+html[data-mode=light] #faq-search-input::placeholder {
+    color: #94a3b8 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-slate-900 {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-slate-900:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-cyan-500\/20 {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"]:hover {
+    border-color: #38bdf8 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"][open] {
+    border-color: #0284c7 !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.12) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-slate-200,
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] .faq-chevron {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #64748b !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"][open] .faq-chevron {
+    background: #e0f2fe !important;
+    border-color: #38bdf8 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] > div {
+    background: #f8fafc !important;
+    border-top-color: #e2e8f0 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] > div p {
+    color: #334155 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] [class*="bg-cyan-500/10"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+
+/* 6. About the Founder Section (#settings-about-founder-card) */
+html[data-mode=light] #settings-about-founder-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #9333ea !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #settings-about-founder-card h3.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-slate-950/60"] {
+    background: #faf5ff !important;
+    border-color: #e9d5ff !important;
+}
+html[data-mode=light] #settings-about-founder-card .text-slate-400 {
+    color: #7e22ce !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/10"] {
+    background: #f3e8ff !important;
+    color: #7e22ce !important;
+    border-color: #d8b4fe !important;
+}
+
+/* 7. Settings View Subtabs Navigation */
+html[data-mode=light] #settings-subtab-faq,
+html[data-mode=light] #settings-subtab-founder {
+    color: #64748b !important;
+}
+html[data-mode=light] #settings-subtab-faq:hover,
+html[data-mode=light] #settings-subtab-founder:hover {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-screentime-notif-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #0284c7 !important;
+}
+html[data-mode=light] #settings-screentime-notif-card h3.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-screentime-notif-card p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #screentime-notif-status-pill {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] #btn-toggle-perm-notif {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #btn-toggle-perm-notif:hover {
+    background: #0369a1 !important;
 }
 
 /* ==========================================================================
@@ -18926,14 +19891,8 @@ window.ArcBlackWhiteMode = (function() {
 
   function apply() {
     const active = isEnabled();
-    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
 
-    if (active && !isGold) {
-      disable(false);
-      return;
-    }
-
-    if (active && isGold) {
+    if (active) {
       document.documentElement.classList.add('arc-bw-mode');
       if (document.body) document.body.classList.add('arc-bw-mode');
     } else {
@@ -18945,23 +19904,20 @@ window.ArcBlackWhiteMode = (function() {
   }
 
   function enable() {
-    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
-    if (!isGold) {
-      if (typeof playSfx === 'function') playSfx('strictDenied');
-      openUpgradeModal();
-      return false;
-    }
-
     try {
       localStorage.setItem(STORAGE_KEY, 'true');
     } catch (e) {}
 
     apply();
     if (typeof playSfx === 'function') playSfx('click');
+    const isLight = document.documentElement.getAttribute('data-mode') === 'light';
+    const msg = isLight 
+      ? '📄 E-Ink Paper Monochrome Activated · Pure clarity, zero eye strain' 
+      : '🖤 Radical Noir Monochrome Activated · Zero dopamine distraction';
     if (typeof showToast === 'function') {
-      showToast('🖤 Black & White Mode Activated · Zero color distraction');
+      showToast(msg);
     } else if (typeof toast === 'function') {
-      toast('🖤 Black & White Mode Activated');
+      toast(msg);
     }
     return true;
   }
@@ -18974,24 +19930,18 @@ window.ArcBlackWhiteMode = (function() {
     apply();
     if (notify) {
       if (typeof playSfx === 'function') playSfx('click');
+      const isLight = document.documentElement.getAttribute('data-mode') === 'light';
+      const msg = isLight ? '☀️ Elevated Light Mode Restored' : '🌈 Cyberpunk Color Mode Restored';
       if (typeof showToast === 'function') {
-        showToast('🌈 Color Mode Restored · Full vibrancy active');
+        showToast(msg);
       } else if (typeof toast === 'function') {
-        toast('🌈 Color Mode Restored');
+        toast(msg);
       }
     }
     return true;
   }
 
   function toggle(forcedState) {
-    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
-    if (!isGold) {
-      if (typeof playSfx === 'function') playSfx('strictDenied');
-      openUpgradeModal();
-      updateUI();
-      return false;
-    }
-
     const current = isEnabled();
     const target = (typeof forcedState === 'boolean') ? forcedState : !current;
 
@@ -19003,21 +19953,31 @@ window.ArcBlackWhiteMode = (function() {
   }
 
   function updateUI() {
-    const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
-    const active = isEnabled() && isGold;
+    const active = isEnabled();
+    const isLight = document.documentElement.getAttribute('data-mode') === 'light';
 
     // 1. Header button
     const headerBtn = document.getElementById('btn-header-bw');
     const headerIcon = document.getElementById('header-bw-icon');
     if (headerBtn) {
       if (active) {
-        headerBtn.classList.add('bg-white', 'text-black', 'border-white', 'shadow-[0_0_15px_rgba(255,255,255,0.5)]');
-        headerBtn.classList.remove('bg-slate-800/80', 'text-slate-300', 'border-slate-700');
-        if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-black text-xs';
+        if (isLight) {
+          headerBtn.className = 'w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-black text-white border-2 border-black font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-md';
+          if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-white text-xs';
+        } else {
+          headerBtn.className = 'w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-white text-black border border-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.6)]';
+          if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-black text-xs';
+        }
+        headerBtn.title = isLight ? 'Disable E-Ink Monochrome (Alt+B)' : 'Disable Noir Monochrome (Alt+B)';
       } else {
-        headerBtn.classList.remove('bg-white', 'text-black', 'border-white', 'shadow-[0_0_15px_rgba(255,255,255,0.5)]');
-        headerBtn.classList.add('bg-slate-800/80', 'text-slate-300', 'border-slate-700');
-        if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-xs';
+        if (isLight) {
+          headerBtn.className = 'w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm hover:border-slate-400';
+          if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-slate-700 text-xs';
+        } else {
+          headerBtn.className = 'w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm';
+          if (headerIcon) headerIcon.className = 'fa-solid fa-circle-half-stroke text-xs';
+        }
+        headerBtn.title = 'Toggle Black & White Mode (Alt+B • Dopamine Detox)';
       }
     }
 
@@ -19036,10 +19996,7 @@ window.ArcBlackWhiteMode = (function() {
     // 4. ArcGold showcase button
     const goldBwBtn = document.getElementById('arc-gold-bw-btn');
     if (goldBwBtn) {
-      if (!isGold) {
-        goldBwBtn.innerHTML = '<i class="fa-solid fa-circle-half-stroke text-[11px]"></i> Unlock with Gold';
-        goldBwBtn.className = 'px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5';
-      } else if (active) {
+      if (active) {
         goldBwBtn.innerHTML = '<i class="fa-solid fa-circle-half-stroke text-[11px] text-white"></i> Disable B&W';
         goldBwBtn.className = 'px-3 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white border border-white/50 text-xs font-bold transition flex items-center gap-1.5 shadow-sm shadow-white/20';
       } else {
@@ -19100,10 +20057,41 @@ window.ArcStoreRating = (function() {
   const FEEDBACK_KEY = 'arc_app_user_feedback';
   let deferredPrompt = null;
 
-  // Listen for native PWA installation event (Windows Desktop / Microsoft Store)
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.matchMedia('(display-mode: window-controls-overlay)').matches ||
+           window.navigator.standalone === true;
+  }
+
+  function updateInstallUI() {
+    const headerBtn = document.getElementById('btn-header-install');
+    if (!headerBtn) return;
+    if (isStandalone()) {
+      headerBtn.classList.add('hidden');
+    } else {
+      headerBtn.classList.remove('hidden');
+    }
+  }
+
+  // Listen for native PWA installation event (Chrome Omnibox & In-App trigger)
   window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent default mini-infobar on mobile so our custom UI & Chrome's omnibox icon take over
     e.preventDefault();
     deferredPrompt = e;
+    window.deferredPrompt = e;
+    updateInstallUI();
+    console.log('[Arc Tracker] PWA ready for installation via Chrome address bar or Install button.');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    console.log('[Arc Tracker] PWA successfully installed to Chrome Desktop / OS.');
+    deferredPrompt = null;
+    window.deferredPrompt = null;
+    if (typeof showToast === 'function') {
+      showToast('🎉 Arc Tracker successfully installed! Launch it anytime from your Taskbar or Desktop.');
+    }
+    if (typeof playSfx === 'function') playSfx('victory');
+    updateInstallUI();
   });
 
   function openStore(storeKey) {
@@ -19136,27 +20124,45 @@ window.ArcStoreRating = (function() {
     if (modal) modal.classList.remove('open');
   }
 
-  async function installWindowsApp() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice && choice.outcome === 'accepted') {
-        if (typeof showToast === 'function') {
-          showToast('🚀 Arc Tracker successfully installed to your Windows Taskbar & Start Menu!');
-        }
-        if (typeof playSfx === 'function') playSfx('victory');
+  async function installApp() {
+    if (typeof playSfx === 'function') playSfx('click');
+
+    if (isStandalone()) {
+      if (typeof showToast === 'function') {
+        showToast('✓ Arc Tracker is already running as an installed desktop app!');
       }
-      deferredPrompt = null;
+      return;
+    }
+
+    if (deferredPrompt) {
+      try {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          if (typeof showToast === 'function') {
+            showToast('🚀 Arc Tracker successfully installed to your Desktop & Taskbar!');
+          }
+          if (typeof playSfx === 'function') playSfx('victory');
+        } else {
+          if (typeof showToast === 'function') {
+            showToast('Install postponed. You can click the Install icon in Chrome\'s address bar anytime.');
+          }
+        }
+        deferredPrompt = null;
+        window.deferredPrompt = null;
+      } catch (err) {
+        console.warn('Install prompt error:', err);
+      }
     } else {
       if (typeof showToast === 'function') {
-        showToast('💻 Opening Microsoft Store page for Arc Tracker Windows 10/11...');
+        showToast('💻 Click the Install icon in Chrome\'s address bar (right side of URL), or Chrome Menu (⋮) → "Install Arc Tracker 2026"');
       }
-      try {
-        window.location.href = 'ms-windows-store://pdp/?productid=9NBLGGH4NNS1';
-      } catch (e) {
-        window.open('https://apps.microsoft.com/detail/arc-tracker', '_blank');
-      }
+      openModal('microsoft_store');
     }
+  }
+
+  async function installWindowsApp() {
+    return installApp();
   }
 
   function submitReviewFeedback() {
@@ -19180,15 +20186,17 @@ window.ArcStoreRating = (function() {
   }
 
   function init() {
-    // Ready
+    updateInstallUI();
   }
 
   return {
     openStore,
     openModal,
     closeModal,
+    installApp,
     installWindowsApp,
     submitReviewFeedback,
+    isStandalone,
     init
   };
 })();
@@ -20065,7 +21073,7 @@ window.ArcScreenTimeStore = (function() {
     if (wComb) wComb.textContent = fmtSecs(phoneLinked ? comp.lastWeek.combinedSecs : comp.lastWeek.laptopSecs);
     if (wAvg) wAvg.textContent = 'Daily Average: ' + fmtSecs(phoneLinked ? comp.lastWeek.dailyAvgCombined : Math.round(comp.lastWeek.laptopSecs / 7)) + ' / day';
     if (wBadge) {
-      wBadge.textContent = comp.lastWeek.daysUnder4Hours + '/7 Days <4h';
+      wBadge.textContent = comp.lastWeek.daysUnder4Hours + '/7 Days \\u003c4h';
       wBadge.className = comp.lastWeek.isSub4WeekAchieved 
         ? 'text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold'
         : 'text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold';
@@ -20191,7 +21199,7 @@ window.ArcScreenTimeStore = (function() {
     if (weekEl) weekEl.textContent = fmtSecs(phoneLinked ? comp.lastWeek.combinedSecs : comp.lastWeek.laptopSecs) + ' (Avg: ' + fmtSecs(comp.lastWeek.dailyAvgCombined) + '/day)';
     if (topEl) topEl.textContent = comp.topAppForWeek.name + ' (' + fmtSecs(comp.topAppForWeek.seconds) + ')';
     if (badgeEl) {
-      badgeEl.textContent = comp.lastWeek.isSub4WeekAchieved ? '✓ Digital Ascetic (<4h/day Verified)' : '⚡ Lock-in Protocol Active';
+      badgeEl.textContent = comp.lastWeek.isSub4WeekAchieved ? '✓ Digital Ascetic (\\u003c4h/day Verified)' : '⚡ Lock-in Protocol Active';
     }
 
     modal.classList.add('open');
@@ -20234,7 +21242,7 @@ window.ArcScreenTimeStore = (function() {
       '🏆 TOP APP THIS WEEK:\n' +
       '• ' + comp.topAppForWeek.name + ': ' + fmtSecs(comp.topAppForWeek.seconds) + '\n\n' +
       '🎯 DISCIPLINE BADGE:\n' +
-      (comp.lastWeek.isSub4WeekAchieved ? '✓ Sub-4hr Digital Ascetic Champion (<4h/day all week!)' : '⚡ Lock-in Discipline Protocol Active') + '\n' +
+      (comp.lastWeek.isSub4WeekAchieved ? '✓ Sub-4hr Digital Ascetic Champion (\\u003c4h/day all week!)' : '⚡ Lock-in Discipline Protocol Active') + '\n' +
       '━━━━━━━━━━━━━━━━━━━━\n' +
       'Generated by Arc Tracker • Transform in Silence';
   }
@@ -20734,34 +21742,43 @@ window.ArcScreenTimeStore = (function() {
   };
 })();
 
-  if (window.ArcGold && typeof window.ArcGold.init === 'function') {
-    window.ArcGold.init();
+(function() {
+  function initAllArcModules() {
+    if (window.ArcGold && typeof window.ArcGold.init === 'function') {
+      window.ArcGold.init();
+    }
+    if (window.ArcCustomBackground && typeof window.ArcCustomBackground.init === 'function') {
+      window.ArcCustomBackground.init();
+    }
+    if (window.ArcStoreRating && typeof window.ArcStoreRating.init === 'function') {
+      window.ArcStoreRating.init();
+    }
+    if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.init === 'function') {
+      window.ArcScreenTimeStore.init();
+    }
+    if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
+      window.ArcSecurity.init();
+    }
+    if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
+      window.ArcProfile.init();
+    }
+    if (window.ArcAutoStart && typeof window.ArcAutoStart.init === 'function') {
+      window.ArcAutoStart.init();
+    }
+    if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
+      window.ArcScreenTimeNotifier.init();
+    }
+    if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.init === 'function') {
+      window.ArcPhoneWidgets.init();
+    }
   }
-  if (window.ArcCustomBackground && typeof window.ArcCustomBackground.init === 'function') {
-    window.ArcCustomBackground.init();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllArcModules);
+  } else {
+    initAllArcModules();
   }
-  if (window.ArcStoreRating && typeof window.ArcStoreRating.init === 'function') {
-    window.ArcStoreRating.init();
-  }
-  if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.init === 'function') {
-    window.ArcScreenTimeStore.init();
-  }
-  if (window.ArcSecurity && typeof window.ArcSecurity.init === 'function') {
-    window.ArcSecurity.init();
-  }
-  if (window.ArcProfile && typeof window.ArcProfile.init === 'function') {
-    window.ArcProfile.init();
-  }
-  if (window.ArcAutoStart && typeof window.ArcAutoStart.init === 'function') {
-    window.ArcAutoStart.init();
-  }
-  if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.init === 'function') {
-    window.ArcScreenTimeNotifier.init();
-  }
-  if (window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.init === 'function') {
-    window.ArcPhoneWidgets.init();
-  }
-});
+})();
 </script>
 
 <script id="pp12-js">
@@ -20894,7 +21911,7 @@ function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.do
  try{localStorage.setItem('arc_app_theme',s.theme);localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}
  const mb=$('#header-mode-toggle-btn'),mi=$('#header-mode-toggle-icon'),ml=$('#header-mode-toggle-label');
  if(mb&&mi){mi.className=isLight?'fa-solid fa-moon text-indigo-400':'fa-solid fa-sun text-amber-400';if(ml)ml.textContent=isLight?'Dark Mode':'Light Mode';mb.title=isLight?'Switch to Dark Mode':'Switch to Light Mode';mb.setAttribute('aria-label',isLight?'Switch to Dark Mode':'Switch to Light Mode')}
- try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){};try{if(window.ArcCustomBackground&&typeof window.ArcCustomBackground.apply==='function')window.ArcCustomBackground.apply()}catch(e){}}
+ try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){};try{if(window.ArcCustomBackground&&typeof window.ArcCustomBackground.apply==='function')window.ArcCustomBackground.apply()}catch(e){};try{if(window.ArcBlackWhiteMode&&typeof window.ArcBlackWhiteMode.updateUI==='function')window.ArcBlackWhiteMode.updateUI()}catch(e){};try{if(window.ArcNotifications&&typeof window.ArcNotifications.renderUi==='function')window.ArcNotifications.renderUi()}catch(e){};try{if(window.ArcFaq&&typeof window.ArcFaq.render==='function')window.ArcFaq.render()}catch(e){}}
 
 /* ---------- FOCUS / POMODORO + SCREEN TIME ---------- */
 const fset=()=>{F.left=(F.mode==='work'?S().focusWork:S().focusBreak)*60};
@@ -24505,7 +25522,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   const origSwitchTab = window.switchTab;
   window.switchTab = function(tabName) {
     if (typeof origSwitchTab === 'function') origSwitchTab.apply(this, arguments);
-    ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime'].forEach(t => {
+    ['tracker', 'rules', 'results', 'progression', 'settings', 'screentime', 'notifications'].forEach(t => {
       const v = document.getElementById(`view-${t}`);
       const dTab = document.getElementById(`tab-${t}`);
       const mTab = document.getElementById(`mobile-tab-${t}`);

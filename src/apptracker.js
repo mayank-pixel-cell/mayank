@@ -744,6 +744,12 @@ class ArcAppTrackerEngine {
       try { window.fstart(); } catch (_) {}
     }
 
+    if (typeof window !== 'undefined' && window.appTrackerState) {
+      window.appTrackerState.focusActive = true;
+      window.appTrackerState.focusSecondsLeft = minutes * 60;
+      window.appTrackerState.focusTotalSeconds = minutes * 60;
+    }
+
     this.playAudio('success');
     if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
       window.showToast(`Focus session started (${minutes}m). Distracting apps blocked!`);
@@ -751,6 +757,9 @@ class ArcAppTrackerEngine {
 
     if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
       window.renderScreenTimeView();
+    }
+    if (typeof window !== 'undefined' && window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.refresh === 'function') {
+      window.ArcPhoneWidgets.refresh();
     }
   }
 
@@ -795,6 +804,9 @@ class ArcAppTrackerEngine {
     }
 
     this.focusSessionActive = false;
+    if (typeof window !== 'undefined' && window.appTrackerState) {
+      window.appTrackerState.focusActive = false;
+    }
 
     if (typeof window !== 'undefined' && typeof window.fpause === 'function') {
       try { window.fpause(true); } catch (_) {}
@@ -814,6 +826,9 @@ class ArcAppTrackerEngine {
 
     if (typeof window !== 'undefined' && typeof window.renderScreenTimeView === 'function') {
       window.renderScreenTimeView();
+    }
+    if (typeof window !== 'undefined' && window.ArcPhoneWidgets && typeof window.ArcPhoneWidgets.refresh === 'function') {
+      window.ArcPhoneWidgets.refresh();
     }
     return true;
   }
@@ -1017,8 +1032,11 @@ export const arcAppTracker = new ArcAppTrackerEngine();
 
 if (typeof window !== 'undefined') {
   window.ArcAppTracker = arcAppTracker;
+  window.arcAppTracker = arcAppTracker;
   window.startFocusSession = (mins) => arcAppTracker.startFocusSession(mins);
   window.stopFocusSession = (completed) => arcAppTracker.stopFocusSession(completed);
+  window.isFocusActive = () => arcAppTracker.isFocusActive();
+  window.getFocusTimeRemainingFormatted = () => arcAppTracker.getFocusTimeRemainingFormatted();
   window.toggleAppFocusBlock = (appId) => arcAppTracker.toggleAppFocusBlock(appId);
   window.setAllAppsFocusBlock = (type) => arcAppTracker.setAllAppsFocusBlock(type);
   window.toggleYouTubeFilterEnabled = () => arcAppTracker.toggleYouTubeFilterEnabled();
