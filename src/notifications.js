@@ -158,6 +158,8 @@ class ArcNotificationEngine {
 
   // Initialize engine
   async init() {
+    if (this._initialized) { this.renderUi(); return; }
+    this._initialized = true;
     console.log('[ArcNotifications] Initializing Notification Center...');
 
     // 1. Hydrate notifications
@@ -278,8 +280,16 @@ class ArcNotificationEngine {
     icon = 'fa-solid fa-bell',
     features = [],
     version = APP_VERSION,
-    silent = false
+    silent = false,
+    appId = null
   }) {
+    if (typeof window !== 'undefined' && window.ArcNotificationBlocker && typeof window.ArcNotificationBlocker.shouldBlock === 'function') {
+      if (window.ArcNotificationBlocker.shouldBlock({ appId, category, title, message })) {
+        console.log(`[ArcNotificationBlocker] Notification blocked for: ${appId || category || title}`);
+        return null;
+      }
+    }
+
     const notif = {
       id: 'notif-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
       version,
@@ -491,13 +501,18 @@ class ArcNotificationEngine {
 
     if (this.isDrawerOpen) {
       drawer.classList.remove('hidden');
+      void drawer.offsetWidth; // force layout reflow for fluid spring
+      drawer.classList.add('arc-panel-open');
       if (caret) caret.style.transform = 'rotate(180deg)';
       if (pill) pill.setAttribute('aria-expanded', 'true');
       if (typeof window.playSfx === 'function') window.playSfx('hover');
     } else {
-      drawer.classList.add('hidden');
+      drawer.classList.remove('arc-panel-open');
       if (caret) caret.style.transform = 'rotate(0deg)';
       if (pill) pill.setAttribute('aria-expanded', 'false');
+      setTimeout(() => {
+        if (!this.isDrawerOpen) drawer.classList.add('hidden');
+      }, 340);
     }
   }
 
@@ -668,6 +683,8 @@ class ArcNotificationEngine {
   }
 
   _bindEvents() {
+    if (this._eventsBound) return;
+    this._eventsBound = true;
     // 1. Keyboard shortcut 'N' to toggle Notifications
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {

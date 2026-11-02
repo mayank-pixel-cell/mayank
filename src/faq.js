@@ -87,18 +87,72 @@ export const FAQ_ITEMS = [
   }
 ];
 
-class ArcFaqEngine {
+export class ArcFaqEngine {
   constructor() {
     this.searchQuery = '';
     this.activeCategory = 'all';
+    this.isSectionExpanded = false; // Contracted by default to increase space
   }
 
   init() {
     this.render();
+    this.updateSectionUI();
+  }
+
+  toggleSection(forceState) {
+    if (typeof forceState === 'boolean') {
+      this.isSectionExpanded = forceState;
+    } else {
+      this.isSectionExpanded = !this.isSectionExpanded;
+    }
+    this.updateSectionUI();
+  }
+
+  updateSectionUI() {
+    const content = document.getElementById('faq-expandable-content');
+    const toggleBtn = document.getElementById('faq-section-toggle-btn');
+    const chevron = document.getElementById('faq-chevron-icon');
+    const summaryText = document.getElementById('faq-summary-hint');
+
+    if (!content) return;
+
+    if (this.isSectionExpanded) {
+      content.classList.remove('hidden');
+      void content.offsetWidth; // force reflow
+      content.classList.add('expanded');
+      if (toggleBtn) {
+        toggleBtn.innerHTML = `<span>Collapse FAQs</span> <i class="fa-solid fa-chevron-up text-[10px]"></i>`;
+        toggleBtn.title = 'Click to collapse FAQ section';
+      }
+      if (chevron) {
+        chevron.className = 'fa-solid fa-chevron-up text-[10px]';
+      }
+      if (summaryText) {
+        summaryText.textContent = 'Habit scoring, offline airgap security, streak freeze & screen time rules • Tap to collapse';
+      }
+    } else {
+      content.classList.remove('expanded');
+      setTimeout(() => {
+        if (!this.isSectionExpanded) content.classList.add('hidden');
+      }, 440);
+      if (toggleBtn) {
+        toggleBtn.innerHTML = `<span>View FAQs</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>`;
+        toggleBtn.title = 'Click to view Frequently Asked Questions';
+      }
+      if (chevron) {
+        chevron.className = 'fa-solid fa-chevron-down text-[10px]';
+      }
+      if (summaryText) {
+        summaryText.textContent = 'Habit scoring, offline airgap security, streak freeze & screen time rules • Tap to expand';
+      }
+    }
   }
 
   filterSearch(query) {
     this.searchQuery = (query || '').trim().toLowerCase();
+    if (this.searchQuery && !this.isSectionExpanded) {
+      this.toggleSection(true);
+    }
     this.render();
   }
 

@@ -32,6 +32,8 @@ export class ArcAboutFounderEngine {
 
     if (this.isExpanded) {
       content.classList.remove('hidden');
+      void content.offsetWidth; // force reflow
+      content.classList.add('expanded');
       if (toggleBtn) {
         toggleBtn.innerHTML = `<span>Collapse Story</span> <i class="fa-solid fa-chevron-up text-[10px]"></i>`;
         toggleBtn.title = 'Click to collapse founder details';
@@ -43,7 +45,10 @@ export class ArcAboutFounderEngine {
         summaryText.textContent = 'How the journey started • Goals & uncompromised vision • Why Arc Tracker is 100% free • Tap to collapse';
       }
     } else {
-      content.classList.add('hidden');
+      content.classList.remove('expanded');
+      setTimeout(() => {
+        if (!this.isExpanded) content.classList.add('hidden');
+      }, 440);
       if (toggleBtn) {
         toggleBtn.innerHTML = `<span>Read Story</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>`;
         toggleBtn.title = 'Click to read how the journey started & vision';
