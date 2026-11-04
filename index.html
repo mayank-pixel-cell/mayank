@@ -25,6 +25,7 @@
     <meta name="referrer" content="no-referrer">
     <!-- Tailwind CSS -->
     <script src="./assets/tailwind.js"></script>
+    <script src="./assets/qrcode.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
     <!-- Inter Font -->
@@ -1138,8 +1139,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         }
 
         #arc-notifications-drawer {
-            transform-origin: bottom right !important;
-            transform: translateY(16px) scale(0.92) !important;
+            transform-origin: top right !important;
+            transform: translateY(-12px) scale(0.94) !important;
         }
 
         #arc-hud-card.arc-panel-open,
@@ -1398,11 +1399,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <i class="fa-solid fa-gear text-pink-400"></i>
                     <span>Settings</span>
                 </button>
-                <button id="tab-notifications" title="Notifications &amp; Updates (N)" role="tab" aria-selected="false" aria-controls="view-notifications" onmouseenter="playSfx('hover')" onclick="switchTab('notifications')" class="px-2.5 lg:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 flex items-center space-x-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                    <i class="fa-solid fa-bell text-cyan-400"></i>
-                    <span>Updates</span>
-                    <span id="nav-notif-badge" class="hidden text-[9px] font-mono font-black px-1.5 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">1</span>
-                </button>
             </nav>
 
             <!-- ACTION BUTTONS -->
@@ -1413,6 +1409,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span class="hidden sm:inline">OFFLINE MODE</span>
                     <span class="sm:hidden">OFFLINE</span>
                 </div>
+
+                <!-- Dedicated Notifications & System Updates Bell Icon -->
+                <button type="button" id="btn-header-notifications" onclick="ArcNotifications.toggleDrawer(); if(window.playSfx)playSfx('click')" class="relative w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Notifications &amp; System Updates (Press N)" aria-label="Notifications &amp; Updates" aria-expanded="false" aria-controls="arc-notifications-drawer">
+                    <i id="arc-notif-bell-icon" class="fa-solid fa-bell text-sm transition-transform duration-200 group-hover:rotate-12"></i>
+                    <!-- Dynamic Live Ping Dot -->
+                    <span id="header-notif-ping" class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500 border border-slate-950"></span>
+                    </span>
+                    <!-- Dynamic Unread Count Badge -->
+                    <span id="header-notif-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 font-black font-mono text-[9px] flex items-center justify-center border border-slate-950 shadow-sm leading-none">1</span>
+                </button>
 
                 <!-- User Profile Capsule (Compact PFP Only) -->
                 <div role="button" tabindex="0" id="header-profile-pill" onclick="ArcProfile.openSetupModal()" class="cursor-pointer relative p-0.5 rounded-full bg-slate-900 border-2 border-cyan-400/50 hover:border-cyan-300 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Customize Operative Profile & Handle">
@@ -1966,6 +1974,147 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <p class="text-xs text-slate-400 leading-relaxed" id="assessment-feedback">
                             Your completion rate reflects strong discipline. Maintain daily consistency to lock in maximum results before December 31.
                         </p>
+                    </div>
+
+                    <!-- LEADERBOARD & GROUPS SECTION (BELOW REIGNITE DISCIPLINE) -->
+                    <div id="arc-leaderboard-groups-section" class="glass-card rounded-2xl sm:rounded-3xl p-3 sm:p-4 space-y-3 border-t-2 border-t-amber-400 glow-amber relative overflow-hidden transition-all duration-300">
+                        <!-- Top Header & Navigation -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-amber-500/20 to-yellow-400/30 text-amber-300 border border-amber-400/40 grid place-items-center text-xs sm:text-sm shadow-inner shrink-0">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <h3 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">Leaderboard &amp; Groups</h3>
+                                        <span id="lb-lock-pill" class="text-[9px] font-mono font-black px-2 py-0.5 rounded-full border bg-amber-500/10 text-amber-300 border-amber-500/30 flex items-center gap-1">
+                                            <i class="fa-solid fa-lock text-[8px]"></i>
+                                            <span>LVL 10</span>
+                                        </span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 leading-tight">Ranked Ladders &amp; Unlimited Squads</p>
+                                </div>
+                            </div>
+
+                            <!-- Controls: Switcher & Compact Toggle -->
+                            <div class="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+                                <div class="flex items-center gap-0.5 p-0.5 bg-slate-900/90 rounded-lg border border-slate-800 text-[10px] sm:text-[11px] font-bold">
+                                    <button type="button" id="tab-btn-leaderboard" onclick="ArcLeaderboardGroups.switchView('leaderboard')" class="px-2.5 py-1 rounded-md text-slate-950 bg-gradient-to-r from-amber-400 to-yellow-400 font-black shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                                        <i class="fa-solid fa-trophy text-[10px]"></i>
+                                        <span>Leaderboard</span>
+                                    </button>
+                                    <button type="button" id="tab-btn-groups" onclick="ArcLeaderboardGroups.switchView('groups')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5 active:scale-95">
+                                        <i class="fa-solid fa-user-group text-[10px]"></i>
+                                        <span>Groups</span>
+                                    </button>
+                                </div>
+
+                                <button type="button" id="btn-lb-compact-toggle" onclick="ArcLeaderboardGroups.toggleCompact()" class="px-2 py-1 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/40 text-slate-300 hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 transition active:scale-95" title="Toggle Compact / Expanded View">
+                                    <i id="lb-compact-icon" class="fa-solid fa-up-right-and-down-left-from-center text-[9px]"></i>
+                                    <span id="lb-compact-label">Expand</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SUB-VIEW 1: LEADERBOARD VIEW -->
+                        <div id="lb-view-container" class="space-y-2.5">
+                            <!-- Locked State Container (Shown if Level < 10) -->
+                            <div id="lb-locked-container">
+                                <!-- Rendered dynamically based on isCompacted state -->
+                            </div>
+
+                            <!-- Unlocked State Container (Shown if Level >= 10 or Dev Override) -->
+                            <div id="lb-unlocked-container" class="hidden space-y-2.5">
+                                <!-- Three Category Switcher Tabs: Regional, Country, Global -->
+                                <div class="flex items-center gap-1 p-1 bg-slate-950/90 rounded-xl border border-slate-800 text-[11px] font-bold">
+                                    <button type="button" onclick="ArcLeaderboardGroups.setCategory('regional')" id="btn-lb-cat-regional" class="flex-1 py-1 px-2 rounded-lg text-center transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-sm">
+                                        <i class="fa-solid fa-location-dot text-[10px]"></i>
+                                        <span>Regional</span>
+                                    </button>
+                                    <button type="button" onclick="ArcLeaderboardGroups.setCategory('country')" id="btn-lb-cat-country" class="flex-1 py-1 px-2 rounded-lg text-center text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1 font-semibold">
+                                        <i class="fa-solid fa-flag text-[10px]"></i>
+                                        <span>Country</span>
+                                    </button>
+                                    <button type="button" onclick="ArcLeaderboardGroups.setCategory('global')" id="btn-lb-cat-global" class="flex-1 py-1 px-2 rounded-lg text-center text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1 font-semibold">
+                                        <i class="fa-solid fa-globe text-[10px]"></i>
+                                        <span>Global</span>
+                                    </button>
+                                </div>
+
+                                <!-- Scope Banner & User Standing (Streamlined) -->
+                                <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px]">
+                                    <div class="flex items-center gap-1.5 truncate">
+                                        <span id="lb-scope-icon" class="text-amber-400 text-xs"><i class="fa-solid fa-location-dot"></i></span>
+                                        <span id="lb-scope-title" class="font-bold text-slate-200 truncate">Regional Sector</span>
+                                    </div>
+                                    <span id="lb-scope-count" class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shrink-0">1,240 Operatives</span>
+                                </div>
+
+                                <!-- User's Current Standing Callout Card -->
+                                <div class="p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/40 via-slate-900/90 to-purple-950/40 border border-cyan-500/40 flex items-center justify-between shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <div class="relative shrink-0">
+                                            <div id="lb-user-avatar" class="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-bold grid place-items-center text-xs">O</div>
+                                            <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border border-slate-950"></span>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-1.5">
+                                                <span id="lb-user-handle" class="font-extrabold text-xs text-white truncate">@operative</span>
+                                                <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 shrink-0">YOU</span>
+                                            </div>
+                                            <div class="text-[9px] text-slate-400 font-mono truncate" id="lb-user-stats">Level 1 • 15% Score • 0d Streak</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right shrink-0">
+                                        <div class="text-xs font-mono font-black text-amber-400" id="lb-user-rank-display">#7 Regional</div>
+                                        <span class="text-[9px] text-emerald-400 font-semibold" id="lb-user-percentile">Top 1%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Rankings Ladder Table / List -->
+                                <div id="lb-rankings-list" class="space-y-1 overflow-y-auto pr-1 custom-scroll">
+                                    <!-- Populated dynamically by ArcLeaderboardGroups.render() -->
+                                </div>
+
+                                <!-- Compact Expand / Collapse Footer Action -->
+                                <div id="lb-ladder-footer-action">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUB-VIEW 2: GROUPS / SQUADS VIEW -->
+                        <div id="groups-view-container" class="hidden space-y-2.5">
+                            <!-- Squads Intro & Create Button -->
+                            <div class="flex items-center justify-between gap-2">
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Accountability Squads</h4>
+                                        <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded">Unlimited</span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 leading-tight">No member limit • Join or create any squad</p>
+                                </div>
+                                <button type="button" onclick="ArcLeaderboardGroups.openCreateSquadModal()" class="px-2.5 py-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1 transition active:scale-95 shadow-sm shrink-0">
+                                    <i class="fa-solid fa-plus text-[9px]"></i>
+                                    <span>Create Squad</span>
+                                </button>
+                            </div>
+
+                            <!-- User's Active Squad Status Banner -->
+                            <div id="groups-active-banner" class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1 text-xs">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Recommended Squads List -->
+                            <div id="groups-squads-list" class="space-y-1.5 overflow-y-auto pr-1 custom-scroll">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Groups Compact Expand / Collapse Footer Action -->
+                            <div id="groups-footer-action">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4315,14 +4464,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
             <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Settings</span>
         </button>
-        <button id="mobile-tab-notifications" aria-label="Updates &amp; Notifications" role="tab" aria-selected="false" aria-controls="view-notifications" onclick="switchTab('notifications')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 text-slate-400 hover:text-slate-200 border border-transparent font-medium active:scale-95 select-none touch-manipulation min-h-[46px]">
-            <div class="relative flex items-center justify-center">
-                <i class="fa-solid fa-bell text-sm sm:text-base"></i>
-                <span class="mobile-active-dot hidden absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,1)]"></span>
-                <span id="mobile-notif-count-badge" class="hidden absolute -top-1 -right-2 px-1 py-0.2 rounded-full text-[8px] font-black font-mono bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 leading-none shadow-sm">1</span>
-            </div>
-            <span class="text-[8.5px] sm:text-[9.5px] tracking-tight mt-0.5 truncate w-full text-center">Updates</span>
-        </button>
     </nav>
 
     <footer class="glass-card border-t border-slate-800/80 py-3 px-4 text-center text-[10px] sm:text-xs text-slate-500 relative">
@@ -4395,81 +4536,79 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
     </div>
 
 
-    <!-- PERMANENT FLOATING CORNER NOTIFICATIONS TAB -->
-    <div id="arc-notifications-corner" class="hidden md:block fixed md:bottom-6 right-3 sm:right-6 z-40 select-none transition-all duration-300">
-        <!-- Floating Corner Tab Trigger Pill -->
-        <button type="button" id="arc-notifications-pill" onclick="ArcNotifications.toggleDrawer()" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-cyan-500/40 hover:border-cyan-300 text-white shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] backdrop-blur-xl transition-all duration-200 hover:scale-105 active:scale-95 group touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Open Notifications Center" aria-expanded="false" aria-controls="arc-notifications-drawer">
-            <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" id="arc-notif-ping"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-            </span>
-            <span class="text-xs text-cyan-400 group-hover:text-cyan-300 transition-transform" id="arc-notif-bell-icon">
-                <i class="fa-solid fa-bell"></i>
-            </span>
-            <span class="text-[10px] text-slate-300 font-mono font-bold uppercase tracking-wider group-hover:text-cyan-300 flex items-center gap-1">
-                <span class="hidden sm:inline">UPDATES</span>
-            </span>
-            <span id="arc-notif-count-badge" class="px-1.5 py-0.5 rounded-full text-[9px] font-black font-mono bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 shadow-sm leading-none flex items-center justify-center min-w-[18px]">1</span>
-            <i id="arc-notif-caret" class="fa-solid fa-chevron-up text-[10px] text-slate-400 transition-transform"></i>
-        </button>
-
-        <!-- Expandable Notification Center Flyout Drawer -->
-        <div id="arc-notifications-drawer" class="hidden absolute bottom-12 right-0 max-w-[calc(100vw-1.5rem)] w-80 sm:w-96 p-4 rounded-2xl bg-slate-950/98 border border-cyan-500/40 shadow-[0_12px_45px_rgba(0,240,255,0.25)] backdrop-blur-2xl space-y-3 mb-2 select-text" role="region" aria-label="Notifications Center">
-            <!-- Drawer Header -->
-            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs">
-                        <i class="fa-solid fa-bell"></i>
-                    </div>
-                    <span class="font-extrabold text-xs text-white">Arc Notifications</span>
-                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.6.0</span>
+    <!-- EXPANDABLE NOTIFICATIONS & UPDATES FLYOUT DRAWER (Anchored to Header Bell Icon) -->
+    <div id="arc-notifications-drawer" class="hidden fixed top-16 right-3 sm:right-6 md:right-8 max-w-[calc(100vw-1.5rem)] w-84 sm:w-96 p-4 rounded-2xl bg-slate-950/98 border border-cyan-500/40 shadow-[0_16px_50px_rgba(0,0,0,0.85),0_0_35px_rgba(0,240,255,0.25)] backdrop-blur-2xl space-y-3 z-50 select-text" role="region" aria-label="Notifications Center">
+        <!-- Drawer Header -->
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-bell"></i>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn text-slate-400 hover:text-cyan-300 text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Check for updates">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                    </button>
-                    <button type="button" onclick="ArcNotifications.toggleDrawer(false)" class="text-slate-400 hover:text-white text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Close (Esc)">✕</button>
-                </div>
+                <span class="font-extrabold text-xs text-white">Notifications &amp; Updates</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.6.0</span>
             </div>
+            <div class="flex items-center gap-1.5">
+                <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn text-slate-400 hover:text-cyan-300 text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Check for updates">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+                <button type="button" onclick="ArcNotifications.toggleDrawer(false)" class="text-slate-400 hover:text-white text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Close (Esc)">✕</button>
+            </div>
+        </div>
 
-            <!-- Quick OS Push Status & Fast Actions -->
-            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 text-[11px]">
-                <div class="flex items-center gap-1.5 font-mono" id="arc-notif-os-status">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span class="text-slate-300">Push Alerts</span>
-                </div>
-                <button type="button" id="arc-notif-os-btn" onclick="ArcNotifications.toggleOsNotifications()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline">
-                    Enable
-                </button>
+        <!-- Quick OS Push Status & Fast Actions -->
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 text-[11px]">
+            <div class="flex items-center gap-1.5 font-mono" id="arc-notif-os-status">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span class="text-slate-300">Push Alerts</span>
             </div>
+            <button type="button" id="arc-notif-os-btn" onclick="ArcNotifications.toggleOsNotifications()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline">
+                Enable
+            </button>
+        </div>
 
-            <!-- Action Buttons: Check Updates & Test Alert -->
-            <div class="flex gap-2">
-                <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn flex-1 py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
-                    <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
-                    <span>Check Updates</span>
-                </button>
-                <button type="button" onclick="ArcNotifications.testUpdateNotification()" class="flex-1 py-1.5 px-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition shadow-sm">
-                    <i class="fa-solid fa-bolt text-[10px]"></i>
-                    <span>Test Alert</span>
-                </button>
-            </div>
+        <!-- Filter Pills: All, Releases, System, Unread -->
+        <div class="flex items-center gap-1 p-1 bg-slate-900/90 rounded-xl border border-slate-800 text-[10px] font-bold">
+            <button type="button" onclick="ArcNotifications.setFilter('all')" id="drawer-filter-all" class="flex-1 py-1 px-1.5 rounded-lg text-center transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+                All (<span id="drawer-count-all">0</span>)
+            </button>
+            <button type="button" onclick="ArcNotifications.setFilter('update')" id="drawer-filter-update" class="flex-1 py-1 px-1.5 rounded-lg text-center text-slate-400 hover:text-slate-200 transition font-medium">
+                Releases (<span id="drawer-count-update">0</span>)
+            </button>
+            <button type="button" onclick="ArcNotifications.setFilter('system')" id="drawer-filter-system" class="flex-1 py-1 px-1.5 rounded-lg text-center text-slate-400 hover:text-slate-200 transition font-medium">
+                System (<span id="drawer-count-system">0</span>)
+            </button>
+            <button type="button" onclick="ArcNotifications.setFilter('unread')" id="drawer-filter-unread" class="flex-1 py-1 px-1.5 rounded-lg text-center text-slate-400 hover:text-slate-200 transition font-medium">
+                Unread (<span id="drawer-count-unread">0</span>)
+            </button>
+        </div>
 
-            <!-- Drawer Notifications Scroll Feed -->
-            <div id="arc-notif-drawer-list" class="max-h-72 overflow-y-auto space-y-2 pr-1">
-                <!-- Dynamically generated items -->
-            </div>
+        <!-- Action Buttons: Check Updates & Test Alert -->
+        <div class="flex gap-2">
+            <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn flex-1 py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                <span>Check Updates</span>
+            </button>
+            <button type="button" onclick="ArcNotifications.testUpdateNotification()" class="flex-1 py-1.5 px-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition shadow-sm">
+                <i class="fa-solid fa-bolt text-[10px]"></i>
+                <span>Test Alert</span>
+            </button>
+        </div>
 
-            <!-- Drawer Footer -->
-            <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
-                <button type="button" onclick="switchTab('notifications'); ArcNotifications.toggleDrawer(false)" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
-                    <i class="fa-solid fa-expand text-[10px]"></i>
-                    <span>Expand Full Hub</span>
-                </button>
-                <button type="button" onclick="ArcNotifications.markAllAsRead()" class="text-slate-400 hover:text-slate-200">
-                    Mark All Read
-                </button>
-            </div>
+        <!-- Drawer Notifications Scroll Feed -->
+        <div id="arc-notif-drawer-list" class="max-h-72 overflow-y-auto space-y-2 pr-1 custom-scroll">
+            <!-- Dynamically generated items -->
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+            <button type="button" onclick="ArcNotifications.clearRead()" class="text-slate-400 hover:text-slate-200 flex items-center gap-1">
+                <i class="fa-regular fa-trash-can text-[10px]"></i>
+                <span>Clear Read</span>
+            </button>
+            <button type="button" onclick="ArcNotifications.markAllAsRead()" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-check-double text-[10px]"></i>
+                <span>Mark All Read</span>
+            </button>
         </div>
     </div>
 
@@ -4497,6 +4636,53 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <p class="text-[10px] font-mono text-emerald-500/80">Type 'exit' or press ESC to return to reality.</p>
         </div>
         <div class="relative z-10 text-[10px] font-mono text-emerald-600">ARC OPERATIVE KERNEL 0x7F · ALL HABITS MONITORED</div>
+    </div>
+
+    <!-- CREATE SQUAD MODAL -->
+    <div id="arc-create-squad-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 transition-opacity duration-200" role="dialog" aria-modal="true" aria-label="Create Operative Squad">
+        <div class="w-full max-w-md bg-slate-950/98 border-2 border-amber-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-sm text-white">Create Operative Squad</h3>
+                        <p class="text-[10px] text-slate-400">Found a new discipline unit &amp; recruit operatives</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ArcLeaderboardGroups.closeCreateSquadModal()" class="text-slate-400 hover:text-white text-xs p-1 rounded-lg hover:bg-slate-900 transition">✕</button>
+            </div>
+
+            <form onsubmit="ArcLeaderboardGroups.handleCreateSquad(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 mb-1">Squad Name</label>
+                    <input id="new-squad-name" type="text" required maxlength="32" placeholder="e.g. Shadow Monks Syndicate" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-amber-400 focus:outline-none placeholder:text-slate-600">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 mb-1">Squad Motto / Covenant</label>
+                    <input id="new-squad-motto" type="text" required maxlength="64" placeholder="e.g. Silence and absolute discipline in the dark." class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-amber-400 focus:outline-none placeholder:text-slate-600">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 mb-1">Core Focus Pillar</label>
+                    <select id="new-squad-category" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-amber-400 focus:outline-none">
+                        <option value="All Pillars">All Pillars (Holistic Discipline)</option>
+                        <option value="Physical">Physical (Fitness &amp; Strength)</option>
+                        <option value="Mindset">Mindset (Mental Clarity &amp; Reading)</option>
+                        <option value="Productivity">Productivity (Deep Work &amp; Focus)</option>
+                        <option value="Discipline">Discipline (Dopamine Shield &amp; Sleep)</option>
+                    </select>
+                </div>
+                <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-300 flex items-center gap-2">
+                    <i class="fa-solid fa-infinity text-xs"></i>
+                    <span><strong>Unlimited Capacity:</strong> Groups have no member limit. Unlimited operatives can join.</span>
+                </div>
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" onclick="ArcLeaderboardGroups.closeCreateSquadModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition">Cancel</button>
+                    <button type="submit" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 text-xs font-black transition shadow-sm">Create &amp; Lead</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- EASTER EGG 2: CYBERDECK MINI-TERMINAL HUD MODAL -->
@@ -6718,6 +6904,14 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     return;
                 }
             }
+
+            if (tabName === 'notifications') {
+                if (window.ArcNotifications) {
+                    window.ArcNotifications.toggleDrawer(true);
+                }
+                return;
+            }
+
             playSfx('tab');
             state.activeTab = tabName;
 
@@ -6770,6 +6964,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (tabName === 'results') {
                 renderSpiderWeb();
                 renderScreenTime();
+                if (window.ArcLeaderboardGroups && typeof window.ArcLeaderboardGroups.render === 'function') {
+                    window.ArcLeaderboardGroups.render();
+                }
             }
             if (tabName === 'rules') {
                 renderRulesBlueprint();
@@ -10674,6 +10871,7 @@ class ArcHardwareGatekeeper {
             initFxCanvas();
             initAppTracker();
             if (window.ArcNotifications) window.ArcNotifications.renderUi();
+            if (window.ArcLeaderboardGroups) window.ArcLeaderboardGroups.init();
             if (window.ArcFaq) window.ArcFaq.init();
         }
 
@@ -12211,18 +12409,42 @@ html[data-mode=light] #arc-store-rating-modal button.bg-slate-800 {
     border-color: #cbd5e1 !important;
 }
 
+/* SCANNER VIEWPORT LASER ANIMATION */
+.arc-qr-scan-line {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.9) 20%, rgba(6, 182, 212, 1) 50%, rgba(168, 85, 247, 0.9) 80%, transparent 100%);
+    box-shadow: 0 0 12px #06b6d4, 0 0 5px #a855f7;
+    border-radius: 9999px;
+    top: 12px;
+    animation: arcQrLaserSweep 2.4s ease-in-out infinite alternate;
+}
+@keyframes arcQrLaserSweep {
+    0% { top: 12px; opacity: 0.85; }
+    50% { opacity: 1; }
+    100% { top: calc(100% - 15px); opacity: 0.85; }
+}
+
 html[data-mode=light] #arc-phone-linking-modal > div,
-html[data-mode=light] #arc-screentime-share-modal > div {
+html[data-mode=light] #arc-screentime-share-modal > div,
+html[data-mode=light] #arc-confirm-pairing-modal > div,
+html[data-mode=light] #arc-disconnect-warning-modal > div {
     background: #ffffff !important;
     border-color: #e2e8f0 !important;
     box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16) !important;
 }
 html[data-mode=light] #arc-phone-linking-modal h3,
-html[data-mode=light] #arc-screentime-share-modal h3 {
+html[data-mode=light] #arc-screentime-share-modal h3,
+html[data-mode=light] #arc-confirm-pairing-modal h3,
+html[data-mode=light] #arc-disconnect-warning-modal h3 {
     color: #0f172a !important;
 }
 html[data-mode=light] #arc-phone-linking-modal p,
-html[data-mode=light] #arc-screentime-share-modal p {
+html[data-mode=light] #arc-screentime-share-modal p,
+html[data-mode=light] #arc-confirm-pairing-modal p,
+html[data-mode=light] #arc-disconnect-warning-modal p {
     color: #475569 !important;
 }
 html[data-mode=light] #st-share-preview-card {
@@ -12241,17 +12463,48 @@ html[data-mode=light] #st-share-name,
 html[data-mode=light] #st-share-combined-time {
     color: #0f172a !important;
 }
-html[data-mode=light] #arc-phone-linking-modal [class*="bg-slate-950/80"] {
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-slate-950/80"],
+html[data-mode=light] #arc-confirm-pairing-modal [class*="bg-slate-950/80"] {
     background: #f8fafc !important;
     border-color: #e2e8f0 !important;
 }
-html[data-mode=light] #arc-phone-linking-modal .bg-slate-900 {
+html[data-mode=light] #arc-phone-linking-modal .bg-slate-900,
+html[data-mode=light] #arc-confirm-pairing-modal .bg-slate-900 {
     background: #ffffff !important;
     border-color: #cbd5e1 !important;
     color: #0284c7 !important;
 }
+html[data-mode=light] #arc-disconnect-warning-modal [class*="bg-rose-950/30"] {
+    background: #fff1f2 !important;
+    border-color: #fecdd3 !important;
+}
+html[data-mode=light] #arc-disconnect-warning-modal [class*="text-slate-300"] {
+    color: #334155 !important;
+}
+html[data-mode=light] #arc-disconnect-warning-modal [class*="text-white"] {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] {
+    background: #ecfeff !important;
+    border-color: #a5f3fc !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-slate-300,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] .text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-cyan-200,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] .text-cyan-300 {
+    color: #0891b2 !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-white {
+    color: #0f172a !important;
+}
 html[data-mode=light] #arc-phone-linking-modal button.bg-slate-800,
-html[data-mode=light] #arc-screentime-share-modal button.bg-slate-800 {
+html[data-mode=light] #arc-screentime-share-modal button.bg-slate-800,
+html[data-mode=light] #arc-confirm-pairing-modal button.bg-slate-800,
+html[data-mode=light] #arc-disconnect-warning-modal button.bg-slate-800,
+html[data-mode=light] #arc-disconnect-warning-modal button.bg-slate-800\/90 {
     background: #f1f5f9 !important;
     color: #0f172a !important;
     border-color: #cbd5e1 !important;
@@ -12412,6 +12665,35 @@ html[data-mode=light] #view-notifications button.bg-slate-800 {
 html[data-mode=light] #view-notifications button.bg-slate-800:hover {
     background: #e2e8f0 !important;
     border-color: #94a3b8 !important;
+}
+
+/* 4b. Leaderboard & Groups Section (#arc-leaderboard-groups-section) */
+html[data-mode=light] #arc-leaderboard-groups-section {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section h3,
+html[data-mode=light] #arc-leaderboard-groups-section h4,
+html[data-mode=light] #arc-leaderboard-groups-section .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section .text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section [class*="bg-slate-900"],
+html[data-mode=light] #arc-leaderboard-groups-section [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
 }
 
 /* 5. Additional Settings FAQ & Help Center (#settings-additional-faq-card) */
@@ -12765,61 +13047,269 @@ html[data-mode=light] .phone-widget-card .text-white {
 <!-- ==========================================================================
      PHONE APPLICATION LINKING MODAL (PAIRING & REDIRECT DESTINATION)
      ========================================================================== -->
+<!-- ==========================================================================
+     PHONE APPLICATION LINKING MODAL (PAIRING & REDIRECT DESTINATION)
+     ========================================================================== -->
 <div id="arc-phone-linking-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Link Mobile Phone Tracker">
-  <div class="relative my-auto flex flex-col max-w-md w-full glass-card rounded-3xl p-5 sm:p-7 border border-purple-500/40 shadow-2xl bg-gradient-to-b from-slate-900/95 via-slate-950/95 to-purple-950/30 animate-zoom-in space-y-5">
-    <div class="flex items-center justify-between border-b border-purple-500/20 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-lg shadow-sm">
-          <i class="fa-solid fa-link"></i>
+  <div class="relative my-auto flex flex-col max-w-2xl sm:max-w-3xl w-full max-h-[92vh] overflow-y-auto glass-card rounded-3xl p-5 sm:p-6 border border-purple-500/40 shadow-2xl bg-gradient-to-b from-slate-900/98 via-slate-950/98 to-purple-950/35 animate-zoom-in space-y-4">
+    <div class="flex items-center justify-between border-b border-purple-500/20 pb-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 text-lg shadow-sm shrink-0">
+          <i class="fa-solid fa-qrcode"></i>
         </div>
-        <div>
-          <h3 class="text-base sm:text-lg font-black text-white">Link Mobile Phone Tracker</h3>
-          <p class="text-xs text-slate-400">Synchronize cross-device screen time in real-time</p>
+        <div class="min-w-0">
+          <h3 class="text-base sm:text-lg font-black text-white truncate">Link Mobile Phone Tracker</h3>
+          <p class="text-xs text-slate-400 truncate">Scan mega QR code • Auto-redirects to Web Browser if app isn't downloaded</p>
         </div>
       </div>
-      <button type="button" onclick="ArcScreenTimeStore.closePhoneLinkPage()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition">
+      <button type="button" onclick="ArcScreenTimeStore.closePhoneLinkPage()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition shrink-0" aria-label="Close phone link modal">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
     </div>
 
-    <!-- PAIRING CODE & SIMULATED QR CODE -->
-    <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3 text-center">
-      <div class="w-32 h-32 mx-auto rounded-xl bg-white p-2.5 flex items-center justify-center shadow-md relative overflow-hidden">
-        <!-- SVG QR Pattern -->
-        <svg viewBox="0 0 100 100" class="w-full h-full text-slate-950">
-          <rect width="100" height="100" fill="white" />
-          <path d="M10 10h30v30h-30zM15 15h20v20h-20zM60 10h30v30h-30zM65 15h20v20h-20zM10 60h30v30h-30zM15 65h20v20h-20zM22 22h6v6h-6zM72 22h6v6h-6zM22 72h6v6h-6zM48 10h4v20h-4zM10 48h20v4h-20zM48 48h20v4h-20zM68 48h4v20h-4zM48 68h20v4h-20zM78 68h12v4h-12zM48 78h4v12h-4zM68 78h12v12h-12z" fill="currentColor"/>
-        </svg>
-      </div>
-      <div class="space-y-1">
-        <div class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Device Pairing Security Code</div>
-        <div class="text-lg font-black font-mono tracking-widest text-cyan-400 bg-slate-900 py-1 px-3 rounded-lg border border-slate-800 inline-block">
-          ARC-7492-MOB
+    <!-- MAIN RESPONSIVE 2-COLUMN GRID (MEGA SCANNER + APP/WEB REDIRECT DASHBOARD) -->
+    <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/85 border border-slate-800 shrink-0 grid grid-cols-1 md:grid-cols-2 gap-5 items-center">
+      
+      <!-- LEFT COL: THE MEGA SCANNER (320px) -->
+      <div class="flex flex-col items-center justify-center space-y-3">
+        <div class="flex items-center justify-between w-full max-w-[320px] px-1">
+          <div id="arc-phone-user-badge" class="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 font-mono text-[10px] font-bold tracking-wider">
+            OPERATIVE: USER
+          </div>
+          <div class="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>MEGA SCANNER (320px)</span>
+          </div>
+        </div>
+
+        <!-- ENLARGED AUTHENTIC VECTOR SVG QR CODE VIEWFINDER -->
+        <div class="relative mx-auto w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-2xl bg-white p-3.5 shadow-[0_0_45px_rgba(168,85,247,0.4)] flex items-center justify-center transition-all duration-300 hover:scale-[1.01] group">
+          <!-- VIEWFINDER TARGET CORNERS -->
+          <span class="absolute -top-1.5 -left-1.5 w-7 h-7 border-t-4 border-l-4 border-purple-500 rounded-tl-lg pointer-events-none transition-all duration-300 group-hover:scale-110"></span>
+          <span class="absolute -top-1.5 -right-1.5 w-7 h-7 border-t-4 border-r-4 border-purple-500 rounded-tr-lg pointer-events-none transition-all duration-300 group-hover:scale-110"></span>
+          <span class="absolute -bottom-1.5 -left-1.5 w-7 h-7 border-b-4 border-l-4 border-purple-500 rounded-bl-lg pointer-events-none transition-all duration-300 group-hover:scale-110"></span>
+          <span class="absolute -bottom-1.5 -right-1.5 w-7 h-7 border-b-4 border-r-4 border-purple-500 rounded-br-lg pointer-events-none transition-all duration-300 group-hover:scale-110"></span>
+
+          <!-- SVG QR CODE CONTAINER -->
+          <div id="arc-phone-qr-container" class="w-full h-full flex items-center justify-center overflow-hidden">
+            <div class="text-[11px] text-slate-700 font-mono font-bold animate-pulse">Generating QR...</div>
+          </div>
+
+          <!-- ANIMATED SCAN LASER LINE -->
+          <div class="arc-qr-scan-line pointer-events-none"></div>
+        </div>
+
+        <!-- NETWORK HOST SWITCHER PILL -->
+        <div class="flex items-center justify-center gap-1.5 pt-0.5 text-[10px] font-mono">
+          <span class="text-slate-400">Host:</span>
+          <button type="button" onclick="ArcScreenTimeStore.setPairingHost('network')" id="arc-host-btn-net" class="px-2 py-0.5 rounded-lg bg-purple-500/25 text-purple-200 border border-purple-500/40 font-bold transition">
+            📱 Wi-Fi LAN (192.168.29.125)
+          </button>
+          <button type="button" onclick="ArcScreenTimeStore.setPairingHost('local')" id="arc-host-btn-local" class="px-2 py-0.5 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 font-bold transition">
+            💻 Localhost
+          </button>
         </div>
       </div>
-      <p class="text-[11px] text-slate-400 leading-relaxed">
-        Scan this QR code from the Arc Mobile App or link instantly using your Google Account credentials.
-      </p>
+
+      <!-- RIGHT COL: DETAILS, BROWSER REDIRECT NOTICE & ACTIONS -->
+      <div class="flex flex-col space-y-3 text-left">
+        <div class="space-y-1">
+          <div class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Device Pairing Security Code</div>
+          <div id="arc-phone-pairing-code" class="text-base sm:text-lg font-black font-mono tracking-widest text-cyan-400 bg-slate-900 py-1.5 px-4 rounded-xl border border-slate-800 inline-block shadow-inner">
+            ARC-7492-MOB
+          </div>
+        </div>
+
+        <!-- HIGHLIGHT: IF APP ISN'T DOWNLOADED, REDIRECT TO WEB BROWSER -->
+        <div class="p-3.5 rounded-2xl bg-gradient-to-br from-cyan-950/50 via-slate-900 to-indigo-950/40 border border-cyan-500/40 space-y-2 shadow-inner">
+          <div class="flex items-center gap-2 text-xs font-black text-cyan-300 uppercase tracking-wider">
+            <i class="fa-solid fa-globe text-cyan-400"></i>
+            <span>Web Browser Auto-Redirect</span>
+          </div>
+          <p class="text-[11.5px] text-slate-300 leading-relaxed font-sans">
+            If the <strong>Arc Tracker app is not downloaded</strong> on your phone, scanning this QR code automatically opens and redirects to your <strong>Web Browser</strong> (Safari / Chrome).
+          </p>
+          <div class="pt-1.5 border-t border-slate-800 flex items-center justify-between text-[10.5px]">
+            <span class="text-emerald-400 font-mono font-bold flex items-center gap-1">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i> No Download Needed
+            </span>
+            <span class="text-purple-300 font-mono font-semibold">65 Days Sync Ready</span>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="space-y-2 pt-1">
+          <!-- COPY LINK & TEST SCAN BUTTONS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button type="button" onclick="ArcScreenTimeStore.copyPairingLink()" class="py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Copy redirect link to send via messaging">
+              <i class="fa-solid fa-copy text-purple-300"></i>
+              <span>Copy Web Link</span>
+            </button>
+
+            <button type="button" onclick="ArcScreenTimeStore.simulatePhoneLink('web_browser')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate scanning when app is not downloaded">
+              <i class="fa-solid fa-globe text-cyan-400"></i>
+              <span>Simulate Browser Scan</span>
+            </button>
+          </div>
+
+          <!-- 1-CLICK PRESET LINK BUTTON -->
+          <button type="button" onclick="ArcScreenTimeStore.connectDemoPhone('📱 Pixel 9 Pro (Android)'); playSfx('victory')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition">
+            <i class="fa-solid fa-mobile-screen-button"></i> 1-Click Link Phone (Pixel 9 Pro)
+          </button>
+
+          <div class="pt-1 flex items-center justify-between text-xs">
+            <button type="button" onclick="ArcScreenTimeStore.disconnectPhone(); playSfx('click')" class="text-slate-400 hover:text-rose-400 transition font-mono text-[11px] flex items-center gap-1.5">
+              <i class="fa-solid fa-triangle-exclamation text-amber-400 text-[10px]"></i>
+              <span>Disconnect / Unlink Phone</span>
+            </button>
+            <button type="button" onclick="ArcScreenTimeStore.closePhoneLinkPage()" class="text-slate-400 hover:text-white transition font-mono text-[11px]">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     CONFIRM MOBILE DEVICE LINKING & SCREEN TIME DATA TRANSFER MODAL
+     ========================================================================== -->
+<div id="arc-confirm-pairing-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Confirm Device Pairing">
+  <div class="relative my-auto flex flex-col max-w-md w-full glass-card rounded-3xl p-5 sm:p-7 border border-emerald-500/40 shadow-2xl bg-gradient-to-b from-slate-900/95 via-slate-950/95 to-emerald-950/30 animate-zoom-in space-y-4">
+    <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-lg shadow-sm shrink-0">
+          <i class="fa-solid fa-link"></i>
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-base sm:text-lg font-black text-white truncate">Confirm Device Link</h3>
+          <p class="text-xs text-slate-400 truncate">Incoming pairing request from primary device</p>
+        </div>
+      </div>
+      <button type="button" onclick="ArcScreenTimeStore.closeConfirmModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white grid place-items-center transition shrink-0" aria-label="Close confirmation modal">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
     </div>
 
-    <!-- LINKING ACTIONS -->
-    <div class="space-y-2">
-      <button type="button" onclick="ArcScreenTimeStore.connectDemoPhone('📱 Pixel 9 Pro (Android)'); playSfx('victory')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition">
-        <i class="fa-solid fa-mobile-screen-button"></i> 1-Click Link Phone (Pixel 9 Pro)
-      </button>
-      
-      <button type="button" onclick="ArcScreenTimeStore.connectDemoPhone('📱 iPhone 16 Pro (iOS)'); playSfx('victory')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 border border-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition">
-        <i class="fa-brands fa-apple"></i> Link iPhone (iOS Tracker)
+    <!-- WEB BROWSER REDIRECT BANNER (SHOWN WHEN APP IS NOT DOWNLOADED) -->
+    <div id="arc-confirm-browser-banner" class="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/40 text-[11.5px] text-cyan-200 leading-relaxed flex items-start gap-2.5">
+      <i class="fa-solid fa-globe text-cyan-400 mt-0.5 text-sm shrink-0"></i>
+      <div>
+        <div class="font-bold text-white flex items-center gap-2">
+          <span>Redirected to Web Browser</span>
+          <span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[9px] font-bold">APP NOT DOWNLOADED</span>
+        </div>
+        <p class="text-[11px] text-slate-300 mt-0.5">
+          Arc Tracker is not installed on this device. You were redirected to your mobile web browser. All screen-time telemetry and 65 days of past data will transfer directly into this browser!
+        </p>
+      </div>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2.5">
+      <div class="flex items-center justify-between text-xs pb-2 border-b border-slate-800/80">
+        <span class="text-slate-400 font-mono">Primary Operative:</span>
+        <span id="arc-confirm-operative-name" class="font-extrabold text-white"></span>
+      </div>
+      <div class="flex items-center justify-between text-xs pb-2 border-b border-slate-800/80">
+        <span class="text-slate-400 font-mono">Pairing Security Code:</span>
+        <span id="arc-confirm-pairing-code" class="font-mono font-bold text-cyan-400 bg-slate-900 px-2.5 py-0.5 rounded border border-slate-800"></span>
+      </div>
+      <div class="flex items-center justify-between text-xs pb-2 border-b border-slate-800/80">
+        <span class="text-slate-400 font-mono">Platform / Environment:</span>
+        <span id="arc-confirm-device-source" class="font-medium text-cyan-300 flex items-center gap-1">
+          <i class="fa-solid fa-globe text-cyan-400"></i> Mobile Web Browser (Redirected)
+        </span>
+      </div>
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-slate-400 font-mono">Historical Telemetry:</span>
+        <span id="arc-confirm-telemetry-badge" class="font-bold text-emerald-400 flex items-center gap-1">
+          <i class="fa-solid fa-database text-[10px]"></i> 65 Days of History Ready
+        </span>
+      </div>
+    </div>
+
+    <!-- OPTIONAL NATIVE APP DOWNLOAD CTA -->
+    <button type="button" onclick="ArcScreenTimeStore.downloadMobileApp()" class="w-full py-2.5 px-3 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-200 font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+      <i class="fa-solid fa-download text-purple-400"></i>
+      <span>Download Native App / Add to Home Screen</span>
+    </button>
+
+    <!-- ACTION BUTTONS -->
+    <div class="space-y-2 pt-1">
+      <button type="button" onclick="ArcScreenTimeStore.executeConfirmLink()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 active:scale-95 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 transition cursor-pointer">
+        <i class="fa-solid fa-circle-check text-sm"></i>
+        <span id="arc-confirm-btn-label">Confirm &amp; Transfer Screen Time to Web Browser</span>
       </button>
 
-      <div class="pt-2 flex items-center justify-between text-xs">
-        <button type="button" onclick="ArcScreenTimeStore.disconnectPhone(); playSfx('click')" class="text-slate-400 hover:text-rose-400 transition font-mono text-[11px]">
-          Disconnect / Unlink Phone
-        </button>
-        <button type="button" onclick="ArcScreenTimeStore.closePhoneLinkPage()" class="text-slate-400 hover:text-white transition font-mono text-[11px]">
-          Cancel
-        </button>
+      <button type="button" onclick="ArcScreenTimeStore.closeConfirmModal()" class="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-400 hover:text-white font-bold text-xs transition cursor-pointer">
+        Cancel / Reject
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     DISCONNECT DEVICE WARNING & DATA DELETION CONFIRMATION MODAL
+     ========================================================================== -->
+<div id="arc-disconnect-warning-modal" class="pp-modal" role="dialog" aria-modal="true" aria-label="Disconnect Device & Delete Data Warning">
+  <div class="relative my-auto flex flex-col max-w-md w-full glass-card rounded-3xl p-5 sm:p-7 border border-rose-500/50 shadow-2xl bg-gradient-to-b from-slate-900/98 via-slate-950/98 to-rose-950/40 animate-zoom-in space-y-4">
+    <!-- PROMINENT WARNING SIGN -->
+    <div class="text-center space-y-2 pt-1">
+      <div class="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 via-rose-500/25 to-red-600/30 border-2 border-rose-500/60 flex items-center justify-center text-rose-400 text-3xl shadow-[0_0_35px_rgba(244,63,94,0.45)]">
+        <i class="fa-solid fa-triangle-exclamation text-rose-400 text-3xl drop-shadow-[0_0_12px_rgba(244,63,94,0.8)]"></i>
+        <span class="absolute -top-1 -right-1 flex h-4 w-4">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-4 w-4 bg-rose-500 border border-slate-900"></span>
+        </span>
       </div>
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 font-mono text-[10px] font-bold tracking-widest uppercase">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Warning: Permanent Action
+        </div>
+        <h3 class="text-lg sm:text-xl font-black text-white tracking-tight">Disconnect &amp; Delete All Data?</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Disconnecting this device will permanently delete all synchronized information and purge screen-time data.
+        </p>
+      </div>
+    </div>
+
+    <!-- PURGE AUDIT BREAKDOWN -->
+    <div class="p-3.5 sm:p-4 rounded-2xl bg-rose-950/30 border border-rose-500/40 space-y-2.5 text-left shadow-inner">
+      <div class="text-[11px] font-black text-rose-200 uppercase tracking-wider flex items-center gap-1.5 pb-2 border-b border-rose-500/25">
+        <i class="fa-solid fa-trash-can text-rose-400"></i>
+        <span>Data To Be Permanently Erased:</span>
+      </div>
+      <ul class="text-[11.5px] text-slate-300 space-y-2">
+        <li class="flex items-start gap-2 leading-tight">
+          <i class="fa-solid fa-circle-xmark text-rose-400 mt-0.5 shrink-0 text-xs"></i>
+          <span><strong class="text-white font-semibold">All Mobile Screen-Time:</strong> Active and recorded phone session counters will be reset to 00h 00m 00s.</span>
+        </li>
+        <li class="flex items-start gap-2 leading-tight">
+          <i class="fa-solid fa-circle-xmark text-rose-400 mt-0.5 shrink-0 text-xs"></i>
+          <span><strong class="text-white font-semibold">65-Day Mobile History &amp; App Logs:</strong> All phone records for YouTube, Instagram, WhatsApp, etc. will be completely deleted.</span>
+        </li>
+        <li class="flex items-start gap-2 leading-tight">
+          <i class="fa-solid fa-circle-xmark text-rose-400 mt-0.5 shrink-0 text-xs"></i>
+          <span><strong class="text-white font-semibold">Pairing Codes &amp; Session Keys:</strong> All active synchronization channels and tokens will be revoked immediately.</span>
+        </li>
+        <li class="flex items-start gap-2 leading-tight text-emerald-300/90 pt-1 border-t border-rose-500/20">
+          <i class="fa-solid fa-shield-check text-emerald-400 mt-0.5 shrink-0 text-xs"></i>
+          <span class="text-[11px]">Desktop/laptop focus sessions, rules, and local habits will remain safe and unaffected.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="space-y-2 pt-1">
+      <button type="button" onclick="ArcScreenTimeStore.executeDisconnectAndPurge()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-500 active:scale-95 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-600/40 border border-rose-400/50 transition cursor-pointer">
+        <i class="fa-solid fa-trash-can text-sm"></i>
+        <span>Delete All Data &amp; Disconnect</span>
+      </button>
+
+      <button type="button" onclick="ArcScreenTimeStore.closeDisconnectModal()" class="w-full py-2.5 px-4 rounded-xl bg-slate-800/90 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white font-bold text-xs transition border border-slate-700/80 cursor-pointer">
+        Keep Device Connected (Cancel)
+      </button>
     </div>
   </div>
 </div>
@@ -22096,11 +22586,106 @@ window.ArcScreenTimeStore = (function() {
     }
   }
 
-  function disconnectPhone() {
-    setPhoneLinked(false, 'No Phone Linked');
+  function disconnectPhone(force = false) {
+    if (force) {
+      executeDisconnectAndPurge();
+      return;
+    }
+    openDisconnectModal();
+  }
+
+  function openDisconnectModal() {
+    const modal = document.getElementById('arc-disconnect-warning-modal');
+    if (modal) {
+      modal.classList.add('open');
+      if (typeof playSfx === 'function') playSfx('modalOpen');
+    }
+  }
+
+  function closeDisconnectModal() {
+    const modal = document.getElementById('arc-disconnect-warning-modal');
+    if (modal) modal.classList.remove('open');
+  }
+
+  function executeDisconnectAndPurge(silent = false) {
+    // 1. Unlink phone flag
+    localStorage.setItem(LINK_KEY, 'false');
+
+    // 2. Clear cross-device screentime state
+    try {
+      const todayKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+      const devRaw = localStorage.getItem('arc_cross_device_screentime');
+      let dev = {};
+      if (devRaw) dev = JSON.parse(devRaw);
+      dev.mobile = {
+        isLinked: false,
+        seconds: 0,
+        deviceName: 'No Phone Linked',
+        lastUpdated: 0,
+        todayKey: todayKey
+      };
+      localStorage.setItem('arc_cross_device_screentime', JSON.stringify(dev));
+      if (window.state) {
+        window.state.deviceScreenTime = dev;
+      }
+    } catch(e) {}
+
+    // 3. Purge all mobile screen-time data and app history from all historical days
+    try {
+      const rawHist = localStorage.getItem(STORAGE_KEY);
+      if (rawHist) {
+        const hist = JSON.parse(rawHist);
+        if (hist && hist.days) {
+          const phoneAppNames = ['YouTube', 'Instagram', 'WhatsApp', 'Discord', 'X / Twitter', 'TikTok', 'Snapchat', 'Reddit', 'Spotify', 'Mobile Focus'];
+          for (const [dateKey, day] of Object.entries(hist.days)) {
+            day.phoneSecs = 0;
+            day.combinedSecs = day.laptopSecs || 0;
+            day.phoneLinked = false;
+            if (day.apps && typeof day.apps === 'object') {
+              phoneAppNames.forEach(app => {
+                delete day.apps[app];
+              });
+            }
+          }
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(hist));
+        }
+      }
+    } catch(e) {}
+
+    // 4. Revoke active pairing tokens and sessions
+    try {
+      localStorage.removeItem('arc_pending_pairing_bundle');
+      localStorage.removeItem('arc_active_pairing_session');
+      localStorage.removeItem('arc_device_pairing_code');
+      sessionStorage.removeItem('arc_companion_linked');
+    } catch(e) {}
+
+    // 5. Broadcast disconnection event to companion devices/tabs
+    try {
+      const bc = new BroadcastChannel('arc_device_pairing');
+      bc.postMessage({
+        type: 'PAIRING_DISCONNECTED',
+        timestamp: Date.now()
+      });
+    } catch(e) {}
+
+    // 6. Close modals
+    closeDisconnectModal();
     closePhoneLinkPage();
-    if (typeof showToast === 'function') {
-      showToast('⚠️ Phone unlinked. Screen time now reflects laptop only.');
+    closeConfirmModal();
+
+    // 7. Update UI and re-render analytics
+    if (typeof updateCrossDeviceScreenTimeUI === 'function') {
+      updateCrossDeviceScreenTimeUI();
+    }
+    renderAnalytics();
+
+    // 8. Sound and user feedback
+    if (!silent) {
+      if (typeof playSfx === 'function') playSfx('trash');
+      if (typeof showToast === 'function') {
+        showToast('⚠️ Device disconnected. All mobile screen-time data & records permanently deleted.');
+      }
     }
   }
 
@@ -22452,9 +23037,407 @@ window.ArcScreenTimeStore = (function() {
     checkSub4WeekAchievement();
   }
 
+
+  // ==========================================================================
+  // UNIQUE USER QR CODE & CROSS-DEVICE PAIRING ENGINE (DATA TRANSFER PROTOCOL)
+  // ==========================================================================
+  let pendingPairingData = null;
+
+  function getUniqueUserPairingInfo() {
+    let uid = localStorage.getItem('arc_unique_user_id');
+    if (!uid) {
+      const rnd = Math.random().toString(36).substring(2, 6).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
+      uid = 'ARC-' + rnd;
+      try { localStorage.setItem('arc_unique_user_id', uid); } catch(e) {}
+    }
+
+    let pairingCode = localStorage.getItem('arc_device_pairing_code');
+    if (!pairingCode) {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      pairingCode = 'ARC-' + num + '-MOB';
+      try { localStorage.setItem('arc_device_pairing_code', pairingCode); } catch(e) {}
+    }
+
+    let profileName = 'Operative';
+    let profileUsername = 'operative';
+    try {
+      if (window.ArcProfile && typeof window.ArcProfile.getProfile === 'function') {
+        const p = window.ArcProfile.getProfile();
+        if (p && p.displayName) profileName = p.displayName;
+        if (p && p.username) profileUsername = p.username;
+      }
+    } catch(e) {}
+
+    return { uid, pairingCode, profileName, profileUsername };
+  }
+
+  function serializeScreenTimeData() {
+    const hist = getHistory();
+    const now = new Date();
+    const todayKey = now.toISOString().split('T')[0];
+    const pairs = [];
+    
+    // Serialize last 65 days into compact pairs [laptopMins, phoneMins]
+    for (let i = 0; i < 65; i++) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const k = d.toISOString().split('T')[0];
+      const entry = (hist.days && hist.days[k]) ? hist.days[k] : null;
+      const lapMins = entry ? Math.round((entry.laptopSecs || 0) / 60) : Math.floor((2 + Math.sin(i * 0.5) * 0.5) * 60);
+      const phoMins = entry ? Math.round((entry.phoneSecs || 0) / 60) : Math.floor((1.1 + Math.cos(i * 0.4) * 0.3) * 60);
+      pairs.push(lapMins + ',' + phoMins);
+    }
+    
+    return todayKey + '|' + pairs.join(';');
+  }
+
+  function deserializeScreenTimeData(compactPayload) {
+    if (!compactPayload || typeof compactPayload !== 'string') return null;
+    const parts = compactPayload.split('|');
+    if (parts.length < 2) return null;
+    const todayKey = parts[0];
+    const pairs = parts[1].split(';');
+    const days = {};
+    const baseDate = new Date(todayKey + 'T12:00:00Z');
+    
+    pairs.forEach((pair, i) => {
+      const [lStr, pStr] = pair.split(',');
+      const lapMins = parseInt(lStr, 10) || 0;
+      const phoMins = parseInt(pStr, 10) || 0;
+      const lapSecs = lapMins * 60;
+      const phoSecs = phoMins * 60;
+      const combinedSecs = lapSecs + phoSecs;
+      
+      const curD = new Date(baseDate);
+      curD.setDate(curD.getDate() - i);
+      const dateKey = curD.toISOString().split('T')[0];
+      
+      days[dateKey] = {
+        date: dateKey,
+        laptopSecs: lapSecs,
+        phoneSecs: phoSecs,
+        combinedSecs: combinedSecs,
+        phoneLinked: true,
+        apps: {
+          'Visual Studio Code': Math.floor(lapSecs * 0.45),
+          'Google Chrome': Math.floor(lapSecs * 0.28),
+          'Terminal': Math.floor(lapSecs * 0.15),
+          'Steam / Gaming': Math.floor(lapSecs * 0.12),
+          'YouTube': Math.floor(phoSecs * 0.35),
+          'Instagram': Math.floor(phoSecs * 0.25),
+          'WhatsApp': Math.floor(phoSecs * 0.20),
+          'Discord': Math.floor(phoSecs * 0.12),
+          'X / Twitter': Math.floor(phoSecs * 0.08)
+        }
+      };
+    });
+    
+    return days;
+  }
+
+  let activePairingHostMode = 'network'; // 'network' (192.168.29.125) or 'local' (127.0.0.1)
+
+  function setPairingHost(mode) {
+    activePairingHostMode = mode;
+    const netBtn = document.getElementById('arc-host-btn-net');
+    const localBtn = document.getElementById('arc-host-btn-local');
+    if (netBtn && localBtn) {
+      if (mode === 'network') {
+        netBtn.className = 'px-2 py-0.5 rounded-lg bg-purple-500/25 text-purple-200 border border-purple-500/40 font-bold transition';
+        localBtn.className = 'px-2 py-0.5 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 font-bold transition';
+      } else {
+        localBtn.className = 'px-2 py-0.5 rounded-lg bg-purple-500/25 text-purple-200 border border-purple-500/40 font-bold transition';
+        netBtn.className = 'px-2 py-0.5 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 font-bold transition';
+      }
+    }
+    renderUniqueQrCode();
+    if (typeof playSfx === 'function') playSfx('click');
+  }
+
+  function generatePairingUrl() {
+    const { uid, pairingCode, profileName } = getUniqueUserPairingInfo();
+    const payload = serializeScreenTimeData();
+    
+    let origin = window.location.origin;
+    if (activePairingHostMode === 'network' && (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')) {
+      origin = 'http://192.168.29.125:5173';
+    } else if (activePairingHostMode === 'local' && (!origin || !origin.startsWith('http'))) {
+      origin = 'http://127.0.0.1:5173';
+    }
+    
+    let path = window.location.pathname || '/';
+    if (!path.endsWith('/')) {
+      const lastSlash = path.lastIndexOf('/');
+      path = lastSlash >= 0 ? path.substring(0, lastSlash + 1) : '/';
+    }
+    
+    return origin + path + '?action=link_device&uid=' + encodeURIComponent(uid) + 
+      '&code=' + encodeURIComponent(pairingCode) + 
+      '&name=' + encodeURIComponent(profileName) + 
+      '&p=' + encodeURIComponent(payload) +
+      '&fallback=web_browser';
+  }
+
+  function renderUniqueQrCode() {
+    const container = document.getElementById('arc-phone-qr-container');
+    const codeEl = document.getElementById('arc-phone-pairing-code');
+    const userBadge = document.getElementById('arc-phone-user-badge');
+    if (!container) return;
+    
+    const { uid, pairingCode, profileName } = getUniqueUserPairingInfo();
+    if (codeEl) codeEl.textContent = pairingCode;
+    if (userBadge) {
+      userBadge.textContent = 'USER: ' + profileName.toUpperCase() + ' (' + uid + ')';
+    }
+    
+    const url = generatePairingUrl();
+    
+    try {
+      if (typeof window.qrcode === 'function') {
+        const qr = window.qrcode(0, 'L');
+        qr.addData(url);
+        qr.make();
+        container.innerHTML = qr.createSvgTag({ scalable: true, margin: 1 });
+        const svg = container.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('width', '100%');
+          svg.setAttribute('height', '100%');
+          svg.style.width = '100%';
+          svg.style.height = '100%';
+          svg.style.display = 'block';
+        }
+      } else {
+        container.innerHTML = '<div class="p-2 text-center text-xs text-slate-800 font-mono font-bold">ARC CODE: ' + pairingCode + '</div>';
+      }
+    } catch (e) {
+      console.warn('QR Code rendering fallback:', e);
+      container.innerHTML = '<div class="p-2 text-center text-xs text-slate-800 font-mono font-bold">ARC CODE: ' + pairingCode + '</div>';
+    }
+  }
+
+  function copyPairingLink() {
+    const url = generatePairingUrl();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        if (typeof showToast === 'function') {
+          showToast('🔗 Pairing link copied! If app isn\'t downloaded, it opens directly in web browser.');
+        }
+      }).catch(() => fallbackCopy(url));
+    } else {
+      fallbackCopy(url);
+    }
+  }
+
+  function simulatePhoneLink(mode = 'web_browser') {
+    const { uid, pairingCode, profileName } = getUniqueUserPairingInfo();
+    const payload = serializeScreenTimeData();
+    pendingPairingData = {
+      uid,
+      code: pairingCode,
+      name: profileName,
+      p: payload,
+      isWebBrowser: mode === 'web_browser',
+      receivedAt: Date.now()
+    };
+    closePhoneLinkPage();
+    setTimeout(() => {
+      openConfirmModal(pendingPairingData);
+    }, 200);
+  }
+
+  function downloadMobileApp() {
+    if (window.deferredInstallPrompt) {
+      window.deferredInstallPrompt.prompt();
+      window.deferredInstallPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult && choiceResult.outcome === 'accepted') {
+          if (typeof showToast === 'function') {
+            showToast('🎉 Arc Tracker downloaded and installed to home screen!');
+          }
+        }
+        window.deferredInstallPrompt = null;
+      });
+    } else {
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isIOS) {
+        if (typeof showToast === 'function') {
+          showToast('📲 To download on iOS: Tap Share button (square with arrow) -> "Add to Home Screen"');
+        }
+      } else {
+        if (typeof showToast === 'function') {
+          showToast('📲 To download on Android: Tap Chrome menu (⋮) -> "Install App" or "Add to Home Screen"');
+        }
+      }
+    }
+  }
+
+  function checkIncomingPairingRequest() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('action') === 'link_device' || urlParams.get('action') === 'pair_device') {
+        const uid = urlParams.get('uid') || 'ARC-USER';
+        const code = urlParams.get('code') || 'ARC-7492-MOB';
+        const name = urlParams.get('name') || 'Primary Operative';
+        const p = urlParams.get('p');
+        const fallback = urlParams.get('fallback') === 'web_browser';
+        
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || window.__TAURI__ !== undefined;
+        
+        pendingPairingData = {
+          uid,
+          code,
+          name,
+          p,
+          isWebBrowser: fallback || !isStandalone,
+          receivedAt: Date.now()
+        };
+        
+        // Open confirmation dialog
+        setTimeout(() => {
+          openConfirmModal(pendingPairingData);
+        }, 350);
+      }
+    } catch(e) {}
+  }
+
+  function openConfirmModal(data) {
+    const modal = document.getElementById('arc-confirm-pairing-modal');
+    if (!modal) return;
+    
+    const d = data || pendingPairingData || { name: 'Operative', uid: 'ARC-USER', code: 'ARC-7492-MOB' };
+    const nameEl = document.getElementById('arc-confirm-operative-name');
+    const codeEl = document.getElementById('arc-confirm-pairing-code');
+    const devEl = document.getElementById('arc-confirm-device-source');
+    const banner = document.getElementById('arc-confirm-browser-banner');
+    const btnLabel = document.getElementById('arc-confirm-btn-label');
+    
+    if (nameEl) nameEl.textContent = (d.name || 'Operative') + ' (' + d.uid + ')';
+    if (codeEl) codeEl.textContent = d.code || 'ARC-7492-MOB';
+    
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || window.__TAURI__ !== undefined;
+    const isBrowserMode = d.isWebBrowser || !isStandalone;
+    
+    if (devEl) {
+      devEl.innerHTML = isBrowserMode 
+        ? '<span class="text-cyan-300 font-bold flex items-center gap-1"><i class="fa-solid fa-globe text-cyan-400"></i> Mobile Web Browser (Redirected)</span>'
+        : '<span class="text-emerald-300 font-bold flex items-center gap-1"><i class="fa-solid fa-mobile-screen text-emerald-400"></i> Arc Tracker Native App</span>';
+    }
+    
+    if (banner) {
+      if (isBrowserMode) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+    
+    if (btnLabel) {
+      btnLabel.textContent = isBrowserMode 
+        ? 'Confirm & Transfer Screen Time to Web Browser'
+        : 'Confirm & Transfer Screen Time to App';
+    }
+    
+    modal.classList.add('open');
+    if (typeof playSfx === 'function') playSfx('modalOpen');
+  }
+
+  function closeConfirmModal() {
+    const modal = document.getElementById('arc-confirm-pairing-modal');
+    if (modal) modal.classList.remove('open');
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  function executeConfirmLink() {
+    if (!pendingPairingData) {
+      const info = getUniqueUserPairingInfo();
+      pendingPairingData = {
+        uid: info.uid,
+        code: info.pairingCode,
+        name: info.profileName,
+        p: serializeScreenTimeData()
+      };
+    }
+    
+    // 1. Transfer and deserialize past screen-time data
+    let transferredCount = 65;
+    if (pendingPairingData.p) {
+      const recoveredDays = deserializeScreenTimeData(pendingPairingData.p);
+      if (recoveredDays && Object.keys(recoveredDays).length > 0) {
+        const existing = getHistory();
+        existing.days = Object.assign(existing.days || {}, recoveredDays);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+          transferredCount = Object.keys(recoveredDays).length;
+        } catch(e) {}
+      }
+    }
+    
+    // 2. Set phone linked state
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true || window.__TAURI__ !== undefined;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    let deviceLabel = '📱 Mobile Web Browser (Active)';
+    if (isStandalone) {
+      deviceLabel = isMobile ? '📱 Mobile App (Active)' : '📱 Installed Desktop App';
+    } else {
+      deviceLabel = isMobile ? '📱 Mobile Web Browser (Active)' : '🌐 Web Browser Companion (Active)';
+    }
+    setPhoneLinked(true, deviceLabel);
+    
+    // 3. Broadcast to host device
+    try {
+      const bc = new BroadcastChannel('arc_device_pairing');
+      bc.postMessage({
+        type: 'PAIRING_SUCCESS',
+        code: pendingPairingData.code,
+        deviceName: deviceLabel,
+        transferredDays: transferredCount
+      });
+    } catch(e) {}
+    
+    // 4. Clean URL params
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    closeConfirmModal();
+    
+    if (typeof playSfx === 'function') playSfx('victory');
+    if (typeof showToast === 'function') {
+      showToast('🎉 Paired in Web Browser! ' + transferredCount + ' days of past screen-time transferred successfully.');
+    }
+  }
+
+  function initBroadcastPairingListener() {
+    try {
+      const bc = new BroadcastChannel('arc_device_pairing');
+      bc.onmessage = (event) => {
+        if (event && event.data) {
+          if (event.data.type === 'PAIRING_SUCCESS') {
+            setPhoneLinked(true, event.data.deviceName || '📱 Mobile Phone (Linked)');
+            closePhoneLinkPage();
+            if (typeof playSfx === 'function') playSfx('victory');
+            if (typeof showToast === 'function') {
+              showToast('📱 Phone paired & verified! Synchronized ' + (event.data.transferredDays || 65) + ' days of past screen-time.');
+            }
+          } else if (event.data.type === 'PAIRING_DISCONNECTED') {
+            executeDisconnectAndPurge(true);
+            if (typeof showToast === 'function') {
+              showToast('⚠️ Companion device unlinked. Synchronized mobile data purged.');
+            }
+          }
+        }
+      };
+    } catch(e) {}
+  }
+
   function openPhoneLinkPage() {
+    renderUniqueQrCode();
     const modal = document.getElementById('arc-phone-linking-modal');
-    if (modal) modal.classList.add('open');
+    if (modal) {
+      modal.classList.add('open');
+      if (typeof playSfx === 'function') playSfx('modalOpen');
+    }
   }
 
   function closePhoneLinkPage() {
@@ -23006,6 +23989,8 @@ window.ArcScreenTimeStore = (function() {
   function init() {
     checkDailyRollover();
     renderAnalytics();
+    checkIncomingPairingRequest();
+    initBroadcastPairingListener();
     setInterval(() => {
       checkDailyRollover();
       renderAnalytics();
@@ -23017,6 +24002,9 @@ window.ArcScreenTimeStore = (function() {
     setPhoneLinked,
     connectDemoPhone,
     disconnectPhone,
+    openDisconnectModal,
+    closeDisconnectModal,
+    executeDisconnectAndPurge,
     openPhoneLinkPage,
     closePhoneLinkPage,
     openShareModal,
@@ -23036,6 +24024,17 @@ window.ArcScreenTimeStore = (function() {
     hoverAppSlice,
     resetAppSlice,
     toggleLastMonthTrendDemo,
+    getUniqueUserPairingInfo,
+    generatePairingUrl,
+    renderUniqueQrCode,
+    copyPairingLink,
+    simulatePhoneLink,
+    setPairingHost,
+    downloadMobileApp,
+    checkIncomingPairingRequest,
+    openConfirmModal,
+    closeConfirmModal,
+    executeConfirmLink,
     init
   };
 })();
@@ -24082,6 +25081,7 @@ input[type="search"], input[type="date"], input[type="time"], select, textarea {
   .arc-safe-header h1 {
     font-size: 0.85rem !important;
   }
+  .arc-safe-header #btn-header-notifications,
   .arc-safe-header #btn-header-bw,
   .arc-safe-header #btn-header-discretion,
   .arc-safe-header #btn-share-tracker {
@@ -24179,6 +25179,7 @@ input[type="search"], input[type="date"], input[type="time"], select, textarea {
     height: 1.7rem !important;
     font-size: 11px !important;
   }
+  .arc-safe-header #btn-header-notifications,
   .arc-safe-header #btn-header-bw,
   .arc-safe-header #btn-header-discretion,
   .arc-safe-header #btn-share-tracker {
@@ -28060,6 +29061,10 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
 
     renderProgressionTab();
     if (typeof renderArcComparisonMatrix === 'function') renderArcComparisonMatrix(); else if (typeof renderMatrix === 'function') renderMatrix();
+
+    if (window.ArcLeaderboardGroups && typeof window.ArcLeaderboardGroups.checkUnlockNotification === 'function') {
+      window.ArcLeaderboardGroups.checkUnlockNotification();
+    }
   };
 
   // 17. App Lifecycle Hooks
@@ -31049,11 +32054,30 @@ class ArcNotificationEngine {
 
   setFilter(filter) {
     this.activeFilter = filter;
+    ['all', 'update', 'system', 'unread'].forEach(f => {
+      const btn = document.getElementById(`drawer-filter-${f}`);
+      if (btn) {
+        if (f === filter) {
+          btn.className = "flex-1 py-1 px-1.5 rounded-lg text-center transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold";
+        } else {
+          btn.className = "flex-1 py-1 px-1.5 rounded-lg text-center text-slate-400 hover:text-slate-200 transition font-medium";
+        }
+      }
+      const fullBtn = document.getElementById(`filter-btn-${f}`);
+      if (fullBtn) {
+        if (f === filter) {
+          fullBtn.className = "px-3 py-1.5 rounded-xl font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-xs flex items-center gap-1.5";
+        } else {
+          fullBtn.className = "px-3 py-1.5 rounded-xl text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 text-xs flex items-center gap-1.5";
+        }
+      }
+    });
     this.renderUi();
   }
 
   toggleDrawer(forceState) {
     const drawer = document.getElementById('arc-notifications-drawer');
+    const headerBtn = document.getElementById('btn-header-notifications');
     const pill = document.getElementById('arc-notifications-pill');
     const caret = document.getElementById('arc-notif-caret');
     if (!drawer) return;
@@ -31070,11 +32094,19 @@ class ArcNotificationEngine {
       drawer.classList.add('arc-panel-open');
       if (caret) caret.style.transform = 'rotate(180deg)';
       if (pill) pill.setAttribute('aria-expanded', 'true');
+      if (headerBtn) {
+        headerBtn.setAttribute('aria-expanded', 'true');
+        headerBtn.classList.add('border-cyan-400', 'text-cyan-300', 'shadow-[0_0_15px_rgba(0,240,255,0.4)]');
+      }
       if (typeof window.playSfx === 'function') window.playSfx('hover');
     } else {
       drawer.classList.remove('arc-panel-open');
       if (caret) caret.style.transform = 'rotate(0deg)';
       if (pill) pill.setAttribute('aria-expanded', 'false');
+      if (headerBtn) {
+        headerBtn.setAttribute('aria-expanded', 'false');
+        headerBtn.classList.remove('border-cyan-400', 'text-cyan-300', 'shadow-[0_0_15px_rgba(0,240,255,0.4)]');
+      }
       setTimeout(() => {
         if (!this.isDrawerOpen) drawer.classList.add('hidden');
       }, 340);
@@ -31107,11 +32139,15 @@ class ArcNotificationEngine {
       pingDot.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
     }
 
-    // 2. Update Header Button Badge
+    // 2. Update Header Button Badge & Ping Dot
     const headerBadge = document.getElementById('header-notif-badge');
+    const headerPing = document.getElementById('header-notif-ping');
     if (headerBadge) {
       headerBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
       headerBadge.classList.toggle('hidden', unreadCount === 0);
+    }
+    if (headerPing) {
+      headerPing.classList.toggle('hidden', unreadCount === 0);
     }
 
     // 3. Update Desktop Nav Tab Badge
@@ -31141,7 +32177,11 @@ class ArcNotificationEngine {
       'filter-count-all': allCount,
       'filter-count-update': updateCount,
       'filter-count-system': systemCount,
-      'filter-count-unread': unreadCount
+      'filter-count-unread': unreadCount,
+      'drawer-count-all': allCount,
+      'drawer-count-update': updateCount,
+      'drawer-count-system': systemCount,
+      'drawer-count-unread': unreadCount
     };
     for (const [id, val] of Object.entries(countEls)) {
       const el = document.getElementById(id);
@@ -31292,6 +32332,719 @@ const arcNotifications = new ArcNotificationEngine();
 
 if (typeof window !== 'undefined') {
   window.ArcNotifications = arcNotifications;
+}
+
+
+// === ARC LEADERBOARD & GROUPS ENGINE ===
+
+/**
+ * Arc Tracker - Competitive Ranked Leaderboards & Operative Squads
+ * Three Competitive Categories: Regional, Country, Global
+ * Gated by Level 10 (Adept Operative status) with interactive Dev Mode preview.
+ */
+class ArcLeaderboardGroupsEngine {
+  constructor() {
+    this.activeView = 'leaderboard'; // 'leaderboard' | 'groups'
+    this.activeCategory = 'regional'; // 'regional' | 'country' | 'global'
+    this.devOverride = false;
+    this.isCompacted = true; // COMPACT BY DEFAULT
+    this.joinedSquadId = null;
+    this.customSquads = [];
+
+    // Unlimited Capacity Squads (No member limit)
+    this.defaultSquads = [
+      {
+        id: 'squad-5am',
+        name: '5 AM Club Elite',
+        motto: 'Rise in the dark, execute before the world wakes.',
+        category: 'Mindset & Morning',
+        icon: 'fa-solid fa-sun',
+        members: 1240,
+        avgScore: '94.6%',
+        streak: 34,
+        color: 'from-amber-500 to-yellow-400'
+      },
+      {
+        id: 'squad-iron',
+        name: 'Iron Willpower Syndicate',
+        motto: 'Heavy lifts, zero social media, non-negotiable discipline.',
+        category: 'Physical & Strength',
+        icon: 'fa-solid fa-dumbbell',
+        members: 3820,
+        avgScore: '92.1%',
+        streak: 28,
+        color: 'from-cyan-500 to-blue-500'
+      },
+      {
+        id: 'squad-deepwork',
+        name: 'Hyper-Focus Titans',
+        motto: '4 hours undistracted code and deep study every day.',
+        category: 'Productivity & Focus',
+        icon: 'fa-solid fa-brain',
+        members: 950,
+        avgScore: '89.8%',
+        streak: 21,
+        color: 'from-purple-500 to-pink-500'
+      },
+      {
+        id: 'squad-cold',
+        name: 'Cold Shower & Dopamine Detox',
+        motto: 'Embrace physical discomfort, eradicate cheap digital dopamine.',
+        category: 'Discipline',
+        icon: 'fa-solid fa-snowflake',
+        members: 1610,
+        avgScore: '88.0%',
+        streak: 22,
+        color: 'from-teal-500 to-emerald-400'
+      }
+    ];
+
+    this.leaderboardData = {
+      regional: {
+        scopeTitle: 'Regional Sector: Western Metro Zone',
+        scopeCount: '1,240 Operatives',
+        scopeIcon: 'fa-solid fa-location-dot',
+        userRank: 7,
+        userPercentile: 'Top 1%',
+        operatives: [
+          { rank: 1, handle: '@vanguard_rex', level: 24, score: '99.4%', streak: '44d', tier: 'Grandmaster', avatar: 'R', color: 'from-amber-400 to-yellow-500' },
+          { rank: 2, handle: '@valkyrie_focus', level: 22, score: '98.1%', streak: '39d', tier: 'Master', avatar: 'V', color: 'from-cyan-400 to-blue-500' },
+          { rank: 3, handle: '@iron_discipline', level: 21, score: '97.5%', streak: '36d', tier: 'Master', avatar: 'I', color: 'from-purple-400 to-pink-500' },
+          { rank: 4, handle: '@solitary_monk', level: 19, score: '95.8%', streak: '32d', tier: 'Diamond', avatar: 'M', color: 'from-emerald-400 to-teal-500' },
+          { rank: 5, handle: '@deep_work_titan', level: 17, score: '94.2%', streak: '29d', tier: 'Diamond', avatar: 'D', color: 'from-blue-400 to-indigo-500' },
+          { rank: 6, handle: '@zenith_operative', level: 15, score: '93.0%', streak: '24d', tier: 'Platinum', avatar: 'Z', color: 'from-indigo-400 to-purple-500' },
+          { rank: 8, handle: '@cold_shower_sam', level: 14, score: '91.5%', streak: '21d', tier: 'Platinum', avatar: 'S', color: 'from-cyan-400 to-teal-500' },
+          { rank: 9, handle: '@shadow_runner', level: 12, score: '89.2%', streak: '17d', tier: 'Gold', avatar: 'S', color: 'from-amber-400 to-orange-500' },
+          { rank: 10, handle: '@hyperfocus_leo', level: 11, score: '87.0%', streak: '15d', tier: 'Gold', avatar: 'L', color: 'from-rose-400 to-pink-500' }
+        ]
+      },
+      country: {
+        scopeTitle: 'National League: India (IN)',
+        scopeCount: '18,920 Operatives',
+        scopeIcon: 'fa-solid fa-flag',
+        userRank: 42,
+        userPercentile: 'Top 3%',
+        operatives: [
+          { rank: 1, handle: '@arjuna_focus', level: 32, score: '99.8%', streak: '58d', tier: 'Apex Legend', avatar: 'A', color: 'from-amber-400 to-yellow-500' },
+          { rank: 2, handle: '@kavach_iron', level: 29, score: '99.1%', streak: '51d', tier: 'Grandmaster', avatar: 'K', color: 'from-cyan-400 to-blue-500' },
+          { rank: 3, handle: '@vanguard_rex', level: 24, score: '98.5%', streak: '44d', tier: 'Master', avatar: 'V', color: 'from-purple-400 to-pink-500' },
+          { rank: 4, handle: '@dharma_warrior', level: 23, score: '97.9%', streak: '41d', tier: 'Master', avatar: 'D', color: 'from-emerald-400 to-teal-500' },
+          { rank: 5, handle: '@shunya_mind', level: 21, score: '96.4%', streak: '35d', tier: 'Diamond', avatar: 'S', color: 'from-blue-400 to-indigo-500' },
+          { rank: 6, handle: '@agni_discipline', level: 20, score: '95.2%', streak: '33d', tier: 'Diamond', avatar: 'A', color: 'from-indigo-400 to-purple-500' },
+          { rank: 7, handle: '@garuda_titan', level: 18, score: '94.0%', streak: '29d', tier: 'Diamond', avatar: 'G', color: 'from-teal-400 to-cyan-500' },
+          { rank: 8, handle: '@brahma_stride', level: 16, score: '92.8%', streak: '26d', tier: 'Platinum', avatar: 'B', color: 'from-amber-400 to-orange-500' }
+        ]
+      },
+      global: {
+        scopeTitle: 'Worldwide Syndicate: 142 Countries',
+        scopeCount: '148,500 Operatives',
+        scopeIcon: 'fa-solid fa-globe',
+        userRank: 284,
+        userPercentile: 'Top 5%',
+        operatives: [
+          { rank: 1, handle: '@kratos_lockin', level: 42, score: '100%', streak: '78d', tier: 'Immortal', avatar: 'K', color: 'from-amber-400 to-yellow-500' },
+          { rank: 2, handle: '@shinobi_discipline', level: 38, score: '99.9%', streak: '69d', tier: 'Apex Legend', avatar: 'S', color: 'from-cyan-400 to-blue-500' },
+          { rank: 3, handle: '@nordic_stoic', level: 35, score: '99.5%', streak: '62d', tier: 'Apex Legend', avatar: 'N', color: 'from-purple-400 to-pink-500' },
+          { rank: 4, handle: '@arjuna_focus', level: 32, score: '99.2%', streak: '58d', tier: 'Grandmaster', avatar: 'A', color: 'from-emerald-400 to-teal-500' },
+          { rank: 5, handle: '@spartan_iron', level: 30, score: '98.7%', streak: '53d', tier: 'Grandmaster', avatar: 'S', color: 'from-blue-400 to-indigo-500' },
+          { rank: 6, handle: '@valkyrie_focus', level: 27, score: '98.1%', streak: '47d', tier: 'Master', avatar: 'V', color: 'from-indigo-400 to-purple-500' },
+          { rank: 7, handle: '@cyber_monk', level: 25, score: '97.4%', streak: '43d', tier: 'Master', avatar: 'C', color: 'from-teal-400 to-cyan-500' },
+          { rank: 8, handle: '@titan_zen', level: 23, score: '96.0%', streak: '38d', tier: 'Diamond', avatar: 'T', color: 'from-rose-400 to-pink-500' }
+        ]
+      }
+    };
+  }
+
+  init() {
+    try {
+      this.joinedSquadId = localStorage.getItem('arc_joined_squad_id') || null;
+      const savedCustom = localStorage.getItem('arc_custom_squads');
+      if (savedCustom) {
+        this.customSquads = JSON.parse(savedCustom) || [];
+      }
+      const savedCompact = localStorage.getItem('arc_lb_compact');
+      if (savedCompact !== null) {
+        this.isCompacted = savedCompact === 'true';
+      } else {
+        this.isCompacted = true; // COMPACT BY DEFAULT
+      }
+    } catch (_) {}
+
+    // Check if level >= 10 and notification should be dispatched
+    this.checkUnlockNotification(false);
+
+    this.render();
+  }
+
+  getUserLevel() {
+    if (typeof window.calculateUserXP === 'function') {
+      const rpg = window.calculateUserXP();
+      if (rpg && rpg.level) return rpg.level;
+    }
+    return (window.state && window.state.level) || 1;
+  }
+
+  isUnlocked() {
+    if (this.devOverride) return true;
+    return this.getUserLevel() >= 10;
+  }
+
+  toggleCompact() {
+    this.isCompacted = !this.isCompacted;
+    try {
+      localStorage.setItem('arc_lb_compact', this.isCompacted ? 'true' : 'false');
+    } catch (_) {}
+    if (typeof window.playSfx === 'function') window.playSfx('click');
+    this.render();
+  }
+
+  checkUnlockNotification(isDevSimulation = false) {
+    const userLevel = this.getUserLevel();
+    if (!isDevSimulation && userLevel < 10) return;
+
+    const storageKey = 'arc_lb_unlocked_notified';
+    let alreadyNotified = false;
+    try {
+      alreadyNotified = localStorage.getItem(storageKey) === 'true';
+    } catch (_) {}
+
+    if (alreadyNotified && !isDevSimulation) return;
+
+    if (!isDevSimulation) {
+      try {
+        localStorage.setItem(storageKey, 'true');
+      } catch (_) {}
+    }
+
+    const title = isDevSimulation
+      ? '🏆 Ranked Leaderboards Unlocked! (Dev Preview)'
+      : '🏆 Ranked Leaderboard Protocol Unlocked!';
+    const message = isDevSimulation
+      ? 'Level 10 Adept Operative clearance granted in preview mode! Regional, Country, and Global ranked competition is now accessible.'
+      : 'Congratulations Operative! You have reached Level 10 and unlocked Regional, Country, and Global ranked competition. Check your standings in Results.';
+
+    if (window.ArcNotifications && typeof window.ArcNotifications.notify === 'function') {
+      window.ArcNotifications.notify({
+        title,
+        message,
+        type: 'system',
+        category: 'Milestone Unlocked',
+        icon: 'fa-solid fa-trophy',
+        features: [
+          'Unlocked Regional, Country, and Global competitive ladders',
+          'Real-time percentile rankings and operative scores',
+          'Operative accountability squads with unlimited member capacity'
+        ]
+      });
+    } else {
+      if (typeof window.showToast === 'function') window.showToast(title);
+      if (typeof window.playSfx === 'function') window.playSfx('levelUp');
+    }
+  }
+
+  switchView(view) {
+    this.activeView = view;
+    if (typeof window.playSfx === 'function') window.playSfx('click');
+
+    const btnLb = document.getElementById('tab-btn-leaderboard');
+    const btnGp = document.getElementById('tab-btn-groups');
+    const lbView = document.getElementById('lb-view-container');
+    const gpView = document.getElementById('groups-view-container');
+
+    if (btnLb && btnGp && lbView && gpView) {
+      if (view === 'leaderboard') {
+        btnLb.className = "px-2.5 py-1 rounded-md text-slate-950 bg-gradient-to-r from-amber-400 to-yellow-400 font-black shadow-sm flex items-center gap-1.5 transition active:scale-95";
+        btnGp.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5 active:scale-95";
+        lbView.classList.remove('hidden');
+        gpView.classList.add('hidden');
+      } else {
+        btnGp.className = "px-2.5 py-1 rounded-md text-slate-950 bg-gradient-to-r from-cyan-400 to-blue-500 font-black shadow-sm flex items-center gap-1.5 transition active:scale-95";
+        btnLb.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5 active:scale-95";
+        gpView.classList.remove('hidden');
+        lbView.classList.add('hidden');
+      }
+    }
+
+    this.render();
+  }
+
+  setCategory(category) {
+    if (!['regional', 'country', 'global'].includes(category)) return;
+    this.activeCategory = category;
+    if (typeof window.playSfx === 'function') window.playSfx('tab');
+
+    ['regional', 'country', 'global'].forEach(cat => {
+      const btn = document.getElementById(`btn-lb-cat-${cat}`);
+      if (btn) {
+        if (cat === category) {
+          btn.className = "flex-1 py-1 px-2 rounded-lg text-center transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-sm";
+        } else {
+          btn.className = "flex-1 py-1 px-2 rounded-lg text-center text-slate-400 hover:text-slate-200 transition flex items-center justify-center gap-1 font-semibold";
+        }
+      }
+    });
+
+    this.renderLeaderboard();
+  }
+
+  toggleDevOverride() {
+    this.devOverride = !this.devOverride;
+    if (typeof window.playSfx === 'function') window.playSfx('check');
+    if (typeof window.showToast === 'function') {
+      window.showToast(this.devOverride ? '⚡ Simulated Level 10 Unlock (Dev Preview)' : '🔒 Restored to actual Operative Level');
+    }
+    if (this.devOverride) {
+      this.checkUnlockNotification(true);
+    }
+    this.render();
+  }
+
+  joinSquad(squadId) {
+    if (this.joinedSquadId && this.joinedSquadId !== squadId) {
+      const prev = [...this.defaultSquads, ...this.customSquads].find(s => s.id === this.joinedSquadId);
+      if (prev && prev.members > 0) prev.members--;
+    }
+
+    this.joinedSquadId = squadId;
+    try {
+      localStorage.setItem('arc_joined_squad_id', squadId);
+    } catch (_) {}
+
+    const allSquads = [...this.defaultSquads, ...this.customSquads];
+    const target = allSquads.find(s => s.id === squadId);
+    if (target) target.members++;
+
+    if (typeof window.playSfx === 'function') window.playSfx('check');
+    if (typeof window.showToast === 'function') {
+      window.showToast(`⚔️ Joined ${target ? target.name : 'Squad'}! (Unlimited size)`);
+    }
+    this.renderGroups();
+  }
+
+  leaveSquad() {
+    const prev = [...this.defaultSquads, ...this.customSquads].find(s => s.id === this.joinedSquadId);
+    if (prev && prev.members > 1) prev.members--;
+
+    this.joinedSquadId = null;
+    try {
+      localStorage.removeItem('arc_joined_squad_id');
+    } catch (_) {}
+    if (typeof window.playSfx === 'function') window.playSfx('click');
+    if (typeof window.showToast === 'function') {
+      window.showToast('Left squad.');
+    }
+    this.renderGroups();
+  }
+
+  openCreateSquadModal() {
+    const modal = document.getElementById('arc-create-squad-modal');
+    if (modal) modal.classList.remove('hidden');
+    if (typeof window.playSfx === 'function') window.playSfx('hover');
+  }
+
+  closeCreateSquadModal() {
+    const modal = document.getElementById('arc-create-squad-modal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  handleCreateSquad(e) {
+    if (e) e.preventDefault();
+    const nameEl = document.getElementById('new-squad-name');
+    const mottoEl = document.getElementById('new-squad-motto');
+    const catEl = document.getElementById('new-squad-category');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const motto = mottoEl ? mottoEl.value.trim() : '';
+    const category = catEl ? catEl.value : 'All Pillars';
+
+    if (!name) return;
+
+    const newSquad = {
+      id: 'squad-custom-' + Date.now(),
+      name,
+      motto: motto || 'Formed in discipline.',
+      category,
+      icon: 'fa-solid fa-shield-halved',
+      members: 1, // Unlimited capacity, starts with creator
+      avgScore: '100%',
+      streak: 1,
+      color: 'from-amber-400 to-yellow-500'
+    };
+
+    this.customSquads.push(newSquad);
+    this.joinedSquadId = newSquad.id;
+
+    try {
+      localStorage.setItem('arc_custom_squads', JSON.stringify(this.customSquads));
+      localStorage.setItem('arc_joined_squad_id', newSquad.id);
+    } catch (_) {}
+
+    this.closeCreateSquadModal();
+    if (nameEl) nameEl.value = '';
+    if (mottoEl) mottoEl.value = '';
+
+    if (typeof window.playSfx === 'function') window.playSfx('levelUp');
+    if (typeof window.showToast === 'function') {
+      window.showToast(`⚔️ Squad "${name}" created! Unlimited member capacity enabled.`);
+    }
+
+    this.renderGroups();
+  }
+
+  render() {
+    // Update Compact / Expand toggle button in header
+    const compactIcon = document.getElementById('lb-compact-icon');
+    const compactLabel = document.getElementById('lb-compact-label');
+    if (compactIcon && compactLabel) {
+      if (this.isCompacted) {
+        compactIcon.className = "fa-solid fa-up-right-and-down-left-from-center text-[9px]";
+        compactLabel.textContent = "Expand";
+      } else {
+        compactIcon.className = "fa-solid fa-down-left-and-up-right-to-center text-[9px]";
+        compactLabel.textContent = "Compact";
+      }
+    }
+
+    this.renderLeaderboard();
+    this.renderGroups();
+  }
+
+  renderLeaderboard() {
+    const userLevel = this.getUserLevel();
+    const unlocked = this.isUnlocked();
+
+    // 1. Update Lock Status Pill in Header
+    const lockPill = document.getElementById('lb-lock-pill');
+    if (lockPill) {
+      if (unlocked) {
+        lockPill.className = "text-[9px] font-mono font-black px-2 py-0.5 rounded-full border bg-emerald-500/15 text-emerald-300 border-emerald-500/30 flex items-center gap-1";
+        lockPill.innerHTML = '<i class="fa-solid fa-unlock text-[8px]"></i><span>UNLOCKED</span>';
+      } else {
+        lockPill.className = "text-[9px] font-mono font-black px-2 py-0.5 rounded-full border bg-amber-500/10 text-amber-300 border-amber-500/30 flex items-center gap-1";
+        lockPill.innerHTML = '<i class="fa-solid fa-lock text-[8px]"></i><span>LVL 10</span>';
+      }
+    }
+
+    // 2. Toggle Locked vs Unlocked Container
+    const lockedContainer = document.getElementById('lb-locked-container');
+    const unlockedContainer = document.getElementById('lb-unlocked-container');
+
+    if (lockedContainer && unlockedContainer) {
+      lockedContainer.classList.toggle('hidden', unlocked);
+      unlockedContainer.classList.toggle('hidden', !unlocked);
+    }
+
+    // 3. Render Locked State (Compact vs Full)
+    if (!unlocked && lockedContainer) {
+      const pct = Math.min(100, Math.round((userLevel / 10) * 100));
+      const remaining = Math.max(0, 10 - userLevel);
+
+      if (this.isCompacted) {
+        // COMPACT LOCKED VIEW (~80px)
+        lockedContainer.innerHTML = `
+          <div class="p-3 rounded-xl bg-slate-950/85 border border-amber-500/30 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-300 grid place-items-center text-xs shrink-0">
+                  <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-white leading-tight">Ranked Leaderboard Locked</h4>
+                  <p class="text-[10px] text-slate-400">Requires Level 10 (Adept Operative)</p>
+                </div>
+              </div>
+              <span class="text-[9px] font-mono font-bold text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 shrink-0">
+                Lvl ${userLevel} / 10 (${pct}%)
+              </span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] pt-0.5">
+              <button type="button" onclick="ArcLeaderboardGroups.toggleDevOverride()" class="text-amber-400 hover:text-amber-300 font-mono font-bold flex items-center gap-1 transition">
+                <i class="fa-solid fa-flask text-[9px]"></i> Preview Level 10 (Dev Mode)
+              </button>
+              <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="text-slate-400 hover:text-white flex items-center gap-1 transition font-mono">
+                Details <i class="fa-solid fa-chevron-down text-[8px]"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        // FULL EXPANDED LOCKED VIEW
+        lockedContainer.innerHTML = `
+          <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/85 border border-amber-500/30 text-center space-y-3 relative overflow-hidden">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-300 grid place-items-center text-xl shadow-inner">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="space-y-1">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono text-[9px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-[8px]"></i>
+                <span>CLASSIFIED PROTOCOL • LEVEL 10 REQUIRED</span>
+              </span>
+              <h4 class="text-sm sm:text-base font-black text-white">Ranked Leaderboard Locked</h4>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+                Regional, Country, and Global ranked competition requires <span class="text-amber-300 font-bold">Level 10 (Adept Operative)</span> status. Complete daily habits and maintain focus sessions to level up.
+              </p>
+            </div>
+
+            <!-- Progress Meter -->
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-left max-w-md mx-auto">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-slate-300 font-bold">Your Rank: Level ${userLevel}</span>
+                <span class="text-amber-400 font-black">${userLevel} / 10 Levels (${pct}%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-slate-400">
+                <span>${remaining} levels remaining</span>
+                <span class="text-cyan-400">Earn XP from Habits &amp; Pomodoro</span>
+              </div>
+            </div>
+
+            <div class="pt-1 flex items-center justify-center gap-2">
+              <button type="button" onclick="ArcLeaderboardGroups.toggleDevOverride()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate Level 10 to preview all 3 leaderboard categories">
+                <i class="fa-solid fa-flask text-amber-400"></i>
+                <span>Preview Level 10 (Dev Mode)</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // 4. Populate Unlocked State (Three Categories)
+    const data = this.leaderboardData[this.activeCategory] || this.leaderboardData.regional;
+
+    // Scope Header
+    const scopeTitle = document.getElementById('lb-scope-title');
+    const scopeCount = document.getElementById('lb-scope-count');
+    const scopeIcon = document.getElementById('lb-scope-icon');
+    if (scopeTitle) scopeTitle.textContent = data.scopeTitle;
+    if (scopeCount) scopeCount.textContent = data.scopeCount;
+    if (scopeIcon) scopeIcon.innerHTML = `<i class="${data.scopeIcon}"></i>`;
+
+    // User Profile Data
+    let handle = '@operative';
+    let avatarChar = 'O';
+    try {
+      if (window.ArcProfile && typeof window.ArcProfile.getProfile === 'function') {
+        const p = window.ArcProfile.getProfile();
+        if (p && p.user) handle = p.user;
+        if (p && p.name) avatarChar = p.name.charAt(0).toUpperCase();
+      }
+    } catch (_) {}
+
+    const userStats = document.getElementById('lb-user-stats');
+    const userHandle = document.getElementById('lb-user-handle');
+    const userAvatar = document.getElementById('lb-user-avatar');
+    const userRankDisplay = document.getElementById('lb-user-rank-display');
+    const userPercentile = document.getElementById('lb-user-percentile');
+
+    const arcScore = (window.state && window.state.overallArcIndex) ? window.state.overallArcIndex : '15%';
+    const streak = (window.state && window.state.streak) ? window.state.streak : 0;
+
+    if (userHandle) userHandle.textContent = handle;
+    if (userAvatar) userAvatar.textContent = avatarChar;
+    if (userStats) userStats.textContent = `Level ${userLevel} • ${arcScore} Score • ${streak}d Streak`;
+
+    const catLabel = this.activeCategory === 'regional' ? 'Regional' : (this.activeCategory === 'country' ? 'National' : 'Global');
+    if (userRankDisplay) userRankDisplay.textContent = `#${data.userRank} ${catLabel}`;
+    if (userPercentile) userPercentile.textContent = data.userPercentile;
+
+    // Ladder Table Rows
+    const rankingsList = document.getElementById('lb-rankings-list');
+    const footerAction = document.getElementById('lb-ladder-footer-action');
+
+    if (rankingsList) {
+      let rows = [...data.operatives];
+      const userObj = {
+        rank: data.userRank,
+        handle: `${handle} (YOU)`,
+        level: userLevel,
+        score: arcScore,
+        streak: `${streak}d`,
+        tier: userLevel >= 25 ? 'Master' : (userLevel >= 15 ? 'Diamond' : 'Platinum'),
+        avatar: avatarChar,
+        isUser: true,
+        color: 'from-cyan-400 to-indigo-500'
+      };
+
+      rows.push(userObj);
+      rows.sort((a, b) => a.rank - b.rank);
+
+      // Adjust height based on isCompacted
+      if (this.isCompacted) {
+        rankingsList.className = "space-y-1 max-h-36 overflow-y-auto pr-1 custom-scroll";
+        if (footerAction) {
+          footerAction.innerHTML = `
+            <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="w-full py-1.5 text-center text-[10px] font-mono text-amber-300 hover:text-white bg-slate-900/60 hover:bg-slate-800 rounded-lg border border-slate-800 transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-chevron-down text-[8px]"></i>
+              <span>Expand Full Leaderboard (${rows.length} Operatives)</span>
+            </button>
+          `;
+        }
+      } else {
+        rankingsList.className = "space-y-1.5 max-h-72 overflow-y-auto pr-1 custom-scroll";
+        if (footerAction) {
+          footerAction.innerHTML = `
+            <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="w-full py-1.5 text-center text-[10px] font-mono text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 rounded-lg border border-slate-800 transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-chevron-up text-[8px]"></i>
+              <span>Compact View</span>
+            </button>
+          `;
+        }
+      }
+
+      rankingsList.innerHTML = rows.map(op => {
+        const isTop1 = op.rank === 1;
+        const isTop2 = op.rank === 2;
+        const isTop3 = op.rank === 3;
+
+        let rankBadge = `<span class="font-mono font-bold text-slate-400 text-[11px] w-5 text-center">#${op.rank}</span>`;
+        if (isTop1) rankBadge = `<span class="text-xs" title="Rank 1 🥇">🥇</span>`;
+        else if (isTop2) rankBadge = `<span class="text-xs" title="Rank 2 🥈">🥈</span>`;
+        else if (isTop3) rankBadge = `<span class="text-xs" title="Rank 3 🥉">🥉</span>`;
+
+        const rowBorder = op.isUser
+          ? 'border-cyan-400/80 bg-cyan-950/30 shadow-[0_0_15px_rgba(0,240,255,0.15)] ring-1 ring-cyan-400/50'
+          : 'border-slate-800/80 bg-slate-900/60 hover:border-slate-700';
+
+        return `
+          <div class="p-1.5 sm:p-2 rounded-xl border ${rowBorder} flex items-center justify-between text-xs transition-all">
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="flex items-center justify-center w-5 shrink-0">${rankBadge}</div>
+              <div class="w-5 h-5 rounded-full bg-gradient-to-tr ${op.color || 'from-slate-700 to-slate-800'} text-white font-bold grid place-items-center text-[9px] shrink-0 border border-white/20">
+                ${op.avatar || op.handle.charAt(1).toUpperCase()}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="font-bold ${op.isUser ? 'text-cyan-300' : 'text-slate-200'} text-[11px] truncate">${op.handle}</span>
+                  <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700">Lvl ${op.level}</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-right shrink-0 font-mono text-[10px]">
+              <span class="text-amber-400 font-bold hidden sm:inline"><i class="fa-solid fa-fire text-[9px]"></i> ${op.streak}</span>
+              <span class="font-black ${op.isUser ? 'text-cyan-400' : 'text-white'}">${op.score}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  renderGroups() {
+    const allSquads = [...this.defaultSquads, ...this.customSquads];
+    const joined = allSquads.find(s => s.id === this.joinedSquadId);
+
+    // 1. Active Squad Banner (Unlimited capacity, sleek)
+    const activeBanner = document.getElementById('groups-active-banner');
+    if (activeBanner) {
+      if (joined) {
+        activeBanner.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="space-y-0.5 min-w-0">
+              <span class="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> ACTIVE OPERATIVE SQUAD
+              </span>
+              <h5 class="text-xs font-black text-white truncate">${joined.name}</h5>
+              <p class="text-[10px] text-slate-300 line-clamp-1">${joined.motto}</p>
+            </div>
+            <button type="button" onclick="ArcLeaderboardGroups.leaveSquad()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-bold transition shrink-0 active:scale-95">
+              Leave
+            </button>
+          </div>
+          <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Members: <b class="text-cyan-300">${joined.members.toLocaleString()}</b> <span class="text-emerald-400 font-sans text-[9px]">(Unlimited)</span></span>
+            <span>Avg Score: <b class="text-amber-300">${joined.avgScore}</b></span>
+            <span>Streak: <b class="text-emerald-300">${joined.streak}d</b></span>
+          </div>
+        `;
+      } else {
+        activeBanner.innerHTML = `
+          <div class="text-center py-1.5 space-y-0.5">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">No Active Squad</span>
+            <p class="text-[10px] text-slate-400">Join an unlimited accountability squad below to link streak telemetry with peer operatives.</p>
+          </div>
+        `;
+      }
+    }
+
+    // 2. Squads List
+    const squadsList = document.getElementById('groups-squads-list');
+    const footerAction = document.getElementById('groups-footer-action');
+
+    if (squadsList) {
+      if (this.isCompacted) {
+        squadsList.className = "space-y-1.5 max-h-44 overflow-y-auto pr-1 custom-scroll";
+        if (footerAction) {
+          footerAction.innerHTML = `
+            <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="w-full py-1.5 text-center text-[10px] font-mono text-cyan-300 hover:text-white bg-slate-900/60 hover:bg-slate-800 rounded-lg border border-slate-800 transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-chevron-down text-[8px]"></i>
+              <span>Expand All Squads (${allSquads.length})</span>
+            </button>
+          `;
+        }
+      } else {
+        squadsList.className = "space-y-2 max-h-72 overflow-y-auto pr-1 custom-scroll";
+        if (footerAction) {
+          footerAction.innerHTML = `
+            <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="w-full py-1.5 text-center text-[10px] font-mono text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 rounded-lg border border-slate-800 transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-chevron-up text-[8px]"></i>
+              <span>Compact View</span>
+            </button>
+          `;
+        }
+      }
+
+      squadsList.innerHTML = allSquads.map(s => {
+        const isJoined = s.id === this.joinedSquadId;
+        return `
+          <div class="p-2 sm:p-2.5 rounded-xl border ${isJoined ? 'border-cyan-400/80 bg-cyan-950/20 ring-1 ring-cyan-400/40' : 'border-slate-800 bg-slate-900/60 hover:border-slate-700'} space-y-1.5 transition-all">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-start gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-xl bg-gradient-to-tr ${s.color || 'from-cyan-500 to-blue-500'} text-slate-950 font-black grid place-items-center text-[11px] shrink-0 shadow-sm">
+                  <i class="${s.icon || 'fa-solid fa-shield-halved'}"></i>
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs font-black text-white leading-tight truncate">${s.name}</h5>
+                  <p class="text-[10px] text-slate-400 leading-snug line-clamp-1">${s.motto}</p>
+                </div>
+              </div>
+              <div class="shrink-0">
+                ${isJoined ? `
+                  <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-check text-[8px]"></i> Joined
+                  </span>
+                ` : `
+                  <button type="button" onclick="ArcLeaderboardGroups.joinSquad('${s.id}')" class="px-2.5 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-slate-700 text-[10px] font-bold transition active:scale-95">
+                    Join
+                  </button>
+                `}
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/60">
+              <span class="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 text-[9px] font-sans">${s.category}</span>
+              <div class="flex items-center gap-2">
+                <span class="flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-slate-500"></i> ${s.members.toLocaleString()} <span class="text-emerald-400 font-mono text-[9px]">∞</span></span>
+                <span><i class="fa-solid fa-fire text-[9px] text-amber-400"></i> ${s.streak}d</span>
+                <span class="text-cyan-300 font-bold">${s.avgScore}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+const arcLeaderboardGroups = new ArcLeaderboardGroupsEngine();
+
+if (typeof window !== 'undefined') {
+  window.ArcLeaderboardGroups = arcLeaderboardGroups;
 }
 
 
@@ -31640,6 +33393,8 @@ if (typeof window !== 'undefined') {
   function initBundle() {
 
     try { if (window.ArcNotifications && typeof window.ArcNotifications.init === 'function') window.ArcNotifications.init(); } catch(e){ console.error(e); }
+
+    try { if (window.ArcLeaderboardGroups && typeof window.ArcLeaderboardGroups.init === 'function') window.ArcLeaderboardGroups.init(); } catch(e){ console.error(e); }
 
     try { if (window.ArcFaq && typeof window.ArcFaq.init === 'function') window.ArcFaq.init(); } catch(e){ console.error(e); }
 
