@@ -2025,6 +2025,15 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
                             <!-- Unlocked State Container (Shown if Level >= 10 or Dev Override) -->
                             <div id="lb-unlocked-container" class="hidden space-y-2.5">
+                                <!-- Level 10 Milestone Note Banner -->
+                                <div id="lb-unlocked-note-banner" class="p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-yellow-400/10 to-emerald-500/15 border border-amber-400/35 text-amber-300 text-[11px] font-bold flex items-center justify-between gap-2 shadow-sm animate-fade-in">
+                                    <div class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-trophy text-amber-400 text-xs shrink-0"></i>
+                                        <span class="truncate"><strong>Note:</strong> Leaderboards are now unlocked!</span>
+                                    </div>
+                                    <span class="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0 font-black">Level 10+</span>
+                                </div>
+
                                 <!-- Three Category Switcher Tabs: Regional, Country, Global -->
                                 <div class="flex items-center gap-1 p-1 bg-slate-950/90 rounded-xl border border-slate-800 text-[11px] font-bold">
                                     <button type="button" onclick="ArcLeaderboardGroups.setCategory('regional')" id="btn-lb-cat-regional" class="flex-1 py-1 px-2 rounded-lg text-center transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-sm">
@@ -27245,6 +27254,11 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
       <div id="levelup-perk-notice" class="pt-1 border-t border-slate-800 text-[11px] text-cyan-300 font-semibold">
         ✨ New Buff: Adrenaline Surge active!
       </div>
+      <!-- Level 10 Leaderboard Unlock Note -->
+      <div id="levelup-leaderboard-unlock-note" class="hidden p-2 rounded-xl bg-amber-500/20 border border-amber-400/50 text-[11px] text-amber-200 font-bold flex items-center justify-center gap-1.5 animate-pulse">
+        <i class="fa-solid fa-trophy text-amber-400 text-xs shrink-0"></i>
+        <span>Leaderboards are now unlocked</span>
+      </div>
     </div>
 
     <button role="button" onclick="closeLevelUpModal()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:brightness-110 text-black font-black text-sm uppercase tracking-wider transition shadow-xl shadow-amber-500/30 hover:scale-[1.02] active:scale-95 relative z-10">
@@ -27696,10 +27710,20 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
         else perkNotice.textContent = '⚔️ Operative Ascension: +25 All Attributes';
       }
 
+      const lbUnlockNote = document.getElementById('levelup-leaderboard-unlock-note');
+      if (lbUnlockNote) {
+        lbUnlockNote.classList.toggle('hidden', newLevel < 10);
+      }
+
       if (overlay && (!state.settings || state.settings.autoLevelUpModal !== false)) {
         overlay.classList.remove('hidden');
       }
-      showToast(`🏆 LEVEL UP! Reached Lv. ${newLevel} — ${tier.title}!`);
+
+      if (newLevel >= 10) {
+        showToast(`🏆 Level ${newLevel} reached: Leaderboards are now unlocked!`);
+      } else {
+        showToast(`🏆 LEVEL UP! Reached Lv. ${newLevel} — ${tier.title}!`);
+      }
     } catch (e) {
       console.warn('Level up celebration error:', e);
     }
@@ -27804,6 +27828,11 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
                 <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider" style="color:${rpg.tier.color}; background:${rpg.tier.color}15; border:1px solid ${rpg.tier.color}40">
                   ${rpg.tier.title}
                 </span>
+                ${rpg.level >= 10 ? `
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-amber-300 bg-amber-500/15 border border-amber-400/40 shadow-sm animate-pulse">
+                    <i class="fa-solid fa-trophy text-[9px] text-amber-400"></i> Leaderboards are now unlocked
+                  </span>
+                ` : ''}
               </div>
               <div class="text-sm font-bold text-slate-200 flex items-center gap-2">
                 <span>${rpg.playerClass.icon}</span>
@@ -32517,11 +32546,11 @@ class ArcLeaderboardGroupsEngine {
     }
 
     const title = isDevSimulation
-      ? '🏆 Ranked Leaderboards Unlocked! (Dev Preview)'
-      : '🏆 Ranked Leaderboard Protocol Unlocked!';
+      ? '🏆 Note: Leaderboards are now unlocked! (Dev Preview)'
+      : '🏆 Note: Leaderboards are now unlocked!';
     const message = isDevSimulation
-      ? 'Level 10 Adept Operative clearance granted in preview mode! Regional, Country, and Global ranked competition is now accessible.'
-      : 'Congratulations Operative! You have reached Level 10 and unlocked Regional, Country, and Global ranked competition. Check your standings in Results.';
+      ? 'Level 10 reached! Note: Leaderboards are now unlocked. Regional, Country, and Global ranked competition is now accessible.'
+      : 'Level 10 reached! Note: Leaderboards are now unlocked. Check your standings in Results across Regional, Country, and Global ladders.';
 
     if (window.ArcNotifications && typeof window.ArcNotifications.notify === 'function') {
       window.ArcNotifications.notify({
@@ -32591,7 +32620,7 @@ class ArcLeaderboardGroupsEngine {
     this.devOverride = !this.devOverride;
     if (typeof window.playSfx === 'function') window.playSfx('check');
     if (typeof window.showToast === 'function') {
-      window.showToast(this.devOverride ? '⚡ Simulated Level 10 Unlock (Dev Preview)' : '🔒 Restored to actual Operative Level');
+      window.showToast(this.devOverride ? '🏆 Note: Leaderboards are now unlocked! (Dev Preview)' : '🔒 Restored to actual Operative Level');
     }
     if (this.devOverride) {
       this.checkUnlockNotification(true);

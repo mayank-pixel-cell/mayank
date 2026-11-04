@@ -4,7 +4,7 @@
  * Ensures 100% functionality in Google Chrome when offline or disconnected.
  */
 
-const CACHE_NAME = 'arc-tracker-cache-v2026.11';
+const CACHE_NAME = 'arc-tracker-cache-v2026.12';
 
 // Core static assets required to render and operate the application offline
 const STATIC_ASSETS = [
