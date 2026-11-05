@@ -82,8 +82,15 @@ function setSleep(min){const s=S();s.sleepTimerMinutes=+min;save();clearSleep();
  A.sl.push(setTimeout(()=>{stopAmb();s.sleepTimerMinutes=0;save();ui();toast('Sleep timer finished — ambient off')},ms));announce('Sleep timer set for '+min+' minutes')}
 
 /* ---------- AUDIO-REACTIVE CANVAS (FFT 2048: bass / mid / treble) ---------- */
-const cv=$('#pp12-fx'),cx=cv.getContext('2d');
-function rs(){const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(innerWidth*d);cv.height=Math.round(innerHeight*d);cx.setTransform(d,0,0,d,0,0)}
+let cv=null,cx=null;
+function ensureFxCanvas(){
+ if(!cv && typeof document!=='undefined'){
+  cv=(typeof $==='function'?$('#pp12-fx'):null)||document.getElementById('pp12-fx');
+  if(cv && !cx) cx=cv.getContext('2d');
+ }
+ return !!(cv && cx);
+}
+function rs(){if(!ensureFxCanvas())return;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(innerWidth*d);cv.height=Math.round(innerHeight*d);cx.setTransform(d,0,0,d,0,0)}
 function rgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[n>>16&255,n>>8&255,n&255].join(',')}
 function bands(){
  if(!A.an || !A.buf || !(A.buf instanceof Uint8Array)){
@@ -105,7 +112,7 @@ function bands(){
   }
  }
 }
-let pRaf=0,pLast=0;function frame(ts){pRaf=0;if(document.hidden)return;pRaf=requestAnimationFrame(frame);if(ts-pLast<15.6)return;pLast=ts;bands();const s=S(),re=s.audioReactiveParticles&&s.particleDensity!=='off';cx.clearRect(0,0,cv.width,cv.height);
+let pRaf=0,pLast=0;function frame(ts){pRaf=0;if(document.hidden)return;pRaf=requestAnimationFrame(frame);if(ts-pLast<15.6)return;pLast=ts;bands();if(!ensureFxCanvas())return;const s=S(),re=s.audioReactiveParticles&&s.particleDensity!=='off';cx.clearRect(0,0,cv.width,cv.height);
  if(typeof fxParticles!=='undefined')fxParticles.forEach(p=>{if(p._r0===undefined){p._r0=p.radius;p._v0=p.vx;p._a0=p.alpha}
   if(re){p.radius=p._r0*(1+R.b*1.4);p.vx=p._v0+Math.sin(ts*.0015+p.y*.01)*R.m*1.8;p.alpha=Math.min(1,(p._a0||p.alpha)*(1+R.b*0.7))}else{p.radius=p._r0;p.vx=p._v0;if(p._a0!==undefined)p.alpha=p._a0}});
  if(!re)return;const W=innerWidth,H=innerHeight;
@@ -185,7 +192,10 @@ const sl=(k,mn,mx,st,l)=>`<input type="range" role="slider" data-set="${k}" min=
 const sel=(k,l,o)=>`<select data-set="${k}" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="${l}">${o.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select>`;
 const ck=(k,l)=>`<input type="checkbox" data-set="${k}" aria-label="${l}" class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">`;
 const row=(l,kw,b,k)=>`<div class="pp-row" data-kw="${(l+' '+kw).toLowerCase()}"><div class="pp-lab"><span>${l}</span><span data-val="${k||''}"></span></div>${b}</div>`;
-function build(){$('#pp-body').innerHTML=
+function build(){
+ const el=$('#pp-body');
+ if(!el)return;
+ el.innerHTML=
 `<section class="pp-panel" data-p="account"><div id="pp-account-container" class="space-y-4"></div></section>`+
 `<section class="pp-panel" data-p="audio">`+
 row('Master Volume','global gain loudness',sl('masterVolume',0,1,.01,'Master volume'),'masterVolume')+

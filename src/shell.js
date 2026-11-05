@@ -10,14 +10,22 @@ import { renderNotificationsView } from "./views/notificationsView.js";
 import { renderFooterHud } from "./components/footerHud.js";
 import { renderShowcaseEasterModals } from "./components/showcaseEasterModals.js";
 import { renderSystemModals } from "./components/systemModals.js";
+import { renderMultiUserModal } from "./components/multiUserModal.js";
 
 /**
  * Synchronously mounts the complete DOM structure into #app-shell before any
  * legacy or modular script executes querySelector / getElementById.
  */
 export function mountAppShell() {
-  const shell = document.getElementById("app-shell");
-  if (!shell || shell.dataset.mounted === "true") return;
+  let shell = document.getElementById("app-shell");
+  if (!shell && typeof document !== "undefined" && document.body) {
+    shell = document.createElement("div");
+    shell.id = "app-shell";
+    shell.className = "contents";
+    document.body.prepend(shell);
+  }
+  if (!shell) return;
+  if (shell.dataset.mounted === "true") return;
 
   shell.innerHTML = [
     renderHeaderNav(),
@@ -33,8 +41,15 @@ export function mountAppShell() {
     `</main>`,
     renderFooterHud(),
     renderShowcaseEasterModals(),
-    renderSystemModals()
+    renderSystemModals(),
+    renderMultiUserModal()
   ].join("\n");
 
   shell.dataset.mounted = "true";
+  console.log("[ArcShell] Application shell mounted into DOM.");
+}
+
+// Synchronously mount immediately when shell.js is evaluated
+if (typeof document !== "undefined") {
+  mountAppShell();
 }

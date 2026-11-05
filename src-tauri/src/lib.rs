@@ -93,7 +93,17 @@ pub fn enforce_window_shield(app: AppHandle, lock_on_top: bool) -> Result<(), St
     Ok(())
 }
 
-fn snapshot_file_path(app: &AppHandle) -> Result<PathBuf, String> {
+fn sanitize_user_id(user_id: Option<&str>) -> String {
+    let raw = user_id.unwrap_or("usr_primary").trim();
+    if raw.is_empty() {
+        return "usr_primary".to_string();
+    }
+    raw.chars()
+        .map(|c| if c.is_ascii_alphanumeric() || c == '_' || c == '-' { c } else { '_' })
+        .collect()
+}
+
+fn snapshot_file_path(app: &AppHandle, user_id: Option<&str>) -> Result<PathBuf, String> {
     let app_dir = app
         .path()
         .app_data_dir()
@@ -102,16 +112,23 @@ fn snapshot_file_path(app: &AppHandle) -> Result<PathBuf, String> {
         fs::create_dir_all(&app_dir)
             .map_err(|e| format!("Failed to create app_data_dir: {}", e))?;
     }
-    Ok(app_dir.join("arc_state_snapshot.json"))
+    let clean_uid = sanitize_user_id(user_id);
+    if clean_uid == "usr_primary" {
+        // Backward-compatible primary filename
+        Ok(app_dir.join("arc_state_snapshot.json"))
+    } else {
+        Ok(app_dir.join(format!("arc_state_snapshot_{}.json", clean_uid)))
+    }
 }
 
 /// Atomically writes the consolidated key-value snapshot to a temp file and renames it over
-/// `arc_state_snapshot.json` to guarantee zero corruption on sudden power loss or OS shutdown.
+/// the user's snapshot file to guarantee zero corruption on sudden power loss or OS shutdown.
 #[tauri::command]
 pub fn atomic_flush_state(
     app: AppHandle,
     flush_lock: State<'_, AtomicFlushLock>,
     payload_json: String,
+    user_id: Option<String>,
 ) -> Result<bool, String> {
     let _guard = flush_lock
         .0
@@ -122,7 +139,7 @@ pub fn atomic_flush_state(
     let _: serde_json::Value = serde_json::from_str(&payload_json)
         .map_err(|e| format!("Invalid JSON in atomic_flush_state: {}", e))?;
 
-    let final_path = snapshot_file_path(&app)?;
+    let final_path = snapshot_file_path(&app, user_id.as_deref())?;
     let tmp_path = final_path.with_extension("json.tmp");
 
     fs::write(&tmp_path, payload_json.as_bytes())
@@ -134,8 +151,11 @@ pub fn atomic_flush_state(
 }
 
 #[tauri::command]
-pub fn load_atomic_snapshot(app: AppHandle) -> Result<Option<String>, String> {
-    let path = snapshot_file_path(&app)?;
+pub fn load_atomic_snapshot(
+    app: AppHandle,
+    user_id: Option<String>,
+) -> Result<Option<String>, String> {
+    let path = snapshot_file_path(&app, user_id.as_deref())?;
     if !path.exists() {
         return Ok(None);
     }

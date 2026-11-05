@@ -1,4 +1,8 @@
 (function(){'use strict';
+const formatDateKey = d => (window.formatDateKey ? window.formatDateKey(d) : d.toISOString().split('T')[0]);
+const getArcWindow = () => (window.getArcWindow ? window.getArcWindow() : null);
+const getGradeInfo = (p, b) => (window.getGradeInfo ? window.getGradeInfo(p, b) : { grade: 'N' });
+const getTodayKey = () => (window.getTodayKey ? window.getTodayKey() : new Date().toISOString().split('T')[0]);
 const $=(s,r=document)=>r.querySelector(s),pad=n=>String(n).padStart(2,'0'),T=()=>getTodayKey(),BT=document.title;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 const toast=m=>{try{showToast(m)}catch(e){}},sfx=t=>{try{playSfx(t)}catch(e){}},save=()=>{try{saveToLocalStorage()}catch(e){}};

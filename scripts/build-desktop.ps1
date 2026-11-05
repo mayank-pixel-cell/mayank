@@ -1,5 +1,6 @@
 # PowerShell script to build Arc Tracker Desktop for Windows (.exe / .msi)
 $ErrorActionPreference = "Stop"
+$env:CARGO_TARGET_DIR = "C:\Users\vruti\.cargo_target\arc_tracker"
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "  Arc Tracker Desktop Build Automation" -ForegroundColor Cyan

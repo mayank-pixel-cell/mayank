@@ -1024,3 +1024,36 @@
             }
         }
         window.triggerGradeParticleBurst = triggerGradeParticleBurst;
+
+// Global Window Bindings for Audio & FX Canvas Engine
+const __fxStart = () => (window.__fxStart ? window.__fxStart() : undefined);
+const __fxStop = () => (window.__fxStop ? window.__fxStop() : undefined);
+
+if (typeof window !== 'undefined') {
+  window.initAudio = initAudio;
+  window.initFxCanvas = initFxCanvas;
+  window.playSfx = playSfx;
+  window.playGradeSfx = playGradeSfx;
+  window.playKeypadNote = playKeypadNote;
+  window.createClickRipple = createClickRipple;
+  window.fxParticles = fxParticles;
+  window.triggerConfettiBurst = triggerConfettiBurst;
+  window.triggerGradeParticleBurst = triggerGradeParticleBurst;
+  window.toggleAudioMute = toggleAudioMute;
+  window.__setSfxVol = __setSfxVol;
+  window.sfxOut = sfxOut;
+}
+export {
+  initAudio,
+  initFxCanvas,
+  playSfx,
+  playGradeSfx,
+  playKeypadNote,
+  createClickRipple,
+  fxParticles,
+  triggerConfettiBurst,
+  triggerGradeParticleBurst,
+  toggleAudioMute,
+  __fxStart,
+  __fxStop
+};

@@ -154,7 +154,33 @@
         let dayOverride = null;
         try { const o = parseInt(localStorage.getItem('arc_day_override'), 10); if (o > 0) dayOverride = o; } catch (e) {}
 
+        if (typeof window !== 'undefined') {
+            window.CATEGORIES = CATEGORIES;
+            window.DEFAULT_HABITS = DEFAULT_HABITS;
+            window.WINTER_ARC_QUOTES = WINTER_ARC_QUOTES;
+            window.SUMMER_ARC_QUOTES = SUMMER_ARC_QUOTES;
+            window.state = state;
+            try {
+                Object.defineProperty(window, 'dayOverride', {
+                    get() { return dayOverride; },
+                    set(v) { dayOverride = v; },
+                    configurable: true
+                });
+                Object.defineProperty(window, 'calendarCurrentDate', {
+                    get() { return calendarCurrentDate; },
+                    set(v) { calendarCurrentDate = v; },
+                    configurable: true
+                });
+                Object.defineProperty(window, 'selectedCalendarDateStr', {
+                    get() { return selectedCalendarDateStr; },
+                    set(v) { selectedCalendarDateStr = v; },
+                    configurable: true
+                });
+            } catch (e) {}
+        }
+
         function getArcWindow() {
+
             const mk = v => { const d = new Date(v + 'T00:00:00'); return isNaN(d) ? null : d; };
             let c = null; try { c = window.SettingsApp && SettingsApp.get && SettingsApp.get().arc; } catch (_) {}
             let s = c && mk(c.start), e = c && mk(c.end);
@@ -263,6 +289,63 @@
         function formatDateKey(d) {
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
+
+// Early global bindings for cross-module compatibility
+if (typeof window !== 'undefined') {
+  window.getArcWindow = getArcWindow;
+  window.getEffectiveToday = getEffectiveToday;
+  window.getTodayKey = getTodayKey;
+  window.getTodayFocusSeconds = getTodayFocusSeconds;
+  window.updateDynamicDayCounter = updateDynamicDayCounter;
+  window.syncDayState = syncDayState;
+  window.formatDateKey = formatDateKey;
+  window.formatDuration = formatDuration;
+  window.getGradeInfo = getGradeInfo;
+  window.showToast = showToast;
+  window.saveToLocalStorage = saveToLocalStorage;
+  window.saveWhatHappenedText = saveWhatHappenedText;
+  window.getLocalStorageItem = getLocalStorageItem;
+  window.setLocalStorageItem = setLocalStorageItem;
+  window.lsGetRaw = lsGetRaw;
+  window.getDurableStore = getDurableStore;
+  window.renderHabits = renderHabits;
+  window.toggleHabit = toggleHabit;
+  window.toggleHabitForDate = toggleHabitForDate;
+  window.addCustomHabit = addCustomHabit;
+  window.deleteHabit = deleteHabit;
+  window.resetTodayHabits = resetTodayHabits;
+  window.renderRulesBlueprint = renderRulesBlueprint;
+  window.updateRulesFreezeUI = updateRulesFreezeUI;
+  window.toggleStreakFreezeFromRules = toggleStreakFreezeFromRules;
+  window.renderCalendar = renderCalendar;
+  window.changeCalendarMonth = changeCalendarMonth;
+  window.stepCalendarDay = stepCalendarDay;
+  window.selectCalendarDate = selectCalendarDate;
+  window.renderCalendarDayDetail = renderCalendarDayDetail;
+  window.renderMatrix = renderMatrix;
+  window.renderSpiderWeb = renderSpiderWeb;
+  window.showCategoryDetail = showCategoryDetail;
+  window.triggerPieChartAnimation = triggerPieChartAnimation;
+  window.toggleLaptopTracker = toggleLaptopTracker;
+  window.startLaptopTimer = startLaptopTimer;
+  window.getTopProductiveDay = getTopProductiveDay;
+  window.updateDailyQuote = updateDailyQuote;
+  window.refreshDailyQuote = refreshDailyQuote;
+  window.openArcModal = openArcModal;
+  window.closeArcModal = closeArcModal;
+  window.confirmAndLaunchSummerShowcase = confirmAndLaunchSummerShowcase;
+  window.nextShowcaseSlide = nextShowcaseSlide;
+  window.prevShowcaseSlide = prevShowcaseSlide;
+  window.toggleShowcaseAutoplay = toggleShowcaseAutoplay;
+  window.closeSummerShowcase = closeSummerShowcase;
+  window.applyArcTheme = applyArcTheme;
+  window.filterSettingsView = filterSettingsView;
+  window.toggleFounderPanel = toggleFounderPanel;
+  window.switchTab = switchTab;
+  window.renderScreenTime = renderScreenTime;
+  window.renderScreenTimeView = renderScreenTime;
+}
+
 
         function formatDuration(totalSecs) {
             const h = Math.floor(totalSecs / 3600);
@@ -2055,7 +2138,7 @@ function toggleStreakFreezeFromRules(checked) {
             }
         }
 
-        window.showCategoryDetail = function(cat, pct) {
+        function showCategoryDetail(cat, pct) {
             const details = document.getElementById('pie-hover-details');
             if (details) {
                 const info = CATEGORIES[cat] || {};
@@ -2266,11 +2349,66 @@ function toggleStreakFreezeFromRules(checked) {
             renderRulesBlueprint();
             renderScreenTime();
             startLaptopTimer();
-            initFxCanvas();
-            initAppTracker();
+            if (typeof initFxCanvas === 'function') initFxCanvas(); else if (window.initFxCanvas) window.initFxCanvas();
+            if (typeof initAppTracker === 'function') initAppTracker(); else if (window.initAppTracker) window.initAppTracker();
             if (window.ArcNotifications) window.ArcNotifications.renderUi();
             if (window.ArcLeaderboardGroups) window.ArcLeaderboardGroups.init();
             if (window.ArcFaq) window.ArcFaq.init();
+        }
+
+        if (typeof window !== 'undefined') {
+          window.initApp = initApp;
+          window.state = state;
+          window.CATEGORIES = CATEGORIES;
+          window.WINTER_ARC_QUOTES = WINTER_ARC_QUOTES;
+          window.SUMMER_ARC_QUOTES = SUMMER_ARC_QUOTES;
+          window.DEFAULT_HABITS = DEFAULT_HABITS;
+          window.screenTimeData = screenTimeData;
+          window.switchTab = switchTab;
+          window.renderHabits = renderHabits;
+          window.toggleHabit = toggleHabit;
+          window.toggleHabitForDate = toggleHabitForDate;
+          window.addCustomHabit = addCustomHabit;
+          window.deleteHabit = deleteHabit;
+          window.resetTodayHabits = resetTodayHabits;
+          window.renderRulesBlueprint = renderRulesBlueprint;
+          window.updateRulesFreezeUI = updateRulesFreezeUI;
+          window.toggleStreakFreezeFromRules = toggleStreakFreezeFromRules;
+          window.renderCalendar = renderCalendar;
+          window.changeCalendarMonth = changeCalendarMonth;
+          window.stepCalendarDay = stepCalendarDay;
+          window.selectCalendarDate = selectCalendarDate;
+          window.renderCalendarDayDetail = renderCalendarDayDetail;
+          window.renderMatrix = renderMatrix;
+          window.renderSpiderWeb = renderSpiderWeb;
+          window.showCategoryDetail = showCategoryDetail;
+          window.triggerPieChartAnimation = triggerPieChartAnimation;
+          window.toggleLaptopTracker = toggleLaptopTracker;
+          window.startLaptopTimer = startLaptopTimer;
+          window.saveWhatHappenedText = saveWhatHappenedText;
+          window.formatDuration = formatDuration;
+          window.getGradeInfo = getGradeInfo;
+          window.showToast = showToast;
+          window.getTopProductiveDay = getTopProductiveDay;
+          window.updateDailyQuote = updateDailyQuote;
+          window.refreshDailyQuote = refreshDailyQuote;
+          window.openArcModal = openArcModal;
+          window.closeArcModal = closeArcModal;
+          window.confirmAndLaunchSummerShowcase = confirmAndLaunchSummerShowcase;
+          window.nextShowcaseSlide = nextShowcaseSlide;
+          window.prevShowcaseSlide = prevShowcaseSlide;
+          window.toggleShowcaseAutoplay = toggleShowcaseAutoplay;
+          window.closeSummerShowcase = closeSummerShowcase;
+          window.applyArcTheme = applyArcTheme;
+          window.filterSettingsView = filterSettingsView;
+          window.toggleFounderPanel = toggleFounderPanel;
+          window.saveToLocalStorage = saveToLocalStorage;
+          window.getLocalStorageItem = getLocalStorageItem;
+          window.setLocalStorageItem = setLocalStorageItem;
+          window.lsGetRaw = lsGetRaw;
+          window.getTodayKey = getTodayKey;
+          window.getEffectiveToday = getEffectiveToday;
+          window.renderScreenTime = renderScreenTime;
         }
 
         document.addEventListener('DOMContentLoaded', initApp);

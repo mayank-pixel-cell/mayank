@@ -94,6 +94,12 @@ export function renderHeaderNav() {
                     <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
 
+                <!-- Multi-User Operative Switcher Button -->
+                <button type="button" id="btn-header-switch-user" onclick="if(window.ArcMultiUser)ArcMultiUser.openSwitcherModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Switch or Add Operative Profile">
+                    <i class="fa-solid fa-users text-xs text-cyan-400"></i>
+                    <span id="header-switch-user-label" class="hidden lg:inline font-mono text-[11px]">@operative</span>
+                </button>
+
 
                 <!-- Black & White Mode Toggle (Arc Gold VIP) -->
                 <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • Arc Gold VIP)">
@@ -112,6 +118,12 @@ export function renderHeaderNav() {
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
                     <i class="fa-solid fa-share-nodes text-xs"></i>
                     <span class="hidden xl:inline">Share</span>
+                </button>
+
+                <!-- Fullscreen Toggle Button -->
+                <button role="button" id="btn-toggle-fullscreen" onclick="if(window.toggleFullscreen)window.toggleFullscreen()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Fullscreen (F11)">
+                    <i id="header-fullscreen-icon" class="fa-solid fa-expand text-xs"></i>
+                    <span class="hidden xl:inline text-[11px]">Fullscreen</span>
                 </button>
 
                 <span id="btn-audio-toggle" class="hidden" aria-hidden="true"><i id="audio-icon"></i></span>

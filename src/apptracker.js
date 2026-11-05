@@ -1884,6 +1884,8 @@ import { arcStorage } from './storage.js';
             if (h > 0) return `${h}h ${m}m`;
             return `${m}m`;
         }
+window.formatDurationShort = formatDurationShort;
+
 
         function updateCrossDeviceScreenTimeUI() {
             const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);

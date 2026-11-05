@@ -1,5 +1,6 @@
 import "./styles/main.css";
 import { mountAppShell } from "./shell.js";
+import "./globals.js";
 
 // 1. Mount DOM synchronously so all IDs exist immediately
 mountAppShell();
@@ -30,6 +31,7 @@ import "./modules/rpgKnowledgeEngine.js";
 import "./modules/easterEggsEngine.js";
 import "./modules/googleSyncComparison.js";
 import "./modules/mobilePermissions.js";
+import "./modules/multiUserEngine.js";
 
 async function bootstrapArcTracker() {
   try {
@@ -38,6 +40,9 @@ async function bootstrapArcTracker() {
     }
     if (typeof window.initApp === "function") {
       window.initApp();
+    }
+    if (window.ArcMultiUser && typeof window.ArcMultiUser.init === "function") {
+      window.ArcMultiUser.init();
     }
   } catch (err) {
     console.error("[ArcMain] Bootstrap error:", err);

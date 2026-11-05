@@ -175,10 +175,16 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
  const GLOW='transition-all duration-300 ease-out hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]';
  const BTN='px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700 bg-slate-900 text-slate-200 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] disabled:opacity-40';
  const IN='bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400';
- const catOpts=sel=>Object.keys(CATEGORIES).map(c=>'<option'+(c===sel?' selected':'')+'>'+c+'</option>').join('');
+ const catOpts=sel=>Object.keys(window.CATEGORIES||{}).map(c=>'<option'+(c===sel?' selected':'')+'>'+c+'</option>').join('');
  const wOpts=w=>[...new Set([1,2,3,w])].sort((a,b)=>a-b).map(n=>'<option value="'+n+'"'+(n==w?' selected':'')+'>'+n+'x</option>').join('');
- const commit=msg=>{saveToLocalStorage();renderHabits();renderRulesBlueprint();if(window.renderHabitManager)renderHabitManager();if(msg)showToast(msg)};
- let lastKey=getTodayKey();
+ const commit=msg=>{
+   if(window.saveToLocalStorage) window.saveToLocalStorage();
+   if(window.renderHabits) window.renderHabits();
+   if(window.renderRulesBlueprint) window.renderRulesBlueprint();
+   if(window.renderHabitManager) window.renderHabitManager();
+   if(msg && window.showToast) window.showToast(msg);
+ };
+ let lastKey=window.getTodayKey ? window.getTodayKey() : (typeof getTodayKey==='function'?getTodayKey():new Date().toISOString().split('T')[0]);
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
@@ -186,26 +192,28 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
  /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
  {const cn=$('custom-habit-name'),cb=cn&&cn.closest('.glass-card'),mgr=$('p20-habit-manager');
-  if(cb&&mgr){cb.className='mt-4 pt-4 border-t border-slate-800 space-y-3';mgr.appendChild(cb);cn.addEventListener('keydown',e=>{if(e.key==='Enter')addCustomHabit()})}}
+  if(cb&&mgr){cb.className='mt-4 pt-4 border-t border-slate-800 space-y-3';mgr.appendChild(cb);cn.addEventListener('keydown',e=>{if(e.key==='Enter'&&window.addCustomHabit)window.addCustomHabit()})}}
 
  window.renderDayControl=function(){
   const c=$('p20-day');if(!c)return;
-  const w=getArcWindow(),t=getEffectiveToday(),day=Math.round((t-w.start)/864e5)+1;
+  const w=(window.getArcWindow?window.getArcWindow():getArcWindow()),t=(window.getEffectiveToday?window.getEffectiveToday():getEffectiveToday()),day=Math.round((t-w.start)/864e5)+1;
   const f=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const dOverride=(typeof window!=='undefined'&&window.dayOverride!==undefined)?window.dayOverride:(typeof dayOverride!=='undefined'?dayOverride:null);
   c.innerHTML='<h3 class="font-extrabold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-calendar-day text-cyan-400"></i> Day counter</h3>'+
    '<p class="text-[11px] text-slate-400 mt-1 mb-3">Follows your device clock. Active arc: '+f(w.start)+' to '+f(w.end)+'. Change the dates under Arc &amp; timeline below.</p>'+
-   '<div class="text-xs text-slate-200 font-mono mb-3">'+(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)+' \u00B7 '+f(t)+' <span class="'+(dayOverride?'text-amber-300':'text-emerald-400')+'">'+(dayOverride?'manual override':'live')+'</span></div>'+
-   '<div class="flex flex-wrap items-center gap-2"><input id="p20-day-in" type="number" inputmode="numeric" min="1" max="'+w.total+'" value="'+(dayOverride||'')+'" placeholder="Day 1-'+w.total+'" aria-label="Manual day override" class="'+IN+' w-28">'+
+   '<div class="text-xs text-slate-200 font-mono mb-3">'+(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)+' \u00B7 '+f(t)+' <span class="'+(dOverride?'text-amber-300':'text-emerald-400')+'">'+(dOverride?'manual override':'live')+'</span></div>'+
+   '<div class="flex flex-wrap items-center gap-2"><input id="p20-day-in" type="number" inputmode="numeric" min="1" max="'+w.total+'" value="'+(dOverride||'')+'" placeholder="Day 1-'+w.total+'" aria-label="Manual day override" class="'+IN+' w-28">'+
    '<button type="button" onclick="setDayOverride(document.getElementById(\'p20-day-in\').value)" class="'+BTN+'">Jump to day</button>'+
-   '<button type="button" onclick="clearDayOverride()" '+(dayOverride?'':'disabled ')+'class="'+BTN+'">Back to today</button></div>';
+   '<button type="button" onclick="clearDayOverride()" '+(dOverride?'':'disabled ')+'class="'+BTN+'">Back to today</button></div>';
  };
 
  window.renderHabitManager=function(force){
   const box=$('p20-hm');if(!box)return;
   const a=document.activeElement;
   if(!force&&box.contains(a)&&a.tagName==='INPUT')return;
-  const n=state.habits.length;
-  box.innerHTML=n?state.habits.map((h,i)=>
+  const habits=(window.state&&window.state.habits)?window.state.habits:[];
+  const n=habits.length;
+  box.innerHTML=n?habits.map((h,i)=>
    '<div class="hm-row flex items-center gap-1.5 p-2 rounded-xl bg-slate-950/80 border border-slate-800 '+GLOW+'">'+
    '<div class="flex flex-col shrink-0"><button type="button" onclick="p20.mv(\''+h.id+'\',-1)" '+(i?'':'disabled ')+'aria-label="Move '+esc(h.name)+' up" class="px-1.5 py-0.5 text-[10px] leading-none text-slate-400 hover:text-cyan-300 disabled:opacity-30">\u25B2</button>'+
    '<button type="button" onclick="p20.mv(\''+h.id+'\',1)" '+(i<n-1?'':'disabled ')+'aria-label="Move '+esc(h.name)+' down" class="px-1.5 py-0.5 text-[10px] leading-none text-slate-400 hover:text-cyan-300 disabled:opacity-30">\u25BC</button></div>'+
@@ -217,36 +225,68 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
  };
 
  window.p20={
-  find:id=>state.habits.find(h=>h.id===id),
-  mv(id,d){const a=state.habits,i=a.findIndex(h=>h.id===id),j=i+d;if(i<0||j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];playSfx('click');commit()},
-  rn(id,v){const h=this.find(id);v=v.trim();if(!h)return;if(!v){showToast('Habit name cannot be empty');renderHabitManager(true);return}h.name=v;commit('Habit renamed')},
+  find:id=>(window.state&&window.state.habits?window.state.habits.find(h=>h.id===id):null),
+  mv(id,d){
+    const a=window.state?window.state.habits:[];
+    const i=a.findIndex(h=>h.id===id),j=i+d;
+    if(i<0||j<0||j>=a.length)return;
+    [a[i],a[j]]=[a[j],a[i]];
+    if(window.playSfx)window.playSfx('click');
+    commit();
+  },
+  rn(id,v){
+    const h=this.find(id);v=v.trim();if(!h)return;
+    if(!v){if(window.showToast)window.showToast('Habit name cannot be empty');renderHabitManager(true);return}
+    h.name=v;commit('Habit renamed');
+  },
   ct(id,v){const h=this.find(id);if(h){h.category=v;commit()}},
   wt(id,v){const h=this.find(id);if(h){h.weight=parseInt(v,10)||1;commit('Weight updated')}},
-  rm(id){const h=this.find(id);if(!h||!confirm('Delete "'+h.name+'"? Past check-ins stay saved, but this habit stops counting toward scores.'))return;state.habits=state.habits.filter(x=>x.id!==id);playSfx('click');commit('Habit removed');if(window.renderHabitManager)renderHabitManager(true)}
+  rm(id){
+    const h=this.find(id);if(!h||!confirm('Delete "'+h.name+'"? Past check-ins stay saved, but this habit stops counting toward scores.'))return;
+    if(window.state&&window.state.habits) window.state.habits=window.state.habits.filter(x=>x.id!==id);
+    if(window.playSfx)window.playSfx('click');
+    commit('Habit removed');
+    if(window.renderHabitManager)renderHabitManager(true);
+  }
  };
 
  function rollover(){
-  syncDayState();lastKey=getTodayKey();
-  const t=getEffectiveToday();calendarCurrentDate=new Date(t.getFullYear(),t.getMonth(),1);selectedCalendarDateStr=lastKey;
-  renderHabits();renderDayControl();
+  if(window.syncDayState) window.syncDayState();
+  lastKey=window.getTodayKey?window.getTodayKey():new Date().toISOString().split('T')[0];
+  const t=(window.getEffectiveToday?window.getEffectiveToday():new Date());
+  if(typeof window!=='undefined'){
+    window.calendarCurrentDate=new Date(t.getFullYear(),t.getMonth(),1);
+    window.selectedCalendarDateStr=lastKey;
+  }
+  if(window.renderHabits) window.renderHabits();
+  renderDayControl();
  }
  window.setDayOverride=function(v){
-  const w=getArcWindow(),n=parseInt(v,10);
-  if(!(n>=1&&n<=w.total)){showToast('Pick a day between 1 and '+w.total);return}
-  dayOverride=n;try{localStorage.setItem('arc_day_override',String(n))}catch(e){}
-  playSfx('click');rollover();showToast('Jumped to day '+n);
+  const w=(window.getArcWindow?window.getArcWindow():{total:90}),n=parseInt(v,10);
+  if(!(n>=1&&n<=w.total)){if(window.showToast)window.showToast('Pick a day between 1 and '+w.total);return}
+  if(typeof window!=='undefined') window.dayOverride=n;
+  try{localStorage.setItem('arc_day_override',String(n))}catch(e){}
+  if(window.playSfx)window.playSfx('click');
+  rollover();
+  if(window.showToast)window.showToast('Jumped to day '+n);
  };
  window.clearDayOverride=function(){
-  dayOverride=null;try{localStorage.removeItem('arc_day_override')}catch(e){}
-  playSfx('click');rollover();showToast('Following today\u2019s date');
+  if(typeof window!=='undefined') window.dayOverride=null;
+  try{localStorage.removeItem('arc_day_override')}catch(e){}
+  if(window.playSfx)window.playSfx('click');
+  rollover();
+  if(window.showToast)window.showToast('Following today\u2019s date');
  };
  window.openHabitManager=function(){
-  switchTab('rules');
+  if(window.switchTab) window.switchTab('rules');
   setTimeout(()=>{const e=$('p20-habit-manager');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60);
  };
 
  /* midnight rollover while the app stays open */
- const tick=()=>{if(getTodayKey()!==lastKey)rollover()};
+ const tick=()=>{
+   const curKey=window.getTodayKey?window.getTodayKey():null;
+   if(curKey&&curKey!==lastKey)rollover();
+ };
  setInterval(tick,30000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()});
  renderDayControl();renderHabitManager(true);
