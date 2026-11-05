@@ -1,0 +1,12 @@
+@import "./calendar-grades.css";
+@import "./animations-panels.css";
+@import "./themes-light-mode.css";
+@import "./screentime-cyber.css";
+@import "./pro13-settings-ax.css";
+@import "./rpg-overhaul.css";
+@import "./liquid-glass.css";
+@import "./bw-monochrome.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

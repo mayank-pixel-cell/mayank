@@ -1,0 +1,1265 @@
+.st-cyber-ambient {
+    position: relative;
+}
+.st-cyber-ambient::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.4), rgba(168,85,247,0.2), rgba(6,182,212,0.05));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* 2. Holographic Radar Shield Dial */
+.st-radar-dial {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(13,19,34,0.9) 70%);
+    border: 1px solid rgba(6,182,212,0.35);
+    box-shadow: 0 0 24px rgba(6,182,212,0.22), inset 0 0 16px rgba(6,182,212,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.st-radar-ring-outer {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(6,182,212,0.5);
+    animation: stRotateCW 18s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-ring-inner {
+    position: absolute;
+    inset: 13px;
+    border-radius: 50%;
+    border: 1px dashed rgba(168,85,247,0.45);
+    animation: stRotateCCW 11s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-crosshair {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.st-radar-crosshair::before, .st-radar-crosshair::after {
+    content: '';
+    position: absolute;
+    background: rgba(6,182,212,0.25);
+}
+.st-radar-crosshair::before {
+    top: 50%; left: 5px; right: 5px; height: 1px;
+    transform: translateY(-50%);
+}
+.st-radar-crosshair::after {
+    left: 50%; top: 5px; bottom: 5px; width: 1px;
+    transform: translateX(-50%);
+}
+
+.st-radar-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(6,182,212,0.08) 310deg, rgba(6,182,212,0.5) 360deg);
+    animation: stRotateCW 3.2s linear infinite;
+    pointer-events: none;
+}
+
+.st-radar-blip {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #00F0FF;
+    box-shadow: 0 0 8px #00F0FF;
+    animation: stBlipPulse 2.4s infinite ease-out;
+}
+.st-radar-blip-1 { top: 26%; left: 30%; animation-delay: 0.2s; }
+.st-radar-blip-2 { top: 66%; left: 66%; animation-delay: 1.1s; background: #A855F7; box-shadow: 0 0 8px #A855F7; }
+.st-radar-blip-3 { top: 35%; left: 72%; animation-delay: 1.8s; background: #10B981; box-shadow: 0 0 8px #10B981; }
+
+@keyframes stRotateCW {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes stRotateCCW {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+@keyframes stBlipPulse {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* 3. Synapse Data Stream Highway */
+.st-synapse-stream {
+    position: relative;
+    overflow: hidden;
+}
+.st-synapse-stream::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.85), rgba(168,85,247,0.95), transparent);
+    background-size: 200% 100%;
+    animation: stSynapseFlow 2.6s linear infinite;
+}
+@keyframes stSynapseFlow {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Specular Light Sweep for Combined Card */
+.st-specular-sweep {
+    position: relative;
+    overflow: hidden;
+}
+.st-specular-sweep::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 60%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), rgba(6,182,212,0.22), transparent);
+    transform: rotate(25deg);
+    animation: stSpecularSweep 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+@keyframes stSpecularSweep {
+    0% { left: -120%; }
+    40%, 100% { left: 220%; }
+}
+
+/* 4. Active App Cyber Equalizer */
+.st-equalizer {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 18px;
+    padding: 0 4px;
+}
+.st-eq-bar {
+    width: 3.5px;
+    border-radius: 9999px;
+    background: linear-gradient(to top, #06B6D4, #A855F7);
+    box-shadow: 0 0 6px rgba(6,182,212,0.6);
+    animation: stEqBounce 1.2s infinite ease-in-out;
+}
+.st-eq-bar:nth-child(1) { height: 45%; animation-delay: 0.1s; }
+.st-eq-bar:nth-child(2) { height: 85%; animation-delay: 0.35s; }
+.st-eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+.st-eq-bar:nth-child(4) { height: 100%; animation-delay: 0.45s; }
+.st-eq-bar:nth-child(5) { height: 50%; animation-delay: 0.15s; }
+
+@keyframes stEqBounce {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.6; }
+    50% { transform: scaleY(1); opacity: 1; filter: brightness(1.25); }
+}
+
+/* 5. Liquid Striped Progress Bars with Glowing Spark Head */
+.st-progress-track {
+    position: relative;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    height: 9px;
+    overflow: visible;
+}
+
+.st-progress-fill {
+    position: relative;
+    height: 100%;
+    border-radius: 9999px;
+    background-size: 24px 24px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 12px rgba(6,182,212,0.4);
+}
+
+.st-progress-fill-normal {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.18) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.18) 50%,
+        rgba(255,255,255,0.18) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #06B6D4, #3B82F6);
+    animation: stStripes 1.8s linear infinite;
+}
+
+.st-progress-fill-warning {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0.2) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #F59E0B, #EF4444);
+    animation: stStripes 1.2s linear infinite;
+    box-shadow: 0 0 14px rgba(245,158,11,0.6);
+}
+
+.st-progress-fill-locked {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.25) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.25) 50%,
+        rgba(255,255,255,0.25) 75%,
+        transparent 75%,
+        transparent
+    ), linear-gradient(90deg, #EF4444, #991B1B);
+    animation: stStripes 0.9s linear infinite;
+    box-shadow: 0 0 16px rgba(239,68,68,0.7);
+}
+
+@keyframes stStripes {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 24px 0, 0 0; }
+}
+
+.st-spark-head {
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 0 8px #00F0FF, 0 0 16px #00F0FF, 0 0 24px #38BDF8;
+    animation: stSparkGlow 1.4s infinite alternate;
+}
+@keyframes stSparkGlow {
+    from { transform: translateY(-50%) scale(0.85); box-shadow: 0 0 6px #00F0FF, 0 0 12px #00F0FF; }
+    to { transform: translateY(-50%) scale(1.2); box-shadow: 0 0 12px #FFFFFF, 0 0 22px #00F0FF, 0 0 30px #38BDF8; }
+}
+
+/* 6. Dynamic Category Edge Auras */
+.st-card-social {
+    box-shadow: 0 8px 24px -4px rgba(236,72,153,0.18), inset 0 0 0 1px rgba(236,72,153,0.22);
+}
+.st-card-social:hover {
+    box-shadow: 0 12px 32px -4px rgba(236,72,153,0.32), inset 0 0 0 1px rgba(236,72,153,0.45);
+    border-color: rgba(236,72,153,0.5) !important;
+}
+
+.st-card-entertainment {
+    box-shadow: 0 8px 24px -4px rgba(244,63,94,0.18), inset 0 0 0 1px rgba(244,63,94,0.22);
+}
+.st-card-entertainment:hover {
+    box-shadow: 0 12px 32px -4px rgba(244,63,94,0.32), inset 0 0 0 1px rgba(244,63,94,0.45);
+    border-color: rgba(244,63,94,0.5) !important;
+}
+
+.st-card-productivity {
+    box-shadow: 0 8px 24px -4px rgba(6,182,212,0.18), inset 0 0 0 1px rgba(6,182,212,0.22);
+}
+.st-card-productivity:hover {
+    box-shadow: 0 12px 32px -4px rgba(6,182,212,0.32), inset 0 0 0 1px rgba(6,182,212,0.45);
+    border-color: rgba(6,182,212,0.5) !important;
+}
+
+.st-card-gaming {
+    box-shadow: 0 8px 24px -4px rgba(168,85,247,0.18), inset 0 0 0 1px rgba(168,85,247,0.22);
+}
+.st-card-gaming:hover {
+    box-shadow: 0 12px 32px -4px rgba(168,85,247,0.32), inset 0 0 0 1px rgba(168,85,247,0.45);
+    border-color: rgba(168,85,247,0.5) !important;
+}
+
+/* Card States: Active, Warning, Locked */
+.st-app-card-active {
+    border-color: rgba(6,182,212,0.85) !important;
+    box-shadow: 0 0 28px rgba(6,182,212,0.3), inset 0 0 16px rgba(6,182,212,0.12) !important;
+    animation: stActiveCardGlow 2.5s infinite ease-in-out;
+}
+@keyframes stActiveCardGlow {
+    0%, 100% { box-shadow: 0 0 18px rgba(6,182,212,0.25), inset 0 0 10px rgba(6,182,212,0.08); }
+    50% { box-shadow: 0 0 32px rgba(6,182,212,0.45), inset 0 0 20px rgba(6,182,212,0.2); }
+}
+
+.st-app-card-warning {
+    border-color: rgba(245,158,11,0.8) !important;
+    box-shadow: 0 0 24px rgba(245,158,11,0.3), inset 0 0 12px rgba(245,158,11,0.1) !important;
+}
+
+.st-app-card-locked {
+    border-color: rgba(239,68,68,0.85) !important;
+    box-shadow: 0 0 28px rgba(239,68,68,0.35), inset 0 0 16px rgba(239,68,68,0.15) !important;
+    animation: stLockedPulse 2s infinite ease-in-out;
+}
+@keyframes stLockedPulse {
+    0%, 100% { border-color: rgba(239,68,68,0.6); }
+    50% { border-color: rgba(239,68,68,1); }
+}
+
+@keyframes arcStrictShake {
+    0%, 100% { transform: translateX(0) scale(1); }
+    15%, 45%, 75% { transform: translateX(-8px) scale(1.02); }
+    30%, 60%, 90% { transform: translateX(8px) scale(1.02); }
+}
+.arc-strict-shake {
+    animation: arcStrictShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* 7. Light Mode Overrides */
+html[data-mode=light] .st-radar-dial {
+    background: radial-gradient(circle, rgba(2,132,199,0.1) 0%, rgba(248,250,252,0.95) 70%) !important;
+    border-color: rgba(2,132,199,0.35) !important;
+    box-shadow: 0 4px 18px rgba(2,132,199,0.18), inset 0 0 12px rgba(2,132,199,0.1) !important;
+}
+html[data-mode=light] .st-radar-ring-outer {
+    border-color: rgba(2,132,199,0.5) !important;
+}
+html[data-mode=light] .st-radar-ring-inner {
+    border-color: rgba(124,58,237,0.45) !important;
+}
+html[data-mode=light] .st-radar-sweep {
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(2,132,199,0.08) 310deg, rgba(2,132,199,0.35) 360deg) !important;
+}
+html[data-mode=light] .st-progress-track {
+    background: #E2E8F0 !important;
+    border-color: #CBD5E1 !important;
+}
+html[data-mode=light] .st-spark-head {
+    box-shadow: 0 0 8px #0284C7, 0 0 16px #0284C7 !important;
+}
+html[data-mode=light] .st-card-social {
+    box-shadow: 0 4px 16px -2px rgba(236,72,153,0.15), inset 0 0 0 1px rgba(236,72,153,0.25) !important;
+}
+html[data-mode=light] .st-card-entertainment {
+    box-shadow: 0 4px 16px -2px rgba(244,63,94,0.15), inset 0 0 0 1px rgba(244,63,94,0.25) !important;
+}
+html[data-mode=light] .st-card-productivity {
+    box-shadow: 0 4px 16px -2px rgba(2,132,199,0.15), inset 0 0 0 1px rgba(2,132,199,0.25) !important;
+}
+html[data-mode=light] .st-card-gaming {
+    box-shadow: 0 4px 16px -2px rgba(124,58,237,0.15), inset 0 0 0 1px rgba(124,58,237,0.25) !important;
+}
+
+/* Light mode app cards & text clarity */
+html[data-mode=light] #st-apps-grid > div {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: rgba(203, 213, 225, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+html[data-mode=light] #st-apps-grid h4,
+html[data-mode=light] #st-apps-grid [id^="st-active-counter-"] {
+    color: #0F172A !important;
+}
+html[data-mode=light] #st-active-app-status-container .bg-cyan-950\/70 {
+    background: rgba(224, 242, 254, 0.9) !important;
+    border-color: rgba(2, 132, 199, 0.45) !important;
+    box-shadow: 0 2px 12px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] #st-active-app-status-container strong {
+    color: #0369A1 !important;
+}
+html[data-mode=light] #st-active-app-status-container .st-equalizer .st-eq-bar {
+    background: #0284C7 !important;
+    box-shadow: 0 0 6px rgba(2, 132, 199, 0.6) !important;
+}
+html[data-mode=light] #view-screentime .bg-slate-950\/70,
+html[data-mode=light] #view-screentime .bg-slate-950\/80 {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+html[data-mode=light] #st-app-launcher-pills button:not(.bg-cyan-500) {
+    background: rgba(241, 245, 249, 0.95) !important;
+    color: #334155 !important;
+    border-color: #CBD5E1 !important;
+}
+html[data-mode=light] #st-app-launcher-pills button.bg-cyan-500 {
+    background: #0284C7 !important;
+    color: #FFFFFF !important;
+    border-color: #0284C7 !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+html[data-mode=light] #st-combined-time-val {
+    background: linear-gradient(90deg, #0284C7, #4F46E5) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+html[data-mode=light] #st-radar-shield-score {
+    color: #0369A1 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: COMFORT & ACCESSIBILITY & SETTINGS CHIPS
+   Fixes dark bar and black-on-black text in #ax-keep (Reverting in 8s bar)
+   ========================================================================== */
+html[data-mode=light] .sx-hr {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #ax-keep {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #ax-keep span,
+html[data-mode=light] #ax-kt {
+    color: #0f172a !important;
+    font-weight: 600 !important;
+}
+html[data-mode=light] .sx-chip {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] .sx-chip:hover {
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #ax-keep .sx-chip,
+html[data-mode=light] button[data-x="keep"] {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3) !important;
+}
+html[data-mode=light] #ax-keep .sx-chip:hover,
+html[data-mode=light] button[data-x="keep"]:hover {
+    background: #0369a1 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: SCREEN TIME HISTORICAL ANALYTICS & COMPARISONS
+   Fixes pitch-dark cards with unreadable black text in Screen Time tab
+   ========================================================================== */
+html[data-mode=light] #st-historical-analytics-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #st-historical-analytics-card .bg-gradient-to-br,
+html[data-mode=light] #st-historical-analytics-card [class*="from-slate-950"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] #st-historical-analytics-card .bg-slate-950,
+html[data-mode=light] #st-historical-analytics-card [class*="bg-slate-950/70"],
+html[data-mode=light] #st-historical-analytics-card [class*="bg-slate-950/80"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-historical-analytics-card .border-slate-800,
+html[data-mode=light] #st-historical-analytics-card [class*="border-slate-800/80"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-historical-analytics-card h3,
+html[data-mode=light] #st-historical-analytics-card h4 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-historical-analytics-card p {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-weekly-top-app-name {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-weekly-top-app-cat {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-weekly-top-app-time {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard .bg-slate-900 {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-weekly-apps-leaderboard span.text-cyan-300 {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix > div {
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix [class*="bg-emerald-950/40"] {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-emerald-400 {
+    color: #047857 !important;
+}
+html[data-mode=light] #st-sub4-days-matrix [class*="bg-rose-950/40"] {
+    background: rgba(244, 63, 94, 0.12) !important;
+    border-color: rgba(244, 63, 94, 0.35) !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-rose-400 {
+    color: #be123c !important;
+}
+html[data-mode=light] #st-sub4-days-matrix .text-slate-400 {
+    color: #334155 !important;
+}
+html[data-mode=light] #st-historical-analytics-card button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0284c7 !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #st-historical-analytics-card button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box {
+    background: rgba(254, 243, 199, 0.65) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box .text-amber-300 {
+    color: #b45309 !important;
+}
+html[data-mode=light] #st-mobile-unlinked-box p {
+    color: #475569 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: ARC GOLD MEMBERSHIP CARD
+   ========================================================================== */
+html[data-mode=light] #settings-gold-card > div {
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.7) 0%, rgba(255, 255, 255, 0.98) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.08) !important;
+}
+html[data-mode=light] #settings-gold-card h2,
+html[data-mode=light] #settings-gold-card h3,
+html[data-mode=light] #settings-gold-card h4,
+html[data-mode=light] #settings-gold-card .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-gold-card p,
+html[data-mode=light] #settings-gold-card li span {
+    color: #334155 !important;
+}
+html[data-mode=light] #settings-gold-card .under-construction-badge {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #92400e !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
+}
+html[data-mode=light] #settings-gold-card [class*="from-slate-950/80"] {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+}
+html[data-mode=light] #settings-gold-card [class*="bg-slate-950/70"],
+html[data-mode=light] #settings-gold-card [class*="bg-slate-950/60"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card .border-slate-800,
+html[data-mode=light] #settings-gold-card [class*="border-slate-800/80"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #settings-gold-card button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-gold-card .gold-plan-card-active {
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.85) 0%, #ffffff 100%) !important;
+    border-color: rgba(245, 158, 11, 0.9) !important;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2) !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: CUSTOM BACKGROUND SETTINGS CARD
+   ========================================================================== */
+html[data-mode=light] #settings-custom-bg-card {
+    background: #ffffff !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+html[data-mode=light] #settings-custom-bg-card h3,
+html[data-mode=light] #settings-custom-bg-card .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-custom-bg-card p,
+html[data-mode=light] #settings-custom-bg-card .text-slate-400,
+html[data-mode=light] #settings-custom-bg-card .text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] #settings-custom-bg-card [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-custom-bg-card [class*="bg-slate-800"] {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #settings-custom-bg-card .border-slate-800,
+html[data-mode=light] #settings-custom-bg-card [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   LIGHT MODE: MODALS (PHONE LINKING & SCREEN TIME SHARING)
+   ========================================================================== */
+html[data-mode=light] #home-store-rating-section {
+    background: #ffffff !important;
+    border-color: rgba(6, 182, 212, 0.35) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+html[data-mode=light] #home-store-rating-section h2,
+html[data-mode=light] #home-store-rating-section h3,
+html[data-mode=light] #home-store-rating-section .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #home-store-rating-section p,
+html[data-mode=light] #home-store-rating-section .text-slate-300,
+html[data-mode=light] #home-store-rating-section .text-slate-400 {
+    color: #334155 !important;
+}
+html[data-mode=light] #home-store-rating-section .store-card,
+html[data-mode=light] #home-store-rating-section [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #home-store-rating-section .border-slate-800,
+html[data-mode=light] #home-store-rating-section [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-store-rating-modal > div {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16) !important;
+}
+html[data-mode=light] #arc-store-rating-modal h3,
+html[data-mode=light] #arc-store-rating-modal h4,
+html[data-mode=light] #arc-store-rating-modal .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-store-rating-modal p,
+html[data-mode=light] #arc-store-rating-modal .text-slate-300,
+html[data-mode=light] #arc-store-rating-modal .text-slate-400 {
+    color: #475569 !important;
+}
+html[data-mode=light] #arc-store-rating-modal [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-store-rating-modal button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* SCANNER VIEWPORT LASER ANIMATION */
+.arc-qr-scan-line {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.9) 20%, rgba(6, 182, 212, 1) 50%, rgba(168, 85, 247, 0.9) 80%, transparent 100%);
+    box-shadow: 0 0 12px #06b6d4, 0 0 5px #a855f7;
+    border-radius: 9999px;
+    top: 12px;
+    animation: arcQrLaserSweep 2.4s ease-in-out infinite alternate;
+}
+@keyframes arcQrLaserSweep {
+    0% { top: 12px; opacity: 0.85; }
+    50% { opacity: 1; }
+    100% { top: calc(100% - 15px); opacity: 0.85; }
+}
+
+html[data-mode=light] #arc-phone-linking-modal > div,
+html[data-mode=light] #arc-screentime-share-modal > div,
+html[data-mode=light] #arc-confirm-pairing-modal > div,
+html[data-mode=light] #arc-disconnect-warning-modal > div {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16) !important;
+}
+html[data-mode=light] #arc-phone-linking-modal h3,
+html[data-mode=light] #arc-screentime-share-modal h3,
+html[data-mode=light] #arc-confirm-pairing-modal h3,
+html[data-mode=light] #arc-disconnect-warning-modal h3 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-phone-linking-modal p,
+html[data-mode=light] #arc-screentime-share-modal p,
+html[data-mode=light] #arc-confirm-pairing-modal p,
+html[data-mode=light] #arc-disconnect-warning-modal p {
+    color: #475569 !important;
+}
+html[data-mode=light] #st-share-preview-card {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-share-preview-card [class*="bg-slate-900/80"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #st-share-preview-card span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #st-share-name,
+html[data-mode=light] #st-share-combined-time {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-slate-950/80"],
+html[data-mode=light] #arc-confirm-pairing-modal [class*="bg-slate-950/80"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-phone-linking-modal .bg-slate-900,
+html[data-mode=light] #arc-confirm-pairing-modal .bg-slate-900 {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #arc-disconnect-warning-modal [class*="bg-rose-950/30"] {
+    background: #fff1f2 !important;
+    border-color: #fecdd3 !important;
+}
+html[data-mode=light] #arc-disconnect-warning-modal [class*="text-slate-300"] {
+    color: #334155 !important;
+}
+html[data-mode=light] #arc-disconnect-warning-modal [class*="text-white"] {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] {
+    background: #ecfeff !important;
+    border-color: #a5f3fc !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-slate-300,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] .text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-cyan-200,
+html[data-mode=light] #arc-phone-linking-modal [class*="bg-cyan-950/"] .text-cyan-300 {
+    color: #0891b2 !important;
+}
+html[data-mode=light] #arc-confirm-browser-banner .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-phone-linking-modal button.bg-slate-800,
+html[data-mode=light] #arc-screentime-share-modal button.bg-slate-800,
+html[data-mode=light] #arc-confirm-pairing-modal button.bg-slate-800,
+html[data-mode=light] #arc-disconnect-warning-modal button.bg-slate-800,
+html[data-mode=light] #arc-disconnect-warning-modal button.bg-slate-800\/90 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* ==========================================================================
+   ENHANCED LIGHT MODE: NOTIFICATIONS, FAQ, FOUNDER & ELEVATED CONTROLS
+   High-contrast, frosted glass, WCAG AAA compliant, pristine modern aesthetic
+   ========================================================================== */
+
+/* 1. Header Notification Button & Badges */
+html[data-mode=light] #btn-header-notifications {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #btn-header-notifications:hover {
+    background: #f8fafc !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #header-notif-badge,
+html[data-mode=light] #nav-notif-badge {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35) !important;
+}
+
+/* 2. Header Black & White Toggle Button in Light Mode */
+html[data-mode=light] #btn-header-bw:not(.bg-white):not(.bg-black) {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+}
+html[data-mode=light] #btn-header-bw:not(.bg-white):not(.bg-black):hover {
+    background: #f8fafc !important;
+    border-color: #64748b !important;
+}
+
+/* 3. Corner Floating Notifications Tab & Drawer */
+html[data-mode=light] #arc-notifications-pill {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #arc-notifications-pill:hover {
+    background: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] #arc-notifications-pill #arc-notif-bell-icon {
+    color: #0284c7 !important;
+}
+html[data-mode=light] #arc-notif-count-badge {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #arc-notifications-drawer {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 20px 45px -8px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.04) !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer h3 {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer .text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #arc-notifications-drawer .bg-slate-950\/95,
+html[data-mode=light] #arc-notifications-drawer [class*="bg-slate-950"] {
+    background: #ffffff !important;
+}
+html[data-mode=light] #arc-notifications-drawer [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-notifications-drawer button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer [id^="filter-btn-"]:not(.bg-cyan-500\/20) {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-notifications-drawer [id^="filter-btn-"].bg-cyan-500\/20 {
+    background: #e0f2fe !important;
+    color: #0284c7 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* Notification Items in Drawer & Hub */
+html[data-mode=light] [data-notif-id]:hover {
+    border-color: #0284c7 !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08) !important;
+}
+html[data-mode=light] [data-notif-id] h4.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] [data-notif-id] h4.text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] [data-notif-id] p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] [data-notif-id] span.font-mono {
+    color: #64748b !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-cyan-500/15"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-purple-500/15"] {
+    background: #f3e8ff !important;
+    color: #7e22ce !important;
+    border-color: #e9d5ff !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-slate-900/90"] {
+    background: #f0f9ff !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.07) !important;
+}
+html[data-mode=light] [data-notif-id] [class*="bg-slate-950/60"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* 4. Full-page Notifications Hub (#view-notifications) */
+html[data-mode=light] #view-notifications .glass-card,
+html[data-mode=light] #view-notifications [class*="bg-slate-900"],
+html[data-mode=light] #view-notifications [class*="bg-slate-950"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #view-notifications h1,
+html[data-mode=light] #view-notifications h2,
+html[data-mode=light] #view-notifications h3,
+html[data-mode=light] #view-notifications .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #view-notifications p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #view-notifications button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] #view-notifications button.bg-slate-800:hover {
+    background: #e2e8f0 !important;
+    border-color: #94a3b8 !important;
+}
+
+/* 4b. Leaderboard & Groups Section (#arc-leaderboard-groups-section) */
+html[data-mode=light] #arc-leaderboard-groups-section {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section h3,
+html[data-mode=light] #arc-leaderboard-groups-section h4,
+html[data-mode=light] #arc-leaderboard-groups-section .text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section .text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section [class*="bg-slate-900"],
+html[data-mode=light] #arc-leaderboard-groups-section [class*="bg-slate-950"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section [class*="border-slate-800"] {
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #arc-leaderboard-groups-section button.bg-slate-800 {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* 5. Additional Settings FAQ & Help Center (#settings-additional-faq-card) */
+html[data-mode=light] #settings-additional-faq-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #0284c7 !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #settings-additional-faq-card h3.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-additional-faq-card p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #faq-search-input {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] #faq-search-input:focus {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+html[data-mode=light] #faq-search-input::placeholder {
+    color: #94a3b8 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-slate-900 {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-slate-900:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html[data-mode=light] .faq-category-pill.bg-cyan-500\/20 {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"]:hover {
+    border-color: #38bdf8 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"][open] {
+    border-color: #0284c7 !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.12) !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-slate-200,
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] summary span.text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] .faq-chevron {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #64748b !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"][open] .faq-chevron {
+    background: #e0f2fe !important;
+    border-color: #38bdf8 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] > div {
+    background: #f8fafc !important;
+    border-top-color: #e2e8f0 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] > div p {
+    color: #334155 !important;
+}
+html[data-mode=light] details.faq-item[name="arc-faq"] [class*="bg-cyan-500/10"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+
+/* 6. About the Founder Section (#settings-about-founder-card) */
+html[data-mode=light] #settings-about-founder-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #9333ea !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #settings-about-founder-card h3.text-white,
+html[data-mode=light] #settings-about-founder-card h4.text-white,
+html[data-mode=light] #settings-about-founder-card h5.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-slate-950"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-slate-900"] {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html[data-mode=light] #settings-about-founder-card .text-slate-300 {
+    color: #334155 !important;
+}
+html[data-mode=light] #settings-about-founder-card .text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-950/30"],
+html[data-mode=light] #settings-about-founder-card [class*="from-purple-950/40"] {
+    background: #faf5ff !important;
+    border-color: #d8b4fe !important;
+    color: #581c87 !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/10"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-purple-500/20"] {
+    background: #f3e8ff !important;
+    color: #7e22ce !important;
+    border-color: #d8b4fe !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-cyan-500/15"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-cyan-500/20"] {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+html[data-mode=light] #settings-about-founder-card [class*="bg-emerald-500/15"],
+html[data-mode=light] #settings-about-founder-card [class*="bg-emerald-500/20"] {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border-color: #bbf7d0 !important;
+}
+
+/* 7. Settings View Subtabs Navigation */
+html[data-mode=light] #settings-subtab-faq,
+html[data-mode=light] #settings-subtab-founder {
+    color: #64748b !important;
+}
+html[data-mode=light] #settings-subtab-faq:hover,
+html[data-mode=light] #settings-subtab-founder:hover {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-screentime-notif-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border-color: #e2e8f0 !important;
+    border-left-color: #0284c7 !important;
+}
+html[data-mode=light] #settings-screentime-notif-card h3.text-white {
+    color: #0f172a !important;
+}
+html[data-mode=light] #settings-screentime-notif-card p.text-slate-400 {
+    color: #64748b !important;
+}
+html[data-mode=light] #screentime-notif-status-pill {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] #btn-toggle-perm-notif {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #btn-toggle-perm-notif:hover {
+    background: #0369a1 !important;
+}
+
+/* ==========================================================================
+   PHONE APPLICATION WIDGETS & ANDROID SIMULATOR STYLES
+   ========================================================================== */
+.phone-widget-card {
+    background: #18181b;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.phone-widget-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 20px 42px -6px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+html[data-mode=light] .phone-widget-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.08) !important;
+}
+html[data-mode=light] .phone-widget-card .text-white {
+    color: #0f172a !important;
+}
+
+.phone-focus-chip {
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background: #27272a;
+    color: #a1a1aa;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.phone-focus-chip:hover {
+    background: #3f3f46;
+    color: #ffffff;
+    border-color: rgba(168, 85, 247, 0.4);
+}
+.phone-focus-chip.active {
+    background: rgba(168, 85, 247, 0.25);
+    color: #e9d5ff;
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* Smartphone Simulator Frame */
+.arc-phone-frame {
+    width: 100%;
+    max-width: min(380px, calc(100vw - 2rem));
+    height: 720px;
+    max-height: min(720px, calc(100dvh - 5rem - env(safe-area-inset-bottom, 0px)));
+    border-radius: clamp(24px, 6vw, 46px);
+    background: #000000;
+    border: 6px solid #27272a;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.arc-phone-screen {
+    flex: 1;
+    position: relative;
+    background-color: #0c0a1a;
+    background-image: url('./assets/phone-homescreen-bg.jpg'), linear-gradient(180deg, #1e1b4b 0%, #312e81 35%, #0f172a 75%, #020617 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+.arc-phone-screen::-webkit-scrollbar {
+    width: 0px;
+    display: none;
+}
+.arc-phone-notch {
+    width: 90px;
+    height: 20px;
+    background: #000000;
+    border-radius: 0 0 14px 14px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+}
+
+/* Post-Unlock Cinematic Loader Rings & Progress Bar */
+.arc-loader-ring-outer {
+    animation-duration: 1.2s;
+}
+.arc-loader-ring-inner {
+    animation-duration: 2s;
+    animation-direction: reverse;
+}
+.arc-loader-bar-initial {
+    width: 0%;
+}
+
+/* ===== ARC GOLD & 120HZ PROMOTION DISPLAY ENGINE ===== */
+.arc-gold-glow-pulse {
+    animation: arcGoldPulse 1.4s ease-in-out 2 !important;
+}
+@keyframes arcGoldPulse {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+        border-color: rgba(245, 158, 11, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(245, 158, 11, 0.65), 0 0 20px rgba(234, 179, 8, 0.4);
+        border-color: rgba(251, 191, 36, 0.9);
+    }
+}
+.arc-120hz-active {
+    scroll-behavior: smooth;
+}
+.gold-plan-card-active {
+    border-color: rgba(245, 158, 11, 0.9) !important;
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.25) !important;
+}
+@keyframes goldTrackPulse {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(140px); }
+    100% { transform: translateX(0); }
+}
+.gold-track-animating {
+    animation: goldTrackPulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+}
+#arc-input-username {
+    padding-left: 2rem !important;
+}

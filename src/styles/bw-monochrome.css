@@ -1,0 +1,627 @@
+/* ==========================================================================
+   ARC BLACK & WHITE VIP MONOCHROME ENGINE (COMPREHENSIVE ZERO-GREY ARCHITECTURE)
+   Strict Pure Black (#000000) & Pure White (#ffffff) across ALL themes & display modes.
+   - Eliminates all solid grey pill masks, covers, and unreadable text.
+   - Fixes empty buttons in active, pressed, and default states.
+   - Preserves 100% visibility for icons, badges, titles, and auto-start controls.
+   ========================================================================== */
+
+/* ---------- 1. CSS VARIABLES OVERRIDE ---------- */
+html.arc-bw-mode,
+html.arc-bw-mode body,
+html.arc-bw-mode[data-mode],
+html.arc-bw-mode[data-theme],
+html.arc-bw-mode.pp-themed {
+  --pp-accent: #ffffff !important;
+  --pp-accent2: #ffffff !important;
+  --pp-accent-rgb: 255, 255, 255 !important;
+  --a: #ffffff !important;
+  --a2: #ffffff !important;
+  --ar: 255, 255, 255 !important;
+  --pp-bg: #000000 !important;
+  --pp-panel: #000000 !important;
+  --pp-fg: #ffffff !important;
+  --pp-mut: #ffffff !important;
+  --pp-line: rgba(255, 255, 255, 0.4) !important;
+  --pp-border-accent-40: #ffffff !important;
+  --accent-glow: none !important;
+  --neon-glow: none !important;
+  --tw-shadow: none !important;
+  --tw-shadow-colored: none !important;
+  --tw-ring-color: #ffffff !important;
+  --tw-ring-offset-color: #000000 !important;
+}
+
+html[data-mode="light"].arc-bw-mode,
+html[data-mode="light"].arc-bw-mode body,
+html[data-mode="light"].arc-bw-mode[data-theme],
+html[data-mode="light"].arc-bw-mode.pp-themed {
+  --pp-accent: #000000 !important;
+  --pp-accent2: #000000 !important;
+  --pp-accent-rgb: 0, 0, 0 !important;
+  --a: #000000 !important;
+  --a2: #000000 !important;
+  --ar: 0, 0, 0 !important;
+  --pp-bg: #ffffff !important;
+  --pp-panel: #ffffff !important;
+  --pp-fg: #000000 !important;
+  --pp-mut: #000000 !important;
+  --pp-line: rgba(0, 0, 0, 0.3) !important;
+  --pp-border-accent-40: #000000 !important;
+  --accent-glow: none !important;
+  --neon-glow: none !important;
+  --tw-shadow: none !important;
+  --tw-shadow-colored: none !important;
+  --tw-ring-color: #000000 !important;
+  --tw-ring-offset-color: #ffffff !important;
+}
+
+/* ---------- 2. STARK BASE BACKGROUNDS & CONTAINERS ---------- */
+html.arc-bw-mode:not([data-mode="light"]),
+html.arc-bw-mode:not([data-mode="light"]) body {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+html[data-mode="light"].arc-bw-mode,
+html[data-mode="light"].arc-bw-mode body {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
+/* Containers in Dark (cards, panels, modals - strictly NOT buttons or badges) */
+html.arc-bw-mode:not([data-mode="light"]) .p13-card,
+html.arc-bw-mode:not([data-mode="light"]) .p13-drawer,
+html.arc-bw-mode:not([data-mode="light"]) .pp-card,
+html.arc-bw-mode:not([data-mode="light"]) .rpg-glow-card,
+html.arc-bw-mode:not([data-mode="light"]) .kb-card,
+html.arc-bw-mode:not([data-mode="light"]) .glass-panel,
+html.arc-bw-mode:not([data-mode="light"]) .glassmorphism,
+html.arc-bw-mode:not([data-mode="light"]) [class*="glass-card"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="backdrop-blur"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-slate-9"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-slate-8"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-zinc-9"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-zinc-8"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-gray-9"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-gray-8"]:not(button):not([role="button"]),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-neutral-9"]:not(button):not([role="button"]) {
+  background-color: #000000 !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Containers in Light */
+html[data-mode="light"].arc-bw-mode .p13-card,
+html[data-mode="light"].arc-bw-mode .p13-drawer,
+html[data-mode="light"].arc-bw-mode .pp-card,
+html[data-mode="light"].arc-bw-mode .rpg-glow-card,
+html[data-mode="light"].arc-bw-mode .kb-card,
+html[data-mode="light"].arc-bw-mode .glass-panel,
+html[data-mode="light"].arc-bw-mode .glassmorphism,
+html[data-mode="light"].arc-bw-mode [class*="glass-card"]:not(button):not([role="button"]),
+html[data-mode="light"].arc-bw-mode [class*="backdrop-blur"]:not(button):not([role="button"]),
+html[data-mode="light"].arc-bw-mode [class*="bg-slate-"]:not(button):not([role="button"]),
+html[data-mode="light"].arc-bw-mode [class*="bg-zinc-"]:not(button):not([role="button"]),
+html[data-mode="light"].arc-bw-mode [class*="bg-gray-"]:not(button):not([role="button"]),
+html[data-mode="light"].arc-bw-mode [class*="bg-neutral-"]:not(button):not([role="button"]) {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Strip all colored gradient backgrounds */
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-cyan-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-amber-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-yellow-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-emerald-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-green-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-blue-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-indigo-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-purple-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-violet-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-rose-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-pink-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-orange-"]:not(button):not([role="button"]):not(span),
+html.arc-bw-mode:not([data-mode="light"]) [class*="bg-sky-"]:not(button):not([role="button"]):not(span) {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+
+html[data-mode="light"].arc-bw-mode [class*="bg-cyan-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-amber-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-yellow-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-emerald-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-green-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-blue-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-indigo-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-purple-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-violet-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-rose-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-pink-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-orange-"]:not(button):not([role="button"]):not(span),
+html[data-mode="light"].arc-bw-mode [class*="bg-sky-"]:not(button):not([role="button"]):not(span) {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* ---------- 3. TEXT & TYPOGRAPHY INTEGRITY ---------- */
+html.arc-bw-mode:not([data-mode="light"]) h1,
+html.arc-bw-mode:not([data-mode="light"]) h2,
+html.arc-bw-mode:not([data-mode="light"]) h3,
+html.arc-bw-mode:not([data-mode="light"]) h4,
+html.arc-bw-mode:not([data-mode="light"]) h5,
+html.arc-bw-mode:not([data-mode="light"]) h6,
+html.arc-bw-mode:not([data-mode="light"]) p,
+html.arc-bw-mode:not([data-mode="light"]) label,
+html.arc-bw-mode:not([data-mode="light"]) strong,
+html.arc-bw-mode:not([data-mode="light"]) b,
+html.arc-bw-mode:not([data-mode="light"]) i:not(button *):not([role="button"] *),
+html.arc-bw-mode:not([data-mode="light"]) a:not(button *):not([role="button"]) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-mode="light"].arc-bw-mode h1,
+html[data-mode="light"].arc-bw-mode h2,
+html[data-mode="light"].arc-bw-mode h3,
+html[data-mode="light"].arc-bw-mode h4,
+html[data-mode="light"].arc-bw-mode h5,
+html[data-mode="light"].arc-bw-mode h6,
+html[data-mode="light"].arc-bw-mode p,
+html[data-mode="light"].arc-bw-mode label,
+html[data-mode="light"].arc-bw-mode strong,
+html[data-mode="light"].arc-bw-mode b,
+html[data-mode="light"].arc-bw-mode i:not(button *):not([role="button"] *),
+html[data-mode="light"].arc-bw-mode a:not(button *):not([role="button"]) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* CRITICAL FIX FOR TITLE INHERITED TRANSPARENCY */
+html.arc-bw-mode #arc-main-title,
+html.arc-bw-mode #arc-main-title * {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) #arc-main-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-mode="light"].arc-bw-mode #arc-main-title {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* ---------- 4. ALL BADGES, PILLS & CHIPS (SOLVES IMAGES 1, 3, 4, 5) ---------- */
+html.arc-bw-mode:not([data-mode="light"]) .arc-sensitive-val,
+html.arc-bw-mode:not([data-mode="light"]) #arc-year-badge,
+html.arc-bw-mode:not([data-mode="light"]) #rules-pillar-grid span,
+html.arc-bw-mode:not([data-mode="light"]) #settings-about-founder-card span,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label="About the Founder"] span,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label*="Terms"] span,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label*="Agreement"] span,
+html.arc-bw-mode:not([data-mode="light"]) #arc-gold-header-badge,
+html.arc-bw-mode:not([data-mode="light"]) span.rounded-full,
+html.arc-bw-mode:not([data-mode="light"]) span[class*="rounded-full"],
+html.arc-bw-mode:not([data-mode="light"]) span[class*="rounded-"][class*="border"],
+html.arc-bw-mode:not([data-mode="light"]) span[style*="background"],
+html.arc-bw-mode:not([data-mode="light"]) span[style*="color"] {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+html.arc-bw-mode:not([data-mode="light"]) .arc-sensitive-val *,
+html.arc-bw-mode:not([data-mode="light"]) #arc-year-badge *,
+html.arc-bw-mode:not([data-mode="light"]) #rules-pillar-grid span *,
+html.arc-bw-mode:not([data-mode="light"]) #settings-about-founder-card span *,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label="About the Founder"] span *,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label*="Terms"] span *,
+html.arc-bw-mode:not([data-mode="light"]) [aria-label*="Agreement"] span *,
+html.arc-bw-mode:not([data-mode="light"]) #arc-gold-header-badge *,
+html.arc-bw-mode:not([data-mode="light"]) span.rounded-full *,
+html.arc-bw-mode:not([data-mode="light"]) span[class*="rounded-full"] *,
+html.arc-bw-mode:not([data-mode="light"]) span[class*="rounded-"][class*="border"] *,
+html.arc-bw-mode:not([data-mode="light"]) span[style*="background"] *,
+html.arc-bw-mode:not([data-mode="light"]) span[style*="color"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Badges in Light Mode */
+html[data-mode="light"].arc-bw-mode .arc-sensitive-val,
+html[data-mode="light"].arc-bw-mode #arc-year-badge,
+html[data-mode="light"].arc-bw-mode #rules-pillar-grid span,
+html[data-mode="light"].arc-bw-mode #settings-about-founder-card span,
+html[data-mode="light"].arc-bw-mode [aria-label="About the Founder"] span,
+html[data-mode="light"].arc-bw-mode [aria-label*="Terms"] span,
+html[data-mode="light"].arc-bw-mode [aria-label*="Agreement"] span,
+html[data-mode="light"].arc-bw-mode #arc-gold-header-badge,
+html[data-mode="light"].arc-bw-mode span.rounded-full,
+html[data-mode="light"].arc-bw-mode span[class*="rounded-full"],
+html[data-mode="light"].arc-bw-mode span[class*="rounded-"][class*="border"],
+html[data-mode="light"].arc-bw-mode span[style*="background"],
+html[data-mode="light"].arc-bw-mode span[style*="color"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.4) !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+html[data-mode="light"].arc-bw-mode .arc-sensitive-val *,
+html[data-mode="light"].arc-bw-mode #arc-year-badge *,
+html[data-mode="light"].arc-bw-mode #rules-pillar-grid span *,
+html[data-mode="light"].arc-bw-mode #settings-about-founder-card span *,
+html[data-mode="light"].arc-bw-mode [aria-label="About the Founder"] span *,
+html[data-mode="light"].arc-bw-mode [aria-label*="Terms"] span *,
+html[data-mode="light"].arc-bw-mode [aria-label*="Agreement"] span *,
+html[data-mode="light"].arc-bw-mode #arc-gold-header-badge *,
+html[data-mode="light"].arc-bw-mode span.rounded-full *,
+html[data-mode="light"].arc-bw-mode span[class*="rounded-full"] *,
+html[data-mode="light"].arc-bw-mode span[class*="rounded-"][class*="border"] *,
+html[data-mode="light"].arc-bw-mode span[style*="background"] *,
+html[data-mode="light"].arc-bw-mode span[style*="color"] * {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  fill: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Rules Pillar Grid cards header accent line */
+html.arc-bw-mode:not([data-mode="light"]) #rules-pillar-grid > div {
+  border-top-color: #ffffff !important;
+}
+html[data-mode="light"].arc-bw-mode #rules-pillar-grid > div {
+  border-top-color: #000000 !important;
+}
+
+/* ---------- 5. BUTTONS: UNPRESSED / DEFAULT (SOLVES IMAGES 2, 6, 7, 9, 10) ---------- */
+html.arc-bw-mode:not([data-mode="light"]) button:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html.arc-bw-mode:not([data-mode="light"]) [role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html.arc-bw-mode:not([data-mode="light"]) a[role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html.arc-bw-mode:not([data-mode="light"]) #btn-header-discretion:not([aria-pressed="true"]),
+html.arc-bw-mode:not([data-mode="light"]) #btn-toggle-autostart:not([data-active="true"]),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-rpg:not([aria-selected="true"]),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-kb:not([aria-selected="true"]),
+html.arc-bw-mode:not([data-mode="light"]) .sx-th:not([aria-pressed="true"]),
+html.arc-bw-mode:not([data-mode="light"]) #home-store-rating-section button,
+html.arc-bw-mode:not([data-mode="light"]) #home-store-rating-section a {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.arc-bw-mode:not([data-mode="light"]) button:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on) :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) [role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on) :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #btn-header-discretion:not([aria-pressed="true"]) :is(*, span, i),
+html.arc-bw-mode:not([data-mode="light"]) #btn-toggle-autostart:not([data-active="true"]) :is(*, span, i),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-rpg:not([aria-selected="true"]) :is(*, span, i),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-kb:not([aria-selected="true"]) :is(*, span, i),
+html.arc-bw-mode:not([data-mode="light"]) .sx-th:not([aria-pressed="true"]) :is(*, span, i, small),
+html.arc-bw-mode:not([data-mode="light"]) #home-store-rating-section button :is(*, span, i),
+html.arc-bw-mode:not([data-mode="light"]) #home-store-rating-section a :is(*, span, i) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Light Mode Unpressed Buttons */
+html[data-mode="light"].arc-bw-mode button:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html[data-mode="light"].arc-bw-mode [role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html[data-mode="light"].arc-bw-mode a[role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on),
+html[data-mode="light"].arc-bw-mode #btn-header-discretion:not([aria-pressed="true"]),
+html[data-mode="light"].arc-bw-mode #btn-toggle-autostart:not([data-active="true"]),
+html[data-mode="light"].arc-bw-mode #subtab-btn-rpg:not([aria-selected="true"]),
+html[data-mode="light"].arc-bw-mode #subtab-btn-kb:not([aria-selected="true"]),
+html[data-mode="light"].arc-bw-mode .sx-th:not([aria-pressed="true"]),
+html[data-mode="light"].arc-bw-mode #home-store-rating-section button,
+html[data-mode="light"].arc-bw-mode #home-store-rating-section a {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.35) !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html[data-mode="light"].arc-bw-mode button:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on) :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode [role="button"]:not([aria-selected="true"]):not([aria-pressed="true"]):not(.btn-primary):not([data-active="true"]):not(.active):not(.on) :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #btn-header-discretion:not([aria-pressed="true"]) :is(*, span, i),
+html[data-mode="light"].arc-bw-mode #btn-toggle-autostart:not([data-active="true"]) :is(*, span, i),
+html[data-mode="light"].arc-bw-mode #subtab-btn-rpg:not([aria-selected="true"]) :is(*, span, i),
+html[data-mode="light"].arc-bw-mode #subtab-btn-kb:not([aria-selected="true"]) :is(*, span, i),
+html[data-mode="light"].arc-bw-mode .sx-th:not([aria-pressed="true"]) :is(*, span, i, small),
+html[data-mode="light"].arc-bw-mode #home-store-rating-section button :is(*, span, i),
+html[data-mode="light"].arc-bw-mode #home-store-rating-section a :is(*, span, i) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  fill: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ---------- 6. BUTTONS: PRESSED / ACTIVE / SELECTED (CRITICAL FIX FOR EMPTY BUTTONS) ---------- */
+html.arc-bw-mode:not([data-mode="light"]) button[aria-selected="true"],
+html.arc-bw-mode:not([data-mode="light"]) button[aria-pressed="true"],
+html.arc-bw-mode:not([data-mode="light"]) [role="tab"][aria-selected="true"],
+html.arc-bw-mode:not([data-mode="light"]) [role="button"][aria-selected="true"],
+html.arc-bw-mode:not([data-mode="light"]) [role="button"][aria-pressed="true"],
+html.arc-bw-mode:not([data-mode="light"]) .btn-primary,
+html.arc-bw-mode:not([data-mode="light"]) button[data-active="true"],
+html.arc-bw-mode:not([data-mode="light"]) #btn-header-discretion[aria-pressed="true"],
+html.arc-bw-mode:not([data-mode="light"]) #btn-toggle-autostart[data-active="true"],
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-rpg[aria-selected="true"],
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-kb[aria-selected="true"],
+html.arc-bw-mode:not([data-mode="light"]) .sx-th[aria-pressed="true"],
+html.arc-bw-mode:not([data-mode="light"]) #tab-tracker[aria-selected="true"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: #ffffff !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html.arc-bw-mode:not([data-mode="light"]) button[aria-selected="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) button[aria-pressed="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) [role="tab"][aria-selected="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) [role="button"][aria-selected="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) [role="button"][aria-pressed="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) .btn-primary :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) button[data-active="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #btn-header-discretion[aria-pressed="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #btn-toggle-autostart[data-active="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-rpg[aria-selected="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #subtab-btn-kb[aria-selected="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) .sx-th[aria-pressed="true"] :is(*, span, i, b, small),
+html.arc-bw-mode:not([data-mode="light"]) #tab-tracker[aria-selected="true"] :is(*, span, i, b, small) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  fill: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Light Mode Active Buttons */
+html[data-mode="light"].arc-bw-mode button[aria-selected="true"],
+html[data-mode="light"].arc-bw-mode button[aria-pressed="true"],
+html[data-mode="light"].arc-bw-mode [role="tab"][aria-selected="true"],
+html[data-mode="light"].arc-bw-mode [role="button"][aria-selected="true"],
+html[data-mode="light"].arc-bw-mode [role="button"][aria-pressed="true"],
+html[data-mode="light"].arc-bw-mode .btn-primary,
+html[data-mode="light"].arc-bw-mode button[data-active="true"],
+html[data-mode="light"].arc-bw-mode #btn-header-discretion[aria-pressed="true"],
+html[data-mode="light"].arc-bw-mode #btn-toggle-autostart[data-active="true"],
+html[data-mode="light"].arc-bw-mode #subtab-btn-rpg[aria-selected="true"],
+html[data-mode="light"].arc-bw-mode #subtab-btn-kb[aria-selected="true"],
+html[data-mode="light"].arc-bw-mode .sx-th[aria-pressed="true"],
+html[data-mode="light"].arc-bw-mode #tab-tracker[aria-selected="true"] {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  background-image: none !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html[data-mode="light"].arc-bw-mode button[aria-selected="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode button[aria-pressed="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode [role="tab"][aria-selected="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode [role="button"][aria-selected="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode [role="button"][aria-pressed="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode .btn-primary :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode button[data-active="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #btn-header-discretion[aria-pressed="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #btn-toggle-autostart[data-active="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #subtab-btn-rpg[aria-selected="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #subtab-btn-kb[aria-selected="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode .sx-th[aria-pressed="true"] :is(*, span, i, b, small),
+html[data-mode="light"].arc-bw-mode #tab-tracker[aria-selected="true"] :is(*, span, i, b, small) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* ---------- 7. TOGGLE SWITCHES (.sx-sw & .arc-lg-switch) (SOLVES IMAGES 1 & 8) ---------- */
+/* Dark Mode Switches */
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw span,
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw input + span {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw span:before,
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw span::before,
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw span::after {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw input:checked + span {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1.5px solid #ffffff !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw input:checked + span:before,
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw input:checked + span::before,
+html.arc-bw-mode:not([data-mode="light"]) .sx-sw input:checked + span::after {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Light Mode Switches */
+html[data-mode="light"].arc-bw-mode .sx-sw span,
+html[data-mode="light"].arc-bw-mode .sx-sw input + span {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.4) !important;
+}
+html[data-mode="light"].arc-bw-mode .sx-sw span:before,
+html[data-mode="light"].arc-bw-mode .sx-sw span::before,
+html[data-mode="light"].arc-bw-mode .sx-sw span::after {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+html[data-mode="light"].arc-bw-mode .sx-sw input:checked + span {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+html[data-mode="light"].arc-bw-mode .sx-sw input:checked + span:before,
+html[data-mode="light"].arc-bw-mode .sx-sw input:checked + span::before,
+html[data-mode="light"].arc-bw-mode .sx-sw input:checked + span::after {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+/* Checkboxes (Free Miss Protection, Habit Checkbox) */
+html.arc-bw-mode:not([data-mode="light"]) input[type="checkbox"]:not(.sx-sw input) {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  accent-color: #ffffff !important;
+}
+html[data-mode="light"].arc-bw-mode input[type="checkbox"]:not(.sx-sw input) {
+  border-color: rgba(0, 0, 0, 0.4) !important;
+  accent-color: #000000 !important;
+}
+
+/* ---------- 8. THEME SWATCH PREVIEWS IN SETTINGS ---------- */
+html.arc-bw-mode:not([data-mode="light"]) .sx-th .sx-sw2 {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.6)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) .sx-th[aria-pressed="true"] .sx-sw2 {
+  background: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+html[data-mode="light"].arc-bw-mode .sx-th .sx-sw2 {
+  background: linear-gradient(135deg, #e2e8f0, #94a3b8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.35) !important;
+}
+html[data-mode="light"].arc-bw-mode .sx-th[aria-pressed="true"] .sx-sw2 {
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* ---------- 9. FLOATING PILLS & HUD ---------- */
+html.arc-bw-mode:not([data-mode="light"]) #arc-hud-pill,
+html.arc-bw-mode:not([data-mode="light"]) #arc-notifications-pill,
+html.arc-bw-mode:not([data-mode="light"]) .arc-hud-pill-fixed {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+}
+html.arc-bw-mode:not([data-mode="light"]) #arc-hud-pill *,
+html.arc-bw-mode:not([data-mode="light"]) #arc-notifications-pill *,
+html.arc-bw-mode:not([data-mode="light"]) .arc-hud-pill-fixed * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+html[data-mode="light"].arc-bw-mode #arc-hud-pill,
+html[data-mode="light"].arc-bw-mode #arc-notifications-pill,
+html[data-mode="light"].arc-bw-mode .arc-hud-pill-fixed {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.35) !important;
+  color: #000000 !important;
+}
+html[data-mode="light"].arc-bw-mode #arc-hud-pill *,
+html[data-mode="light"].arc-bw-mode #arc-notifications-pill *,
+html[data-mode="light"].arc-bw-mode .arc-hud-pill-fixed * {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  fill: #000000 !important;
+}
+
+/* Heatmap pure monochromatic scale */
+html.arc-bw-mode:not([data-mode="light"]) .pq0 { background: #000000 !important; border: 1px solid rgba(255, 255, 255, 0.4) !important; }
+html.arc-bw-mode:not([data-mode="light"]) .pq1 { background: rgba(255, 255, 255, 0.3) !important; border: none !important; }
+html.arc-bw-mode:not([data-mode="light"]) .pq2 { background: rgba(255, 255, 255, 0.55) !important; border: none !important; }
+html.arc-bw-mode:not([data-mode="light"]) .pq3 { background: rgba(255, 255, 255, 0.75) !important; border: none !important; }
+html.arc-bw-mode:not([data-mode="light"]) .pq4 { background: #ffffff !important; border: none !important; }
+html.arc-bw-mode:not([data-mode="light"]) .pq5 { background: #ffffff !important; border: none !important; box-shadow: 0 0 6px #ffffff !important; }
+
+html[data-mode="light"].arc-bw-mode .pq0 { background: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.35) !important; }
+html[data-mode="light"].arc-bw-mode .pq1 { background: rgba(0, 0, 0, 0.25) !important; border: none !important; }
+html[data-mode="light"].arc-bw-mode .pq2 { background: rgba(0, 0, 0, 0.5) !important; border: none !important; }
+html[data-mode="light"].arc-bw-mode .pq3 { background: rgba(0, 0, 0, 0.75) !important; border: none !important; }
+html[data-mode="light"].arc-bw-mode .pq4 { background: #000000 !important; border: none !important; }
+html[data-mode="light"].arc-bw-mode .pq5 { background: #000000 !important; border: none !important; box-shadow: 0 0 6px rgba(0,0,0,0.4) !important; }
+
+/* Inverted selection */
+html.arc-bw-mode ::selection {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+html[data-mode="light"].arc-bw-mode ::selection {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Hide colored decorative glows */
+html.arc-bw-mode #bg-glow-container,
+html.arc-bw-mode #bg-glow-1,
+html.arc-bw-mode #bg-glow-2,
+html.arc-bw-mode .bg-noise,
+html.arc-bw-mode #sa-burst {
+  display: none !important;
+}
+
+/* Liquid Glass Harmony (when both Liquid Glass and B&W Mode are enabled) */
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) .glass-card,
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) header.arc-safe-header,
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) nav[aria-label="Mobile Bottom Navigation"],
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) .pp-modal > div {
+  background: rgba(0, 0, 0, 0.9) !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-mode="light"].arc-bw-mode.arc-liquid-glass .glass-card,
+html[data-mode="light"].arc-bw-mode.arc-liquid-glass header.arc-safe-header,
+html[data-mode="light"].arc-bw-mode.arc-liquid-glass nav[aria-label="Mobile Bottom Navigation"],
+html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
+  background: rgba(255, 255, 255, 0.92) !important;
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}

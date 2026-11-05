@@ -1,0 +1,215 @@
+:root {
+            --arc-spring-ease: cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            --arc-fluid-decel: cubic-bezier(0.16, 1, 0.3, 1);
+            --arc-fluid-exit: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 1. Quick Control Floating Panels (Screen Time Monitor & Notifications Flyout) */
+        #arc-hud-card,
+        #arc-notifications-drawer {
+            will-change: transform, opacity;
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+            transition: opacity 0.28s var(--arc-fluid-exit),
+                        transform 0.34s var(--arc-fluid-exit),
+                        visibility 0.34s !important;
+        }
+
+        #arc-hud-card {
+            transform-origin: bottom left !important;
+            transform: translateY(16px) scale(0.92) !important;
+        }
+
+        #arc-notifications-drawer {
+            transform-origin: top right !important;
+            transform: translateY(-12px) scale(0.94) !important;
+        }
+
+        #arc-hud-card.arc-panel-open,
+        #arc-notifications-drawer.arc-panel-open {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+            transform: translateY(0) scale(1) !important;
+            transition: opacity 0.36s var(--arc-fluid-decel),
+                        transform 0.46s var(--arc-spring-ease),
+                        visibility 0s !important;
+        }
+
+        /* Caret rotation with fluid spring */
+        #arc-hud-caret,
+        #arc-notif-caret {
+            transition: transform 0.42s var(--arc-spring-ease) !important;
+            will-change: transform;
+        }
+
+        /* 2. Expandable Accordion Panels (About Founder & FAQ Section) */
+        .arc-fluid-accordion {
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: grid-template-rows 0.42s var(--arc-fluid-decel),
+                        opacity 0.32s var(--arc-fluid-decel),
+                        transform 0.42s var(--arc-fluid-decel) !important;
+            will-change: grid-template-rows, opacity, transform;
+        }
+
+        .arc-fluid-accordion > div,
+        .arc-fluid-accordion > * {
+            overflow: hidden;
+        }
+
+        .arc-fluid-accordion.expanded {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            transform: translateY(0);
+            transition: grid-template-rows 0.48s var(--arc-spring-ease),
+                        opacity 0.38s var(--arc-fluid-decel),
+                        transform 0.48s var(--arc-spring-ease) !important;
+        }
+
+        /* 3. FAQ Items Accordion (<details name="arc-faq">) */
+        details.faq-item {
+            interpolate-size: allow-keywords;
+            transition: border-color 0.32s var(--arc-fluid-decel),
+                        background-color 0.32s var(--arc-fluid-decel),
+                        box-shadow 0.32s var(--arc-fluid-decel),
+                        transform 0.28s var(--arc-fluid-decel) !important;
+        }
+
+        details.faq-item summary {
+            transition: background-color 0.25s ease !important;
+        }
+
+        details.faq-item summary .faq-chevron {
+            transition: transform 0.45s var(--arc-spring-ease),
+                        background-color 0.3s ease,
+                        color 0.3s ease,
+                        border-color 0.3s ease !important;
+            will-change: transform;
+        }
+
+        details.faq-item::details-content {
+            opacity: 0;
+            block-size: 0;
+            overflow-y: clip;
+            transition: content-visibility 0.42s allow-discrete,
+                        opacity 0.32s var(--arc-fluid-decel),
+                        block-size 0.45s var(--arc-fluid-decel) !important;
+        }
+
+        details.faq-item[open]::details-content {
+            opacity: 1;
+            block-size: auto;
+        }
+
+        details.faq-item > div {
+            animation: arcFaqSlideDown 0.32s var(--arc-fluid-decel);
+        }
+
+        @keyframes arcFaqSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 4. Slide-in Settings & Audio Drawer (#pp12-drawer) */
+        #pp12-drawer {
+            visibility: hidden;
+            transform: translateX(105%) !important;
+            transition: transform 0.46s var(--arc-fluid-decel),
+                        visibility 0s 0.46s,
+                        background-color 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease !important;
+            will-change: transform;
+        }
+
+        #pp12-drawer.open {
+            visibility: visible !important;
+            transform: translateX(0%) !important;
+            transition: transform 0.52s var(--arc-spring-ease),
+                        visibility 0s,
+                        background-color 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease !important;
+        }
+
+        #pp12-back {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.38s var(--arc-fluid-decel),
+                        visibility 0s 0.38s !important;
+            will-change: opacity;
+        }
+
+        #pp12-back.open {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            transition: opacity 0.38s var(--arc-fluid-decel),
+                        visibility 0s !important;
+        }
+
+        /* 5. Modals and Dialog Overlays (.pp-modal & .arc-spring-modal) */
+        .pp-modal,
+        #arc-gold-bw-upgrade-modal {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.32s var(--arc-fluid-decel),
+                        backdrop-filter 0.32s ease !important;
+        }
+
+        .pp-modal > div,
+        #arc-gold-bw-upgrade-modal > div {
+            transform: scale(0.92) translateY(16px);
+            opacity: 0;
+            transition: transform 0.34s var(--arc-fluid-exit),
+                        opacity 0.28s var(--arc-fluid-exit) !important;
+            will-change: transform, opacity;
+        }
+
+        .pp-modal.open,
+        #arc-gold-bw-upgrade-modal.arc-modal-open {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        .pp-modal.open > div,
+        #arc-gold-bw-upgrade-modal.arc-modal-open > div {
+            transform: scale(1) translateY(0) !important;
+            opacity: 1 !important;
+            transition: transform 0.48s var(--arc-spring-ease),
+                        opacity 0.38s var(--arc-fluid-decel) !important;
+        }
+
+        /* 6. Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            #arc-hud-card,
+            #arc-notifications-drawer,
+            #arc-hud-caret,
+            #arc-notif-caret,
+            .arc-fluid-accordion,
+            details.faq-item,
+            details.faq-item summary .faq-chevron,
+            details.faq-item::details-content,
+            details.faq-item > div,
+            #pp12-drawer,
+            #pp12-back,
+            .pp-modal,
+            .pp-modal > div,
+            #arc-gold-bw-upgrade-modal,
+            #arc-gold-bw-upgrade-modal > div {
+                transition: none !important;
+                animation: none !important;
+                transform: none !important;
+            }
+        }

@@ -1,0 +1,125 @@
+/* --- rpg-summer-overhaul-css --- */
+
+  .rpg-glow-cyan {
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.05);
+  }
+  .rpg-glow-amber {
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.3), inset 0 0 15px rgba(245, 158, 11, 0.05);
+  }
+  .rpg-glow-card {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rpg-glow-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 240, 255, 0.2);
+  }
+  .cert-gold-border {
+    border: 3px solid;
+    border-image: linear-gradient(135deg, #F59E0B, #FBBF24, #00F0FF, #EA580C) 1;
+  }
+
+  /* Floating RPG Combat & XP Popups */
+  .rpg-floating-combat-text {
+    position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+    font-family: 'Inter', monospace, sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    color: #00F0FF;
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.9);
+    animation: floatUpCombat 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .rpg-floating-combat-text.crit {
+    font-size: 18px;
+    color: #F59E0B;
+    text-shadow: 0 0 16px rgba(245, 158, 11, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+  }
+  .rpg-floating-combat-text.dmg {
+    font-size: 16px;
+    color: #EF4444;
+    text-shadow: 0 0 14px rgba(239, 68, 68, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+  }
+  @keyframes floatUpCombat {
+    0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.8); }
+    20% { opacity: 1; transform: translate3d(0, -10px, 0) scale(1.15); }
+    75% { opacity: 1; transform: translate3d(0, -35px, 0) scale(1); }
+    100% { opacity: 0; transform: translate3d(0, -55px, 0) scale(0.85); }
+  }
+
+  /* Screen Shake on Impact */
+  @keyframes screenShakeFx {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(-4px, 3px); }
+    30% { transform: translate(4px, -3px); }
+    45% { transform: translate(-3px, -2px); }
+    60% { transform: translate(3px, 2px); }
+    75% { transform: translate(-2px, 1px); }
+  }
+  .rpg-screen-shake {
+    animation: screenShakeFx 0.45s ease-in-out;
+  }
+
+  /* Task Pulse on Complete */
+  @keyframes taskPulseGlow {
+    0%, 100% { box-shadow: 0 0 0 rgba(0, 240, 255, 0); }
+    50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+  }
+  .rpg-task-pulse {
+    animation: taskPulseGlow 0.4s ease-out;
+  }
+
+  /* Boss Hit Flash */
+  @keyframes bossDamageFlash {
+    0%, 100% { filter: none; }
+    50% { filter: brightness(1.6) drop-shadow(0 0 25px #EF4444); }
+  }
+  .rpg-boss-hit {
+    animation: bossDamageFlash 0.35s ease-in-out;
+  }
+
+  /* Knowledge Base Accordion */
+  .kb-card {
+    transition: all 0.25s ease;
+  }
+  .kb-card:hover {
+    border-color: rgba(0, 240, 255, 0.4);
+    transform: translateY(-1px);
+  }
+
+/* --- mobile-permissions-css --- */
+
+  /* STRICTLY MOBILE-ONLY: Hidden on desktop and tablet screens >= 769px */
+  @media (min-width: 769px) {
+    #arc-mobile-permissions-modal,
+    #arc-perm-pip-widget {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  }
+
+  @keyframes pulseGlowCyan {
+    0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.25); }
+    50% { box-shadow: 0 0 28px rgba(6, 182, 212, 0.55); }
+  }
+  .perm-glow-cyan {
+    animation: pulseGlowCyan 2.8s infinite ease-in-out;
+  }
+
+  @keyframes simTapRipple {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  .sim-ripple {
+    animation: simTapRipple 1.2s infinite ease-out;
+  }
+
+  @keyframes shakeModalBox {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-9px); }
+    40%, 80% { transform: translateX(9px); }
+  }
+  .animate-perm-shake {
+    animation: shakeModalBox 0.45s ease-in-out;
+  }

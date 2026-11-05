@@ -1,0 +1,853 @@
+:root{--pp-accent:#00f0ff;--pp-accent2:#d946ef;--pp-bg:#060913;--pp-panel:rgba(9,13,26,.92);--pp-fg:#e2e8f0;--pp-mut:#94a3b8;--pp-line:rgba(255,255,255,.12);--pp-noise-op:.15}
+/* ==========================================================================
+   ENHANCED LIGHT MODE DESIGN SYSTEM (Pristine, High-Contrast, Ergonomic)
+   ========================================================================== */
+html[data-mode=light]{
+    color-scheme: light;
+    --pp-panel: rgba(255, 255, 255, 0.94);
+    --pp-fg: #0f172a;
+    --pp-mut: #64748b;
+    --pp-line: rgba(15, 23, 42, 0.08);
+    --pp-accent: #0284c7;
+    --pp-accent2: #9333ea;
+    --pp-bg: #f8fafc;
+    --pp-noise-op: 0.02;
+    --a: #0284c7;
+    --a2: #6366f1;
+    --ar: 2, 132, 199;
+}
+html[data-mode=light] body[data-arc=summer]{
+    --a: #d97706;
+    --a2: #ea580c;
+    --ar: 217, 119, 6;
+}
+
+/* 1. Global Page Surface, Scrollbars & Atmospheric Lighting */
+html[data-mode=light] body{
+    background-color: #f8fafc !important;
+    background-image: radial-gradient(120% 55% at 50% -8%, rgba(2, 132, 199, 0.07), transparent 62%), radial-gradient(90% 50% at 100% 100%, rgba(147, 51, 234, 0.04), transparent 60%) !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] body[data-arc=summer]{
+    background-color: #faf8f5 !important;
+    background-image: radial-gradient(120% 55% at 50% -8%, rgba(251, 191, 36, 0.12), transparent 62%), radial-gradient(90% 50% at 100% 100%, rgba(244, 114, 182, 0.05), transparent 60%) !important;
+}
+html[data-mode=light] #bg-glow-1{
+    background: rgba(14, 165, 233, 0.08) !important;
+}
+html[data-mode=light] #bg-glow-2{
+    background: rgba(168, 85, 247, 0.06) !important;
+}
+html[data-mode=light] .bg-noise{
+    opacity: 0.02 !important;
+}
+html[data-mode=light] ::-webkit-scrollbar-track{
+    background: #f1f5f9 !important;
+}
+html[data-mode=light] ::-webkit-scrollbar-thumb{
+    background: #cbd5e1 !important;
+    border: 2px solid #f1f5f9;
+    border-radius: 9999px;
+}
+html[data-mode=light] ::-webkit-scrollbar-thumb:hover{
+    background: #94a3b8 !important;
+}
+@supports (scrollbar-color: auto) {
+    html[data-mode=light] {
+        scrollbar-color: #cbd5e1 #f1f5f9;
+    }
+}
+
+/* 2. Glass Cards & Elevated Panels */
+html[data-mode=light] .glass-card{
+    background: rgba(255, 255, 255, 0.88) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+    border-color: rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+html[data-mode=light] .glass-card-hover:hover{
+    border-color: rgba(2, 132, 199, 0.45) !important;
+    box-shadow: 0 12px 32px -4px rgba(2, 132, 199, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05) !important;
+    transform: translateY(-2px);
+}
+
+/* 3. Typography & High-Contrast Hierarchy */
+html[data-mode=light] .text-white{
+    color: #0f172a !important;
+}
+html[data-mode=light] .text-slate-100,
+html[data-mode=light] .text-slate-200{
+    color: #1e293b !important;
+}
+html[data-mode=light] .text-slate-300{
+    color: #334155 !important;
+}
+html[data-mode=light] .text-slate-400{
+    color: #475569 !important;
+}
+html[data-mode=light] .text-slate-500{
+    color: #64748b !important;
+}
+html[data-mode=light] .text-slate-600{
+    color: #94a3b8 !important;
+}
+
+/* High-Contrast Brand Accents & Slash-Opacity Overrides */
+html[data-mode=light] .text-cyan-400,
+html[data-mode=light] .text-cyan-300,
+html[data-mode=light] .text-cyan-200,
+html[data-mode=light] .text-cyan-400\/90,
+html[data-mode=light] .text-cyan-400\/80,
+html[data-mode=light] .text-cyan-300\/90,
+html[data-mode=light] .text-cyan-200\/80,
+html[data-mode=light] [class*="text-cyan-300"],
+html[data-mode=light] [class*="text-cyan-200"]{
+    color: #0284c7 !important;
+}
+html[data-mode=light] .text-amber-400,
+html[data-mode=light] .text-amber-300,
+html[data-mode=light] .text-amber-200,
+html[data-mode=light] .text-amber-400\/80,
+html[data-mode=light] .text-amber-300\/80,
+html[data-mode=light] .text-amber-200\/80,
+html[data-mode=light] .text-amber-200\/90,
+html[data-mode=light] [class*="text-amber-300"],
+html[data-mode=light] [class*="text-amber-200"]{
+    color: #b45309 !important;
+}
+html[data-mode=light] .text-emerald-400,
+html[data-mode=light] .text-emerald-300,
+html[data-mode=light] .text-emerald-500\/80,
+html[data-mode=light] [class*="text-emerald-400"],
+html[data-mode=light] [class*="text-emerald-300"]{
+    color: #047857 !important;
+}
+html[data-mode=light] .text-purple-400,
+html[data-mode=light] .text-purple-300,
+html[data-mode=light] .text-purple-400\/80,
+html[data-mode=light] .text-purple-300\/80,
+html[data-mode=light] [class*="text-purple-300"],
+html[data-mode=light] [class*="text-purple-400"]{
+    color: #7c3aed !important;
+}
+html[data-mode=light] .text-blue-400,
+html[data-mode=light] .text-blue-300{
+    color: #1d4ed8 !important;
+}
+html[data-mode=light] .text-slate-400\/90{
+    color: #475569 !important;
+}
+
+/* Clipped Gradient Headings & Numeric Displays */
+html[data-mode=light] #arc-main-title{
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 65%, #0284c7 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+html[data-mode=light] #laptop-timer-display{
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 70%, #0284c7 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+html[data-mode=light] #arc-completion-banner{
+    background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(238, 242, 255, 0.95) 100%) !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 12px 35px -5px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* 4. Elimination of Murky Dark Wells & Inner Boxes */
+html[data-mode=light] .bg-slate-900\/95,
+html[data-mode=light] .bg-slate-900\/90,
+html[data-mode=light] .bg-slate-900\/80,
+html[data-mode=light] .bg-slate-900\/70,
+html[data-mode=light] .bg-slate-900\/60,
+html[data-mode=light] .bg-slate-900\/50,
+html[data-mode=light] .bg-slate-900\/40,
+html[data-mode=light] .bg-slate-900,
+html[data-mode=light] .bg-slate-950\/95,
+html[data-mode=light] .bg-slate-950\/90,
+html[data-mode=light] .bg-slate-950\/80,
+html[data-mode=light] .bg-slate-950\/70,
+html[data-mode=light] .bg-slate-950\/60,
+html[data-mode=light] .bg-slate-950\/50,
+html[data-mode=light] .bg-slate-950\/40,
+html[data-mode=light] .bg-slate-950,
+html[data-mode=light] .bg-slate-800\/80,
+html[data-mode=light] .bg-slate-800\/60,
+html[data-mode=light] .bg-slate-800,
+html[data-mode=light] .bg-slate-700\/20,
+html[data-mode=light] [class*="bg-slate-950\/"],
+html[data-mode=light] [class*="bg-slate-900\/"],
+html[data-mode=light] [class*="bg-slate-800\/"]{
+    background-color: rgba(241, 245, 249, 0.75) !important;
+    border-color: rgba(203, 213, 225, 0.75) !important;
+}
+html[data-mode=light] .border-slate-800\/90,
+html[data-mode=light] .border-slate-800\/80,
+html[data-mode=light] .border-slate-800\/70,
+html[data-mode=light] .border-slate-800\/60,
+html[data-mode=light] .border-slate-800,
+html[data-mode=light] .border-slate-700\/80,
+html[data-mode=light] .border-slate-700\/60,
+html[data-mode=light] .border-slate-700,
+html[data-mode=light] .border-slate-600,
+html[data-mode=light] .border-slate-500\/30,
+html[data-mode=light] [class*="border-slate-"]{
+    border-color: rgba(203, 213, 225, 0.8) !important;
+}
+html[data-mode=light] .bg-slate-800{
+    background-color: #e2e8f0 !important;
+}
+
+/* 5. Clean Tactile Buttons & Badges */
+html[data-mode=light] button.bg-slate-800,
+html[data-mode=light] button.bg-slate-900,
+html[data-mode=light] button.bg-slate-800\/80,
+html[data-mode=light] button.bg-slate-800\/60,
+html[data-mode=light] button[class*="bg-slate-800"],
+html[data-mode=light] button[class*="bg-slate-900"],
+html[data-mode=light] #btn-ambient-toggle,
+html[data-mode=light] #btn-open-settings,
+html[data-mode=light] #btn-audio-toggle,
+html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red),
+html[data-mode=light] .pp-btn:not(.on),
+html[data-mode=light] .pp-tab:not(.on){
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+html[data-mode=light] #btn-ambient-toggle i,
+html[data-mode=light] #btn-open-settings i,
+html[data-mode=light] #btn-audio-toggle i{
+    color: #0284c7 !important;
+}
+html[data-mode=light] button.bg-slate-800:hover,
+html[data-mode=light] button.bg-slate-900:hover,
+html[data-mode=light] button[class*="bg-slate-800"]:hover,
+html[data-mode=light] button[class*="bg-slate-900"]:hover,
+html[data-mode=light] #btn-ambient-toggle:hover,
+html[data-mode=light] #btn-open-settings:hover,
+html[data-mode=light] #btn-audio-toggle:hover,
+html[data-mode=light] .sx-btn:not(.sx-pri):not(.sx-red):hover,
+html[data-mode=light] .pp-btn:not(.on):hover,
+html[data-mode=light] .pp-tab:not(.on):hover{
+    background-color: #f8fafc !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #btn-ambient-toggle.on{
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] #btn-ambient-toggle.on i{
+    color: #ffffff !important;
+}
+html[data-mode=light] button.bg-slate-800:active,
+html[data-mode=light] button.bg-slate-900:active,
+html[data-mode=light] button[class*="bg-slate-800"]:active{
+    background-color: #f1f5f9 !important;
+}
+html[data-mode=light] .bg-cyan-500,
+html[data-mode=light] button.bg-cyan-500{
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+html[data-mode=light] .bg-cyan-500:hover,
+html[data-mode=light] button.bg-cyan-500:hover{
+    background-color: #0369a1 !important;
+}
+html[data-mode=light] .bg-cyan-500\/10,
+html[data-mode=light] .bg-cyan-500\/15,
+html[data-mode=light] .bg-cyan-500\/20{
+    background-color: rgba(2, 132, 199, 0.1) !important;
+    color: #0369a1 !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+}
+html[data-mode=light] .bg-amber-500\/10,
+html[data-mode=light] .bg-amber-500\/20,
+html[data-mode=light] .bg-amber-500\/30{
+    background-color: rgba(217, 119, 6, 0.1) !important;
+    color: #b45309 !important;
+    border-color: rgba(217, 119, 6, 0.3) !important;
+}
+html[data-mode=light] .bg-emerald-500\/10,
+html[data-mode=light] .bg-emerald-500\/20{
+    background-color: rgba(5, 150, 105, 0.1) !important;
+    color: #047857 !important;
+    border-color: rgba(5, 150, 105, 0.3) !important;
+}
+html[data-mode=light] .bg-purple-500\/10,
+html[data-mode=light] .bg-purple-500\/20{
+    background-color: rgba(124, 58, 237, 0.1) !important;
+    color: #6d28d9 !important;
+    border-color: rgba(124, 58, 237, 0.3) !important;
+}
+html[data-mode=light] .bg-blue-500\/10,
+html[data-mode=light] .bg-blue-500\/20{
+    background-color: rgba(29, 78, 216, 0.1) !important;
+    color: #1d4ed8 !important;
+    border-color: rgba(29, 78, 216, 0.3) !important;
+}
+
+/* 6. Form Inputs, Selects & Textareas */
+html[data-mode=light] input:not([type="checkbox"]):not([type="range"]):not([type="color"]),
+html[data-mode=light] select,
+html[data-mode=light] textarea,
+html[data-mode=light] .pp-in,
+html[data-mode=light] .sx-in,
+html[data-mode=light] .p13-in{
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] input::placeholder,
+html[data-mode=light] textarea::placeholder{
+    color: #94a3b8 !important;
+}
+html[data-mode=light] input:focus,
+html[data-mode=light] select:focus,
+html[data-mode=light] textarea:focus,
+html[data-mode=light] .pp-in:focus,
+html[data-mode=light] .sx-in:focus{
+    border-color: #0284c7 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+}
+html[data-mode=light] select option{
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* 7. Navigation (Header, Desktop Top Nav, Mobile Bottom Nav) */
+html[data-mode=light] header.glass-card{
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"]{
+    background: rgba(241, 245, 249, 0.9) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="true"]{
+    background: #ffffff !important;
+    color: #0284c7 !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+    border: 1px solid rgba(203, 213, 225, 0.7) !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="false"]{
+    color: #475569 !important;
+}
+html[data-mode=light] nav[aria-label="Desktop Navigation"] button[aria-selected="false"]:hover{
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"]{
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"] button[aria-selected="true"]{
+    color: #0284c7 !important;
+}
+html[data-mode=light] nav[aria-label="Mobile Bottom Navigation"] button[aria-selected="false"]{
+    color: #64748b !important;
+}
+
+/* 8. Calendar Days & Tiered Badges */
+html[data-mode=light] .calendar-day-card{
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] .calendar-grade-none{
+    background: rgba(241, 245, 249, 0.85) !important;
+    border: 1px solid rgba(203, 213, 225, 0.8) !important;
+    color: #475569 !important;
+}
+html[data-mode=light] .calendar-grade-none .grade-letter{
+    color: #94a3b8 !important;
+}
+html[data-mode=light] .calendar-grade-s{
+    background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%) !important;
+    border: 1.5px solid #10b981 !important;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.22) !important;
+    color: #065f46 !important;
+}
+html[data-mode=light] .calendar-grade-s .grade-letter{
+    color: #047857 !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-a{
+    background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+    border: 1.5px solid #0284c7 !important;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.18) !important;
+    color: #075985 !important;
+}
+html[data-mode=light] .calendar-grade-a .grade-letter{
+    color: #0284c7 !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-b{
+    background: linear-gradient(145deg, #faf5ff 0%, #f3e8ff 100%) !important;
+    border: 1.5px solid #a855f7 !important;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.16) !important;
+    color: #6b21a8 !important;
+}
+html[data-mode=light] .calendar-grade-b .grade-letter{
+    color: #7c3aed !important;
+    text-shadow: none !important;
+}
+html[data-mode=light] .calendar-grade-c{
+    background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%) !important;
+    border: 1.5px solid #f59e0b !important;
+    color: #92400e !important;
+}
+html[data-mode=light] .calendar-grade-c .grade-letter{
+    color: #b45309 !important;
+}
+html[data-mode=light] .calendar-grade-f{
+    background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%) !important;
+    border: 1.5px solid #f43f5e !important;
+    color: #9f1239 !important;
+}
+html[data-mode=light] .calendar-grade-f .grade-letter{
+    color: #e11d48 !important;
+}
+html[data-mode=light] .calendar-day-card span:first-of-type{
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
+html[data-mode=light] .pulse-today-ring{
+    outline: 2px solid #0284c7 !important;
+    box-shadow: 0 0 16px rgba(2, 132, 199, 0.35) !important;
+}
+html[data-mode=light] .calendar-day-selected{
+    outline: 2px solid #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
+}
+
+/* 9. Habits Rows & Checkboxes */
+html[data-mode=light] .habit-checkbox{
+    border-color: #cbd5e1 !important;
+    background-color: #ffffff !important;
+}
+html[data-mode=light] .habit-checkbox:checked{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-size: 74% 74% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 14px rgba(2, 132, 199, 0.45) !important;
+}
+html[data-mode=light] .habit-row{
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+}
+html[data-mode=light] .habit-row.border-l-slate-700{
+    border-left-color: #cbd5e1 !important;
+}
+html[data-mode=light] .habit-row.bg-emerald-950\/20{
+    background: linear-gradient(90deg, rgba(236, 253, 245, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+    border-left-color: #10b981 !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08) !important;
+}
+
+/* 9b. Habit Celebration Banner & RPG Floating Text in Light Mode */
+html[data-mode=light] #habit-celebration-banner{
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.15), 0 0 20px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] #habit-celebration-banner .text-white{
+    color: #0f172a !important;
+}
+html[data-mode=light] #habit-celebration-banner .text-slate-400{
+    color: #475569 !important;
+}
+html[data-mode=light] .rpg-floating-combat-text{
+    color: #0284c7 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(2, 132, 199, 0.4) !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12), 0 0 12px rgba(2, 132, 199, 0.25) !important;
+}
+html[data-mode=light] .rpg-floating-combat-text.crit{
+    color: #b45309 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.14), 0 0 14px rgba(245, 158, 11, 0.35) !important;
+}
+
+/* 10. Modals, Drawers, Overlays & PIN Keypad */
+html[data-mode=light] .pp-modal,
+html[data-mode=light] #p13-m,
+html[data-mode=light] #arc-modal,
+html[data-mode=light] #pp12-back,
+html[data-mode=light] #arc-pin-overlay,
+html[data-mode=light] #screen-time-hub-modal,
+html[data-mode=light] #cyberdeck-terminal-modal,
+html[data-mode=light] #mandala-easter-egg-modal,
+html[data-mode=light] #summer-showcase-overlay,
+html[data-mode=light] #rpg-levelup-overlay,
+html[data-mode=light] #rpg-victory-cert-modal{
+    background: rgba(15, 23, 42, 0.45) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+}
+html[data-mode=light] .pp-box,
+html[data-mode=light] #p13-m .bx,
+html[data-mode=light] #arc-modal > div > div,
+html[data-mode=light] #screen-time-hub-modal > div > div,
+html[data-mode=light] #cyberdeck-terminal-modal > div > div{
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+}
+html[data-mode=light] #pp12-drawer{
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #0f172a !important;
+    border-left: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: -10px 0 35px rgba(15, 23, 42, 0.1) !important;
+}
+html[data-mode=light] .pp-tab,
+html[data-mode=light] .pp-btn{
+    background: rgba(241, 245, 249, 0.8) !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] .pp-tab.on,
+html[data-mode=light] .pp-btn.on,
+html[data-mode=light] #btn-ambient-toggle.on{
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+    background: rgba(2, 132, 199, 0.12) !important;
+}
+html[data-mode=light] .pp-row{
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+html[data-mode=light] .pp-lab{
+    color: #64748b !important;
+}
+html[data-mode=light] .arc-pad-btn{
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+html[data-mode=light] .arc-pad-btn:hover{
+    background: rgba(2, 132, 199, 0.1) !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+}
+html[data-mode=light] #pp12-hud{
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+html[data-mode=light] #toast{
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    border: 1px solid #0284c7 !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15) !important;
+}
+html[data-mode=light] #toast #toast-icon{
+    color: #0284c7 !important;
+}
+
+/* 11. Spider Web Radar & Graphics */
+html[data-mode=light] .spider-web-outer-rim{
+    stroke: rgba(2, 132, 199, 0.4) !important;
+    filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.25)) !important;
+}
+html[data-mode=light] .spider-web-grid{
+    stroke: rgba(148, 163, 184, 0.4) !important;
+}
+html[data-mode=light] .spider-radar-beam-line{
+    stroke: #0284c7 !important;
+}
+html[data-mode=light] .p13-bar{
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] .pq0{
+    background: #e2e8f0 !important;
+}
+html[data-mode=light] .pq1{
+    background: #94a3b8 !important;
+}
+html[data-mode=light] .p13-hm .td{
+    outline-color: #0f172a !important;
+}
+html[data-mode=light] .sx-sw span{
+    background: #cbd5e1 !important;
+}
+html[data-mode=light] .sx-seg{
+    border-color: #cbd5e1 !important;
+    background: #f1f5f9 !important;
+}
+html[data-mode=light] .sx-seg button{
+    color: #475569 !important;
+}
+html[data-mode=light] .sx-seg button[aria-pressed="true"]{
+    background: #ffffff !important;
+    color: #0284c7 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+}
+html[data-mode=night] body{background:#000!important}
+html[data-mode=night] .glass-card{background:rgba(0,0,0,.92)!important}
+html.pp-themed body{background:var(--pp-bg)}
+html.pp-themed .text-cyan-300,html.pp-themed .text-cyan-400{color:var(--pp-accent)!important}
+html.pp-themed{--pp-border-accent-40:color-mix(in srgb,var(--pp-accent) 40%,transparent)}
+html.pp-themed .border-cyan-500\/30,html.pp-themed .border-cyan-500\/40{border-color:rgba(0,240,255,0.4)!important}
+@supports (color:color-mix(in srgb,red,blue)){html.pp-themed .border-cyan-500\/30,html.pp-themed .border-cyan-500\/40{border-color:var(--pp-border-accent-40)!important}}
+html.pp-themed .bg-cyan-500\/10,html.pp-themed .bg-cyan-500\/20{background:rgba(0,240,255,0.14)!important;background:color-mix(in srgb,var(--pp-accent) 14%,transparent)!important}
+html.pp-themed #bg-glow-1{background:rgba(0,240,255,0.16)!important;background:color-mix(in srgb,var(--pp-accent) 16%,transparent)!important}
+html.pp-themed #bg-glow-2{background:rgba(139,92,246,0.16)!important;background:color-mix(in srgb,var(--pp-accent2) 16%,transparent)!important}
+html .bg-noise{opacity:var(--pp-noise-op)!important}
+html.pp-eco *,html.pp-eco *::before{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.pp-eco #bg-glow-container{display:none}
+@keyframes pp-slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes pp-zoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes pp-flip{from{opacity:0;transform:perspective(900px) rotateX(-14deg)}to{opacity:1;transform:none}}
+@keyframes pp-blur{from{opacity:0;filter:blur(14px)}to{opacity:1;filter:none}}
+@keyframes pp-bounce{0%{opacity:0;transform:translateY(30px)}60%{opacity:1;transform:translateY(-8px)}100%{transform:none}}
+html[data-transition=slide] .tab-view-enter{animation:pp-slide .35s ease both}
+html[data-transition=zoom] .tab-view-enter{animation:pp-zoom .35s ease both}
+html[data-transition=flip] .tab-view-enter{animation:pp-flip .45s ease both}
+html[data-transition=blur] .tab-view-enter{animation:pp-blur .45s ease both}
+html[data-transition=bounce] .tab-view-enter{animation:pp-bounce .5s ease both}
+#pp12-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.pp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#pp12-back{position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+#pp12-back.open{opacity:1;pointer-events:auto}
+#pp12-drawer{position:fixed;top:0;right:0;height:100%;width:min(26rem,100%);z-index:60;display:flex;flex-direction:column;visibility:hidden;transform:translateX(105%);transition:transform .35s cubic-bezier(.16,1,.3,1),visibility 0s .35s;background:var(--pp-panel);color:var(--pp-fg);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-left:1px solid var(--pp-line)}
+#pp12-drawer.open{visibility:visible;transform:none;transition-delay:0s}
+.pp-tab,.pp-btn{padding:.45rem .7rem;border-radius:.7rem;border:1px solid var(--pp-line);background:rgba(127,127,127,.12);color:var(--pp-fg);font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;text-align:left;flex-shrink:0;min-width:max-content}
+.pp-tab.on,.pp-btn.on,#btn-ambient-toggle.on{border-color:var(--pp-accent);color:var(--pp-accent);background:rgba(0,240,255,0.14);background:color-mix(in srgb,var(--pp-accent) 14%,transparent)}
+.pp-btn:hover,.pp-tab:hover{border-color:var(--pp-accent)}
+.pp-row{padding:.7rem 0;border-bottom:1px solid var(--pp-line)}
+.pp-lab{display:flex;justify-content:space-between;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--pp-mut);margin-bottom:.4rem}
+.pp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem}
+.pp-in{width:100%;padding:.45rem .6rem;border-radius:.6rem;background:rgba(127,127,127,.15);color:var(--pp-fg);border:1px solid var(--pp-line);font-size:.8rem}
+.pp-in option{color:#0f172a}
+.pp-badge{font:700 .6rem monospace;padding:.2rem .45rem;border-radius:.4rem;background:rgba(0,240,255,0.18);background:color-mix(in srgb,var(--pp-accent) 18%,transparent);color:var(--pp-accent);align-self:center}
+#pp12-drawer input[type=range]{accent-color:var(--pp-accent)}
+#pp12-drawer input[type=checkbox]{accent-color:var(--pp-accent);width:1.1rem;height:1.1rem}
+.pp-modal{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;max-width:100vw!important;max-height:100vh!important;margin:0!important;z-index:99999!important;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.75)!important;-webkit-backdrop-filter:blur(8px)!important;backdrop-filter:blur(8px)!important;overflow-y:auto;overscroll-behavior:contain;transform:none!important;translate:none!important}
+.pp-modal.open{display:flex!important}
+#arc-profile-setup-modal{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;z-index:100000!important;transform:none!important;translate:none!important}
+#arc-profile-setup-modal.open{display:flex!important}
+#arc-last-month-modal{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;padding:0!important;margin:0!important;align-items:stretch!important;justify-content:stretch!important;background:#030712!important;z-index:99999!important;width:100vw!important;height:100vh!important;max-width:100vw!important;max-height:100vh!important;border:none!important;transform:none!important;translate:none!important}
+#arc-last-month-modal.open{display:flex!important}
+#arc-last-month-modal .arc-last-month-fullscreen-wrap{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;border:none!important;margin:0!important;display:flex!important;flex-direction:column!important;background:radial-gradient(circle at 50% 0%,rgba(30,27,75,0.45) 0%,#030712 75%)!important}
+#arc-cross-device-comparison-modal{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;padding:0!important;margin:0!important;align-items:stretch!important;justify-content:stretch!important;background:#030712!important;z-index:100000!important;width:100vw!important;height:100vh!important;max-width:100vw!important;max-height:100vh!important;border:none!important;transform:none!important;translate:none!important;overflow:hidden!important}
+#arc-cross-device-comparison-modal.open{display:flex!important}
+#arc-cross-device-comparison-modal .arc-cross-device-wrap{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;border:none!important;margin:0!important;display:flex!important;flex-direction:column!important;background:radial-gradient(circle at 50% 0%,rgba(49,46,129,0.45) 0%,#030712 75%)!important}
+.cxd-subview-hidden{display:none}
+.cxd-bar-w-41{width:41%}
+.cxd-bar-w-42{width:42%}
+.cxd-bar-w-58{width:58%}
+.pp-box{max-width:28rem;width:100%;border-radius:1rem;padding:1.2rem;background:var(--pp-panel);color:var(--pp-fg);border:1px solid var(--pp-line);font-size:.85rem;max-height:90vh;overflow:auto}
+.pp-box h3{font-weight:900;font-size:1rem;margin-bottom:.6rem}
+.pp-box kbd{font:700 .75rem monospace;padding:.1rem .45rem;border-radius:.35rem;border:1px solid var(--pp-line);background:rgba(127,127,127,.2)}
+#pp-heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:11px;gap:3px;width:max-content}
+.pp-cell{width:11px;height:11px;border-radius:2px;background:rgba(127,127,127,.2)}
+#pp12-hud{position:fixed;left:50%;bottom:4.5rem;transform:translateX(-50%);z-index:45;display:none;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:999px;background:var(--pp-panel);color:var(--pp-fg);border:1px solid var(--pp-accent);font:800 .9rem monospace;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+/* 12. Fluid Spring Dynamics, Visual Shimmers & Touch Ripples */
+.tab-view-enter {
+    animation: arcTabEnter 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes arcTabEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Tactile Spring Presses on Interactive Elements */
+button:not(:disabled), [role="button"], [role="tab"], .arc-pad-btn, .pp-btn, .pp-tab, .sx-btn {
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease !important;
+}
+button:not(:disabled):active, [role="button"]:active, [role="tab"]:active, .arc-pad-btn:active, .pp-btn:active, .pp-tab:active, .sx-btn:active {
+    transform: scale(0.94) translateY(1px) !important;
+}
+
+/* Bouncy Elastic Habit Checkboxes */
+.habit-checkbox {
+    transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+    cursor: pointer;
+}
+.habit-checkbox:checked {
+    animation: arcCheckboxPop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.55) !important;
+}
+html[data-mode=light] .habit-checkbox:checked {
+    box-shadow: 0 0 14px rgba(2, 132, 199, 0.45) !important;
+}
+@keyframes arcCheckboxPop {
+    0% { transform: scale(0.68); }
+    55% { transform: scale(1.32); }
+    100% { transform: scale(1); }
+}
+
+/* Glowing Habit Row Pulse on Completion */
+.rpg-task-pulse {
+    animation: arcHabitPulse 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+@keyframes arcHabitPulse {
+    0% { transform: scale(0.985); filter: brightness(1.25); }
+    50% { transform: scale(1.025); filter: brightness(1.45); box-shadow: 0 0 28px rgba(0, 240, 255, 0.4); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Liquid Specular Highlights on Progress Bars */
+#progress-today-bar, #overall-progress-bar, .xp-progress-bar-fill, #today-progress-bar, #header-score-bar-fill {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#progress-today-bar::after, #overall-progress-bar::after, .xp-progress-bar-fill::after, #today-progress-bar::after, #header-score-bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: arcProgressHighlight 2.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+@keyframes arcProgressHighlight {
+    0% { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(200%); }
+}
+
+/* Calendar Day Card Magnetic Hover & Selection */
+.calendar-day-card {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.2s ease !important;
+    cursor: pointer;
+}
+.calendar-day-card:hover {
+    transform: translateY(-3px) scale(1.08) !important;
+    z-index: 20;
+    box-shadow: 0 10px 22px rgba(0, 240, 255, 0.25) !important;
+}
+html[data-mode=light] .calendar-day-card:hover {
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.22) !important;
+}
+.calendar-day-card:active {
+    transform: scale(0.92) !important;
+}
+
+/* Interactive Soft Glow Touch Ripple */
+.arc-click-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.42) 0%, rgba(0, 240, 255, 0.12) 50%, transparent 70%);
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 1;
+    animation: arcRippleKeyframe 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 50;
+}
+html[data-mode=light] .arc-click-ripple {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.32) 0%, rgba(2, 132, 199, 0.08) 50%, transparent 70%);
+}
+@keyframes arcRippleKeyframe {
+    0% { transform: scale(0.08); opacity: 0.9; }
+    100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Pomodoro Breathing Pulse Ring */
+.pomodoro-running-glow {
+    animation: pomodoroBreathingRing 2.4s infinite ease-in-out !important;
+}
+@keyframes pomodoroBreathingRing {
+    0%, 100% {
+        box-shadow: 0 0 14px rgba(0, 240, 255, 0.4), 0 0 0 1px rgba(0, 240, 255, 0.5) !important;
+    }
+    50% {
+        box-shadow: 0 0 28px rgba(0, 240, 255, 0.8), 0 0 0 3px rgba(0, 240, 255, 0.9) !important;
+    }
+}
+html[data-mode=light] .pomodoro-running-glow {
+    animation: pomodoroBreathingRingLight 2.4s infinite ease-in-out !important;
+}
+@keyframes pomodoroBreathingRingLight {
+    0%, 100% {
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35), 0 0 0 1px rgba(2, 132, 199, 0.5) !important;
+    }
+    50% {
+        box-shadow: 0 6px 28px rgba(2, 132, 199, 0.65), 0 0 0 3px rgba(2, 132, 199, 0.8) !important;
+    }
+}
+
+/* Ambient Cursor Follower Glow */
+#arc-ambient-cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 480px;
+    margin-left: -240px;
+    margin-top: -240px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.65;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, rgba(139, 92, 246, 0.035) 42%, transparent 70%);
+    will-change: transform;
+    transition: opacity 0.4s ease;
+}
+html[data-mode=light] #arc-ambient-cursor-glow {
+    background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, rgba(99, 102, 241, 0.045) 42%, transparent 70%) !important;
+    opacity: 0.82 !important;
+}
+
+/* Global Smooth Color & Theme Transition */
+html, body, .glass-card, header, nav, button, input, select, textarea {
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.25s ease, box-shadow 0.35s ease !important;
+}
+
+/* Universal High-Definition Vector X (Twitter) Brand Logo */
+.fa-x-twitter,
+.fa-brands.fa-x-twitter {
+    display: inline-block !important;
+    width: 1em !important;
+    height: 1em !important;
+    vertical-align: -0.125em !important;
+    background-color: currentColor !important;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/%3E%3C/svg%3E") !important;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/%3E%3C/svg%3E") !important;
+    -webkit-mask-size: contain !important;
+    mask-size: contain !important;
+    -webkit-mask-repeat: no-repeat !important;
+    mask-repeat: no-repeat !important;
+    -webkit-mask-position: center !important;
+    mask-position: center !important;
+}
+.fa-x-twitter::before,
+.fa-brands.fa-x-twitter::before {
+    content: "" !important;
+    display: none !important;
+}
+
+/* ==========================================================================
+   SCREEN TIME CYBERNETIC VISUAL EFFECTS & HOLOGRAPHIC SUITE
+   ========================================================================== */
+
+/* 1. Cyber Ambient Atmosphere */

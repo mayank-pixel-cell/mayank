@@ -1,8 +1,8 @@
 [package]
 name = "arc-tracker"
-version = "1.0.0"
-description = "Arc Tracker - Interactive Habit & Goal Tracking Application"
-authors = ["Arc Tracker Team"]
+version = "2.6.0"
+description = "Arc Tracker - Winter & Summer Arc Discipline Operating System"
+authors = ["Mayank"]
 edition = "2021"
 
 [lib]
@@ -17,3 +17,13 @@ tauri = { version = "2", features = [] }
 tauri-plugin-store = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "time", "sync", "macros"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Threading",
+    "Win32_System_SystemInformation",
+    "Win32_UI_Input_KeyboardAndMouse"
+] }

@@ -1,0 +1,367 @@
+/* ==========================================================================
+   IOS LIQUID GLASS UI & DYNAMIC SPRING PHYSICS ENGINE (GOLD VIP EXCLUSIVE)
+   Universal Cross-Device Engine (Mobile, Tablet, Desktop, Foldable, Retina)
+   - High-Refraction Frosted Diffusion (blur 28px, saturate 200%, brightness 106%)
+   - Specular Rim Highlighting & Prismatic Inset Bevels
+   - Dynamic 3D Perspective Tilt on Desktop (Mouse/Pen pointer tracking)
+   - Touch-Safe Physics: Zero scroll-jitter, tactile liquid compression on touch
+   - Dynamic Island Header & Fixed Mobile Navigation Dock
+   - Liquid Glass Capsule Buttons, Modals, Drawers & Interactive Controls
+   - Safe Area Inset Management & Full Reduced-Motion Fallbacks
+   ========================================================================== */
+
+:root {
+  --lg-spring-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --lg-bounce-timing: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --lg-fluid-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  --card-glare-x: 50%;
+  --card-glare-y: -20%;
+  --card-tilt-x: 0deg;
+  --card-tilt-y: 0deg;
+}
+
+/* 1. Global Surface Translucency & Frosted Diffusion (Dark Mode) */
+html.arc-liquid-glass:not([data-mode="light"]) .glass-card,
+html.arc-liquid-glass:not([data-mode="light"]) header.arc-safe-header,
+html.arc-liquid-glass:not([data-mode="light"]) nav[aria-label="Mobile Bottom Navigation"],
+html.arc-liquid-glass:not([data-mode="light"]) .pp-card,
+html.arc-liquid-glass:not([data-mode="light"]) .rpg-glow-card,
+html.arc-liquid-glass:not([data-mode="light"]) .kb-card,
+html.arc-liquid-glass:not([data-mode="light"]) #arc-hud-pill,
+html.arc-liquid-glass:not([data-mode="light"]) #arc-notifications-pill,
+html.arc-liquid-glass:not([data-mode="light"]) #arc-notifications-drawer,
+html.arc-liquid-glass:not([data-mode="light"]) #pp12-drawer,
+html.arc-liquid-glass:not([data-mode="light"]) #settings-view-subtabs,
+html.arc-liquid-glass:not([data-mode="light"]) .sx-dlg,
+html.arc-liquid-glass:not([data-mode="light"]) .pp-modal,
+html.arc-liquid-glass:not([data-mode="light"]) [role="dialog"] > div {
+  background: rgba(15, 23, 42, 0.44) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.06) 100%) !important;
+  backdrop-filter: blur(28px) saturate(200%) brightness(106%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(106%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.55),
+    inset 1.5px 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1.5px 1px 0 rgba(255, 255, 255, 0.06),
+    inset -1.5px 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 20px 48px -8px rgba(0, 0, 0, 0.45),
+    0 6px 18px -2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 2. Global Surface Translucency & Frosted Diffusion (Light Mode) */
+html[data-mode="light"].arc-liquid-glass .glass-card,
+html[data-mode="light"].arc-liquid-glass header.arc-safe-header,
+html[data-mode="light"].arc-liquid-glass nav[aria-label="Mobile Bottom Navigation"],
+html[data-mode="light"].arc-liquid-glass .pp-card,
+html[data-mode="light"].arc-liquid-glass .rpg-glow-card,
+html[data-mode="light"].arc-liquid-glass .kb-card,
+html[data-mode="light"].arc-liquid-glass #arc-hud-pill,
+html[data-mode="light"].arc-liquid-glass #arc-notifications-pill,
+html[data-mode="light"].arc-liquid-glass #arc-notifications-drawer,
+html[data-mode="light"].arc-liquid-glass #pp12-drawer,
+html[data-mode="light"].arc-liquid-glass #settings-view-subtabs,
+html[data-mode="light"].arc-liquid-glass .sx-dlg,
+html[data-mode="light"].arc-liquid-glass .pp-modal,
+html[data-mode="light"].arc-liquid-glass [role="dialog"] > div {
+  background: rgba(255, 255, 255, 0.58) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.65) 100%) !important;
+  backdrop-filter: blur(30px) saturate(210%) brightness(102%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(210%) brightness(102%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.98),
+    inset 1.5px 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.05),
+    0 16px 40px -4px rgba(15, 23, 42, 0.1),
+    0 4px 14px 0 rgba(15, 23, 42, 0.05) !important;
+}
+
+/* 3. Strict Position Preservation (Header & Mobile Nav Must NEVER be Overridden) */
+html.arc-liquid-glass .glass-card:not(header):not(nav) {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+html.arc-liquid-glass header.arc-safe-header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 40 !important;
+  transform: none !important;
+}
+
+html.arc-liquid-glass nav[aria-label="Mobile Bottom Navigation"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
+  transform: none !important;
+}
+
+/* 4. Interactive Specular Lens Glare Overlay */
+html.arc-liquid-glass .glass-card:not(header):not(nav):not(footer)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle 420px at var(--card-glare-x, 50%) var(--card-glare-y, -20%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 75%);
+  opacity: 0.75;
+  transition: opacity 0.35s ease;
+  z-index: 1;
+}
+
+html[data-mode="light"].arc-liquid-glass .glass-card:not(header):not(nav):not(footer)::before {
+  background: radial-gradient(circle 420px at var(--card-glare-x, 50%) var(--card-glare-y, -20%), rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.15) 45%, transparent 75%);
+  opacity: 0.9;
+}
+
+html.arc-liquid-glass .glass-card:hover::before {
+  opacity: 1;
+}
+
+/* Keep card child content above the glare overlay */
+html.arc-liquid-glass .glass-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 5. Desktop 3D Perspective Tilt (Only on hover-capable pointer devices) */
+@media (hover: hover) and (pointer: fine) {
+  html.arc-liquid-glass .glass-card:not(header):not(nav):not(footer) {
+    transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                border-color 0.3s ease,
+                background 0.3s ease !important;
+    will-change: transform, box-shadow;
+  }
+
+  html.arc-liquid-glass .glass-card:not(header):not(nav):not(footer):hover {
+    transform: perspective(1000px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg)) translateY(-3px) scale3d(1.008, 1.008, 1.008) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 
+      inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.12),
+      0 26px 54px -8px rgba(0, 0, 0, 0.5),
+      0 8px 24px -2px rgba(0, 0, 0, 0.32) !important;
+  }
+
+  html[data-mode="light"].arc-liquid-glass .glass-card:not(header):not(nav):not(footer):hover {
+    border-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 
+      inset 0 2.5px 3px 0 rgba(255, 255, 255, 1),
+      inset 0 -1px 1px 0 rgba(0, 0, 0, 0.05),
+      0 24px 48px -4px rgba(15, 23, 42, 0.16),
+      0 8px 20px 0 rgba(15, 23, 42, 0.08) !important;
+  }
+}
+
+/* 6. Touch Device Feedback (Instant tactile liquid compression, zero scroll jank) */
+@media (hover: none) or (pointer: coarse) {
+  html.arc-liquid-glass .glass-card:not(header):not(nav):not(footer) {
+    transform: none !important;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
+  }
+  html.arc-liquid-glass .glass-card:not(header):not(nav):not(footer):active {
+    transform: scale(0.985) !important;
+  }
+}
+
+/* 7. Liquid Glass Buttons & Interactive Controls */
+html.arc-liquid-glass button,
+html.arc-liquid-glass [role="button"],
+html.arc-liquid-glass [role="tab"],
+html.arc-liquid-glass .pp-btn,
+html.arc-liquid-glass .sx-btn,
+html.arc-liquid-glass .sx-chip,
+html.arc-liquid-glass .phone-focus-chip {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.35s ease,
+              background 0.25s ease,
+              border-color 0.25s ease !important;
+}
+
+@media (hover: hover) {
+  html.arc-liquid-glass button:hover:not(:disabled),
+  html.arc-liquid-glass [role="button"]:hover:not(:disabled),
+  html.arc-liquid-glass [role="tab"]:hover {
+    transform: translateY(-1.5px) scale(1.03) !important;
+  }
+}
+
+html.arc-liquid-glass button:active:not(:disabled),
+html.arc-liquid-glass [role="button"]:active:not(:disabled),
+html.arc-liquid-glass [role="tab"]:active {
+  transform: scale(0.94) !important;
+  transition-duration: 0.12s !important;
+}
+
+/* Header buttons: Translucent Liquid Glass Lozenges */
+html.arc-liquid-glass:not([data-mode="light"]):not(.arc-bw-mode) header.arc-safe-header button,
+html.arc-liquid-glass:not([data-mode="light"]):not(.arc-bw-mode) header.arc-safe-header [role="button"] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+html[data-mode="light"].arc-liquid-glass:not(.arc-bw-mode) header.arc-safe-header button,
+html[data-mode="light"].arc-liquid-glass:not(.arc-bw-mode) header.arc-safe-header [role="button"] {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.9), 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* 8. Floating Island Pills & HUD */
+html.arc-liquid-glass #arc-hud-pill,
+html.arc-liquid-glass #arc-notifications-pill {
+  backdrop-filter: blur(32px) saturate(210%) brightness(108%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(210%) brightness(108%) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0.5px rgba(255, 255, 255, 0.1),
+    0 16px 36px -4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* On mobile, ensure corner notification pill floats safely above bottom nav */
+@media (max-width: 767px) {
+  html.arc-liquid-glass #arc-notifications-corner {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* 9. Liquid Glass Habits & Lists */
+html.arc-liquid-glass .habit-row,
+html.arc-liquid-glass .calendar-day-card {
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+}
+
+@media (hover: hover) {
+  html.arc-liquid-glass .habit-row:hover {
+    transform: translateY(-2px) scale(1.006) !important;
+    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* 10. Authentic iOS 18 Liquid Glass Switch */
+.arc-lg-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  min-height: 44px; /* Apple HIG minimum touch target */
+}
+.arc-lg-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+.arc-lg-switch-track {
+  width: 50px;
+  height: 28px;
+  border-radius: 9999px;
+  background: rgba(100, 116, 139, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+}
+.arc-lg-switch input:checked + .arc-lg-switch-track {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 16px rgba(6, 182, 212, 0.4);
+}
+.arc-lg-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.arc-lg-switch input:checked + .arc-lg-switch-track .arc-lg-switch-thumb {
+  transform: translateX(22px);
+}
+
+/* 11. Low-Tier Device Hardware Adaptation */
+html.arc-liquid-glass.arc-lg-low-tier .glass-card,
+html.arc-liquid-glass.arc-lg-low-tier header.arc-safe-header,
+html.arc-liquid-glass.arc-lg-low-tier nav[aria-label="Mobile Bottom Navigation"] {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* 12. Non-supporting browser fallbacks */
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  html.arc-liquid-glass:not([data-mode="light"]) .glass-card {
+    background: rgba(15, 23, 42, 0.9) !important;
+  }
+  html[data-mode="light"].arc-liquid-glass .glass-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+  }
+}
+
+/* 13. Seamless Monochrome Harmony (B&W Mode + Liquid Glass) */
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) .glass-card,
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) header.arc-safe-header,
+html.arc-bw-mode.arc-liquid-glass:not([data-mode="light"]) nav[aria-label="Mobile Bottom Navigation"] {
+  background: rgba(0, 0, 0, 0.72) !important;
+  background-image: none !important;
+  backdrop-filter: blur(28px) grayscale(100%) !important;
+  -webkit-backdrop-filter: blur(28px) grayscale(100%) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.65), 0 20px 48px -8px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.arc-bw-mode[data-mode="light"].arc-liquid-glass .glass-card,
+html.arc-bw-mode[data-mode="light"].arc-liquid-glass header.arc-safe-header,
+html.arc-bw-mode[data-mode="light"].arc-liquid-glass nav[aria-label="Mobile Bottom Navigation"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+  background-image: none !important;
+  backdrop-filter: blur(28px) grayscale(100%) !important;
+  -webkit-backdrop-filter: blur(28px) grayscale(100%) !important;
+  border-color: rgba(0, 0, 0, 0.4) !important;
+  box-shadow: inset 0 1.5px 1px 0 rgba(255, 255, 255, 1), 0 16px 40px -4px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 14. Accessibility: Prefers-Reduced-Motion */
+@media (prefers-reduced-motion: reduce) {
+  html.arc-liquid-glass .glass-card,
+  html.arc-liquid-glass .habit-row,
+  html.arc-liquid-glass .calendar-day-card,
+  html.arc-liquid-glass button,
+  html.arc-liquid-glass [role="button"],
+  html.arc-liquid-glass [role="tab"],
+  html.arc-liquid-glass .pp-btn,
+  html.arc-liquid-glass .sx-btn {
+    transition: opacity 0.2s ease, background 0.2s ease !important;
+    transform: none !important;
+  }
+  html.arc-liquid-glass .glass-card:hover,
+  html.arc-liquid-glass button:hover:not(:disabled),
+  html.arc-liquid-glass [role="tab"]:hover {
+    transform: none !important;
+  }
+}
