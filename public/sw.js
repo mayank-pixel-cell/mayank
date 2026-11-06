@@ -1,4 +1,4 @@
-const CACHE_NAME = "arc-tracker-v2.6.0-multiuser";
+const CACHE_NAME = "arc-tracker-v2.6.1-applaunch";
 const CORE_ASSETS = [
   "./",
   "./index.html",

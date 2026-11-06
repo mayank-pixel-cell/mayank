@@ -1978,28 +1978,78 @@ window.ArcAutoStart = (function() {
   function downloadWindowsStartupScript() {
     const appUrl = window.location.href;
     const batContent = `@echo off
-:: ========================================================
-::       ARC TRACKER - AUTOMATIC WINDOWS STARTUP INSTALLER
-:: ========================================================
+setlocal enabledelayedexpansion
+title Arc Tracker Windows Auto-Start Setup
+echo ========================================================
+echo       ARC TRACKER - AUTOMATIC APP STARTUP INSTALLER
+echo ========================================================
 echo.
-echo [ARC TRACKER] Registering Arc Tracker to launch when your PC turns on...
+echo [ARC TRACKER] Registering Arc Tracker Desktop App for Windows Startup...
 echo.
 
 set "STARTUP_FOLDER=%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"
-set "SHORTCUT_PATH=%STARTUP_FOLDER%\\ArcTracker.url"
 
-echo [InternetShortcut] > "%SHORTCUT_PATH%"
-echo URL=${appUrl} >> "%SHORTCUT_PATH%"
-echo IconIndex=0 >> "%SHORTCUT_PATH%"
-if exist "%LOCALAPPDATA%\\Microsoft\\Edge\\Application\\msedge.exe" (
-    echo IconFile=%LOCALAPPDATA%\\Microsoft\\Edge\\Application\\msedge.exe >> "%SHORTCUT_PATH%"
+:: 1. Delete legacy InternetShortcut (.url) which opened in a web browser
+if exist "%STARTUP_FOLDER%\\ArcTracker.url" (
+    del /f /q "%STARTUP_FOLDER%\\ArcTracker.url" >nul 2>&1
+    echo [OK] Removed legacy browser shortcut.
 )
 
+:: 2. Find Arc Tracker project directory
+set "APP_DIR=%~dp0"
+if "!APP_DIR:~-1!"=="\\" set "APP_DIR=!APP_DIR:~0,-1!"
+
+if not exist "!APP_DIR!\\Launch-ArcTracker.bat" (
+    if exist "%USERPROFILE%\\OneDrive\\Desktop\\mayank\\mayank\\Launch-ArcTracker.bat" (
+        set "APP_DIR=%USERPROFILE%\\OneDrive\\Desktop\\mayank\\mayank"
+    ) else if exist "%USERPROFILE%\\Desktop\\mayank\\mayank\\Launch-ArcTracker.bat" (
+        set "APP_DIR=%USERPROFILE%\\Desktop\\mayank\\mayank"
+    )
+)
+
+:: 3. Create Launch-ArcTracker.vbs if missing
+if exist "!APP_DIR!\\Launch-ArcTracker.bat" (
+    if not exist "!APP_DIR!\\Launch-ArcTracker.vbs" (
+        echo Option Explicit > "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo Dim WshShell, fso, scriptDir >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo Set WshShell = CreateObject("WScript.Shell") >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo Set fso = CreateObject("Scripting.FileSystemObject") >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo scriptDir = fso.GetParentFolderName(WScript.ScriptFullName) >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo WshShell.CurrentDirectory = scriptDir >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+        echo WshShell.Run "cmd.exe /c """ ^& scriptDir ^& "\\Launch-ArcTracker.bat""", 0, False >> "!APP_DIR!\\Launch-ArcTracker.vbs"
+    )
+)
+
+:: 4. Generate native Windows Shortcut (.lnk) for Desktop App Mode
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$wsh = New-Object -ComObject WScript.Shell; " ^
+  "$shortcut = $wsh.CreateShortcut('%STARTUP_FOLDER%\\Arc Tracker.lnk'); " ^
+  "if (Test-Path '!APP_DIR!\\Launch-ArcTracker.vbs') { " ^
+  "  $shortcut.TargetPath = (Join-Path $env:SystemRoot 'System32\\wscript.exe'); " ^
+  "  $shortcut.Arguments = '\"!APP_DIR!\\Launch-ArcTracker.vbs\"'; " ^
+  "  $shortcut.WorkingDirectory = '!APP_DIR!'; " ^
+  "  if (Test-Path '!APP_DIR!\\src-tauri\\icons\\icon.ico') { $shortcut.IconLocation = '!APP_DIR!\\src-tauri\\icons\\icon.ico,0' } " ^
+  "} else { " ^
+  "  $pX86 = [System.Environment]::GetEnvironmentVariable('ProgramFiles(x86)'); " ^
+  "  $edge = if ($pX86) { Join-Path $pX86 'Microsoft\\Edge\\Application\\msedge.exe' } else { '' }; " ^
+  "  if (-not (Test-Path $edge)) { $edge = Join-Path $env:ProgramFiles 'Microsoft\\Edge\\Application\\msedge.exe' }; " ^
+  "  if (Test-Path $edge) { $shortcut.TargetPath = $edge; $shortcut.Arguments = '--app=\"${appUrl}\" --start-maximized' } " ^
+  "  else { $shortcut.TargetPath = 'chrome.exe'; $shortcut.Arguments = '--app=\"${appUrl}\" --start-maximized' }; " ^
+  "}; " ^
+  "$shortcut.Description = 'Arc Tracker Desktop App'; " ^
+  "$shortcut.Save()"
+
 echo.
-echo [SUCCESS] Shortcut created in Startup folder:
-echo "%SHORTCUT_PATH%"
+echo ========================================================
+echo [SUCCESS] Arc Tracker App is now registered for Auto-Start!
 echo.
-echo Arc Tracker will now start automatically every time your device powers on!
+echo * Legacy web browser shortcut removed.
+echo * Desktop App Shortcut created at:
+echo   "%STARTUP_FOLDER%\\Arc Tracker.lnk"
+echo.
+echo Arc Tracker will now launch as a dedicated desktop application
+echo window whenever your computer turns on (no browser tabs/URL bar).
+echo ========================================================
 echo.
 pause
 `;

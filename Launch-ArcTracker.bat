@@ -16,14 +16,11 @@ if not exist "%EDGE_PATH%" set "EDGE_PATH=C:\Program Files\Microsoft\Edge\Applic
 set "CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe"
 if not exist "%CHROME_PATH%" set "CHROME_PATH=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 
-REM Start local preview server in background if not already running
-netstat -ano | findstr :1420 >nul
+REM Start local preview server in background if not already responding
+powershell.exe -NoProfile -Command "try { $r = [System.Net.WebRequest]::Create('http://localhost:1420'); $r.Timeout = 1000; $resp = $r.GetResponse(); $resp.Close(); exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    if exist "node_modules\.bin\vite.cmd" (
-        start /b "" "node_modules\.bin\vite.cmd" preview --port 1420
-    ) else (
-        start /b cmd /c "npm.cmd run preview -- --port 1420"
-    )
+    echo Starting Arc Tracker local server...
+    start "" /min cmd.exe /c "npm.cmd run preview"
     timeout /t 2 /nobreak >nul
 )
 
