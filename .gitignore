@@ -8,6 +8,8 @@ dist-ssr/
 # Tauri / Rust build artifacts
 src-tauri/target/
 src-tauri/.cargo/
+**/.cargo/config.toml
+.cargo/
 
 # Android build outputs & local config (if generated)
 src-tauri/gen/android/.gradle
