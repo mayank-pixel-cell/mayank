@@ -19666,12 +19666,24 @@ window.ArcGold = (function() {
   };
 
   const PROMO_STORAGE_KEY = 'arc_gold_applied_promo';
+  const VALID_PROMO_KEYS = ['ARC50', 'DISCIPLINE', 'SUMMERARC', 'FOUNDER', 'GOLDVIP', 'STUDENT'];
 
   function getAppliedPromo() {
     try {
-      const code = localStorage.getItem(PROMO_STORAGE_KEY);
-      if (code && PROMO_CODES[code.toUpperCase()]) {
-        return { code: code.toUpperCase(), ...PROMO_CODES[code.toUpperCase()] };
+      const stored = localStorage.getItem(PROMO_STORAGE_KEY);
+      if (!stored || typeof stored !== 'string') return null;
+      const upper = stored.trim().toUpperCase();
+      for (let i = 0; i < VALID_PROMO_KEYS.length; i++) {
+        const k = VALID_PROMO_KEYS[i];
+        if (k === upper && Object.prototype.hasOwnProperty.call(PROMO_CODES, k)) {
+          const item = PROMO_CODES[k];
+          return {
+            code: k,
+            type: item.type === 'percent' ? 'percent' : 'fixed',
+            value: Number(item.value) || 0,
+            label: escapeHtml(item.label)
+          };
+        }
       }
     } catch (_) {}
     return null;
@@ -19679,28 +19691,30 @@ window.ArcGold = (function() {
 
   function applyPromoCode(inputCode) {
     if (!inputCode || typeof inputCode !== 'string') return false;
-    const cleanCode = inputCode.trim().toUpperCase();
-    if (!cleanCode) return false;
-    if (PROMO_CODES[cleanCode]) {
-      localStorage.setItem(PROMO_STORAGE_KEY, cleanCode);
-      if (typeof playSfx === 'function') playSfx('bonus');
-      if (typeof showToast === 'function') {
-        showToast(`🎉 Promo code "${cleanCode}" applied! ${PROMO_CODES[cleanCode].label}`);
+    const clean = inputCode.trim().toUpperCase();
+    for (let i = 0; i < VALID_PROMO_KEYS.length; i++) {
+      const k = VALID_PROMO_KEYS[i];
+      if (k === clean) {
+        localStorage.setItem(PROMO_STORAGE_KEY, k);
+        if (typeof playSfx === 'function') playSfx('bonus');
+        if (typeof showToast === 'function') {
+          showToast('🎉 Promo code "' + k + '" applied! ' + PROMO_CODES[k].label);
+        }
+        render();
+        return true;
       }
-      render();
-      return true;
-    } else {
-      if (typeof playSfx === 'function') playSfx('denied');
-      if (typeof showToast === 'function') {
-        showToast(`❌ Invalid or expired promo code: "${cleanCode}". Try "ARC50" or "DISCIPLINE"`);
-      }
-      const errEl = document.getElementById('gold-promo-error-msg');
-      if (errEl) {
-        errEl.textContent = `Promo code "${cleanCode}" is invalid. Valid codes: ARC50, DISCIPLINE, SUMMERARC, GOLDVIP`;
-        errEl.classList.remove('hidden');
-      }
-      return false;
     }
+    if (typeof playSfx === 'function') playSfx('denied');
+    const safeDisplay = escapeHtml(clean.slice(0, 20));
+    if (typeof showToast === 'function') {
+      showToast('❌ Invalid promo code: "' + safeDisplay + '". Try "ARC50" or "DISCIPLINE"');
+    }
+    const errEl = document.getElementById('gold-promo-error-msg');
+    if (errEl) {
+      errEl.textContent = 'Promo code "' + safeDisplay + '" is invalid. Valid codes: ARC50, DISCIPLINE, SUMMERARC, GOLDVIP';
+      errEl.classList.remove('hidden');
+    }
+    return false;
   }
 
   function removePromoCode() {
@@ -20940,7 +20954,7 @@ window.ArcGold = (function() {
                 </div>
                 <div>
                   <span class="font-bold text-emerald-300 font-mono tracking-wide">${promo.code}</span>
-                  <span class="text-slate-300 text-xs ml-1.5">applied: <b>${promo.label}</b></span>
+                  <span class="text-slate-300 text-xs ml-1.5">applied: <b>${escapeHtml(promo.label)}</b></span>
                 </div>
               </div>
               <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Prices Discounted Below</span>
