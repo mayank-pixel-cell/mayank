@@ -16,5 +16,5 @@ powershell.exe -NoProfile -Command ^
   "}"
 
 echo Arc Tracker server stopped.
-timeout /t 2 >nul
+ping -n 2 127.0.0.1 >nul
 exit
