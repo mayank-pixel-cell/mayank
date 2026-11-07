@@ -425,24 +425,24 @@ export function renderBlockerModals() {
             </div>
         </div>
 
-        <!-- ARC GOLD STRICT MODE UPGRADE MODAL (FOR FREE USERS) -->
+                <!-- ARC GOLD STRICT MODE MODAL (ALIGNED WITH 100% FREE MANIFESTO) -->
         <div id="arc-gold-strict-upgrade-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
             <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-slate-900 to-black border-2 border-amber-500/70 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(245,158,11,0.3)] space-y-6 text-center animate-zoom-in my-auto">
-                <!-- Glowing Crown Icon -->
+                <!-- Glowing Shield Icon -->
                 <div class="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400/20 via-yellow-500/30 to-amber-600/20 border-2 border-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/30">
                     <span class="absolute inset-0 rounded-3xl border border-amber-400 animate-ping opacity-30"></span>
-                    <i class="fa-solid fa-crown text-3xl sm:text-4xl text-amber-300"></i>
+                    <i class="fa-solid fa-shield-halved text-3xl sm:text-4xl text-amber-300"></i>
                 </div>
 
                 <div class="space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/50 text-[10px] font-mono font-black uppercase tracking-widest">
-                        ⭐ ARC GOLD VIP PERK
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 text-[10px] font-mono font-black uppercase tracking-widest">
+                        🛡️ 100% FREE MANIFESTO • DISCIPLINE FOR ALL
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                        Unlock Focus Strict Mode
+                        Focus Strict Mode (100% Free Forever)
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md mx-auto">
-                        Strict Mode is an exclusive <span class="text-amber-300 font-bold">Arc Gold VIP</span> discipline feature. It locks your focus sessions so you cannot give up or exit early when temptation strikes.
+                        In accordance with our <span class="text-emerald-400 font-bold">100% Free Manifesto</span>, self-discipline is a human right, never a luxury subscription. Strict Mode locks your focus sessions so you cannot give up or exit early when temptation strikes—completely free for every warrior.
                     </p>
                 </div>
 
@@ -452,9 +452,46 @@ export function renderBlockerModals() {
                         <i class="fa-solid fa-lock text-amber-400 mt-0.5 shrink-0"></i>
                         <div>
                             <div class="font-bold text-white">Unbreakable Focus</div>
-                            <div class="text-[10px] text-slate-400">Zero early exits or pauses permitted</div>
+                            <div class="text-[10px] text-slate-400">Zero early exits or pauses permitted (100% Free)</div>
                         </div>
                     </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-hand-holding-heart text-emerald-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Never Paywalled</div>
+                            <div class="text-[10px] text-slate-400">Zero subscriptions or hidden paywalls</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-bolt-lightning text-cyan-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Ironclad Commitment</div>
+                            <div class="text-[10px] text-slate-400">Enforces deep focus until countdown hits 00:00</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-crown text-yellow-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Voluntary VIP Patronage</div>
+                            <div class="text-[10px] text-slate-400">Arc Gold is optional aesthetic support only</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="space-y-2 pt-2">
+                    <button role="button" onclick="closeGoldStrictModal(); if(window.toggleFocusStrictMode){window.toggleFocusStrictMode();} if(typeof showToast==='function') showToast('🛡️ Focus Strict Mode configured (100% Free)!'); playSfx('achievement')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 hover:from-emerald-300 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock text-slate-950"></i> Enable Focus Strict Mode (100% Free)
+                    </button>
+                    <button role="button" onclick="closeGoldStrictModal(); if(window.ArcGold){window.ArcGold.scrollToGoldCard();} playSfx('click')" class="w-full py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-amber-200 border border-amber-500/30 text-xs font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-crown text-amber-400"></i> Optional: Support via Arc Gold VIP Patronage
+                    </button>
+                    <button role="button" onclick="closeGoldStrictModal(); playSfx('modalClose')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
                     <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
                         <i class="fa-solid fa-bolt-lightning text-cyan-400 mt-0.5 shrink-0"></i>
                         <div>
@@ -490,36 +527,73 @@ export function renderBlockerModals() {
             </div>
         </div>
 
-        <!-- ARC GOLD BLACK & WHITE MODE UPGRADE MODAL (FOR FREE USERS) -->
+                <!-- ARC GOLD BLACK & WHITE MODE MODAL (ALIGNED WITH 100% FREE MANIFESTO) -->
         <div id="arc-gold-bw-upgrade-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
-            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-slate-900 to-black border-2 border-amber-500/70 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(245,158,11,0.3)] space-y-6 text-center animate-zoom-in my-auto">
-                <!-- Glowing B&W Gold Icon -->
-                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400/20 via-yellow-500/30 to-amber-600/20 border-2 border-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                    <span class="absolute inset-0 rounded-3xl border border-amber-400 animate-ping opacity-30"></span>
-                    <i class="fa-solid fa-circle-half-stroke text-3xl sm:text-4xl text-amber-300"></i>
+            <div class="relative w-full max-w-lg bg-gradient-to-b from-slate-950 via-slate-900 to-black border-2 border-zinc-500/70 rounded-3xl p-6 sm:p-8 shadow-[0_0_80px_rgba(255,255,255,0.15)] space-y-6 text-center animate-zoom-in my-auto">
+                <!-- Glowing B&W Icon -->
+                <div class="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-white/20 via-zinc-500/30 to-black/40 border-2 border-zinc-300 flex items-center justify-center shadow-lg shadow-white/10">
+                    <span class="absolute inset-0 rounded-3xl border border-zinc-400 animate-ping opacity-20"></span>
+                    <i class="fa-solid fa-circle-half-stroke text-3xl sm:text-4xl text-white"></i>
                 </div>
 
                 <div class="space-y-2">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/50 text-[10px] font-mono font-black uppercase tracking-widest">
-                        ⭐ ARC GOLD VIP PERK
+                    <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 text-[10px] font-mono font-black uppercase tracking-widest">
+                        🧠 100% FREE MANIFESTO • DOPAMINE DETOX
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                        Unlock Black &amp; White Mode
+                        Black &amp; White Mode (100% Free Forever)
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md mx-auto">
-                        Black &amp; White Mode is an exclusive <span class="text-amber-300 font-bold">Arc Gold VIP</span> feature. It strips 100% of colors across the entire application, delivering a stark, high-contrast monochrome aesthetic for deep dopamine detox and zero visual distraction.
+                        In accordance with our <span class="text-emerald-400 font-bold">100% Free Manifesto</span>, visual detox tools are never locked behind paywalls. Black &amp; White Mode strips 100% of interface colors to eliminate hyper-stimulating cues and deliver deep monochrome focus—free for all users.
                     </p>
                 </div>
 
                 <!-- FEATURES HIGHLIGHT -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left text-xs">
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-start gap-2.5">
-                        <i class="fa-solid fa-droplet-slash text-amber-400 mt-0.5 shrink-0"></i>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-zinc-700/60 flex items-start gap-2.5">
+                        <i class="fa-solid fa-droplet-slash text-zinc-300 mt-0.5 shrink-0"></i>
                         <div>
                             <div class="font-bold text-white">100% Color Stripping</div>
-                            <div class="text-[10px] text-slate-400">Pure monochrome black, gray &amp; white</div>
+                            <div class="text-[10px] text-slate-400">Pure monochrome black, gray &amp; white (100% Free)</div>
                         </div>
                     </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-brain text-cyan-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Dopamine Detox</div>
+                            <div class="text-[10px] text-slate-400">Eliminates hyper-stimulating interface hues</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-keyboard text-purple-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Instant Hotkey (Alt+B)</div>
+                            <div class="text-[10px] text-slate-400">Quick-switch between color and B&amp;W anytime</div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-crown text-amber-400 mt-0.5 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-white">Voluntary VIP Patronage</div>
+                            <div class="text-[10px] text-slate-400">Arc Gold is optional aesthetic support only</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="space-y-2 pt-1">
+                    <button role="button" onclick="if(window.ArcBlackWhiteMode){ArcBlackWhiteMode.toggle(); ArcBlackWhiteMode.closeUpgradeModal();}else{closeUpgradeModal();} if(typeof showToast==='function') showToast('⚡ Black & White Mode toggled (100% Free)!'); playSfx('zenChime')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-zinc-100 via-slate-200 to-zinc-300 hover:from-white hover:to-zinc-200 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-white/20 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-half-stroke text-slate-950"></i> Toggle Black &amp; White Mode (100% Free)
+                    </button>
+                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); switchTab('settings'); if(window.ArcGold)window.ArcGold.scrollToGoldCard(); playSfx('click')" class="w-full py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-amber-200 border border-amber-500/30 text-xs font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-crown text-amber-400"></i> Optional: Support via Arc Gold VIP Patronage
+                    </button>
+                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); playSfx('modalClose')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
                     <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
                         <i class="fa-solid fa-brain text-cyan-400 mt-0.5 shrink-0"></i>
                         <div>

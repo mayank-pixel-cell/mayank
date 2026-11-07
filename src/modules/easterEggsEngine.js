@@ -488,7 +488,7 @@
   exit          - Disconnect and exit terminal`, 'text-emerald-300');
     } else if (cmd === 'server' || cmd === 'telemetry') {
       const sync = window.ArcServerSync;
-      const url = sync ? sync.serverUrl : 'http://localhost:4000';
+      const url = sync ? sync.serverUrl : 'https://zkxcwogqodwixfgmxdiy.supabase.co';
       const online = sync ? sync.isOnline : false;
       const tel = sync && sync.cachedTelemetry ? sync.cachedTelemetry : null;
       const users = tel ? tel.totalUsers : 16;
@@ -505,7 +505,7 @@
   Arc Gold VIPs   : ${gold} active supporters
   Active Squads   : ${squads} units configured
   Timestamp       : ${time}
-  Sync Protocol   : REST + JSON Atomic Store`, 'text-cyan-300');
+  Sync Protocol   : Supabase PostgreSQL Realtime`, 'text-cyan-300');
     } else if (cmd === 'gold' || cmd === 'vip') {
       const isGold = !!(window.ArcGold && window.ArcGold.isGold());
       const gState = window.ArcGold && window.ArcGold.getState ? window.ArcGold.getState() : null;

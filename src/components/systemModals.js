@@ -1181,8 +1181,8 @@ export function renderSystemModals() {
             <p class="text-[11px] text-slate-400">Available for Android phones, tablets &amp; Wear OS devices.</p>
           </div>
         </div>
-        <a href="https://play.google.com/store/apps/details?id=com.arctracker.app" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/40 text-xs font-bold transition shrink-0">
-          Open Store
+        <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" onclick="if(window.showToast) window.showToast('Google Play Store listing coming soon! Check GitHub Releases for early builds.');" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/40 text-xs font-bold transition shrink-0">
+          Releases (Soon)
         </a>
       </div>
 
@@ -1200,8 +1200,8 @@ export function renderSystemModals() {
             <p class="text-[11px] text-slate-400">Available for iPhone, iPad &amp; Mac.</p>
           </div>
         </div>
-        <a href="https://apps.apple.com/app/arc-tracker/id1688000000" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-400 text-sky-300 hover:text-slate-950 border border-sky-500/40 text-xs font-bold transition shrink-0">
-          Open Store
+        <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" onclick="if(window.showToast) window.showToast('Apple App Store listing coming soon! Check GitHub Releases for early builds.');" class="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-400 text-sky-300 hover:text-slate-950 border border-sky-500/40 text-xs font-bold transition shrink-0">
+          Releases (Soon)
         </a>
       </div>
     </div>

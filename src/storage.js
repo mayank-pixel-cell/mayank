@@ -21,7 +21,10 @@ const GLOBAL_SHARED_KEYS = new Set([
   "__arc_multiuser_migrated_v1",
   "arc_gold_membership",
   "arc_gold_applied_promo",
-  "arc_hardware_profile"
+  "arc_hardware_profile",
+  "arc_unique_user_id",
+  "arc_user_id",
+  "arc_device_id"
 ]);
 
 class ArcDurableStorage {
@@ -125,6 +128,11 @@ class ArcDurableStorage {
 
     // 5. Hydrate active user's partition into native localStorage
     this._hydrateActiveUserToLocalStorage(activeUid);
+
+    // 6. Ensure persistent unique user ID exists
+    try {
+      getOrCreateUserId();
+    } catch (_) {}
 
     if (typeof window !== "undefined") {
       window.addEventListener("visibilitychange", () => {
@@ -318,6 +326,19 @@ class ArcDurableStorage {
     }
 
     this._scheduleFlush();
+
+    // Trigger debounced auto-sync to Supabase when screentime or tracker state is saved
+    if (
+      key &&
+      (key.includes("screentime") ||
+       key.includes("tracker_state") ||
+       key === "arc_tracker_state" ||
+       key.startsWith("arc_screentime"))
+    ) {
+      if (typeof scheduleAutoSync === "function") {
+        scheduleAutoSync();
+      }
+    }
   }
 
   removeItem(key) {
@@ -473,44 +494,297 @@ class ArcDurableStorage {
       }
     });
   }
+
+  getOrCreateUserId() {
+    return getOrCreateUserId();
+  }
+
+  getCurrentStats() {
+    return getCurrentStats();
+  }
+
+  scheduleAutoSync(delayMs) {
+    return scheduleAutoSync(delayMs);
+  }
+
+  triggerStartupSync() {
+    return triggerStartupSync();
+  }
 }
 
+/**
+ * Resolves or auto-generates a persistent unique device/user identifier.
+ * Checks if a unique user identifier or profile name exists in local storage.
+ * If not, generates a persistent unique ID (e.g., 'user_' + crypto.randomUUID())
+ * and saves it locally so every installation is counted as 1 unique user.
+ *
+ * @returns {string} The persistent unique user ID
+ */
+export function getOrCreateUserId() {
+  const storage = typeof window !== "undefined" && window.localStorage
+    ? window.localStorage
+    : (typeof localStorage !== "undefined" ? localStorage : null);
+
+  if (!storage) {
+    const fallbackUuid = (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function")
+      ? crypto.randomUUID()
+      : Math.random().toString(36).substring(2, 15);
+    return `user_${fallbackUuid}`;
+  }
+
+  try {
+    // 1. Check if unique user ID already exists in local storage
+    const storedId = storage.getItem("arc_unique_user_id") || storage.getItem("arc_user_id");
+    if (storedId && storedId.trim()) {
+      return storedId.trim();
+    }
+
+    // 2. Check if a profile exists with a customized email, username, or profile name
+    const rawProfile = storage.getItem("arc_user_profile");
+    if (rawProfile) {
+      try {
+        const prof = JSON.parse(rawProfile);
+        if (prof.email && typeof prof.email === "string" && prof.email.trim() && prof.email !== "operative@winterarc.local") {
+          const cleanEmail = prof.email.trim();
+          storage.setItem("arc_unique_user_id", cleanEmail);
+          storage.setItem("arc_user_id", cleanEmail);
+          return cleanEmail;
+        }
+        const profileName = prof.username || prof.displayName || prof.name || prof.user;
+        if (profileName && typeof profileName === "string" && profileName.trim() && !["Operative", "operative"].includes(profileName.trim())) {
+          const sanitized = profileName.trim().replace(/^@+/, "").replace(/[^a-zA-Z0-9_.-]/g, "_");
+          const candidateId = `user_${sanitized}`;
+          storage.setItem("arc_unique_user_id", candidateId);
+          storage.setItem("arc_user_id", candidateId);
+          return candidateId;
+        }
+      } catch (_) {}
+    }
+
+    const simpleProfileName = storage.getItem("profile_name") || storage.getItem("arc_profile_name") || storage.getItem("username");
+    if (simpleProfileName && typeof simpleProfileName === "string" && simpleProfileName.trim() && !["Operative", "operative"].includes(simpleProfileName.trim())) {
+      const sanitized = simpleProfileName.trim().replace(/^@+/, "").replace(/[^a-zA-Z0-9_.-]/g, "_");
+      const candidateId = `user_${sanitized}`;
+      storage.setItem("arc_unique_user_id", candidateId);
+      storage.setItem("arc_user_id", candidateId);
+      return candidateId;
+    }
+
+    const opUid = storage.getItem("arc_operative_uid");
+    if (opUid && typeof opUid === "string" && opUid.trim() && !opUid.startsWith("op_fallback_")) {
+      storage.setItem("arc_unique_user_id", opUid.trim());
+      storage.setItem("arc_user_id", opUid.trim());
+      return opUid.trim();
+    }
+
+    // 3. Otherwise generate a persistent unique ID ('user_' + crypto.randomUUID())
+    let uuid;
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      uuid = crypto.randomUUID();
+    } else {
+      uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
+
+    const newId = `user_${uuid}`;
+    storage.setItem("arc_unique_user_id", newId);
+    storage.setItem("arc_user_id", newId);
+    return newId;
+  } catch (err) {
+    console.warn("[ArcStorage] Error resolving unique user ID:", err);
+    return `user_${Date.now()}`;
+  }
+}
+
+/**
+ * Captures a consolidated snapshot of the user's current habits, streak,
+ * screentime, and device stats for cloud backup.
+ *
+ * @returns {object} Current user stats
+ */
+export function getCurrentStats() {
+  const stats = {
+    updated_at: new Date().toISOString()
+  };
+
+  // 1. Tracker state (habits, streak, xp, level, scores)
+  if (typeof window !== "undefined" && window.state) {
+    stats.state = window.state;
+    stats.streak = window.state.streak || 0;
+    stats.level = window.state.level || 1;
+    stats.xp = window.state.xp || 0;
+  } else if (typeof localStorage !== "undefined") {
+    try {
+      const rawState = localStorage.getItem("arc_tracker_state");
+      if (rawState) stats.state = JSON.parse(rawState);
+    } catch (_) {}
+  }
+
+  // 2. Screen time and cross-device usage stats
+  if (typeof window !== "undefined" && window.ArcScreenTime) {
+    stats.screenTime = {
+      activeSeconds: window.ArcScreenTime.activeSeconds || 0,
+      todayKey: window.ArcScreenTime.todayKey || "",
+      deviceScreenTime: window.ArcScreenTime.deviceScreenTime || null,
+      history: window.ArcScreenTime.history || null,
+      platform: window.ArcScreenTime.platform || null
+    };
+  } else if (typeof localStorage !== "undefined") {
+    try {
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      const activeSecs = localStorage.getItem(`arc_screentime_${today}`);
+      const crossDevice = localStorage.getItem("arc_cross_device_screentime");
+      const history = localStorage.getItem("arc_screentime_history");
+      stats.screenTime = {
+        activeSeconds: activeSecs ? Number(activeSecs) : 0,
+        todayKey: today,
+        deviceScreenTime: crossDevice ? JSON.parse(crossDevice) : null,
+        history: history ? JSON.parse(history) : null
+      };
+    } catch (_) {}
+  }
+
+  // 3. User profile snapshot
+  if (typeof localStorage !== "undefined") {
+    try {
+      const rawProf = localStorage.getItem("arc_user_profile");
+      if (rawProf) stats.profile = JSON.parse(rawProf);
+    } catch (_) {}
+  }
+
+  return stats;
+}
+
+let syncDebounceTimer = null;
+let lastSyncTimestamp = 0;
+let syncPendingSince = null;
+const MIN_SYNC_INTERVAL_MS = 30000; // Minimum 30s interval between syncs (at most once every 30–60s)
+const MAX_WAIT_INTERVAL_MS = 60000; // Maximum wait 60s
+const BATCH_DEBOUNCE_MS = 3000;     // 3s batch debounce
+
+/**
+ * Schedules an automatic backup sync to Supabase. Debounces rapid saves
+ * so it syncs at most once every 30–60 seconds while guaranteeing updates are saved.
+ *
+ * @param {number} [delayMs=3000]
+ */
+export function scheduleAutoSync(delayMs = BATCH_DEBOUNCE_MS) {
+  const now = Date.now();
+  if (!syncPendingSince) {
+    syncPendingSince = now;
+  }
+
+  if (syncDebounceTimer) {
+    clearTimeout(syncDebounceTimer);
+    syncDebounceTimer = null;
+  }
+
+  const timeSinceLastSync = now - lastSyncTimestamp;
+  const timePending = now - syncPendingSince;
+
+  let wait = delayMs;
+  if (timeSinceLastSync < MIN_SYNC_INTERVAL_MS) {
+    wait = Math.max(wait, MIN_SYNC_INTERVAL_MS - timeSinceLastSync);
+  }
+
+  const maxRemaining = Math.max(0, MAX_WAIT_INTERVAL_MS - timePending);
+  wait = Math.min(wait, maxRemaining);
+
+  syncDebounceTimer = setTimeout(async () => {
+    syncDebounceTimer = null;
+    syncPendingSince = null;
+    try {
+      const userId = getOrCreateUserId();
+      const currentStats = getCurrentStats();
+      await syncUserData(userId, currentStats);
+    } catch (e) {
+      console.warn("[ArcStorage] Debounced auto-sync error:", e);
+    }
+  }, wait);
+}
+
+/**
+ * Immediately triggers an initial startup sync to register active user and state.
+ */
+export async function triggerStartupSync() {
+  try {
+    const userId = getOrCreateUserId();
+    const currentStats = getCurrentStats();
+    return await syncUserData(userId, currentStats);
+  } catch (err) {
+    console.warn("[ArcStorage] Startup sync error:", err);
+  }
+}
 
 /**
  * Upserts user habit and application data into Supabase cloud storage (user_data table).
  * Local storage operations remain completely unaffected and sovereign.
+ * Specifies { onConflict: 'email' } so returning users update their existing row instead of making duplicate entries.
  *
- * @param {string} userEmail
- * @param {object|any} appStats
+ * @param {string} [userEmail]
+ * @param {object|any} [appStats]
  * @returns {Promise<{success: boolean, data?: any, error?: any}>}
  */
 export async function syncUserData(userEmail, appStats) {
   try {
+    const userId = userEmail || getOrCreateUserId();
+    const stats = (appStats !== undefined && appStats !== null) ? appStats : getCurrentStats();
+
     const { data, error } = await supabase
       .from('user_data')
       .upsert({
-        email: userEmail,
-        data: appStats,
+        email: userId,
+        data: stats,
         last_active: new Date().toISOString()
-      })
+      }, { onConflict: 'email' })
+      .select();
 
     if (error) {
-      console.error('Error syncing to Supabase:', error.message)
-      return { success: false, error }
+      console.error('[ArcStorage] Error syncing to Supabase:', error.message);
+      return { success: false, error };
     }
-    return { success: true, data }
+    lastSyncTimestamp = Date.now();
+    return { success: true, data };
   } catch (err) {
-    console.error('Unexpected sync error:', err)
-    return { success: false, error: err }
+    console.error('[ArcStorage] Unexpected sync error:', err);
+    return { success: false, error: err };
   }
 }
 
 const arcStorage = new ArcDurableStorage();
 arcStorage.syncUserData = syncUserData;
+arcStorage.getOrCreateUserId = getOrCreateUserId;
+arcStorage.getCurrentStats = getCurrentStats;
+arcStorage.scheduleAutoSync = scheduleAutoSync;
+arcStorage.triggerStartupSync = triggerStartupSync;
+
 if (typeof window !== "undefined") {
   window.ArcStorage = arcStorage;
   window.arcStorage = arcStorage;
   window.syncUserData = syncUserData;
+  window.getOrCreateUserId = getOrCreateUserId;
+  window.getCurrentStats = getCurrentStats;
+  window.scheduleAutoSync = scheduleAutoSync;
+  window.triggerStartupSync = triggerStartupSync;
+
+  // Fallback auto-sync on page load if main bootstrap does not trigger
+  const onReady = () => {
+    setTimeout(() => {
+      if (!lastSyncTimestamp) {
+        triggerStartupSync();
+      }
+    }, 1500);
+  };
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    onReady();
+  } else {
+    window.addEventListener("DOMContentLoaded", onReady, { once: true });
+  }
 }
+
 export { arcStorage, ArcDurableStorage };
 export default arcStorage;

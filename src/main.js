@@ -6,7 +6,7 @@ import "./globals.js";
 mountAppShell();
 
 // 2. Import core storage & hardware gatekeeper
-import "./storage.js";
+import { arcStorage, syncUserData, getOrCreateUserId, getCurrentStats } from "./storage.js";
 import "./hardware.js";
 
 // 3. Import core & feature modules (they bind global handlers and wait for init/DOMContentLoaded)
@@ -51,6 +51,23 @@ async function bootstrapArcTracker() {
     }
     if (window.ArcServerSync && typeof window.ArcServerSync.init === "function") {
       window.ArcServerSync.init();
+    }
+
+    // Auto-sync active user data & screentime to Supabase on app load
+    try {
+      const userId = getOrCreateUserId();
+      const currentStats = getCurrentStats();
+      syncUserData(userId, currentStats).then((res) => {
+        if (res && res.success) {
+          console.log("[ArcMain] Supabase startup sync complete for:", userId);
+        } else {
+          console.warn("[ArcMain] Supabase startup sync notice:", res?.error?.message || res?.error);
+        }
+      }).catch((err) => {
+        console.warn("[ArcMain] Supabase startup sync caught:", err);
+      });
+    } catch (e) {
+      console.warn("[ArcMain] Auto-sync startup trigger error:", e);
     }
   } catch (err) {
     console.error("[ArcMain] Bootstrap error:", err);

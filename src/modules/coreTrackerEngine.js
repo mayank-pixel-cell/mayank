@@ -43,7 +43,7 @@
         ];
 
         let currentQuoteIndex = 0;
-        let calendarCurrentDate = new Date(2026, 9, 1);
+        let calendarCurrentDate = new Date();
         let selectedCalendarDateStr = null;
 
         let state = {
@@ -132,6 +132,9 @@
             }
             if (window.ArcServerSync && typeof window.ArcServerSync.scheduleDebouncedSync === 'function') {
                 window.ArcServerSync.scheduleDebouncedSync(1500);
+            }
+            if (window.ArcStorage && typeof window.ArcStorage.scheduleAutoSync === 'function') {
+                window.ArcStorage.scheduleAutoSync();
             }
         }
 
@@ -1649,6 +1652,10 @@ function toggleStreakFreezeFromRules(checked) {
             const monthName = calendarCurrentDate.toLocaleString('default', { month: 'long' });
 
             monthYearTracker.textContent = `${monthName} ${year}`;
+            const headerTitle = document.getElementById('tracker-calendar-header-title');
+            if (headerTitle) {
+                headerTitle.textContent = `${monthName} ${year} Lock-In Calendar`;
+            }
 
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();

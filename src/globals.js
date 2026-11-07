@@ -24,6 +24,9 @@ export function getLocalStorageItem(key, defaultValue = null) {
 export function setLocalStorageItem(key, value) {
   try {
     localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    if (key && (key.includes('screentime') || key.includes('tracker_state')) && window.ArcStorage && typeof window.ArcStorage.scheduleAutoSync === 'function') {
+      window.ArcStorage.scheduleAutoSync();
+    }
   } catch (e) {}
 }
 
@@ -34,6 +37,9 @@ export function saveToLocalStorage() {
   try {
     if (window.state) {
       localStorage.setItem('arc_tracker_state', JSON.stringify(window.state));
+    }
+    if (window.ArcStorage && typeof window.ArcStorage.scheduleAutoSync === 'function') {
+      window.ArcStorage.scheduleAutoSync();
     }
   } catch (e) {}
 }

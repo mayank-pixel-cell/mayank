@@ -1,4 +1,8 @@
 export function renderTrackerView() {
+  const now = new Date();
+  const currentMonthYear = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const currentSelectedDay = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
   return `<!-- WINTER ARC FINISHED BANNER -->
         <div id="arc-completion-banner" class="hidden glass-card rounded-2xl p-4 sm:p-6 border-2 border-cyan-400 bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 space-y-4 mb-4 sm:mb-6 shadow-2xl relative overflow-hidden transition-all duration-300">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
@@ -107,13 +111,13 @@ export function renderTrackerView() {
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                         <h3 class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-cyan-400 text-base sm:text-lg"></i> October 2026 Lock-In Calendar
+                            <i class="fa-solid fa-calendar-days text-cyan-400 text-base sm:text-lg"></i> <span id="tracker-calendar-header-title">${currentMonthYear} Lock-In Calendar</span>
                         </h3>
                         <p class="text-[11px] sm:text-xs text-slate-300">Tap any day or press <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">◀</kbd> <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">▶</kbd> to switch days</p>
                     </div>
                     <div class="flex items-center justify-between sm:justify-start gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start sm:self-auto w-full sm:w-auto">
                         <button role="button" onclick="changeCalendarMonth(-1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Previous Month"><i class="fa-solid fa-chevron-left"></i></button>
-                        <span id="tracker-calendar-month-year" class="text-xs font-mono font-bold text-cyan-400 flex-1 text-center min-w-[100px]">October 2026</span>
+                        <span id="tracker-calendar-month-year" class="text-xs font-mono font-bold text-cyan-400 flex-1 text-center min-w-[100px]">${currentMonthYear}</span>
                         <button role="button" onclick="changeCalendarMonth(1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Next Month"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
@@ -135,7 +139,7 @@ export function renderTrackerView() {
                                 <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20 ml-1">Daily Log</span>
                             </div>
                         </div>
-                        <div id="tracker-calendar-selected-date-title" class="text-xs sm:text-sm font-extrabold text-white">Sunday, October 4, 2026</div>
+                        <div id="tracker-calendar-selected-date-title" class="text-xs sm:text-sm font-extrabold text-white">${currentSelectedDay}</div>
                         
                         <div class="space-y-1">
                             <div class="flex justify-between items-center text-xs">
@@ -282,16 +286,18 @@ export function renderTrackerView() {
 
                     <!-- 3 COMPACT STORE BUTTONS (NO FAKE RATINGS) -->
                     <div class="flex items-center gap-2 flex-wrap shrink-0 w-full sm:w-auto">
-                        <!-- Google Play -->
-                        <a href="https://play.google.com/store/apps/details?id=com.arctracker.app" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none px-3 py-1.5 rounded-xl bg-slate-950/70 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm whitespace-nowrap" title="Google Play Store">
+                        <!-- Google Play (Coming Soon / GitHub Releases) -->
+                        <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" onclick="if(window.showToast) window.showToast('Google Play Store listing coming soon! Check GitHub Releases for early builds.'); if(window.playSfx) playSfx('click');" class="flex-1 sm:flex-none px-3 py-1.5 rounded-xl bg-slate-950/70 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm whitespace-nowrap" title="Google Play Store (Coming Soon - View GitHub Releases)">
                             <i class="fa-brands fa-google-play text-emerald-400 text-xs"></i>
                             <span>Google Play</span>
+                            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold">Soon</span>
                         </a>
 
-                        <!-- App Store -->
-                        <a href="https://apps.apple.com/app/arc-tracker/id1688000000" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none px-3 py-1.5 rounded-xl bg-slate-950/70 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-sky-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm whitespace-nowrap" title="Apple App Store">
+                        <!-- App Store (Coming Soon / GitHub Releases) -->
+                        <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" onclick="if(window.showToast) window.showToast('Apple App Store listing coming soon! Check GitHub Releases for early builds.'); if(window.playSfx) playSfx('click');" class="flex-1 sm:flex-none px-3 py-1.5 rounded-xl bg-slate-950/70 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800 hover:border-sky-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm whitespace-nowrap" title="Apple App Store (Coming Soon - View GitHub Releases)">
                             <i class="fa-brands fa-apple text-sky-400 text-sm"></i>
                             <span>App Store</span>
+                            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-500/10 text-sky-300 border border-sky-500/20 font-bold">Soon</span>
                         </a>
 
                         <!-- Microsoft Store -->

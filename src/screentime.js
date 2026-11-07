@@ -459,6 +459,10 @@ class ArcScreenTimeEngine {
         window.setLocalStorageItem(storageKey, this.activeSeconds);
         window.setLocalStorageItem('arc_cross_device_screentime', this.deviceScreenTime);
       }
+
+      if (arcStorage && typeof arcStorage.scheduleAutoSync === 'function') {
+        arcStorage.scheduleAutoSync();
+      }
     } catch (e) {
       console.warn('[ArcScreenTime] Save warning:', e);
     }

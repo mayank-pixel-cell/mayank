@@ -284,19 +284,6 @@
                     gain.connect(filter); filter.connect(sfxOut());
                     osc1.start(now); osc2.start(now);
                     osc1.stop(now + 0.35); osc2.stop(now + 0.35);
-                } else if (type === 'fanfare') {
-                    // Ascending digital victory fanfare
-                    [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => {
-                        const t = now + i * 0.045;
-                        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-                        o.type = 'triangle';
-                        o.frequency.setValueAtTime(f, t);
-                        g.gain.setValueAtTime(0.0001, t);
-                        g.gain.exponentialRampToValueAtTime(0.12, t + 0.015);
-                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-                        o.connect(g); g.connect(sfxOut());
-                        o.start(t); o.stop(t + 0.5);
-                    });
                 } else if (type === 'modalOpen') {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
@@ -437,19 +424,6 @@
                         osc.start(t);
                         osc.stop(t + 0.07);
                     });
-                } else if (type === 'quantumHum') {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(65.41, now);
-                    osc.frequency.exponentialRampToValueAtTime(130.81, now + 0.6);
-                    gain.gain.setValueAtTime(0.001, now);
-                    gain.gain.exponentialRampToValueAtTime(0.15, now + 0.2);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
-                    osc.connect(gain);
-                    gain.connect(sfxOut());
-                    osc.start(now);
-                    osc.stop(now + 0.9);
                 } else if (type === 'zenChime') {
                     [432, 864].forEach((freq, i) => {
                         const osc = audioCtx.createOscillator();
