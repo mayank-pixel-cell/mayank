@@ -9,7 +9,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tauri::{AppHandle, Manager, RunEvent, State, WindowEvent};
+use tauri::{AppHandle, Emitter, Manager, RunEvent, State, WindowEvent};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -25,7 +25,7 @@ pub struct DeviceTelemetry {
 pub struct AtomicFlushLock(pub Mutex<()>);
 
 #[tauri::command]
-pub fn get_system_uptime_seconds() -> u64 {
+fn get_system_uptime_seconds() -> u64 {
     #[cfg(target_os = "windows")]
     unsafe {
         windows_sys::Win32::System::SystemInformation::GetTickCount64() / 1000
@@ -40,7 +40,7 @@ pub fn get_system_uptime_seconds() -> u64 {
 }
 
 #[tauri::command]
-pub fn get_device_telemetry() -> DeviceTelemetry {
+fn get_device_telemetry() -> DeviceTelemetry {
     let now_ms = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_millis() as u64)
@@ -56,14 +56,14 @@ pub fn get_device_telemetry() -> DeviceTelemetry {
 }
 
 #[tauri::command]
-pub async fn get_active_window_info() -> Result<ActiveWindowTelemetry, String> {
+async fn get_active_window_info() -> Result<ActiveWindowTelemetry, String> {
     tokio::task::spawn_blocking(query_os_active_window)
         .await
         .map_err(|e| format!("Failed to query active window: {}", e))
 }
 
 #[tauri::command]
-pub fn set_os_monitor_config(
+fn set_os_monitor_config(
     state: State<'_, Arc<OsTrackerState>>,
     config: OsMonitorConfig,
 ) -> Result<(), String> {
@@ -76,7 +76,7 @@ pub fn set_os_monitor_config(
 }
 
 #[tauri::command]
-pub fn enforce_window_shield(app: AppHandle, lock_on_top: bool) -> Result<(), String> {
+fn enforce_window_shield(app: AppHandle, lock_on_top: bool) -> Result<(), String> {
     #[cfg(desktop)]
     if let Some(window) = app.get_webview_window("main") {
         if lock_on_top {
@@ -124,7 +124,7 @@ fn snapshot_file_path(app: &AppHandle, user_id: Option<&str>) -> Result<PathBuf,
 /// Atomically writes the consolidated key-value snapshot to a temp file and renames it over
 /// the user's snapshot file to guarantee zero corruption on sudden power loss or OS shutdown.
 #[tauri::command]
-pub fn atomic_flush_state(
+fn atomic_flush_state(
     app: AppHandle,
     flush_lock: State<'_, AtomicFlushLock>,
     payload_json: String,
@@ -151,7 +151,7 @@ pub fn atomic_flush_state(
 }
 
 #[tauri::command]
-pub fn load_atomic_snapshot(
+fn load_atomic_snapshot(
     app: AppHandle,
     user_id: Option<String>,
 ) -> Result<Option<String>, String> {
