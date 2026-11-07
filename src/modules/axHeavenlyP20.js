@@ -157,10 +157,54 @@ window.__getHbBands = function() {
 };
 async function setOn(on, targetBody){if(on&&window.ArcHardwareGatekeeper&&window.ArcHardwareGatekeeper.isCelestialAudioDisabled()){console.log('[HeavenlyBodies] Suppressed for lower-end device smoothness');cfg.on=false;save();ui();return;}cfg.on=on;save();if(on){const ok=await start(targetBody);if(!ok&&!ctx){cfg.on=false;save()}}else stop();ui()}
 function ui(){const t=$('#hb-t');if(!t)return;const p=Math.round(cfg.vol*100);t.setAttribute('aria-checked',String(cfg.on));$('#hb-v').value=p;$('#hb-vp').textContent=p+'%';$('#hb-now').textContent=cfg.on?(ctx&&cur>=0?'Now drifting: '+B[cur][0]:'Tap anywhere to start'):'Off'}
-function inject(){const r=$('#sx-root');if(!r||$('#hb-card'))return;const s=document.createElement('section');s.id='hb-card';s.className='glass-card rounded-2xl p-4 space-y-3 border border-slate-700/60';s.style.gridColumn='1/-1';s.setAttribute('aria-labelledby','hb-h');
- s.innerHTML=`<div class="flex items-center justify-between gap-3"><div class="min-w-0"><h3 id="hb-h" class="text-sm font-extrabold text-white">Heavenly Bodies Ambient Audio</h3><p id="hb-now" class="text-xs text-slate-400" aria-live="polite">Off</p></div><button id="hb-t" type="button" role="switch" aria-checked="false" aria-labelledby="hb-h"></button></div><label for="hb-v" class="flex items-center justify-between text-xs text-slate-300"><span>Celestial volume (separate from sound FX)</span><span id="hb-vp" class="font-mono"></span></label><input id="hb-v" type="range" min="0" max="100" step="1" aria-label="Celestial ambient volume">`;
- r.appendChild(s);$('#hb-t').onclick=()=>setOn(!cfg.on);
- $('#hb-v').oninput=e=>{cfg.vol=e.target.value/100;if(master)master.gain.setTargetAtTime(lvl(cfg.vol),ctx.currentTime,.05);ui()};$('#hb-v').onchange=save;ui()}
+function inject(){const r=$('#sx-root');if(!r||$('#hb-card'))return;
+ const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+  ? window.ArcSettingsAccordion.isExpanded('hb-card')
+  : false;
+ const s=document.createElement('section');
+ s.id='hb-card';
+ s.className='glass-card rounded-2xl p-4 sm:p-5 border border-slate-700/60 settings-card-item';
+ s.style.gridColumn='1/-1';
+ s.setAttribute('aria-labelledby','hb-h');
+ s.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "hb-card")');
+ s.innerHTML=`
+  <div class="flex items-center justify-between gap-3 select-none">
+   <div class="flex items-center gap-3 min-w-0">
+    <div class="sx-ic shrink-0"><i class="fa-solid fa-earth-americas"></i></div>
+    <div class="min-w-0 flex items-center gap-2 flex-wrap">
+     <h3 id="hb-h" class="text-sm sm:text-base font-extrabold text-white truncate">Heavenly Bodies Ambient Audio</h3>
+     <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shrink-0">Ambient</span>
+    </div>
+   </div>
+   <div class="flex items-center gap-2 shrink-0">
+    <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('hb-card')">
+     <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+    </button>
+   </div>
+  </div>
+  <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+   <div class="space-y-3">
+    <div class="flex items-center justify-between gap-3">
+     <div>
+      <div class="text-xs font-bold text-slate-300">Celestial Ambience Toggle</div>
+      <p id="hb-now" class="text-xs text-slate-400" aria-live="polite">Off</p>
+     </div>
+     <button id="hb-t" type="button" role="switch" aria-checked="false" aria-labelledby="hb-h"></button>
+    </div>
+    <label for="hb-v" class="flex items-center justify-between text-xs text-slate-300">
+     <span>Celestial volume (separate from sound FX)</span>
+     <span id="hb-vp" class="font-mono"></span>
+    </label>
+    <input id="hb-v" type="range" min="0" max="100" step="1" aria-label="Celestial ambient volume">
+   </div>
+  </div>
+ `;
+ r.appendChild(s);
+ $('#hb-t').onclick=()=>setOn(!cfg.on);
+ $('#hb-v').oninput=e=>{cfg.vol=e.target.value/100;if(master)master.gain.setTargetAtTime(lvl(cfg.vol),ctx.currentTime,.05);ui()};
+ $('#hb-v').onchange=save;
+ ui();
+}
 /* autoplay policy: a saved ON state only (re)starts after a real user gesture; also recovers iOS interruptions */
 const arm=()=>{if(!cfg.on)return;if(!ctx)start().then(ui);else if(ctx.state!=='running')ctx.resume().catch(()=>{})};
 ['pointerdown','keydown','touchend'].forEach(e=>addEventListener(e,arm,{capture:true,passive:true}));
@@ -197,15 +241,44 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  window.renderDayControl=function(){
   const c=$('p20-day');if(!c)return;
+  const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+    ? window.ArcSettingsAccordion.isExpanded('p20-day')
+    : false;
   const w=(window.getArcWindow?window.getArcWindow():getArcWindow()),t=(window.getEffectiveToday?window.getEffectiveToday():getEffectiveToday()),day=Math.round((t-w.start)/864e5)+1;
   const f=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   const dOverride=(typeof window!=='undefined'&&window.dayOverride!==undefined)?window.dayOverride:(typeof dayOverride!=='undefined'?dayOverride:null);
-  c.innerHTML='<h3 class="font-extrabold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-calendar-day text-cyan-400"></i> Day counter</h3>'+
-   '<p class="text-[11px] text-slate-400 mt-1 mb-3">Follows your device clock. Active arc: '+f(w.start)+' to '+f(w.end)+'. Change the dates under Arc &amp; timeline below.</p>'+
-   '<div class="text-xs text-slate-200 font-mono mb-3">'+(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)+' \u00B7 '+f(t)+' <span class="'+(dOverride?'text-amber-300':'text-emerald-400')+'">'+(dOverride?'manual override':'live')+'</span></div>'+
-   '<div class="flex flex-wrap items-center gap-2"><input id="p20-day-in" type="number" inputmode="numeric" min="1" max="'+w.total+'" value="'+(dOverride||'')+'" placeholder="Day 1-'+w.total+'" aria-label="Manual day override" class="'+IN+' w-28">'+
-   '<button type="button" onclick="setDayOverride(document.getElementById(\'p20-day-in\').value)" class="'+BTN+'">Jump to day</button>'+
-   '<button type="button" onclick="clearDayOverride()" '+(dOverride?'':'disabled ')+'class="'+BTN+'">Back to today</button></div>';
+  c.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-day")');
+  c.innerHTML=`
+    <div class="flex items-center justify-between gap-3 select-none">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+          <i class="fa-solid fa-calendar-day text-base"></i>
+        </div>
+        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+          <h3 class="font-extrabold text-sm sm:text-base text-white truncate">Day Counter</h3>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${dOverride ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} flex items-center gap-1 shrink-0">
+            ${dOverride ? 'Manual Override' : (day < 1 ? 'Starts in ' + (1 - day) + 'd' : day > w.total ? 'Finished' : 'Day ' + day + ' / ' + w.total)}
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-day')">
+          <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+        </button>
+      </div>
+    </div>
+    <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+      <div class="space-y-3">
+        <p class="text-[11px] text-slate-400">Follows your device clock. Active arc: ${f(w.start)} to ${f(w.end)}. Change the dates under Arc &amp; timeline below.</p>
+        <div class="text-xs text-slate-200 font-mono">${(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)} · ${f(t)} <span class="${(dOverride?'text-amber-300':'text-emerald-400')}">${(dOverride?'manual override':'live')}</span></div>
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="p20-day-in" type="number" inputmode="numeric" min="1" max="${w.total}" value="${(dOverride||'')}" placeholder="Day 1-${w.total}" aria-label="Manual day override" class="${IN} w-28">
+          <button type="button" onclick="setDayOverride(document.getElementById('p20-day-in').value)" class="${BTN}">Jump to day</button>
+          <button type="button" onclick="clearDayOverride()" ${(dOverride?'':'disabled ')}class="${BTN}">Back to today</button>
+        </div>
+      </div>
+    </div>
+  `;
  };
 
  window.renderHabitManager=function(force){

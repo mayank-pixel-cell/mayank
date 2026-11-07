@@ -907,143 +907,44 @@ class ArcServerSyncEngine {
       ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE • Connected to Supabase Cloud</span>`
       : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> OFFLINE CACHE • Cloud Reconnecting</span>`;
 
+    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+      ? window.ArcSettingsAccordion.isExpanded('p20-server-sync')
+      : false;
+
+    container.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-server-sync")');
+
     container.innerHTML = `
-      <div class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/90 space-y-4 shadow-xl relative overflow-hidden">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <i class="fa-solid fa-server"></i> SUPABASE CLOUD TELEMETRY
-              </span>
+      <div class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/90 shadow-xl relative overflow-hidden settings-card-item">
+        <div class="flex items-center justify-between gap-3 select-none">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+              <i class="fa-solid fa-server text-base"></i>
+            </div>
+            <div class="min-w-0 flex items-center gap-2 flex-wrap">
+              <h3 class="text-sm sm:text-base font-black text-white truncate">Supabase Cloud Telemetry</h3>
               ${statusBadge}
             </div>
-            <h3 class="text-sm sm:text-base font-black text-white flex items-center gap-2">
-              Live Supabase Telemetry &amp; Community Registry
-            </h3>
-            <p class="text-[11px] text-slate-400">
-              Synchronized tracking for global operatives, Gold VIP purchases, competitive ranks, and squads.
-            </p>
           </div>
-
           <div class="flex items-center gap-2 shrink-0">
-            <button type="button" onclick="ArcServerSync.syncUserAndFetchTelemetry(); playSfx('click');" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 transition shadow-sm">
-              <i class="fa-solid fa-arrows-rotate ${this.isSyncing ? 'animate-spin' : ''}"></i>
-              <span>${this.isSyncing ? 'Syncing...' : 'Sync Now'}</span>
+            <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-server-sync')">
+              <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
             </button>
           </div>
         </div>
 
-        <!-- Supabase Cloud Endpoint Bar -->
-        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-          <label class="block text-[10px] font-mono uppercase text-slate-400 font-bold">
-            Cloud Backend Endpoint (Supabase PostgreSQL)
-          </label>
-          <div class="flex items-center gap-2">
-            <div class="relative flex-1">
-              <input id="arc-server-url-input" type="text" value="${this.serverUrl}" placeholder="https://zkxcwogqodwixfgmxdiy.supabase.co" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400" />
-            </div>
-            <button type="button" onclick="const el = document.getElementById('arc-server-url-input'); if(el) ArcServerSync.setServerUrl(el.value); playSfx('click');" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs font-bold transition active:scale-95">
-              Save &amp; Test
-            </button>
-          </div>
-        </div>
-
-        <!-- 4 Live Server Metrics Counters -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-            <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center justify-center gap-1">
-              <i class="fa-solid fa-users text-cyan-400"></i> Registered
-            </div>
-            <div class="text-lg sm:text-xl font-black text-white font-mono">
-              ${Number(tel.totalUsers || 0).toLocaleString()}
-            </div>
-            <div class="text-[9px] text-slate-400">Total Operatives</div>
-          </div>
-
-          <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-            <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-              <i class="fa-solid fa-bolt"></i> Active Today
-            </div>
-            <div class="text-lg sm:text-xl font-black text-emerald-400 font-mono">
-              ${Number(tel.activeTodayCount || 0).toLocaleString()}
-            </div>
-            <div class="text-[9px] text-slate-400">In Last 24 Hours</div>
-          </div>
-
-          <div class="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30 text-center space-y-1">
-            <div class="text-[10px] font-mono text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1">
-              <i class="fa-solid fa-crown"></i> Arc Gold VIPs
-            </div>
-            <div class="text-lg sm:text-xl font-black text-amber-400 font-mono">
-              ${Number(tel.totalGoldUsers || 0).toLocaleString()}
-            </div>
-            <div class="text-[9px] text-amber-300/80">Active Supporters</div>
-          </div>
-
-          <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-            <div class="text-[10px] font-mono text-purple-400 uppercase tracking-wider flex items-center justify-center gap-1">
-              <i class="fa-solid fa-shield-halved"></i> Squads
-            </div>
-            <div class="text-lg sm:text-xl font-black text-purple-300 font-mono">
-              ${Number(tel.totalGroups || 0).toLocaleString()}
-            </div>
-            <div class="text-[9px] text-slate-400">Accountability Units</div>
-          </div>
-        </div>
-
-        <!-- Collapsible Arc Gold VIP Supporters Roster -->
-        <div class="rounded-xl border border-amber-500/30 bg-slate-950/80 overflow-hidden">
-          <button type="button" onclick="const r = document.getElementById('arc-gold-roster-body'); const chevron = document.getElementById('arc-gold-roster-chevron'); if(r){ r.classList.toggle('hidden'); if(chevron){ chevron.classList.toggle('rotate-180'); } } playSfx('tab');" class="w-full p-3 flex items-center justify-between text-left hover:bg-amber-500/5 transition">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/40 grid place-items-center text-xs">
-                <i class="fa-solid fa-crown"></i>
-              </span>
+        <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
               <div>
-                <h4 class="text-xs font-black text-white flex items-center gap-2">
-                  Arc Gold VIP Supporters Roster
-                  <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 font-bold">
-                    ${goldUsers.length} VIPs
-                  </span>
-                </h4>
-                <p class="text-[10px] text-slate-400">Operatives fueling independent development with Arc Gold licenses</p>
+                <h4 class="text-xs font-bold text-slate-200">Live Supabase Telemetry &amp; Community Registry</h4>
+                <p class="text-[11px] text-slate-400">Synchronized tracking for global operatives, Gold VIP purchases, competitive ranks, and squads.</p>
               </div>
+              <button type="button" onclick="ArcServerSync.syncUserAndFetchTelemetry(); playSfx('click');" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 transition shadow-sm shrink-0">
+                <i class="fa-solid fa-arrows-rotate ${this.isSyncing ? 'animate-spin' : ''}"></i>
+                <span>${this.isSyncing ? 'Syncing...' : 'Sync Now'}</span>
+              </button>
             </div>
-            <i id="arc-gold-roster-chevron" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-          </button>
-
-          <div id="arc-gold-roster-body" class="p-3 border-t border-slate-800 space-y-2 max-h-56 overflow-y-auto custom-scroll">
-            ${goldUsers.length === 0 ? '<div class="text-xs text-slate-400 text-center py-2 italic">Loading VIP supporters...</div>' : goldUsers.map(u => {
-              const planBadge = u.goldPlan === 'lifetime'
-                ? '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-400/40">LIFETIME VIP</span>'
-                : (u.goldPlan === 'annual'
-                  ? '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">ANNUAL</span>'
-                  : '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 border border-slate-600">MONTHLY</span>');
-
-              const dateStr = u.goldPurchasedAt ? new Date(u.goldPurchasedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
-
-              return `
-                <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/70 border border-slate-800/80 text-xs">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 font-bold grid place-items-center text-[10px] shrink-0">
-                      ${u.avatar || u.handle.charAt(1).toUpperCase()}
-                    </div>
-                    <div class="min-w-0">
-                      <div class="flex items-center gap-1.5">
-                        <span class="font-bold text-slate-200 truncate">${u.handle}</span>
-                        <span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[8px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>
-                      </div>
-                      <div class="text-[10px] text-slate-400 font-mono">
-                        Level ${u.level} • ${typeof u.arcScore === 'number' ? u.arcScore.toFixed(1) : u.arcScore}% Score
-                      </div>
-                    </div>
-                  </div>
-                  <div class="text-right shrink-0 space-y-0.5">
-                    <div>${planBadge}</div>
-                    <div class="text-[9px] font-mono text-slate-400">${dateStr}</div>
-                  </div>
-                </div>
-              `;
-            }).join('')}
+${detailedBody}
           </div>
         </div>
       </div>

@@ -420,108 +420,47 @@ export class ArcHardwareGatekeeper {
     const coresText = this.specs?.cores ? `${this.specs.cores} CPU Cores` : 'Multi-Core';
     const gpuText = this.specs?.webgl2Accelerated ? 'WebGL 2.0 (Accelerated)' : (this.specs?.webgl2Supported ? 'WebGL 2.0 (Standard)' : 'Basic GPU');
 
+    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+      ? window.ArcSettingsAccordion.isExpanded('settings-hardware-profiler-card')
+      : false;
+
+    card.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "settings-hardware-profiler-card")');
+
     card.innerHTML = `
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full ${isLower ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} border text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <i class="fa-solid fa-microchip"></i> HARDWARE PROFILER &amp; PERFORMANCE
-            </span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded ${isLower ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'}">
-              ${isLower ? '⚡ TIER 1: LOWER-END (SMOOTH 60 FPS)' : '🚀 TIER 2: HIGH-END (ULTRA FIDELITY)'}
+      <div class="flex items-center justify-between gap-3 select-none">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+            <i class="fa-solid fa-microchip text-base"></i>
+          </div>
+          <div class="min-w-0 flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Hardware Profiler &amp; Smoothness Engine</h3>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${isLower ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} shrink-0">
+              ${isLower ? 'Tier 1: 60 FPS Cap' : 'Tier 2: Ultra Fidelity'}
             </span>
           </div>
-          <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-            Device Hardware Profiler &amp; Smoothness Engine
-          </h3>
-          <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-            ${isLower 
-              ? 'Lower-end device detected. Extra features (canvas particle physics &amp; celestial bodies multi-oscillator sound) are automatically disabled so the application stays completely smooth at 60 FPS.' 
-              : 'High-end hardware validated. Ambient particle effects and celestial ambient soundscapes are fully enabled.'}
-          </p>
         </div>
-
-        <div class="flex items-center gap-2 flex-wrap shrink-0">
-          <button type="button" onclick="window.ArcHardwareGatekeeper.runFpsBenchmark()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition">
-            <i class="fa-solid fa-gauge-high text-cyan-400"></i>
-            <span id="hw-benchmark-btn-text">Test 60 FPS Benchmark</span>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
           </button>
         </div>
       </div>
 
-      <!-- SPECS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3 border-t border-slate-800/80 text-xs">
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Memory (RAM)</div>
-          <div class="font-bold text-white mt-0.5">${ramText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Processor</div>
-          <div class="font-bold text-white mt-0.5">${coresText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Graphics Pipeline</div>
-          <div class="font-bold text-white mt-0.5 truncate" title="${gpuText}">${gpuText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Smoothness Mode</div>
-          <div class="font-bold ${isLower ? 'text-amber-400' : 'text-emerald-400'} mt-0.5">
-            ${isLower ? '60 FPS Active' : 'Ultra Quality'}
+      <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+        <div class="space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
+            <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+              ${isLower 
+                ? 'Lower-end device detected. Extra features (canvas particle physics &amp; celestial bodies multi-oscillator sound) are automatically disabled so the application stays completely smooth at 60 FPS.' 
+                : 'High-end hardware validated. Ambient particle effects and celestial ambient soundscapes are fully enabled.'}
+            </p>
+            <button type="button" onclick="window.ArcHardwareGatekeeper.runFpsBenchmark()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+              <i class="fa-solid fa-gauge-high text-cyan-400"></i>
+              <span id="hw-benchmark-btn-text">Test 60 FPS Benchmark</span>
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- BENCHMARK LIVE DISPLAY -->
-      <div id="hw-benchmark-display" class="hidden mt-3 p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs text-cyan-200 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-chart-line text-cyan-400"></i>
-          <span id="hw-benchmark-results-text">Measuring frame timing...</span>
-        </div>
-        <span id="hw-benchmark-fps-badge" class="font-mono font-bold text-cyan-300">-- FPS</span>
-      </div>
-
-      <!-- SMOOTHNESS FEATURE CONTROLS -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-800/80">
-        <!-- FORCE SMOOTH MODE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white">Force Smooth Mode</div>
-            <div class="text-[10px] text-slate-400">Lock to 60 FPS optimizations</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-force-smooth" ${this.overrides.forceSmoothMode ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleForceSmooth(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-          </label>
-        </div>
-
-        <!-- PARTICLES MOVING TOGGLE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white flex items-center gap-1.5">
-              Moving Particles
-              ${isParticlesOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
-            </div>
-            <div class="text-[10px] text-slate-400">Snow &amp; ember physics</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-particles" ${!isParticlesOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleParticlesManual(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
-          </label>
-        </div>
-
-        <!-- CELESTIAL BODIES SOUND TOGGLE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white flex items-center gap-1.5">
-              Celestial Audio
-              ${isCelestialOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
-            </div>
-            <div class="text-[10px] text-slate-400">Multi-oscillator drones</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-celestial" ${!isCelestialOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleCelestialManual(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
-          </label>
+          ${detailedContent}
         </div>
       </div>
     `;

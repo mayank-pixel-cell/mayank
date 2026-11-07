@@ -1243,6 +1243,7 @@ if (typeof window !== 'undefined') {
             const autoStartCard = document.getElementById('settings-autostart-card');
             const screenNotifCard = document.getElementById('settings-screentime-notif-card');
             const goldCard = document.getElementById('settings-gold-card');
+            const termsCard = document.getElementById('settings-terms-legal-card');
             const faqBtn = document.getElementById('settings-subtab-faq');
             const founderBtn = document.getElementById('settings-subtab-founder');
             if (faqBtn && category !== 'faq') faqBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
@@ -1266,6 +1267,7 @@ if (typeof window !== 'undefined') {
                 if (faqCard) faqCard.style.display = '';
                 if (founderCard) founderCard.style.display = '';
                 if (goldCard) goldCard.style.display = '';
+                if (termsCard) termsCard.style.display = '';
                 if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
                     window.ArcServerSync.renderSettingsCard();
                 }
@@ -1283,6 +1285,7 @@ if (typeof window !== 'undefined') {
                 if (faqCard) faqCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = '';
+                if (termsCard) termsCard.style.display = 'none';
             } else if (category === 'account') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -1297,6 +1300,7 @@ if (typeof window !== 'undefined') {
                 if (faqCard) faqCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
@@ -1316,11 +1320,17 @@ if (typeof window !== 'undefined') {
                 if (sxRoot) sxRoot.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (faqCard) {
                     faqCard.style.display = '';
                     faqCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+                        window.ArcSettingsAccordion.toggle('settings-additional-faq-card', true);
+                    } else if (window.ArcFaq && typeof window.ArcFaq.toggleSection === 'function') {
+                        window.ArcFaq.toggleSection(true);
+                    }
                 }
-                if (window.ArcFaq) window.ArcFaq.render();
+                if (window.ArcFaq && typeof window.ArcFaq.render === 'function') window.ArcFaq.render();
             } else if (category === 'founder') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -1334,18 +1344,20 @@ if (typeof window !== 'undefined') {
                 if (sxRoot) sxRoot.style.display = 'none';
                 if (faqCard) faqCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (founderCard) {
                     founderCard.style.display = '';
                     founderCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    if (window.ArcAboutFounder) {
+                    if (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+                        window.ArcSettingsAccordion.toggle('settings-about-founder-card', true);
+                    } else if (window.ArcAboutFounder && typeof window.ArcAboutFounder.toggle === 'function') {
                         window.ArcAboutFounder.toggle(true);
                     } else if (typeof toggleFounderPanel === 'function') {
                         toggleFounderPanel(true);
                     }
                 }
             }
-        }
-        window.filterSettingsView = filterSettingsView;
+        }window.filterSettingsView = filterSettingsView;
 
         function toggleFounderPanel(forceState) {
             if (window.ArcAboutFounder && typeof window.ArcAboutFounder.toggle === 'function') {

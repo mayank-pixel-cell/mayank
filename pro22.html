@@ -2376,60 +2376,76 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </button>
                 </div>
             </div>
-                        <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+
+            <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
             <div id="settings-theme-arc-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-palette"></i> THEME &amp; ARC CONTROLS
+                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                            <i class="fa-solid fa-palette text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Display Mode &amp; Active Season</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1">
+                                <i class="fa-solid fa-palette text-[9px]"></i> THEME &amp; ARC
                             </span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                            Display Mode &amp; Active Season
-                        </h3>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400" aria-label="Toggle Display Mode &amp; Active Season card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-theme-arc-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
                             Toggle between Light Mode and Dark Mode interface styles, or transition between Winter Arc and Summer Arc seasons.
                         </p>
-                    </div>
-
-                    <!-- THE ACTION BUTTONS RELOCATED FROM HEADER -->
-                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
-                        <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode()" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-cyan-400 hover:text-cyan-300 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
-                            <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400 mr-2 text-sm"></i>
-                            <span id="header-mode-toggle-label">Light Mode</span>
-                        </button>
-                        <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition hover:bg-amber-500/30 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
-                            <i id="header-arc-switch-icon" class="fa-solid fa-snowflake text-cyan-400 mr-2 text-sm"></i>
-                            <span id="arc-switch-btn-text">Switch to Winter Arc</span>
-                        </button>
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1">
+                            <button role="button" id="header-mode-toggle-btn" onclick="toggleLightDarkMode()" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-cyan-400 hover:text-cyan-300 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Light/Dark Display Mode" title="Toggle Light/Dark Display Mode">
+                                <i id="header-mode-toggle-icon" class="fa-solid fa-sun text-amber-400 mr-2 text-sm"></i>
+                                <span id="header-mode-toggle-label">Light Mode</span>
+                            </button>
+                            <button role="button" onclick="openArcModal(); playSfx('modalOpen')" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center transition hover:bg-amber-500/30 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Switch Arc">
+                                <i id="header-arc-switch-icon" class="fa-solid fa-snowflake text-cyan-400 mr-2 text-sm"></i>
+                                <span id="arc-switch-btn-text">Switch to Winter Arc</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- LIQUID GLASS UI & FLUID SPRING ANIMATIONS (ARC GOLD EXCLUSIVE) -->
             <div id="settings-liquid-glass-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> iOS THEME &amp; MOTION
-                            </span>
-                            <span class="px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 text-[9px] font-mono font-black uppercase tracking-wider flex items-center gap-1">
+                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Liquid Glass UI &amp; Animations</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">iOS MOTION</span>
+                            <span class="px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 text-[9px] font-mono font-black uppercase tracking-wider flex items-center gap-1 shrink-0">
                                 <i class="fa-solid fa-crown text-[9px] text-amber-400"></i> GOLD
                             </span>
-                            <span id="liquid-glass-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">DISABLED</span>
+                            <span id="liquid-glass-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">DISABLED</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                            Liquid Glass UI &amp; Animations
-                        </h3>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Liquid Glass UI &amp; Animations card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-liquid-glass-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
                             Enable iOS-style translucent liquid glass surfaces, refractive highlights, and fluid spring animations.
                         </p>
-                    </div>
-
-                    <div class="flex items-center gap-2.5 flex-wrap shrink-0" id="liquid-glass-ctrl-wrap">
-                        <!-- Dynamic toggle or locked prompt rendered by ArcLiquidGlass.updateUI() -->
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1" id="liquid-glass-ctrl-wrap">
+                            <!-- Dynamic toggle or locked prompt rendered by ArcLiquidGlass.updateUI() -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2439,92 +2455,100 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             <!-- AUTO-START ON DEVICE BOOT SETTINGS CARD -->
             <div id="settings-autostart-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-power-off"></i> SYSTEM STARTUP
-                            </span>
-                            <span id="autostart-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">DISABLED</span>
+                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i class="fa-solid fa-power-off text-sm"></i>
                         </div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                            Launch When Device Turns On (Auto-Start)
-                        </h3>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Launch When Device Turns On (Auto-Start)</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">STARTUP</span>
+                            <span id="autostart-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">DISABLED</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Auto-Start card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-autostart-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
                             Automatically launch Arc Tracker whenever your PC, Mac, or phone turns on so screen time tracking and habit sentinel run continuously without missing a beat.
                         </p>
-                    </div>
-
-                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
-                        <button role="button" id="btn-toggle-autostart" data-active="false" onclick="ArcAutoStart.toggle()" class="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-500/20">
-                            <i class="fa-solid fa-power-off"></i>
-                            <span id="btn-toggle-autostart-text">Turn On Auto-Start</span>
-                        </button>
-                        <button role="button" onclick="ArcAutoStart.openModal()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95">
-                            <i class="fa-solid fa-circle-info text-cyan-400"></i>
-                            <span>Setup Guide</span>
-                        </button>
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1">
+                            <button role="button" id="btn-toggle-autostart" data-active="false" onclick="ArcAutoStart.toggle()" class="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-cyan-500/20">
+                                <i class="fa-solid fa-power-off"></i>
+                                <span id="btn-toggle-autostart-text">Turn On Auto-Start</span>
+                            </button>
+                            <button role="button" onclick="ArcAutoStart.openModal()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Setup Guide</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- PERMANENT SCREEN TIME NOTIFICATION CARD -->
             <div id="settings-screentime-notif-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-bell"></i> SYSTEM TRAY &amp; LOCK SCREEN
-                            </span>
-                            <span id="screentime-notif-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">DISABLED</span>
+                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
+                            <i class="fa-solid fa-bell text-sm"></i>
                         </div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                            Permanent Screen Time Notification
-                        </h3>
-                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
-                            Pins a live, silent notification in your device's notification center, status bar, and lock screen displaying your total screen time and dopamine shield score at a glance.
-                        </p>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Permanent Screen Time Notification</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">SYSTEM TRAY</span>
+                            <span id="screentime-notif-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">DISABLED</span>
+                        </div>
                     </div>
-
-                    <div class="flex items-center gap-2.5 flex-wrap shrink-0">
-                        <button role="button" id="btn-toggle-perm-notif" onclick="ArcScreenTimeNotifier.toggle()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20">
-                            <i class="fa-solid fa-bell"></i>
-                            <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400" aria-label="Toggle Permanent Notification card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-screentime-notif-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
                 </div>
-            </div>
-            <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
-                        <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
-
-            <!-- ADDITIONAL SETTINGS & FREQUENTLY ASKED QUESTIONS (FAQ) (Contracted by Default) -->
-            <section id="settings-additional-faq-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-4" aria-label="Additional Settings & Frequently Asked Questions">
-                <!-- CONTRACTED HEADER BAR (Clickable to Expand / Collapse) -->
-                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="if(window.ArcFaq) { ArcFaq.toggleSection(); }" title="Click to view Frequently Asked Questions">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-11 h-11 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/20 shrink-0">
-                            <i class="fa-solid fa-circle-question text-lg"></i>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Pins a live, silent notification in your device's notification center, status bar, and lock screen displaying your total screen time and dopamine shield score at a glance.
+                        </p>
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1">
+                            <button role="button" id="btn-toggle-perm-notif" onclick="ArcScreenTimeNotifier.toggle()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20">
+                                <i class="fa-solid fa-bell"></i>
+                                <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
+                            </button>
                         </div>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <h3 class="text-sm sm:text-base font-black text-white tracking-wide truncate">
-                                    Frequently Asked Questions (FAQ)
-                                </h3>
-                                <span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
-                                    <i class="fa-solid fa-book-open text-[9px] text-cyan-300"></i> KNOWLEDGE BASE
-                                </span>
-                                <span id="faq-results-count" class="text-[9px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 shrink-0">10 of 10 questions</span>
-                            </div>
-                            <p id="faq-summary-hint" class="text-xs text-slate-400 mt-0.5 truncate">
-                                Habit scoring, offline airgap security, streak freeze &amp; screen time rules • Tap to expand
-                            </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p20-settings" class="grid grid-cols-1 gap-4 mb-4"></div>
+            <div id="sx-root" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start"></div>
+
+            <!-- ADDITIONAL SETTINGS & FREQUENTLY ASKED QUESTIONS (FAQ) (Compact by Default) -->
+            <section id="settings-additional-faq-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Additional Settings &amp; Frequently Asked Questions">
+                <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
+                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
+                            <i class="fa-solid fa-circle-question text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Frequently Asked Questions (FAQ)</h3>
+                            <span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
+                                <i class="fa-solid fa-book-open text-[9px] text-cyan-300"></i> KNOWLEDGE BASE
+                            </span>
+                            <span id="faq-results-count" class="text-[9px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 shrink-0">10 questions</span>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2 shrink-0">
-                        <button id="faq-section-toggle-btn" type="button" onclick="event.stopPropagation(); if(window.ArcFaq) { ArcFaq.toggleSection(); }" class="px-3.5 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" title="Click to view Frequently Asked Questions">
+                        <button id="faq-section-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle FAQs" onclick="ArcSettingsAccordion.toggle('settings-additional-faq-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
                             <span>View FAQs</span>
-                            <i id="faq-chevron-icon" class="fa-solid fa-chevron-down text-[10px]"></i>
+                            <i id="faq-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                         </button>
                     </div>
                 </div>
@@ -2588,36 +2612,29 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div></div>
             </section>
 
-            <!-- ABOUT THE FOUNDER SECTION (Contracted by Default) -->
-            <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-purple-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-4" aria-label="About the Founder">
-                <!-- CONTRACTED HEADER BAR (Clickable to Expand / Collapse) -->
-                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(); } else { toggleFounderPanel(); }" title="Click to read the Founder Story &amp; 100% Free Manifesto">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-lg shadow-purple-500/25 shrink-0 border border-purple-400/30">
-                            <i class="fa-solid fa-user-astronaut text-lg"></i>
+            <!-- ABOUT THE FOUNDER SECTION (Compact by Default) -->
+            <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="About the Founder">
+                <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
+                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-sm shrink-0 border border-purple-400/30">
+                            <i class="fa-solid fa-user-astronaut text-base"></i>
                         </div>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <h3 class="text-sm sm:text-base font-black text-white tracking-wide truncate">
-                                    About the Founder
-                                </h3>
-                                <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
-                                    <i class="fa-solid fa-crown text-[9px] text-purple-300"></i> LEADERSHIP &amp; VISION
-                                </span>
-                                <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
-                                    <i class="fa-solid fa-gem text-[9px] text-emerald-300"></i> 100% FREE MANIFESTO
-                                </span>
-                            </div>
-                            <p id="founder-summary-hint" class="text-xs text-slate-400 mt-0.5 truncate">
-                                How the journey started • Goals &amp; uncompromised vision • Why Arc Tracker is 100% free • Tap to expand
-                            </p>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">About the Founder</h3>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
+                                <i class="fa-solid fa-crown text-[9px] text-purple-300"></i> LEADERSHIP
+                            </span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm shrink-0">
+                                <i class="fa-solid fa-gem text-[9px] text-emerald-300"></i> 100% FREE MANIFESTO
+                            </span>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2 shrink-0">
-                        <button id="founder-toggle-btn" type="button" onclick="event.stopPropagation(); if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(); } else { toggleFounderPanel(); }" class="px-3.5 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" title="Click to expand founder story">
+                        <button id="founder-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle Founder Story" onclick="ArcSettingsAccordion.toggle('settings-about-founder-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
                             <span>Read Story</span>
-                            <i id="founder-chevron-icon" class="fa-solid fa-chevron-down text-[10px]"></i>
+                            <i id="founder-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                         </button>
                     </div>
                 </div>
@@ -2800,7 +2817,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         </div>
 
                         <div class="flex items-center gap-2 shrink-0">
-                            <button type="button" onclick="if(window.ArcAboutFounder) { window.ArcAboutFounder.toggle(false); } else { toggleFounderPanel(false); }" class="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-2 transition cursor-pointer shadow-sm">
+                            <button type="button" onclick="ArcSettingsAccordion.toggle('settings-about-founder-card', false)" class="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-2 transition cursor-pointer shadow-sm">
                                 <i class="fa-solid fa-chevron-up text-xs text-purple-400"></i>
                                 <span>Collapse Story</span>
                             </button>
@@ -2810,40 +2827,47 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </section>
 
             <!-- TERMS & CONDITIONS & LEGAL AGREEMENT CARD -->
-            <section id="settings-terms-legal-card" class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300 space-y-4" aria-label="Terms and Conditions and Legal Agreement">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-scale-balanced"></i> LEGAL &amp; GOVERNANCE
-                            </span>
-                            <span id="settings-terms-status-pill" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-bold uppercase">
+            <section id="settings-terms-legal-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Terms and Conditions and Legal Agreement">
+                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i class="fa-solid fa-scale-balanced text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Terms &amp; Conditions &amp; Agreement</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">LEGAL</span>
+                            <span id="settings-terms-status-pill" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-bold uppercase shrink-0">
                                 ✓ TERMS ACCEPTED
                             </span>
                         </div>
-                        <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
-                            Terms &amp; Conditions &amp; User Agreement
-                        </h3>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Terms &amp; Conditions card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-terms-legal-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Arc Tracker is governed by the Covenant of Self-Discipline and Local Data Sovereignty (Protocol v2026.2). Review the complete terms, privacy protections, and focus lockout authorizations below.
-                </p>
-
-                <div class="flex flex-wrap items-center gap-2.5 pt-1">
-                    <button type="button" onclick="ArcTermsOnboarding.openTermsReader()" class="py-2 px-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-sm">
-                        <i class="fa-solid fa-file-contract"></i>
-                        <span>Read Terms &amp; Conditions</span>
-                    </button>
-                    <a href="./terms-and-conditions.html" target="_blank" rel="noopener noreferrer" class="py-2 px-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 transition">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-cyan-400"></i>
-                        <span>Standalone Terms Page</span>
-                    </a>
-                    <a href="./privacy-policy.html" target="_blank" rel="noopener noreferrer" class="py-2 px-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 transition">
-                        <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-                        <span>Privacy Policy</span>
-                    </a>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Arc Tracker is governed by the Covenant of Self-Discipline and Local Data Sovereignty (Protocol v2026.2). Review the complete terms, privacy protections, and focus lockout authorizations below.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                            <button type="button" onclick="ArcTermsOnboarding.openTermsReader()" class="py-2 px-3.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-sm">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <span>Read Terms &amp; Conditions</span>
+                            </button>
+                            <a href="./terms-and-conditions.html" target="_blank" rel="noopener noreferrer" class="py-2 px-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-cyan-400"></i>
+                                <span>Standalone Terms Page</span>
+                            </a>
+                            <a href="./privacy-policy.html" target="_blank" rel="noopener noreferrer" class="py-2 px-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 transition">
+                                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                                <span>Privacy Policy</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
             <!-- ARC GOLD MEMBERSHIP & 120HZ PROMOTION SECTION (AT THE BOTTOM OF SETTINGS) -->
@@ -7043,6 +7067,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             const autoStartCard = document.getElementById('settings-autostart-card');
             const screenNotifCard = document.getElementById('settings-screentime-notif-card');
             const goldCard = document.getElementById('settings-gold-card');
+            const termsCard = document.getElementById('settings-terms-legal-card');
             const faqBtn = document.getElementById('settings-subtab-faq');
             const founderBtn = document.getElementById('settings-subtab-founder');
             if (faqBtn && category !== 'faq') faqBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
@@ -7066,6 +7091,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (faqCard) faqCard.style.display = '';
                 if (founderCard) founderCard.style.display = '';
                 if (goldCard) goldCard.style.display = '';
+                if (termsCard) termsCard.style.display = '';
                 if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
                     window.ArcServerSync.renderSettingsCard();
                 }
@@ -7083,6 +7109,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (faqCard) faqCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = '';
+                if (termsCard) termsCard.style.display = 'none';
             } else if (category === 'account') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -7097,6 +7124,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (faqCard) faqCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
@@ -7116,11 +7144,17 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (sxRoot) sxRoot.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
                 if (founderCard) founderCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (faqCard) {
                     faqCard.style.display = '';
                     faqCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+                        window.ArcSettingsAccordion.toggle('settings-additional-faq-card', true);
+                    } else if (window.ArcFaq && typeof window.ArcFaq.toggleSection === 'function') {
+                        window.ArcFaq.toggleSection(true);
+                    }
                 }
-                if (window.ArcFaq) window.ArcFaq.render();
+                if (window.ArcFaq && typeof window.ArcFaq.render === 'function') window.ArcFaq.render();
             } else if (category === 'founder') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -7134,18 +7168,20 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (sxRoot) sxRoot.style.display = 'none';
                 if (faqCard) faqCard.style.display = 'none';
                 if (goldCard) goldCard.style.display = 'none';
+                if (termsCard) termsCard.style.display = 'none';
                 if (founderCard) {
                     founderCard.style.display = '';
                     founderCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    if (window.ArcAboutFounder) {
+                    if (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+                        window.ArcSettingsAccordion.toggle('settings-about-founder-card', true);
+                    } else if (window.ArcAboutFounder && typeof window.ArcAboutFounder.toggle === 'function') {
                         window.ArcAboutFounder.toggle(true);
                     } else if (typeof toggleFounderPanel === 'function') {
                         toggleFounderPanel(true);
                     }
                 }
             }
-        }
-        window.filterSettingsView = filterSettingsView;
+        }window.filterSettingsView = filterSettingsView;
 
         function toggleFounderPanel(forceState) {
             if (window.ArcAboutFounder && typeof window.ArcAboutFounder.toggle === 'function') {
@@ -10795,124 +10831,47 @@ class ArcHardwareGatekeeper {
     const coresText = this.specs?.cores ? `${this.specs.cores} CPU Cores` : 'Multi-Core';
     const gpuText = this.specs?.webgl2Accelerated ? 'WebGL 2.0 (Accelerated)' : (this.specs?.webgl2Supported ? 'WebGL 2.0 (Standard)' : 'Basic GPU');
 
+    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+      ? window.ArcSettingsAccordion.isExpanded('settings-hardware-profiler-card')
+      : false;
+
+    card.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "settings-hardware-profiler-card")');
+
     card.innerHTML = `
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full ${isLower ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'} border text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <i class="fa-solid fa-microchip"></i> HARDWARE PROFILER &amp; PERFORMANCE
-            </span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded ${isLower ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'}">
-              ${isLower ? '⚡ TIER 1: LOWER-END (SMOOTH 60 FPS)' : '🚀 TIER 2: HIGH-END (ULTRA FIDELITY)'}
+      <div class="flex items-center justify-between gap-3 select-none">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+            <i class="fa-solid fa-microchip text-base"></i>
+          </div>
+          <div class="min-w-0 flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Hardware Profiler &amp; Smoothness Engine</h3>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${isLower ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} shrink-0">
+              ${isLower ? 'Tier 1: 60 FPS Cap' : 'Tier 2: Ultra Fidelity'}
             </span>
           </div>
-          <h3 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-            Device Hardware Profiler &amp; Smoothness Engine
-          </h3>
-          <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-            ${isLower 
-              ? 'Lower-end device detected. Extra features (canvas particle physics &amp; celestial bodies multi-oscillator sound) are automatically disabled so the application stays completely smooth at 60 FPS.' 
-              : 'High-end hardware validated. Ambient particle effects and celestial ambient soundscapes are fully enabled.'}
-          </p>
         </div>
-
-        <div class="flex items-center gap-2 flex-wrap shrink-0">
-          <button type="button" onclick="window.ArcHardwareGatekeeper.runFpsBenchmark()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition">
-            <i class="fa-solid fa-gauge-high text-cyan-400"></i>
-            <span id="hw-benchmark-btn-text">Test 60 FPS Benchmark</span>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
           </button>
         </div>
       </div>
 
-      <!-- SPECS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3 border-t border-slate-800/80 text-xs">
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Memory (RAM)</div>
-          <div class="font-bold text-white mt-0.5">${ramText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Processor</div>
-          <div class="font-bold text-white mt-0.5">${coresText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Graphics Pipeline</div>
-          <div class="font-bold text-white mt-0.5 truncate" title="${gpuText}">${gpuText}</div>
-        </div>
-        <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/60">
-          <div class="text-[10px] font-mono text-slate-400 uppercase">Smoothness Mode</div>
-          <div class="font-bold ${isLower ? 'text-amber-400' : 'text-emerald-400'} mt-0.5">
-            ${isLower ? '60 FPS Active' : 'Ultra Quality'}
+      <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+        <div class="space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
+            <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+              ${isLower 
+                ? 'Lower-end device detected. Extra features (canvas particle physics &amp; celestial bodies multi-oscillator sound) are automatically disabled so the application stays completely smooth at 60 FPS.' 
+                : 'High-end hardware validated. Ambient particle effects and celestial ambient soundscapes are fully enabled.'}
+            </p>
+            <button type="button" onclick="window.ArcHardwareGatekeeper.runFpsBenchmark()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+              <i class="fa-solid fa-gauge-high text-cyan-400"></i>
+              <span id="hw-benchmark-btn-text">Test 60 FPS Benchmark</span>
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- BENCHMARK LIVE DISPLAY -->
-      <div id="hw-benchmark-display" class="hidden mt-3 p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs text-cyan-200 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-chart-line text-cyan-400"></i>
-          <span id="hw-benchmark-results-text">Measuring frame timing...</span>
-        </div>
-        <span id="hw-benchmark-fps-badge" class="font-mono font-bold text-cyan-300">-- FPS</span>
-      </div>
-
-      <!-- SMOOTHNESS FEATURE CONTROLS -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4 pt-3 border-t border-slate-800/80">
-        <!-- 120HZ PROMOTION & MAX REFRESH RATE (ARC GOLD) -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border ${window.ArcGold && window.ArcGold.isGold() ? 'border-amber-500/40 bg-amber-950/10' : 'border-slate-800/70'}">
-          <div>
-            <div class="font-bold text-xs text-white flex items-center gap-1.5">
-              120Hz &amp; Max Rate
-              ${window.ArcGold && window.ArcGold.isGold() 
-                ? (window.ArcGold.is120HzEnabled() ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">120Hz ON</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 font-mono">60Hz</span>')
-                : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">👑 GOLD</span>'}
-            </div>
-            <div class="text-[10px] text-slate-400">${window.ArcGold && window.ArcGold.isGold() ? 'ProMotion 120Hz engine' : 'Unlocks ProMotion 120Hz'}</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer" onclick="${!window.ArcGold || !window.ArcGold.isGold() ? 'if(window.ArcGold)window.ArcGold.scrollToGoldCard(); return false;' : ''}">
-            <input type="checkbox" id="hw-toggle-120hz" ${window.ArcGold && window.ArcGold.is120HzEnabled() ? 'checked' : ''} onchange="if(window.ArcGold)window.ArcGold.toggle120Hz(this.checked)" ${!window.ArcGold || !window.ArcGold.isGold() ? 'disabled' : ''} class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all ${window.ArcGold && window.ArcGold.isGold() ? 'peer-checked:bg-amber-500' : 'opacity-50'}"></div>
-          </label>
-        </div>
-        <!-- FORCE SMOOTH MODE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white">Force Smooth Mode</div>
-            <div class="text-[10px] text-slate-400">Lock to 60 FPS optimizations</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-force-smooth" ${this.overrides.forceSmoothMode ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleForceSmooth(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-          </label>
-        </div>
-
-        <!-- PARTICLES MOVING TOGGLE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white flex items-center gap-1.5">
-              Moving Particles
-              ${isParticlesOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
-            </div>
-            <div class="text-[10px] text-slate-400">Snow &amp; ember physics</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-particles" ${!isParticlesOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleParticlesManual(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
-          </label>
-        </div>
-
-        <!-- CELESTIAL BODIES SOUND TOGGLE -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
-          <div>
-            <div class="font-bold text-xs text-white flex items-center gap-1.5">
-              Celestial Audio
-              ${isCelestialOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
-            </div>
-            <div class="text-[10px] text-slate-400">Multi-oscillator drones</div>
-          </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="hw-toggle-celestial" ${!isCelestialOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleCelestialManual(this.checked)" class="sr-only peer">
-            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
-          </label>
+          ${detailedHwContent}
         </div>
       </div>
     `;
@@ -16880,6 +16839,132 @@ if (document.readyState === 'loading') {
 }
 </script>
 
+<script id="arc-settings-accordion-js">
+if (!window.ArcSettingsAccordion) {
+  class ArcSettingsAccordionManager {
+    constructor() {
+      this.expandedCards = new Set();
+    }
+    isExpanded(cardId) {
+      if (!cardId) return false;
+      const actualId = typeof cardId === 'string' ? cardId : (cardId.id || '');
+      return this.expandedCards.has(actualId);
+    }
+    toggle(cardId, forceState) {
+      if (!cardId) return;
+      const card = typeof cardId === 'string' ? document.getElementById(cardId) : cardId;
+      if (!card) return;
+      const actualId = card.id || (typeof cardId === 'string' ? cardId : '');
+      const accordion = card.querySelector('.arc-fluid-accordion');
+      const chevron = card.querySelector('.settings-chevron-icon') ||
+                      card.querySelector('#faq-chevron-icon') ||
+                      card.querySelector('#founder-chevron-icon');
+      const arrowBtn = card.querySelector('.settings-arrow-btn') ||
+                       card.querySelector('#faq-section-toggle-btn') ||
+                       card.querySelector('#founder-toggle-btn');
+      const currentlyExpanded = accordion
+        ? accordion.classList.contains('expanded')
+        : this.expandedCards.has(actualId);
+      const willExpand = (typeof forceState === 'boolean') ? forceState : !currentlyExpanded;
+      if (willExpand) {
+        if (actualId) this.expandedCards.add(actualId);
+        if (accordion) {
+          accordion.classList.remove('hidden');
+          void accordion.offsetWidth;
+          accordion.classList.add('expanded');
+        }
+        if (chevron) {
+          chevron.classList.add('rotate-180');
+        }
+        if (arrowBtn) {
+          arrowBtn.setAttribute('aria-expanded', 'true');
+        }
+      } else {
+        if (actualId) this.expandedCards.delete(actualId);
+        if (accordion) {
+          accordion.classList.remove('expanded');
+          setTimeout(() => {
+            if (!this.expandedCards.has(actualId) && accordion && !accordion.classList.contains('expanded')) {
+              accordion.classList.add('hidden');
+            }
+          }, 350);
+        }
+        if (chevron) {
+          chevron.classList.remove('rotate-180');
+        }
+        if (arrowBtn) {
+          arrowBtn.setAttribute('aria-expanded', 'false');
+        }
+      }
+      if (actualId === 'settings-additional-faq-card' && window.ArcFaq) {
+        window.ArcFaq.isSectionExpanded = willExpand;
+        if (typeof window.ArcFaq.updateSectionUI === 'function') {
+          const toggleBtn = document.getElementById('faq-section-toggle-btn');
+          if (toggleBtn) {
+            toggleBtn.innerHTML = willExpand 
+              ? '<span>Collapse FAQs</span> <i id="faq-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300 rotate-180"></i>'
+              : '<span>View FAQs</span> <i id="faq-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>';
+          }
+        }
+      }
+      if (actualId === 'settings-about-founder-card' && window.ArcAboutFounder) {
+        window.ArcAboutFounder.isExpanded = willExpand;
+        const toggleBtn = document.getElementById('founder-toggle-btn');
+        if (toggleBtn) {
+          toggleBtn.innerHTML = willExpand
+            ? '<span>Collapse Story</span> <i id="founder-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300 rotate-180"></i>'
+            : '<span>Read Story</span> <i id="founder-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>';
+        }
+      }
+      if (typeof window.playSfx === 'function') {
+        try { window.playSfx('click'); } catch (e) {}
+      }
+      return willExpand;
+    }
+    handleKeyDown(event, cardId) {
+      if (!event) return;
+      if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        this.toggle(cardId, true);
+      } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        this.toggle(cardId, false);
+      }
+    }
+    applyState(cardId) {
+      if (!cardId) return;
+      const card = typeof cardId === 'string' ? document.getElementById(cardId) : cardId;
+      if (!card) return;
+      const actualId = card.id || (typeof cardId === 'string' ? cardId : '');
+      const isExp = this.expandedCards.has(actualId);
+      const accordion = card.querySelector('.arc-fluid-accordion');
+      const chevron = card.querySelector('.settings-chevron-icon') ||
+                      card.querySelector('#faq-chevron-icon') ||
+                      card.querySelector('#founder-chevron-icon');
+      const arrowBtn = card.querySelector('.settings-arrow-btn') ||
+                       card.querySelector('#faq-section-toggle-btn') ||
+                       card.querySelector('#founder-toggle-btn');
+      if (accordion) {
+        if (isExp) {
+          accordion.classList.remove('hidden');
+          accordion.classList.add('expanded');
+        } else {
+          accordion.classList.remove('expanded');
+          accordion.classList.add('hidden');
+        }
+      }
+      if (chevron) {
+        if (isExp) chevron.classList.add('rotate-180');
+        else chevron.classList.remove('rotate-180');
+      }
+      if (arrowBtn) {
+        arrowBtn.setAttribute('aria-expanded', isExp ? 'true' : 'false');
+      }
+    }
+  }
+  window.ArcSettingsAccordion = new ArcSettingsAccordionManager();
+}
+</script>
 <script id="arc-security-js">
 window.ArcSecurity = (function() {
   'use strict';
@@ -20402,24 +20487,31 @@ window.ArcGold = (function() {
 
   let isBoxOpen = false;
 
-  function toggleBox() {
-    isBoxOpen = !isBoxOpen;
-    render();
+  function toggleBox(forceState) {
+    if (window.ArcSettingsAccordion) {
+      window.ArcSettingsAccordion.toggle('settings-gold-card', forceState);
+    } else {
+      if (typeof forceState === 'boolean') isBoxOpen = forceState;
+      else isBoxOpen = !isBoxOpen;
+      render();
+    }
   }
 
   function openBox() {
-    isBoxOpen = true;
-    render();
+    toggleBox(true);
   }
 
   function closeBox() {
-    isBoxOpen = false;
-    render();
+    toggleBox(false);
   }
 
   function scrollToGoldCard() {
-    isBoxOpen = true;
-    render();
+    if (window.ArcSettingsAccordion) {
+      window.ArcSettingsAccordion.toggle('settings-gold-card', true);
+    } else {
+      isBoxOpen = true;
+      render();
+    }
     const card = document.getElementById('settings-gold-card');
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -20520,896 +20612,54 @@ window.ArcGold = (function() {
       });
     }
 
-    if (!isBoxOpen) {
-      container.innerHTML = `
-        <div class="glass-card rounded-2xl border border-amber-500/40 p-3.5 sm:p-4 transition-all duration-300 bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.08)] hover:border-amber-400/60">
-          <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="window.ArcGold.toggleBox()" title="Click to open Arc Gold &amp; 120Hz settings">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
-                <i class="fa-solid fa-crown text-lg"></i>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="text-sm font-black text-white tracking-wide truncate">Arc Gold Membership</h3>
-                  <span class="under-construction-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 shrink-0 shadow-sm">
-                    <i class="fa-solid fa-person-digging text-amber-400 animate-pulse text-[11px]"></i> Under Construction
-                  </span>
-                  ${goldActive ? `
-                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shrink-0">
-                      <i class="fa-solid fa-check"></i> ${state.isTrial ? 'Free Trial Active' : 'VIP Active'}
-                    </span>
-                    ${(function() {
-                      const n = getExpiryNotice();
-                      if (n && n.urgent) {
-                        return '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-red-500/25 text-red-300 border border-red-500/50 flex items-center gap-1 shrink-0 animate-pulse"><i class="fa-solid fa-clock"></i> Ends in ' + n.daysLeft + 'd</span>';
-                      }
-                      return '';
-                    })()}
-                  ` : (state.status === 'expired' ? `
-                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1 shrink-0">
-                      <i class="fa-solid fa-hourglass-end text-amber-400"></i> Expired · Free Tier
-                    </span>
-                  ` : '')}
-                </div>
-                <p class="text-[11px] text-slate-400 mt-0.5 truncate">
-                  ProMotion 120Hz engine &amp; VIP tiers • Tap to expand details
-                </p>
-              </div>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="event.stopPropagation(); window.ArcGold.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-amber-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
-                <span>Open</span>
-                <i class="fa-solid fa-chevron-down text-[10px]"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-      return;
-    }
+    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+      ? window.ArcSettingsAccordion.isExpanded('settings-gold-card')
+      : isBoxOpen;
 
     container.innerHTML = `
-      <div class="glass-card rounded-3xl p-5 sm:p-7 border border-amber-500/40 relative overflow-hidden space-y-6 shadow-[0_0_35px_rgba(245,158,11,0.12)] bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-amber-950/20 transition-all duration-300">
-        <!-- TOP COLLAPSIBLE TOGGLE BAR -->
-        <div class="flex items-center justify-between gap-3 pb-4 border-b border-amber-500/20 cursor-pointer select-none" onclick="window.ArcGold.toggleBox()" title="Click to collapse">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="under-construction-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-person-digging text-amber-400 animate-pulse text-[11px]"></i> Under Construction
-            </span>
-            <span class="text-xs text-slate-400 font-medium hidden sm:inline">· Tap anywhere on this bar to close</span>
-          </div>
-          <button type="button" onclick="event.stopPropagation(); window.ArcGold.toggleBox();" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
-            <span>Close</span>
-            <i class="fa-solid fa-chevron-up text-[10px]"></i>
-          </button>
-        </div>
-
-        <!-- 3-DAY EXPIRY URGENT NOTIFICATION BANNER -->
-        ${(function() {
-          const notice = getExpiryNotice();
-          if (notice && notice.urgent) {
-            return `
-              <div id="gold-expiry-urgent-banner" class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/25 via-orange-500/20 to-red-500/15 border-2 border-amber-400/80 shadow-[0_0_25px_rgba(245,158,11,0.35)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-amber-500/30 flex items-center justify-center text-amber-300 shrink-0 border border-amber-400">
-                    <i class="fa-solid fa-clock text-base animate-pulse"></i>
-                  </div>
-                  <div>
-                    <div class="font-extrabold text-amber-300 text-sm flex items-center gap-2">
-                      <span>⚠️ ${notice.isTrial ? 'Free First Month Trial' : 'Arc Gold Subscription'} Ending Soon!</span>
-                      <span class="px-2 py-0.5 rounded-full bg-red-500/30 text-red-200 border border-red-400/50 text-[10px] uppercase font-mono font-bold animate-pulse">
-                        ${notice.daysLeft === 1 ? 'Expires Tomorrow' : notice.daysLeft + ' Days Left'}
-                      </span>
-                    </div>
-                    <p class="text-slate-200 text-xs mt-1 leading-relaxed">
-                      Your ${notice.isTrial ? 'first month free trial' : 'membership'} will expire on <b>${expiresFormatted}</b>. Choose an Annual (₹365/yr) or Lifetime (₹700) pass below to keep your 120Hz ProMotion Engine and Custom Wallpaper active.
-                    </p>
-                  </div>
-                </div>
-                <div class="shrink-0 flex items-center gap-2 self-end sm:self-center">
-                  <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-md transition active:scale-95">
-                    Renew Annual (₹1/day)
-                  </button>
-                </div>
-              </div>
-            `;
-          }
-          return '';
-        })()}
-
-        <!-- EXPIRED SUBSCRIPTION REVERT BANNER -->
-        ${(!goldActive && state.status === 'expired') ? `
-          <div class="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                <i class="fa-solid fa-hourglass-end text-sm"></i>
-              </div>
-              <div>
-                <span class="font-bold text-amber-300">Arc Gold ${state.isTrial ? 'Free Trial' : 'Membership'} Ended</span>
-                <p class="text-slate-400 text-xs mt-0.5">Your ProMotion 120Hz engine and Custom Photo Wallpaper have automatically reverted to the standard Free version. Renew any plan below to re-enable them instantly.</p>
-              </div>
+      <div class="glass-card rounded-2xl border border-amber-500/40 p-4 transition-all duration-300 bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.08)] hover:border-amber-400/60" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-gold-card')">
+        <div class="flex items-center justify-between gap-3 select-none">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+              <i class="fa-solid fa-crown text-base"></i>
             </div>
-            <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs shrink-0 shadow-sm transition active:scale-95">
-              Renew
-            </button>
-          </div>
-        ` : ''}
-
-        <!-- UNDER CONSTRUCTION ADVISORY BANNER -->
-        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start sm:items-center gap-3 text-xs text-amber-200">
-          <div class="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 border border-amber-500/40">
-            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
-          </div>
-          <div class="flex-1 min-w-0">
-            <span class="font-bold text-amber-300">Under Construction:</span>
-            <span class="text-slate-300 ml-1">Arc Gold and the 120Hz ProMotion Engine are currently under active development. You can preview, test, and activate tiers below.</span>
-          </div>
-        </div>
-
-        <!-- AMBIENT GOLD HEADER -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-amber-500/20">
-          <div class="flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.4)] shrink-0">
-              <i class="fa-solid fa-crown text-xl"></i>
-            </div>
-            <div>
+            <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <h2 class="text-base sm:text-lg font-black text-white tracking-wide">Arc Gold Membership</h2>
-                <span id="gold-membership-status-badge" class="${goldActive ? 'px-3 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.25)] flex items-center gap-1.5' : 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700'}">
-                  ${goldActive ? '<i class="fa-solid fa-crown text-amber-400 text-xs animate-pulse"></i> ARC GOLD ACTIVE (' + (currentPlan ? currentPlan.name : 'VIP') + ')' : '<i class="fa-solid fa-shield text-slate-400"></i> Free Tier'}
+                <h3 class="text-sm font-black text-white tracking-wide truncate">Arc Gold Membership</h3>
+                <span class="under-construction-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 shrink-0 shadow-sm">
+                  <i class="fa-solid fa-person-digging text-amber-400 animate-pulse text-[10px]"></i> Under Construction
                 </span>
-              </div>
-              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                Unlock ProMotion 120Hz Ultra-Smooth Refresh Rate, Uncapped Frame Rates &amp; VIP Perks.
-              </p>
-            </div>
-          </div>
-          <div id="gold-header-action-zone" class="shrink-0 flex items-center gap-2">
-            ${goldActive ? `
-              <button type="button" onclick="window.ArcGold.cancelPlan()" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold transition">
-                Cancel Membership
-              </button>
-            ` : `
-              <span class="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/30">
-                ⭐ ProMotion 120Hz Available
-              </span>
-            `}
-          </div>
-        </div>
-
-        <!-- EXCLUSIVE 120HZ PROMOTION & MAX REFRESH RATE DISPLAY ENGINE -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950/80 via-amber-950/20 to-slate-950/80 border ${goldActive ? 'border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.15)]' : 'border-amber-500/30'} space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-500/30 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
-                <i class="fa-solid fa-bolt-lightning text-base"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="text-sm font-black text-white">ProMotion 120Hz &amp; Max Refresh Rate Engine</h3>
-                  <span id="gold-120hz-status-pill" class="${hzActive ? 'text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase' : 'text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold uppercase'}">
-                    ${hzActive ? '⚡ 120Hz ACTIVE' : '👑 GOLD EXCLUSIVE'}
+                ${goldActive ? `
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-check"></i> ${state.isTrial ? 'Free Trial Active' : 'VIP Active'}
                   </span>
-                </div>
-                <p class="text-xs text-slate-300 mt-1 leading-relaxed">
-                  Eliminates the standard 60 FPS cap on high-refresh displays (120Hz ProMotion, 144Hz, 165Hz, and 240Hz screens). Enables sub-pixel animation pacing, instantaneous touch responsiveness, and fluid habit checklists.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3 self-end sm:self-center shrink-0">
-              <div class="text-right">
-                <div class="text-[11px] font-bold text-white" id="gold-toggle-status-text">${hzActive ? '120Hz ProMotion ON' : '120Hz Engine'}</div>
-                <div class="text-[10px] text-slate-400" id="gold-toggle-subtext">${goldActive ? (hzActive ? 'High refresh enabled' : 'Disabled') : 'Requires Gold'}</div>
-              </div>
-              <label class="relative inline-flex items-center cursor-pointer" onclick="${!goldActive ? 'window.ArcGold.scrollToGoldCard(); return false;' : ''}">
-                <input type="checkbox" id="gold-toggle-120hz" ${hzActive ? 'checked' : ''} onchange="window.ArcGold.toggle120Hz(this.checked)" class="sr-only peer" ${!goldActive ? 'disabled' : ''}>
-                <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${goldActive ? 'peer-checked:bg-gradient-to-r peer-checked:from-amber-400 peer-checked:to-yellow-500 cursor-pointer' : 'opacity-50 cursor-not-allowed'}"></div>
-              </label>
-            </div>
-          </div>
-
-          <!-- 120HZ BENCHMARK & SMOOTHNESS TEST ANIMATION -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-amber-500/20 text-xs">
-            <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 flex items-center justify-between">
-              <div class="space-y-0.5">
-                <div class="text-[10px] font-mono text-slate-400 uppercase">Engine Frame Profile</div>
-                <div id="gold-display-fps-stat" class="font-bold text-white flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full ${hzActive ? 'bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-slate-500'}" id="gold-fps-indicator-dot"></span>
-                  <span id="gold-fps-text-val">${hzActive ? '120Hz ProMotion Active' : 'Standard 60 FPS Cap'}</span>
-                </div>
-              </div>
-              <button type="button" onclick="window.ArcGold.runSmoothnessTest()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-bold flex items-center gap-1.5 transition">
-                <i class="fa-solid fa-play text-[10px]"></i> Test Frame Rate
-              </button>
-            </div>
-
-            <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3 overflow-hidden">
-              <div class="text-[10px] font-mono text-slate-400 shrink-0">Fluidity Test:</div>
-              <div class="flex-1 h-3 bg-slate-900 rounded-full overflow-hidden relative border border-slate-800">
-                <div id="gold-smoothness-track" class="h-full w-12 bg-gradient-to-r from-amber-400 to-yellow-300 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all"></div>
-              </div>
-              <span id="gold-smoothness-test-status" class="text-[10px] font-mono text-slate-400 shrink-0">Idle</span>
-            </div>
-          </div>
-        <!-- ANTI-UNINSTALL & APP COMMITMENT GUARD (NEW GOLD EXCLUSIVE) -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-slate-900/60 border ${goldActive && isUninstallPreventionActive() ? 'border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-amber-500/30'} relative overflow-hidden space-y-3 transition-all duration-300">
-          <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-sm shadow-sm shrink-0">
-                <i class="fa-solid fa-shield-halved"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-xs sm:text-sm font-extrabold text-white">Anti-Uninstall &amp; Commitment Lock</span>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${goldActive ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
-                    👑 GOLD EXCLUSIVE
-                  </span>
-                  ${goldActive && isUninstallPreventionActive() ? `
-                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                      <i class="fa-solid fa-lock"></i> ACTIVE
-                    </span>
-                  ` : ''}
-                </div>
-                <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">
-                  Special Gold protection prevents app uninstallation, PWA removal, and accidental local storage resets across all linked devices.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3 shrink-0">
-              <div class="text-right">
-                <div class="text-[11px] font-bold text-white">${isUninstallPreventionActive() ? 'Uninstall Guard ON' : 'Uninstall Guard'}</div>
-                <div class="text-[10px] text-slate-400">${goldActive ? (isUninstallPreventionActive() ? 'Protected' : 'Disabled') : 'Requires Gold'}</div>
-              </div>
-              <label class="relative inline-flex items-center cursor-pointer" onclick="${!goldActive ? 'window.ArcGold.scrollToGoldCard(); return false;' : ''}">
-                <input type="checkbox" id="gold-toggle-anti-uninstall" ${isUninstallPreventionActive() ? 'checked' : ''} onchange="window.ArcGold.toggleUninstallPrevention(this.checked)" class="sr-only peer" ${!goldActive ? 'disabled' : ''}>
-                <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${goldActive ? 'peer-checked:bg-gradient-to-r peer-checked:from-amber-400 peer-checked:to-yellow-500 cursor-pointer' : 'opacity-50 cursor-not-allowed'}"></div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- FOCUS STRICT MODE SHOWCASE CARD (NEW GOLD EXCLUSIVE) -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-slate-900/60 border border-amber-500/30 relative overflow-hidden space-y-3">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)] shrink-0">
-                <i class="fa-solid fa-lock text-base"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
-                    Focus Strict Mode
-                  </h4>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">Gold Exclusive</span>
-                </div>
-                <p class="text-xs text-slate-300 mt-0.5">
-                  Zero early exits. Once initiated, session termination, pausing, and resets are locked out until the countdown reaches 00:00.
-                </p>
-              </div>
-            </div>
-            <div class="shrink-0 flex items-center gap-2">
-              <span class="text-[11px] font-mono font-bold ${goldActive ? (typeof appTrackerState !== 'undefined' && appTrackerState.strictMode ? 'text-amber-400' : 'text-slate-400') : 'text-amber-500'}">
-                ${!goldActive ? 'Locked (VIP)' : (typeof appTrackerState !== 'undefined' && appTrackerState.strictMode ? 'Active 🔒' : 'Ready')}
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-amber-500/15 text-xs text-slate-400">
-            <div class="flex items-center gap-3">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-amber-400"></i> Anti-Bail Enforcement</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i> Hardcore Productivity</span>
-            </div>
-            <button type="button" onclick="if(window.toggleFocusStrictMode){window.toggleFocusStrictMode();}else{window.openGoldStrictModal?.();}" class="px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5">
-              <i class="fa-solid fa-sliders text-[11px]"></i> Configure in Screen Time
-            </button>
-          </div>
-        </div>
-
-        <!-- BLACK & WHITE MODE SHOWCASE CARD (NEW GOLD EXCLUSIVE) -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-zinc-900 border border-slate-700/80 relative overflow-hidden space-y-3 shadow-lg">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-white to-slate-400 flex items-center justify-center text-slate-950 shadow-[0_0_15px_rgba(255,255,255,0.3)] shrink-0">
-                <i class="fa-solid fa-circle-half-stroke text-base"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
-                    Black &amp; White Mode
-                  </h4>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">Gold Exclusive</span>
-                </div>
-                <p class="text-xs text-slate-300 mt-0.5">
-                  Radical dopamine detox. Strips 100% of interface colors, rendering everything in crisp, high-contrast monochrome to eliminate distraction.
-                </p>
-              </div>
-            </div>
-            <div class="shrink-0 flex items-center gap-2">
-              <span class="text-[11px] font-mono font-bold ${goldActive ? (window.ArcBlackWhiteMode && window.ArcBlackWhiteMode.isEnabled() ? 'text-white' : 'text-slate-400') : 'text-amber-500'}">
-                ${!goldActive ? 'Locked (VIP)' : (window.ArcBlackWhiteMode && window.ArcBlackWhiteMode.isEnabled() ? 'Active ⚫' : 'Ready')}
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
-            <div class="flex items-center gap-3">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-droplet-slash text-slate-300"></i> Zero Saturation</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-brain text-slate-300"></i> Dopamine Detox</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-keyboard text-slate-300"></i> Alt+B Hotkey</span>
-            </div>
-            <button type="button" id="arc-gold-bw-btn" onclick="if(window.ArcBlackWhiteMode){window.ArcBlackWhiteMode.toggle();}else{window.ArcGold?.scrollToGoldCard();}" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/30 text-xs font-bold transition flex items-center gap-1.5">
-              <i class="fa-solid fa-circle-half-stroke text-[11px]"></i> ${goldActive ? (window.ArcBlackWhiteMode && window.ArcBlackWhiteMode.isEnabled() ? 'Disable B&W' : 'Enable B&W') : 'Unlock with Gold'}
-            </button>
-          </div>
-        </div>
-
-        <!-- LIQUID GLASS UI PERK CARD -->
-        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
-                <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-xs sm:text-sm font-bold text-white">
-                    iOS Liquid Glass UI &amp; Motion
-                  </h4>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">Gold Exclusive</span>
-                </div>
-                <p class="text-xs text-slate-300 mt-0.5">
-                  Ultra-sheer translucent surfaces, optical refraction, specular rim bevels, and weighted spring physics modeled on iOS.
-                </p>
-              </div>
-            </div>
-            <div class="shrink-0 flex items-center gap-2">
-              <span class="text-[11px] font-mono font-bold ${goldActive ? (window.ArcLiquidGlass && window.ArcLiquidGlass.isEnabled() ? 'text-cyan-400' : 'text-slate-400') : 'text-amber-500'}">
-                ${!goldActive ? 'Locked (VIP)' : (window.ArcLiquidGlass && window.ArcLiquidGlass.isEnabled() ? 'Active ✨' : 'Ready')}
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
-            <div class="flex items-center gap-3">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-glasses text-slate-300"></i> Frosted Blur 24px</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-gem text-slate-300"></i> Specular Rims</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-wind text-slate-300"></i> Spring Physics</span>
-            </div>
-            <button type="button" id="arc-gold-lg-btn" onclick="if(window.ArcLiquidGlass){window.ArcLiquidGlass.toggle();}else{window.ArcGold?.scrollToGoldCard();}" class="px-3 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 text-xs font-bold transition flex items-center gap-1.5">
-              <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i> ${goldActive ? (window.ArcLiquidGlass && window.ArcLiquidGlass.isEnabled() ? 'Disable Liquid Glass' : 'Enable Liquid Glass') : 'Unlock with Gold'}
-            </button>
-          </div>
-        </div>
-
-        <!-- FREE PLAN VS ARC GOLD VIP CAPABILITY MATRIX -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-slate-900/90 via-slate-950 to-slate-950 border border-slate-800 relative overflow-hidden space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-scale-balanced text-amber-400"></i>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-white font-mono">Plan Comparison: Free Tier vs Arc Gold VIP</h3>
-              </div>
-              <p class="text-xs text-slate-400 mt-0.5">The Free Plan provides essential basics with standard limits. Arc Gold unlocks unbreakable discipline, uncapped 120Hz display, and dual seats.</p>
-            </div>
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0 self-start sm:self-center">
-              TRANSPARENT BREAKDOWN
-            </span>
-          </div>
-
-          <!-- COMPARISON TABLE -->
-          <div class="overflow-x-auto no-scrollbar">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase tracking-wider">
-                  <th class="py-2.5 px-3 text-slate-400 w-2/5">Capability / Function</th>
-                  <th class="py-2.5 px-3 text-slate-400 bg-slate-950/60 rounded-t-xl w-[30%]">
-                    <div class="flex items-center gap-1.5 font-bold text-slate-300">
-                      <i class="fa-solid fa-shield text-slate-400"></i> Free Plan (Basic)
-                    </div>
-                  </th>
-                  <th class="py-2.5 px-3 text-amber-300 bg-amber-500/10 border-x border-t border-amber-500/30 rounded-t-xl w-[30%]">
-                    <div class="flex items-center gap-1.5 font-black text-amber-300">
-                      <i class="fa-solid fa-crown text-amber-400 text-xs"></i> Arc Gold (VIP)
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800/60 text-xs">
-                <!-- ROW 1: Focus Strict Mode -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-lock text-amber-400 text-[11px]"></i> Focus Strict Mode
-                    </div>
-                    <div class="text-[10px] text-slate-400">Zero early exits, anti-bail lockout screen</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
-                    <div class="flex items-center gap-1.5 text-rose-400/90 font-medium">
-                      <i class="fa-solid fa-xmark text-rose-500 text-sm"></i>
-                      <span>Not Available</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Can pause, stop, or reset anytime (no discipline lock)</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>Unbreakable Strict Mode</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Locks out stop, pause, and reset until 00:00</div>
-                  </td>
-                </tr>
-
-                <!-- ROW 2: ProMotion Refresh Rate -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-bolt text-yellow-400 text-[11px]"></i> Display Refresh Rate
-                    </div>
-                    <div class="text-[10px] text-slate-400">Screen responsiveness & UI motion fluidity</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
-                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                      <span>Standard 60Hz Cap</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Basic browser refresh rate</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>120Hz ProMotion Engine</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Uncapped high-velocity FPS & ultra smooth scroll</div>
-                  </td>
-                </tr>
-
-                <!-- ROW 3: Multi-User / Accounts -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-users text-cyan-400 text-[11px]"></i> Multi-User & Devices
-                    </div>
-                    <div class="text-[10px] text-slate-400">Authorized operatives per license</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
-                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                      <span>1 Solo User</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Single device/operative only</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>Dual-User VIP License</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Authorized for 2 separate users / devices</div>
-                  </td>
-                </tr>
-
-                <!-- ROW 4: Custom Photo Wallpaper -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-image text-purple-400 text-[11px]"></i> Custom Wallpaper
-                    </div>
-                    <div class="text-[10px] text-slate-400">Workspace visual personalization</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
-                    <div class="flex items-center gap-1.5 text-rose-400/90 font-medium">
-                      <i class="fa-solid fa-xmark text-rose-500 text-sm"></i>
-                      <span>Standard Themes Only</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Restricted to preset default themes</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>Custom Photo Wallpaper</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Upload photos, adjust opacity & ambient blur</div>
-                  </td>
-                </tr>
-
-                <!-- ROW 5: App & YouTube Blocker -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-shield-halved text-emerald-400 text-[11px]"></i> Blocker & Filters
-                    </div>
-                    <div class="text-[10px] text-slate-400">Distraction containment engine</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40">
-                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                      <span>Basic App Limits</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Manual daily screen time counters</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-amber-500/20">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>Advanced Lockout Shield</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Automated full-screen shield & YouTube smart filter</div>
-                  </td>
-                </tr>
-
-                <!-- ROW 6: VIP Crown & Prestige -->
-                <tr class="hover:bg-slate-900/40 transition">
-                  <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center gap-1.5">
-                      <i class="fa-solid fa-crown text-amber-400 text-[11px]"></i> Profile Badge & Prestige
-                    </div>
-                    <div class="text-[10px] text-slate-400">Identity aura across header & profile</div>
-                  </td>
-                  <td class="py-3 px-3 text-slate-400 bg-slate-950/40 rounded-b-xl">
-                    <div class="flex items-center gap-1.5 text-slate-300 font-medium">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                      <span>Free Operative</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">Standard profile without VIP styling</div>
-                  </td>
-                  <td class="py-3 px-3 text-amber-200 bg-amber-500/5 border-x border-b border-amber-500/30 rounded-b-xl">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-bold">
-                      <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
-                      <span>VIP Crown & Amber Aura</span>
-                    </div>
-                    <div class="text-[10px] text-amber-300/80 mt-0.5">Radiant gold border, header badge & founder status</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- PROMO CODE INPUT & DISCOUNT ENGINE -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-950 to-amber-950/20 border border-slate-800 hover:border-amber-500/30 transition space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-ticket text-amber-400"></i>
-                <span class="text-xs font-bold text-white uppercase tracking-wider font-mono">Apply VIP Promo Code</span>
-                ${promo ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1"><i class="fa-solid fa-tag text-[9px]"></i> ${promo.code} ACTIVE</span>` : ''}
-              </div>
-              <p class="text-[11px] text-slate-400 mt-0.5">Apply promotional coupons for instant price reductions across all Arc Gold membership tiers.</p>
-            </div>
-            ${promo ? `
-              <button type="button" onclick="window.ArcGold.removePromoCode()" class="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-bold transition flex items-center gap-1.5 self-start sm:self-center">
-                <i class="fa-solid fa-xmark text-[10px]"></i> Remove Promo
-              </button>
-            ` : ''}
-          </div>
-
-          ${promo ? `
-            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs">
-              <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black">
-                  <i class="fa-solid fa-percent text-xs"></i>
-                </div>
-                <div>
-                  <span class="font-bold text-emerald-300 font-mono tracking-wide">${promo.code}</span>
-                  <span class="text-slate-300 text-xs ml-1.5">applied: <b>${escapeHtml(promo.label)}</b></span>
-                </div>
-              </div>
-              <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Prices Discounted Below</span>
-            </div>
-          ` : `
-            <div class="flex items-center gap-2">
-              <div class="relative flex-1">
-                <i class="fa-solid fa-tag text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
-                <input type="text" id="gold-promo-input" placeholder="Enter promo code (e.g. ARC50, DISCIPLINE)" onkeydown="if(event.key==='Enter'){window.ArcGold.handlePromoSubmit();}" class="w-full bg-slate-950 border border-slate-700/80 focus:border-amber-400 pl-8 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 font-mono uppercase tracking-wider outline-none transition shadow-inner">
-              </div>
-              <button type="button" onclick="window.ArcGold.handlePromoSubmit()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition shadow-md shadow-amber-500/20 active:scale-95 shrink-0 flex items-center gap-1.5">
-                <span>Apply</span>
-                <i class="fa-solid fa-arrow-right text-[10px]"></i>
-              </button>
-            </div>
-            <div class="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400">
-              <span class="text-slate-500">Popular coupons:</span>
-              <button type="button" onclick="window.ArcGold.applyPromoCode('ARC50')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">ARC50 (50% OFF)</button>
-              <button type="button" onclick="window.ArcGold.applyPromoCode('DISCIPLINE')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">DISCIPLINE (25% OFF)</button>
-              <button type="button" onclick="window.ArcGold.applyPromoCode('SUMMERARC')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-mono font-bold transition">SUMMERARC (₹20 OFF)</button>
-            </div>
-            <div id="gold-promo-error-msg" class="text-[11px] text-rose-400 font-medium hidden"></div>
-          `}
-        </div>
-
-        <!-- ARC GOLD VIP FEATURE SPOTLIGHT: FOCUS STRICT MODE -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900/90 to-amber-950/20 border border-amber-500/40 shadow-lg space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 flex items-center justify-center text-lg shadow-inner">
-                <i class="fa-solid fa-lock"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-sm font-black text-white">Focus Strict Mode</h4>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1 shadow-sm">
-                    <i class="fa-solid fa-crown text-[8px] text-amber-400"></i> VIP EXCLUSIVE
-                  </span>
-                </div>
-                <p class="text-xs text-slate-400 mt-0.5">Zero early exit. Enforces absolute discipline by locking early cancellation until 00:00.</p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2 self-start sm:self-center">
-              ${goldActive ? `
-                <button type="button" onclick="handleFocusStrictModeToggle()" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 ${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'bg-amber-500/20 text-amber-300 border border-amber-400/50 hover:bg-amber-500/30 shadow-md shadow-amber-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'}">
-                  <i class="fa-solid ${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'fa-lock text-amber-400' : 'fa-lock-open text-slate-400'}"></i>
-                  <span>${typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive() ? 'Strict Mode: ACTIVE' : 'Strict Mode: OFF'}</span>
-                </button>
-              ` : `
-                <div class="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5">
-                  <i class="fa-solid fa-lock text-amber-400 text-[11px]"></i>
-                  <span>Included with Gold</span>
-                </div>
-              `}
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 font-mono">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved text-amber-400 text-xs"></i>
-              <span>Blocks "End Focus" button</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-ban text-amber-400 text-xs"></i>
-              <span>Guards pause &amp; shortcuts ('p')</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-bell text-amber-400 text-xs"></i>
-              <span>Lockout warning modal &amp; audio</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRICING TIERS GRID -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono flex items-center gap-2">
-              <i class="fa-solid fa-tags text-amber-400"></i> Arc Gold Membership Plans
-            </h3>
-            <span class="text-[11px] text-slate-400">
-              Zero popups · Offline private security · Cancel anytime
-            </span>
-          </div>
-
-          <!-- 2-USER MAXIMUM POLICY NOTICE -->
-          <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-200">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-users text-amber-400 text-sm shrink-0"></i>
-              <span><b>Strict 2-User Guarantee:</b> Every Arc Gold membership is strictly capped at 2 authorized users/devices to prevent multiple users using one account.</span>
-            </div>
-            <span class="font-mono text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-500/40 font-bold self-start sm:self-center shrink-0">MAX 2 USERS ONLY</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="gold-plans-grid">
-            <!-- MONTHLY: ₹59 / month -->
-            <div class="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${state.plan === 'monthly' ? 'gold-plan-card-active' : 'bg-slate-950/60 border-slate-800/80 hover:border-amber-500/40'}">
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${PLANS.monthly.badgeColor}">
-                    ${PLANS.monthly.badge}
-                  </span>
-                  ${state.plan === 'monthly' ? '<span class="text-[10px] font-mono font-bold text-amber-400 flex items-center gap-1"><i class="fa-solid fa-check"></i> ACTIVE</span>' : ''}
-                </div>
-                <div>
-                  <h4 class="text-sm font-extrabold text-white">${PLANS.monthly.name}</h4>
-                  <div class="mt-2 flex items-baseline gap-1.5">
-                    ${monthlyHasDisc ? `
-                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${monthlyEff}</span>
-                      <span class="text-sm line-through text-slate-500 font-semibold">₹${monthlyOrig}</span>
-                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
-                    ` : `
-                      <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.monthly.displayPrice}</span>
-                    `}
-                    <span class="text-xs text-slate-400 font-normal">${PLANS.monthly.periodText}</span>
-                  </div>
-                  <p class="text-xs text-slate-400 mt-1">${PLANS.monthly.desc}</p>
-                </div>
-                <ul class="space-y-2 pt-2 border-t border-slate-800/80 text-xs text-slate-300">
-                  ${PLANS.monthly.features.map(f => '<li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400 text-[10px]"></i><span>' + f + '</span></li>').join('')}
-                </ul>
-              </div>
-              <div class="pt-5">
-                ${state.plan === 'monthly' ? `
-                  <button type="button" disabled class="w-full py-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-2 cursor-default">
-                    <i class="fa-solid fa-check-double"></i> Current Active Plan
-                  </button>
-                ` : `
-                  <button type="button" onclick="window.ArcGold.activatePlan('monthly')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-white border border-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition">
-                    Activate Monthly · ₹${monthlyEff}
-                  </button>
-                `}
-              </div>
-            </div>
-
-            <!-- ANNUAL: ₹365 / year -->
-            <div class="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between relative ${state.plan === 'annual' ? 'gold-plan-card-active' : 'bg-gradient-to-b from-amber-950/20 via-slate-950/80 to-slate-950/90 border-amber-500/40 hover:border-amber-400/80 shadow-[0_0_20px_rgba(245,158,11,0.1)]'}">
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${PLANS.annual.badgeColor}">
-                    ${PLANS.annual.badge}
-                  </span>
-                  ${state.plan === 'annual' ? '<span class="text-[10px] font-mono font-bold text-amber-400 flex items-center gap-1"><i class="fa-solid fa-check"></i> ACTIVE</span>' : ''}
-                </div>
-                <div>
-                  <h4 class="text-sm font-extrabold text-white flex items-center gap-1.5">
-                    ${PLANS.annual.name}
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">SAVE 48%</span>
-                  </h4>
-                  <div class="mt-2 flex items-baseline gap-1.5">
-                    ${annualHasDisc ? `
-                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${annualEff}</span>
-                      <span class="text-sm line-through text-slate-500 font-semibold">₹${annualOrig}</span>
-                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
-                    ` : `
-                      <span class="text-2xl sm:text-3xl font-black text-amber-300">${PLANS.annual.displayPrice}</span>
-                    `}
-                    <span class="text-xs text-slate-400 font-normal">${PLANS.annual.periodText}</span>
-                  </div>
-                  <p class="text-xs text-slate-300 mt-1">${PLANS.annual.desc}</p>
-                </div>
-                <ul class="space-y-2 pt-2 border-t border-slate-800/80 text-xs text-slate-200">
-                  ${PLANS.annual.features.map(f => '<li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400 text-[10px]"></i><span>' + f + '</span></li>').join('')}
-                </ul>
-              </div>
-              <div class="pt-5">
-                ${state.plan === 'annual' ? `
-                  <button type="button" disabled class="w-full py-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-2 cursor-default">
-                    <i class="fa-solid fa-check-double"></i> Current Active Plan
-                  </button>
-                ` : `
-                  <button type="button" onclick="window.ArcGold.activatePlan('annual')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 active:scale-95 text-slate-950 text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)] transition">
-                    Activate Annual · ₹${annualEff}
-                  </button>
-                `}
-              </div>
-            </div>
-
-            <!-- LIFETIME: ₹700 one-time -->
-            <div class="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${state.plan === 'lifetime' ? 'gold-plan-card-active' : 'bg-slate-950/60 border-slate-800/80 hover:border-yellow-500/40'}">
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${PLANS.lifetime.badgeColor}">
-                    ${PLANS.lifetime.badge}
-                  </span>
-                  ${state.plan === 'lifetime' ? '<span class="text-[10px] font-mono font-bold text-amber-400 flex items-center gap-1"><i class="fa-solid fa-check"></i> ACTIVE</span>' : ''}
-                </div>
-                <div>
-                  <h4 class="text-sm font-extrabold text-white">${PLANS.lifetime.name}</h4>
-                  <div class="mt-2 flex items-baseline gap-1.5">
-                    ${lifetimeHasDisc ? `
-                      <span class="text-2xl sm:text-3xl font-black text-amber-300">₹${lifetimeEff}</span>
-                      <span class="text-sm line-through text-slate-500 font-semibold">₹${lifetimeOrig}</span>
-                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold">${promo.type === 'percent' ? promo.value + '% OFF' : '₹' + promo.value + ' OFF'}</span>
-                    ` : `
-                      <span class="text-2xl sm:text-3xl font-black text-white">${PLANS.lifetime.displayPrice}</span>
-                    `}
-                    <span class="text-xs text-slate-400 font-normal">${PLANS.lifetime.periodText}</span>
-                  </div>
-                  <p class="text-xs text-slate-400 mt-1">${PLANS.lifetime.desc}</p>
-                </div>
-                <ul class="space-y-2 pt-2 border-t border-slate-800/80 text-xs text-slate-300">
-                  ${PLANS.lifetime.features.map(f => '<li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400 text-[10px]"></i><span>' + f + '</span></li>').join('')}
-                </ul>
-              </div>
-              <div class="pt-5">
-                ${state.plan === 'lifetime' ? `
-                  <button type="button" disabled class="w-full py-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-2 cursor-default">
-                    <i class="fa-solid fa-crown text-amber-400"></i> Lifetime VIP Founder
-                  </button>
-                ` : `
-                  <button type="button" onclick="window.ArcGold.activatePlan('lifetime')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-yellow-300 border border-yellow-500/40 text-xs font-bold flex items-center justify-center gap-2 transition">
-                    Unlock Lifetime · ₹${lifetimeEff}
-                  </button>
-                `}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACTIVE SUBSCRIPTION DETAILS (IF ACTIVE) -->
-        ${goldActive ? `
-          <div id="gold-active-details" class="p-4 sm:p-5 rounded-2xl ${state.isTrial ? 'bg-gradient-to-r from-emerald-950/30 via-slate-900/90 to-amber-950/20 border-emerald-500/40' : 'bg-amber-950/20 border-amber-500/30'} border space-y-4 text-xs">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div class="space-y-1">
-                <div class="font-bold ${state.isTrial ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-2">
-                  <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
-                  ${state.isTrial ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase">First Month Free</span>' : ''}
-                </div>
-                <div class="text-[11px] text-slate-400">
-                  Plan: <b class="text-white">${state.isTrial ? '30-Day Free First Month Pass' : (currentPlan ? currentPlan.name : 'VIP')}</b> (${state.symbol}${state.price}) · Status: <span class="text-emerald-400 font-bold">Active</span> · Expiry: ${expiresFormatted}
                   ${(function() {
                     const n = getExpiryNotice();
                     if (n && n.urgent) {
-                      return ' · <span class="text-amber-400 font-bold animate-pulse">⚠️ Expires in ' + n.daysLeft + ' day' + (n.daysLeft > 1 ? 's' : '') + '!</span>';
+                      return '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-red-500/25 text-red-300 border border-red-500/50 flex items-center gap-1 shrink-0 animate-pulse"><i class="fa-solid fa-clock"></i> Ends in ' + n.daysLeft + 'd</span>';
                     }
                     return '';
                   })()}
-                </div>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <button type="button" onclick="window.ArcGold.cancelPlan()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 text-slate-300 border border-slate-700 text-xs font-semibold transition">
-                  ${state.isTrial ? 'End Trial Early' : 'Downgrade to Free'}
-                </button>
+                ` : (state.status === 'expired' ? `
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1 shrink-0">
+                    <i class="fa-solid fa-hourglass-end text-amber-400"></i> Expired · Free Tier
+                  </span>
+                ` : '')}
               </div>
             </div>
-
-            <!-- 2-USER ACCOUNT ENFORCER WIDGET -->
-            ${(function() {
-              const users = getAuthorizedUsers();
-              return `
-                <div class="pt-3 border-t border-slate-800/80 space-y-2.5">
-                  <div class="flex items-center justify-between flex-wrap gap-2">
-                    <div class="flex items-center gap-2">
-                      <i class="fa-solid fa-users text-amber-400"></i>
-                      <span class="font-bold text-white text-xs uppercase tracking-wide font-mono">Authorized Users &amp; Devices</span>
-                      <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${users.length >= 2 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'}">
-                        ${users.length} / ${MAX_AUTHORIZED_USERS} Slots Used
-                      </span>
-                    </div>
-                    <span class="text-[10px] text-slate-400">Strictly 2 users allowed to prevent multiple users using one account</span>
-                  </div>
-
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <!-- User Slot 1 (Primary) -->
-                    <div class="p-2.5 rounded-xl bg-slate-950/80 border border-amber-500/30 flex items-center justify-between gap-2">
-                      <div class="flex items-center gap-2.5 min-w-0">
-                        <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0 border border-amber-500/40">
-                          <i class="fa-solid fa-user-check text-[11px]"></i>
-                        </div>
-                        <div class="min-w-0">
-                          <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                            <span>${escapeHtml(users[0] ? users[0].name : 'Primary User')}</span>
-                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">Slot 1</span>
-                          </div>
-                          <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[0] ? users[0].id : 'Primary Device')}</div>
-                        </div>
-                      </div>
-                      <span class="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">Primary</span>
-                    </div>
-
-                    <!-- User Slot 2 (Secondary or Available) -->
-                    ${users[1] ? `
-                      <div class="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2.5 min-w-0">
-                          <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-xs shrink-0 border border-cyan-500/40">
-                            <i class="fa-solid fa-user-check text-[11px]"></i>
-                          </div>
-                          <div class="min-w-0">
-                            <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                              <span>${escapeHtml(users[1].name)}</span>
-                              <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-mono">Slot 2</span>
-                            </div>
-                            <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[1].id)}</div>
-                          </div>
-                        </div>
-                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${escapeJsString(users[1].id)}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
-                          <i class="fa-solid fa-xmark mr-1"></i> Remove
-                        </button>
-                      </div>
-                    ` : `
-                      <div class="p-2.5 rounded-xl bg-slate-950/40 border border-dashed border-slate-700 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2.5 min-w-0">
-                          <div class="w-7 h-7 rounded-lg bg-slate-800 text-slate-500 flex items-center justify-center font-bold text-xs shrink-0">
-                            <i class="fa-solid fa-user-plus text-[11px]"></i>
-                          </div>
-                          <div class="min-w-0">
-                            <div class="text-xs font-bold text-slate-300">Slot 2: Empty</div>
-                            <div class="text-[10px] text-slate-500">Add 1 second user or device</div>
-                          </div>
-                        </div>
-                        <button type="button" onclick="window.ArcGold.promptAddSecondUser()" class="text-[10px] font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 px-2.5 py-1 rounded-lg transition shrink-0">
-                          <i class="fa-solid fa-plus mr-1"></i> Add User
-                        </button>
-                      </div>
-                    `}
-                  </div>
-                </div>
-              `;
-            })()}
           </div>
-        ` : ''}
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-gold-card') : window.ArcGold.toggleBox()">
+              <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+          <div class="space-y-6">
+            ${detailedGoldContent}
+          </div>
+        </div>
       </div>
     `;
     if (window.ArcLiquidGlass && typeof window.ArcLiquidGlass.updateUI === 'function') {
@@ -22125,12 +21375,16 @@ window.ArcCustomBackground = (function() {
   let activeFilter = 'all'; // 'all' | 'mobile' | 'desktop' | 'gym' | 'sports' | 'studies' | 'mindset'
 
   function toggleBox(forceState) {
-    if (typeof forceState === 'boolean') {
-      isBoxOpen = forceState;
+    if (window.ArcSettingsAccordion) {
+      window.ArcSettingsAccordion.toggle('settings-custom-bg-card', forceState);
     } else {
-      isBoxOpen = !isBoxOpen;
+      if (typeof forceState === 'boolean') {
+        isBoxOpen = forceState;
+      } else {
+        isBoxOpen = !isBoxOpen;
+      }
+      renderCard();
     }
-    renderCard();
   }
 
   function setFilter(filter) {
@@ -22581,45 +21835,6 @@ window.ArcCustomBackground = (function() {
     const activePresetId = (state.enabled && state.isPreset) ? state.presetId : null;
     const hasCustomBg = !!(gold && state.enabled && state.imageData);
 
-    // Contracted / Collapsed View (Default)
-    if (!isBoxOpen) {
-      const activePreset = activePresetId ? PRESET_WALLPAPERS.find(p => p.id === activePresetId) : null;
-      card.innerHTML = `
-        <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to expand Custom &amp; 4K Wallpapers">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
-              <i class="fa-solid fa-image text-lg"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2 flex-wrap">
-                <h3 class="text-sm font-bold text-white tracking-wide truncate">Custom &amp; 4K Wallpapers</h3>
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                  <i class="fa-solid fa-crown text-[9px]"></i> VIP
-                </span>
-                ${hasCustomBg ? `
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                    <i class="fa-solid fa-check"></i> ${activePreset ? activePreset.title : 'Active'}
-                  </span>
-                ` : ''}
-              </div>
-              <p class="text-xs text-slate-400 truncate mt-0.5">
-                ${hasCustomBg 
-                  ? 'Active: ' + (activePreset ? activePreset.title + ' • ' + activePreset.badge : state.fileName) + ' • Tap to change or customize' 
-                  : 'Gym, Sports, Studies &amp; Mindset masterpieces for mobile &amp; laptop • Tap to browse'}
-              </p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <button type="button" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
-              <span>Open</span>
-              <i class="fa-solid fa-chevron-down text-[10px]"></i>
-            </button>
-          </div>
-        </div>
-      `;
-      return;
-    }
-
     // Filter presets
     const filteredPresets = PRESET_WALLPAPERS.filter(p => {
       if (activeFilter === 'all') return true;
@@ -22740,133 +21955,109 @@ window.ArcCustomBackground = (function() {
       </div>
     `;
 
-    if (gold) {
-      card.innerHTML = `
-        <div class="flex flex-col gap-3.5">
-          <!-- CARD HEADER (EXPANDED) -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-amber-500/20 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to collapse Custom &amp; 4K Wallpapers">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
-                <i class="fa-solid fa-image text-lg"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="text-sm font-bold text-white tracking-wide">Custom &amp; 4K Wallpapers</h3>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-sm">
-                    <i class="fa-solid fa-crown text-[10px]"></i> Arc Gold VIP
-                  </span>
-                  ${hasCustomBg ? `
-                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
-                      <i class="fa-solid fa-check"></i> Active
-                    </span>
-                  ` : ''}
-                </div>
-                <p class="text-xs text-slate-400 mt-0.5">
-                  Predefined Gym, Sports, Studies &amp; Mindset wallpapers with sparkling quotes for mobile &amp; laptop, or upload your photo.
-                </p>
-              </div>
-            </div>
+    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+      ? window.ArcSettingsAccordion.isExpanded('settings-custom-bg-card')
+      : isBoxOpen;
 
-            <!-- ACTION BUTTONS & CLOSE TOGGLE -->
-            <div class="flex items-center gap-2 shrink-0">
-              <input type="file" id="arc-custom-bg-input" accept="image/*" class="hidden" onchange="window.ArcCustomBackground.handleFileSelect(this)" />
-              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.triggerUpload()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition active:scale-95" title="Upload your own photo from device">
-                <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-                <span class="hidden sm:inline">Upload Photo</span>
-              </button>
+    card.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "settings-custom-bg-card")');
+
+    card.innerHTML = `
+      <div class="flex items-center justify-between gap-3 select-none">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl ${gold ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)]' : 'bg-slate-800 border border-slate-700 text-amber-400'} flex items-center justify-center shrink-0">
+            <i class="fa-solid ${gold ? 'fa-image' : 'fa-lock'} text-base"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-sm font-bold text-white tracking-wide truncate">Custom &amp; 4K Wallpapers</h3>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                <i class="fa-solid fa-crown text-[9px]"></i> ${gold ? 'VIP' : 'Arc Gold Perk'}
+              </span>
               ${hasCustomBg ? `
-                <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.removeBackground()" class="px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-semibold flex items-center gap-1 transition active:scale-95" title="Remove custom background and reset to theme">
-                  <i class="fa-solid fa-trash-can text-xs"></i>
-                  <span class="hidden sm:inline">Reset</span>
-                </button>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                  <i class="fa-solid fa-check"></i> ${activePreset ? activePreset.title : 'Active'}
+                </span>
               ` : ''}
-              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.toggleBox()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1 transition" title="Close wallpaper selector">
-                <span>Close</span>
-                <i class="fa-solid fa-chevron-up text-[10px]"></i>
-              </button>
             </div>
           </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : window.ArcCustomBackground.toggleBox()">
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+          </button>
+        </div>
+      </div>
 
-          <!-- COMPACT PRESETS GALLERY -->
-          ${presetsHtml}
-
-          <!-- ACTIVE WALLPAPER STATUS & CONTROLS -->
-          ${hasCustomBg ? `
-            <div class="flex flex-col md:flex-row items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30 shadow-md">
-              <div class="flex items-center gap-2.5 min-w-0 w-full md:w-auto">
-                <div class="w-10 h-10 rounded-lg overflow-hidden border border-amber-400/50 shrink-0 bg-slate-950">
-                  <img src="${state.imageData}" alt="Active Wallpaper" class="w-full h-full object-cover" />
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                    <span>${state.fileName || 'Custom Wallpaper'}</span>
-                    <span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-400/20 text-amber-300">Live</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 truncate">
-                    ${state.isPreset ? 'Premium preset • Sparkling quote &amp; particles active' : 'Custom photo • Audio-reactive particles active'}
-                  </div>
-                </div>
+      <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+        <div>
+          ${gold ? `
+            <div class="flex flex-col gap-3.5">
+              <div class="flex items-center justify-between gap-2 pt-1 flex-wrap">
+                <input type="file" id="arc-custom-bg-input" accept="image/*" class="hidden" onchange="window.ArcCustomBackground.handleFileSelect(this)" />
+                <button type="button" onclick="window.ArcCustomBackground.triggerUpload()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition active:scale-95" title="Upload your own photo from device">
+                  <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+                  <span>Upload Photo</span>
+                </button>
+                ${hasCustomBg ? `
+                  <button type="button" onclick="window.ArcCustomBackground.removeBackground()" class="px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-semibold flex items-center gap-1 transition active:scale-95" title="Remove custom background and reset to theme">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                    <span>Reset</span>
+                  </button>
+                ` : ''}
               </div>
-
-              <!-- DIMMING SLIDER -->
-              <div class="flex items-center gap-2.5 w-full md:w-auto bg-slate-950/70 px-3 py-1.5 rounded-lg border border-slate-800">
-                <div class="text-[11px] text-slate-300 flex items-center gap-1 shrink-0">
-                  <i class="fa-solid fa-circle-half-stroke text-amber-400 text-xs"></i>
-                  <span>Dim:</span>
+              ${presetsHtml}
+              ${hasCustomBg ? `
+                <div class="flex flex-col md:flex-row items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-900/90 border border-amber-500/30 shadow-md">
+                  <div class="flex items-center gap-2.5 min-w-0 w-full md:w-auto">
+                    <div class="w-10 h-10 rounded-lg overflow-hidden border border-amber-400/50 shrink-0 bg-slate-950">
+                      <img src="${state.imageData}" alt="Active Wallpaper" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                        <span>${state.fileName || 'Custom Wallpaper'}</span>
+                        <span class="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-amber-400/20 text-amber-300">Live</span>
+                      </div>
+                      <div class="text-[10px] text-slate-400 truncate">
+                        ${state.isPreset ? 'Premium preset • Sparkling quote &amp; particles active' : 'Custom photo • Audio-reactive particles active'}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- DIMMING SLIDER -->
+                  <div class="flex items-center gap-2.5 w-full md:w-auto bg-slate-950/70 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <div class="text-[11px] text-slate-300 flex items-center gap-1 shrink-0">
+                      <i class="fa-solid fa-circle-half-stroke text-amber-400 text-xs"></i>
+                      <span>Dim:</span>
+                    </div>
+                    <input type="range" min="10" max="85" step="5" value="${state.dim || 45}" oninput="window.ArcCustomBackground.setDim(this.value)" class="w-24 sm:w-32 accent-amber-400 cursor-pointer" />
+                    <span id="custom-bg-dim-val" class="text-xs font-mono font-bold text-amber-300 w-8 text-right">${state.dim || 45}%</span>
+                  </div>
                 </div>
-                <input type="range" min="10" max="85" step="5" value="${state.dim || 45}" oninput="window.ArcCustomBackground.setDim(this.value)" class="w-24 sm:w-32 accent-amber-400 cursor-pointer" />
-                <span id="custom-bg-dim-val" class="text-xs font-mono font-bold text-amber-300 w-8 text-right">${state.dim || 45}%</span>
-              </div>
+              ` : `
+                <div onclick="window.ArcCustomBackground.triggerUpload()" class="p-3 rounded-xl border border-dashed border-amber-500/30 hover:border-amber-400/60 bg-amber-500/5 hover:bg-amber-500/10 transition cursor-pointer flex items-center justify-center text-center gap-2 group">
+                  <div class="w-7 h-7 rounded-full bg-amber-500/15 group-hover:bg-amber-500/25 flex items-center justify-center text-amber-400 transition text-xs shrink-0">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                  </div>
+                  <span class="text-xs font-bold text-amber-300">Or click here to upload your own custom photo from your device</span>
+                </div>
+              `}
             </div>
           ` : `
-            <div onclick="window.ArcCustomBackground.triggerUpload()" class="p-3 rounded-xl border border-dashed border-amber-500/30 hover:border-amber-400/60 bg-amber-500/5 hover:bg-amber-500/10 transition cursor-pointer flex items-center justify-center text-center gap-2 group">
-              <div class="w-7 h-7 rounded-full bg-amber-500/15 group-hover:bg-amber-500/25 flex items-center justify-center text-amber-400 transition text-xs shrink-0">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
+            <div class="flex flex-col gap-3.5">
+              <div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                <p class="text-xs text-slate-300">
+                  Unlock Gym, Sports, Studies &amp; Mindset wallpapers with sparkling quotes and custom photo background support with Arc Gold VIP.
+                </p>
+                <button type="button" onclick="window.ArcGold.scrollToGoldCard()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 border border-amber-400/50 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95 shrink-0">
+                  <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+                  <span>Unlock</span>
+                </button>
               </div>
-              <span class="text-xs font-bold text-amber-300">Or click here to upload your own custom photo from your device</span>
+              ${presetsHtml}
             </div>
           `}
         </div>
-      `;
-    } else {
-      // Free Tier: Gated UI showing Locked Presets & Upgrade CTA
-      card.innerHTML = `
-        <div class="flex flex-col gap-3.5">
-          <!-- CARD HEADER (LOCKED) -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-slate-800/80 cursor-pointer select-none" onclick="window.ArcCustomBackground.toggleBox()" title="Click to collapse">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 shrink-0">
-                <i class="fa-solid fa-lock text-base"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="text-sm font-bold text-white tracking-wide">Custom &amp; 4K Wallpapers</h3>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1">
-                    <i class="fa-solid fa-crown text-[10px]"></i> Arc Gold Perk
-                  </span>
-                </div>
-                <p class="text-xs text-slate-400 mt-0.5">
-                  Unlock Gym, Sports, Studies &amp; Mindset wallpapers with sparkling quotes and custom photo background support with Arc Gold VIP.
-                </p>
-              </div>
-            </div>
-            <div class="shrink-0 flex items-center gap-2">
-              <button type="button" onclick="event.stopPropagation(); window.ArcGold.scrollToGoldCard()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 border border-amber-400/50 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
-                <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
-                <span>Unlock with Arc Gold</span>
-              </button>
-              <button type="button" onclick="event.stopPropagation(); window.ArcCustomBackground.toggleBox();" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-1 transition">
-                <span>Close</span>
-                <i class="fa-solid fa-chevron-up text-[10px]"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- COMPACT PRESETS PREVIEW -->
-          ${presetsHtml}
-        </div>
-      `;
-    }
+      </div>
+    `;
   }
 
   function init() {
@@ -22898,7 +22089,7 @@ window.ArcCustomBackground = (function() {
     toggleBox,
     setFilter,
     getFilter: () => activeFilter,
-    isExpanded: () => isBoxOpen,
+    isExpanded: () => (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function') ? window.ArcSettingsAccordion.isExpanded('settings-custom-bg-card') : isBoxOpen,
     renderCard,
     init
   };
@@ -25932,7 +25123,33 @@ function fzStatus(){const el=q('#sx-fzs');if(!el)return;const u=memo[ymd(new Dat
 const row=(l,h,c)=>'<div class="sx-row"><div class="min-w-0"><div class="text-xs font-semibold text-slate-200">'+l+'</div>'+(h?'<div class="text-[10px] text-slate-500">'+h+'</div>':'')+'</div>'+c+'</div>';
 const sw=(id,on,l,dis)=>'<label class="sx-sw"><input type="checkbox" id="'+id+'" '+(on?'checked':'')+(dis?' disabled':'')+' aria-label="'+l+'"><span></span></label>';
 const rg=(id,max,v,u,l,dis)=>'<div class="sx-rg"><input type="range" id="'+id+'" min="0" max="'+max+'" value="'+v+'"'+(dis?' disabled':'')+' aria-label="'+l+'"><output id="'+id+'-o" class="sx-o">'+v+u+'</output></div>';
-const card=(i,t,s,b)=>'<section class="glass-card rounded-2xl p-4 sm:p-5 space-y-3"><div class="flex items-center gap-3"><div class="sx-ic"><i class="fa-solid '+i+'"></i></div><div class="min-w-0"><h2 class="text-sm sm:text-base font-extrabold text-white">'+t+'</h2><p class="text-[11px] text-slate-400">'+s+'</p></div></div>'+b+'</section>';
+const card = (id, i, t, s, pill, b) => {
+ const isExp = (typeof window !== 'undefined' && window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+  ? window.ArcSettingsAccordion.isExpanded(id)
+  : false;
+ return '<section id="' + id + '" class="glass-card rounded-2xl p-4 sm:p-5 settings-card-item" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, \'' + id + '\')">' +
+  '<div class="flex items-center justify-between gap-3 select-none">' +
+   '<div class="flex items-center gap-3 min-w-0">' +
+    '<div class="sx-ic shrink-0"><i class="fa-solid ' + i + '"></i></div>' +
+    '<div class="min-w-0 flex items-center gap-2 flex-wrap">' +
+     '<h2 class="text-sm sm:text-base font-extrabold text-white truncate">' + t + '</h2>' +
+     (pill ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700 shrink-0">' + pill + '</span>' : '') +
+    '</div>' +
+   '</div>' +
+   '<div class="flex items-center gap-2 shrink-0">' +
+    '<button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="' + isExp + '" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle(\'' + id + '\')">' +
+     '<i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ' + (isExp ? 'rotate-180' : '') + '"></i>' +
+    '</button>' +
+   '</div>' +
+  '</div>' +
+  '<div class="arc-fluid-accordion ' + (isExp ? 'expanded' : 'hidden') + ' pt-3 border-t border-slate-800/80 mt-3">' +
+   '<div class="space-y-3">' +
+    '<p class="text-[11px] text-slate-400">' + s + '</p>' +
+    b +
+   '</div>' +
+  '</div>' +
+ '</section>';
+};
 const sub=t=>'<div class="text-xs font-bold text-slate-200 pt-2">'+t+'</div>';
 function weightsHtml(){return Object.keys(CATEGORIES).map(c=>{const hs=state.habits.filter(h=>h.category===c),ws=[...new Set(hs.map(h=>h.weight))],cur=cfg.weights[c]||(ws.length===1?ws[0]:0);
  return row('<span class="inline-block w-2 h-2 rounded-full mr-1.5" style="background:'+CATEGORIES[c].color+'"></span>'+c,hs.length+(hs.length===1?' habit':' habits'),
@@ -25941,11 +25158,11 @@ function habitsHtml(){const H=state.habits;return H.map((h,i)=>{const c=(CATEGOR
  return '<li class="sx-hr"><span class="w-2 h-2 rounded-full shrink-0" style="background:'+c+'"></span><span class="flex-1 min-w-0 truncate text-xs text-slate-200">'+nm+'</span><span class="text-[10px] font-mono text-slate-500">'+h.weight+'x</span>'+
  '<button class="sx-ib" data-a="mv" data-i="'+i+'" data-d="-1" aria-label="Move '+nm+' up"'+(i===0?' disabled':'')+'><i class="fa-solid fa-chevron-up"></i></button>'+
  '<button class="sx-ib" data-a="mv" data-i="'+i+'" data-d="1" aria-label="Move '+nm+' down"'+(i===H.length-1?' disabled':'')+'><i class="fa-solid fa-chevron-down"></i></button></li>'}).join('')||'<li class="text-[11px] text-slate-500">No habits yet.</li>'}
-const quotesHtml=()=>cfg.quotes.list.map((x,i)=>'<li class="sx-hr"><span class="flex-1 min-w-0 text-xs text-slate-300">\u201C'+esc(x.quote)+'\u201D <span class="text-slate-500">\u2014 '+esc(x.author||'Me')+'</span></span><button class="sx-ib" data-a="qdel" data-i="'+i+'" aria-label="Delete quote"><i class="fa-solid fa-trash"></i></button></li>').join('')||'<li class="text-[11px] text-slate-500">No custom quotes yet.</li>';
+const quotesHtml=()=>cfg.quotes.list.map((x,i)=>'<li class="sx-hr"><span class="flex-1 min-w-0 text-xs text-slate-300">“'+esc(x.quote)+'” <span class="text-slate-500">— '+esc(x.author||'Me')+'</span></span><button class="sx-ib" data-a="qdel" data-i="'+i+'" aria-label="Delete quote"><i class="fa-solid fa-trash"></i></button></li>').join('')||'<li class="text-[11px] text-slate-500">No custom quotes yet.</li>';
 function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cfg.fx,Q=cfg.quotes,sum=state.currentArc==='summer',
  den=F.density==null?(typeof fxParticles!=='undefined'?fxParticles.length:80):F.density,sel=cfg.theme||'winter';
  root.innerHTML=
- card('fa-database','Data & storage','Back up, restore or wipe everything this app keeps in your browser.',
+ card('sx-card-data','fa-database','Data & storage','Back up, restore or wipe everything this app keeps in your browser.','Local + Airgap',
   '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><button class="sx-btn sx-pri" data-a="export"><i class="fa-solid fa-file-export"></i> Export Backup (.json)</button>'+
   '<button class="sx-btn" type="button" onclick="exportArcMarkdownReport()"><i class="fa-solid fa-file-arrow-down"></i> Export Dossier (.md)</button>'+
   '<label class="sx-btn" role="button" tabindex="0" for="json-sync-input"><i class="fa-solid fa-file-import"></i> Import Backup (.json)</label>'+
@@ -25956,7 +25173,7 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   '<p class="text-[11px] text-slate-400">JSON imports are automatically scanned for malware, executable code and XSS exploits. Zero-exfiltration Content Security Policy blocks network data leaks.</p>'+
   '<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1"><button class="sx-btn text-cyan-300" data-a="sec-audit"><i class="fa-solid fa-shield-virus"></i> Malware Audit</button><button class="sx-btn" data-a="sec-enc-exp"><i class="fa-solid fa-lock"></i> Encrypted Backup</button><button class="sx-btn" data-a="sec-pin-set"><i class="fa-solid fa-key"></i> Security PIN</button></div></div>'+
   '<div class="sx-danger"><div class="min-w-0"><div class="text-xs font-bold text-rose-300"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Danger zone</div><div class="text-[11px] text-slate-400">Permanently deletes all habits, logs and settings in this browser.</div></div><button class="sx-btn sx-red" data-a="clear"><i class="fa-solid fa-trash"></i> Clear All Data</button></div>')+
- card('fa-sliders','Audio, visuals & performance','Tune sound and the particle canvas. Changes apply instantly.',
+ card('sx-card-audio','fa-sliders','Audio, visuals & performance','Tune sound and the particle canvas. Changes apply instantly.','Realtime',
   row('Master volume','Sound effects and focus ambience',rg('sx-vol',100,A.volume,'%','Master volume'))+
   row('Click sounds','Buttons, tabs and modals',sw('sx-a-click',A.click,'Click sounds'))+
   row('Checkbox sounds','Completing and undoing habits',sw('sx-a-check',A.check,'Checkbox sounds'))+
@@ -25971,12 +25188,12 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   const subLabel = !isUnlocked ? '🔒 Gold' : (n===30?'Battery saver':n===60?'Smooth':n===120?'Ultra smooth':'Up to 200 FPS');
   return '<button data-a="fps" data-v="'+n+'" '+(isUnlocked?'':'data-gold-locked="true" title="Exclusive to Arc Gold"')+' aria-pressed="'+(F.fps===n)+'">'+label+'<small>'+subLabel+'</small></button>';
 }).join('')+'</div>'))+
- card('fa-calendar-days','Arc & timeline','Define your own challenge window, look and motivation.',
+ card('sx-card-timeline','fa-calendar-days','Arc & timeline','Define your own challenge window, look and motivation.','Timeline',
   '<div class="grid grid-cols-2 gap-2"><label class="sx-f">Start date<input type="date" id="sx-start" class="sx-in" value="'+esc(cfg.arc.start)+'"></label><label class="sx-f">End date<input type="date" id="sx-end" class="sx-in" value="'+esc(cfg.arc.end)+'"></label></div>'+
   '<div class="flex flex-wrap items-center gap-2"><span class="text-[11px] text-slate-400">Quick length</span>'+[30,60,90].map(n=>'<button class="sx-chip" data-a="days" data-v="'+n+'">'+n+' days</button>').join('')+'<span id="sx-arc-sum" class="text-[11px] text-slate-400 ml-auto font-mono"></span></div>'+
   sub('Theme')+'<div class="grid grid-cols-3 gap-2" role="group" aria-label="Theme preset">'+Object.entries(TH).map(([k,t])=>'<button class="sx-th" data-a="theme" data-v="'+esc(k)+'" aria-pressed="'+(sel===k)+'"><span class="sx-sw2" style="background:linear-gradient(135deg,'+t.a+','+t.b+')"></span><b>'+t.n+'</b><small>'+t.d+'</small></button>').join('')+'</div>'+
   row('Accent color','Overrides the preset accent','<div class="flex items-center gap-2"><input type="color" id="sx-acc" class="sx-col" value="'+esc(cfg.accent||TH[sel].a)+'" aria-label="Accent color"><button class="sx-chip" data-a="accreset">Reset</button></div>'))+
- card('fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.',
+ card('sx-card-habits','fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.','Scoring',
   sub('Category weights')+'<div id="sx-w">'+weightsHtml()+'</div>'+
   sub('Streak freeze')+row('Free miss','One missed day per calendar month keeps your streak',sw('sx-fz',cfg.freeze.on,'Streak freeze'))+'<div id="sx-fzs" class="text-[11px] text-slate-500"></div>');
  arcLabels();gauge();fzStatus()}
@@ -26461,14 +25678,43 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  window.renderDayControl=function(){
   const c=$('p20-day');if(!c)return;
+  const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+    ? window.ArcSettingsAccordion.isExpanded('p20-day')
+    : false;
   const w=getArcWindow(),t=getEffectiveToday(),day=Math.round((t-w.start)/864e5)+1;
   const f=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  c.innerHTML='<h3 class="font-extrabold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-calendar-day text-cyan-400"></i> Day counter</h3>'+
-   '<p class="text-[11px] text-slate-400 mt-1 mb-3">Follows your device clock. Active arc: '+f(w.start)+' to '+f(w.end)+'. Change the dates under Arc &amp; timeline below.</p>'+
-   '<div class="text-xs text-slate-200 font-mono mb-3">'+(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)+' \u00B7 '+f(t)+' <span class="'+(dayOverride?'text-amber-300':'text-emerald-400')+'">'+(dayOverride?'manual override':'live')+'</span></div>'+
-   '<div class="flex flex-wrap items-center gap-2"><input id="p20-day-in" type="number" inputmode="numeric" min="1" max="'+w.total+'" value="'+(dayOverride||'')+'" placeholder="Day 1-'+w.total+'" aria-label="Manual day override" class="'+IN+' w-28">'+
-   '<button type="button" onclick="setDayOverride(document.getElementById(\'p20-day-in\').value)" class="'+BTN+'">Jump to day</button>'+
-   '<button type="button" onclick="clearDayOverride()" '+(dayOverride?'':'disabled ')+'class="'+BTN+'">Back to today</button></div>';
+  c.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-day")');
+  c.innerHTML=`
+    <div class="flex items-center justify-between gap-3 select-none">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+          <i class="fa-solid fa-calendar-day text-base"></i>
+        </div>
+        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+          <h3 class="font-extrabold text-sm sm:text-base text-white truncate">Day Counter</h3>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${dayOverride ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} flex items-center gap-1 shrink-0">
+            ${dayOverride ? 'Manual Override' : (day < 1 ? 'Starts in ' + (1 - day) + 'd' : day > w.total ? 'Finished' : 'Day ' + day + ' / ' + w.total)}
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-day')">
+          <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+        </button>
+      </div>
+    </div>
+    <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+      <div class="space-y-3">
+        <p class="text-[11px] text-slate-400">Follows your device clock. Active arc: ${f(w.start)} to ${f(w.end)}. Change the dates under Arc &amp; timeline below.</p>
+        <div class="text-xs text-slate-200 font-mono">${(day<1?'Starts in '+(1-day)+'d':day>w.total?'Arc finished':'Day '+day+' / '+w.total)} · ${f(t)} <span class="${(dayOverride?'text-amber-300':'text-emerald-400')}">${(dayOverride?'manual override':'live')}</span></div>
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="p20-day-in" type="number" inputmode="numeric" min="1" max="${w.total}" value="${(dayOverride||'')}" placeholder="Day 1-${w.total}" aria-label="Manual day override" class="${IN} w-28">
+          <button type="button" onclick="setDayOverride(document.getElementById('p20-day-in').value)" class="${BTN}">Jump to day</button>
+          <button type="button" onclick="clearDayOverride()" ${(dayOverride?'':'disabled ')}class="${BTN}">Back to today</button>
+        </div>
+      </div>
+    </div>
+  `;
  };
 
  window.renderHabitManager=function(force){
@@ -31347,7 +30593,36 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     `;
 
     containers.forEach(c => {
-      c.innerHTML = html;
+      if (c.id === 'p20-google-account') {
+        const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+          ? window.ArcSettingsAccordion.isExpanded('p20-google-account')
+          : false;
+        c.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-google-account")');
+        c.innerHTML = `
+          <div class="flex items-center justify-between gap-3 select-none">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0">
+                ${googleIconSvg}
+              </div>
+              <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                <h3 class="font-black text-sm sm:text-base text-white truncate">Google Account &amp; Sync</h3>
+                ${user ? '<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold uppercase tracking-wider shrink-0">ONLINE</span>' : '<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-bold uppercase tracking-wider shrink-0">NOT CONNECTED</span>'}
+                ${isSyncing ? '<span class="inline-block w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin shrink-0"></span>' : ''}
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-google-account')">
+                <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+              </button>
+            </div>
+          </div>
+          <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+            ${html}
+          </div>
+        `;
+      } else {
+        c.innerHTML = html;
+      }
     });
 
     if (typeof updateCrossDeviceScreenTimeUI === 'function') {

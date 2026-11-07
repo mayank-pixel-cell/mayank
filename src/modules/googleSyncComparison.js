@@ -894,7 +894,36 @@
     `;
 
     containers.forEach(c => {
-      c.innerHTML = html;
+      if (c.id === 'p20-google-account') {
+        const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+          ? window.ArcSettingsAccordion.isExpanded('p20-google-account')
+          : false;
+        c.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-google-account")');
+        c.innerHTML = `
+          <div class="flex items-center justify-between gap-3 select-none">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0">
+                ${googleIconSvg}
+              </div>
+              <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                <h3 class="font-black text-sm sm:text-base text-white truncate">Google Account &amp; Sync</h3>
+                ${user ? '<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold uppercase tracking-wider shrink-0">ONLINE</span>' : '<span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 font-bold uppercase tracking-wider shrink-0">NOT CONNECTED</span>'}
+                ${isSyncing ? '<span class="inline-block w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin shrink-0"></span>' : ''}
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-google-account')">
+                <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
+              </button>
+            </div>
+          </div>
+          <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
+            ${html}
+          </div>
+        `;
+      } else {
+        c.innerHTML = html;
+      }
     });
 
     if (typeof updateCrossDeviceScreenTimeUI === 'function') {

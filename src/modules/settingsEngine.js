@@ -87,7 +87,33 @@ function fzStatus(){const el=q('#sx-fzs');if(!el)return;const u=memo[ymd(new Dat
 const row=(l,h,c)=>'<div class="sx-row"><div class="min-w-0"><div class="text-xs font-semibold text-slate-200">'+l+'</div>'+(h?'<div class="text-[10px] text-slate-500">'+h+'</div>':'')+'</div>'+c+'</div>';
 const sw=(id,on,l,dis)=>'<label class="sx-sw"><input type="checkbox" id="'+id+'" '+(on?'checked':'')+(dis?' disabled':'')+' aria-label="'+l+'"><span></span></label>';
 const rg=(id,max,v,u,l,dis)=>'<div class="sx-rg"><input type="range" id="'+id+'" min="0" max="'+max+'" value="'+v+'"'+(dis?' disabled':'')+' aria-label="'+l+'"><output id="'+id+'-o" class="sx-o">'+v+u+'</output></div>';
-const card=(i,t,s,b)=>'<section class="glass-card rounded-2xl p-4 sm:p-5 space-y-3"><div class="flex items-center gap-3"><div class="sx-ic"><i class="fa-solid '+i+'"></i></div><div class="min-w-0"><h2 class="text-sm sm:text-base font-extrabold text-white">'+t+'</h2><p class="text-[11px] text-slate-400">'+s+'</p></div></div>'+b+'</section>';
+const card = (id, i, t, s, pill, b) => {
+ const isExp = (typeof window !== 'undefined' && window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
+  ? window.ArcSettingsAccordion.isExpanded(id)
+  : false;
+ return '<section id="' + id + '" class="glass-card rounded-2xl p-4 sm:p-5 settings-card-item" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, \'' + id + '\')">' +
+  '<div class="flex items-center justify-between gap-3 select-none">' +
+   '<div class="flex items-center gap-3 min-w-0">' +
+    '<div class="sx-ic shrink-0"><i class="fa-solid ' + i + '"></i></div>' +
+    '<div class="min-w-0 flex items-center gap-2 flex-wrap">' +
+     '<h2 class="text-sm sm:text-base font-extrabold text-white truncate">' + t + '</h2>' +
+     (pill ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700 shrink-0">' + pill + '</span>' : '') +
+    '</div>' +
+   '</div>' +
+   '<div class="flex items-center gap-2 shrink-0">' +
+    '<button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="' + isExp + '" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle(\'' + id + '\')">' +
+     '<i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ' + (isExp ? 'rotate-180' : '') + '"></i>' +
+    '</button>' +
+   '</div>' +
+  '</div>' +
+  '<div class="arc-fluid-accordion ' + (isExp ? 'expanded' : 'hidden') + ' pt-3 border-t border-slate-800/80 mt-3">' +
+   '<div class="space-y-3">' +
+    '<p class="text-[11px] text-slate-400">' + s + '</p>' +
+    b +
+   '</div>' +
+  '</div>' +
+ '</section>';
+};
 const sub=t=>'<div class="text-xs font-bold text-slate-200 pt-2">'+t+'</div>';
 function weightsHtml(){return Object.keys(CATEGORIES).map(c=>{const hs=state.habits.filter(h=>h.category===c),ws=[...new Set(hs.map(h=>h.weight))],cur=cfg.weights[c]||(ws.length===1?ws[0]:0);
  return row('<span class="inline-block w-2 h-2 rounded-full mr-1.5" style="background:'+CATEGORIES[c].color+'"></span>'+c,hs.length+(hs.length===1?' habit':' habits'),
@@ -96,11 +122,11 @@ function habitsHtml(){const H=state.habits;return H.map((h,i)=>{const c=(CATEGOR
  return '<li class="sx-hr"><span class="w-2 h-2 rounded-full shrink-0" style="background:'+c+'"></span><span class="flex-1 min-w-0 truncate text-xs text-slate-200">'+nm+'</span><span class="text-[10px] font-mono text-slate-500">'+h.weight+'x</span>'+
  '<button class="sx-ib" data-a="mv" data-i="'+i+'" data-d="-1" aria-label="Move '+nm+' up"'+(i===0?' disabled':'')+'><i class="fa-solid fa-chevron-up"></i></button>'+
  '<button class="sx-ib" data-a="mv" data-i="'+i+'" data-d="1" aria-label="Move '+nm+' down"'+(i===H.length-1?' disabled':'')+'><i class="fa-solid fa-chevron-down"></i></button></li>'}).join('')||'<li class="text-[11px] text-slate-500">No habits yet.</li>'}
-const quotesHtml=()=>cfg.quotes.list.map((x,i)=>'<li class="sx-hr"><span class="flex-1 min-w-0 text-xs text-slate-300">\u201C'+esc(x.quote)+'\u201D <span class="text-slate-500">\u2014 '+esc(x.author||'Me')+'</span></span><button class="sx-ib" data-a="qdel" data-i="'+i+'" aria-label="Delete quote"><i class="fa-solid fa-trash"></i></button></li>').join('')||'<li class="text-[11px] text-slate-500">No custom quotes yet.</li>';
+const quotesHtml=()=>cfg.quotes.list.map((x,i)=>'<li class="sx-hr"><span class="flex-1 min-w-0 text-xs text-slate-300">“'+esc(x.quote)+'” <span class="text-slate-500">— '+esc(x.author||'Me')+'</span></span><button class="sx-ib" data-a="qdel" data-i="'+i+'" aria-label="Delete quote"><i class="fa-solid fa-trash"></i></button></li>').join('')||'<li class="text-[11px] text-slate-500">No custom quotes yet.</li>';
 function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cfg.fx,Q=cfg.quotes,sum=state.currentArc==='summer',
  den=F.density==null?(typeof fxParticles!=='undefined'?fxParticles.length:80):F.density,sel=cfg.theme||'winter';
  root.innerHTML=
- card('fa-database','Data & storage','Back up, restore or wipe everything this app keeps in your browser.',
+ card('sx-card-data','fa-database','Data & storage','Back up, restore or wipe everything this app keeps in your browser.','Local + Airgap',
   '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><button class="sx-btn sx-pri" data-a="export"><i class="fa-solid fa-file-export"></i> Export Backup (.json)</button>'+
   '<button class="sx-btn" type="button" onclick="exportArcMarkdownReport()"><i class="fa-solid fa-file-arrow-down"></i> Export Dossier (.md)</button>'+
   '<label class="sx-btn" role="button" tabindex="0" for="json-sync-input"><i class="fa-solid fa-file-import"></i> Import Backup (.json)</label>'+
@@ -111,7 +137,7 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   '<p class="text-[11px] text-slate-400">JSON imports are automatically scanned for malware, executable code and XSS exploits. Zero-exfiltration Content Security Policy blocks network data leaks.</p>'+
   '<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1"><button class="sx-btn text-cyan-300" data-a="sec-audit"><i class="fa-solid fa-shield-virus"></i> Malware Audit</button><button class="sx-btn" data-a="sec-enc-exp"><i class="fa-solid fa-lock"></i> Encrypted Backup</button><button class="sx-btn" data-a="sec-pin-set"><i class="fa-solid fa-key"></i> Security PIN</button></div></div>'+
   '<div class="sx-danger"><div class="min-w-0"><div class="text-xs font-bold text-rose-300"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Danger zone</div><div class="text-[11px] text-slate-400">Permanently deletes all habits, logs and settings in this browser.</div></div><button class="sx-btn sx-red" data-a="clear"><i class="fa-solid fa-trash"></i> Clear All Data</button></div>')+
- card('fa-sliders','Audio, visuals & performance','Tune sound and the particle canvas. Changes apply instantly.',
+ card('sx-card-audio','fa-sliders','Audio, visuals & performance','Tune sound and the particle canvas. Changes apply instantly.','Realtime',
   row('Master volume','Sound effects and focus ambience',rg('sx-vol',100,A.volume,'%','Master volume'))+
   row('Click sounds','Buttons, tabs and modals',sw('sx-a-click',A.click,'Click sounds'))+
   row('Checkbox sounds','Completing and undoing habits',sw('sx-a-check',A.check,'Checkbox sounds'))+
@@ -126,12 +152,12 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   const subLabel = !isUnlocked ? '🔒 Gold' : (n===30?'Battery saver':n===60?'Smooth':n===120?'Ultra smooth':'Up to 200 FPS');
   return '<button data-a="fps" data-v="'+n+'" '+(isUnlocked?'':'data-gold-locked="true" title="Exclusive to Arc Gold"')+' aria-pressed="'+(F.fps===n)+'">'+label+'<small>'+subLabel+'</small></button>';
 }).join('')+'</div>'))+
- card('fa-calendar-days','Arc & timeline','Define your own challenge window, look and motivation.',
+ card('sx-card-timeline','fa-calendar-days','Arc & timeline','Define your own challenge window, look and motivation.','Timeline',
   '<div class="grid grid-cols-2 gap-2"><label class="sx-f">Start date<input type="date" id="sx-start" class="sx-in" value="'+esc(cfg.arc.start)+'"></label><label class="sx-f">End date<input type="date" id="sx-end" class="sx-in" value="'+esc(cfg.arc.end)+'"></label></div>'+
   '<div class="flex flex-wrap items-center gap-2"><span class="text-[11px] text-slate-400">Quick length</span>'+[30,60,90].map(n=>'<button class="sx-chip" data-a="days" data-v="'+n+'">'+n+' days</button>').join('')+'<span id="sx-arc-sum" class="text-[11px] text-slate-400 ml-auto font-mono"></span></div>'+
   sub('Theme')+'<div class="grid grid-cols-3 gap-2" role="group" aria-label="Theme preset">'+Object.entries(TH).map(([k,t])=>'<button class="sx-th" data-a="theme" data-v="'+esc(k)+'" aria-pressed="'+(sel===k)+'"><span class="sx-sw2" style="background:linear-gradient(135deg,'+t.a+','+t.b+')"></span><b>'+t.n+'</b><small>'+t.d+'</small></button>').join('')+'</div>'+
   row('Accent color','Overrides the preset accent','<div class="flex items-center gap-2"><input type="color" id="sx-acc" class="sx-col" value="'+esc(cfg.accent||TH[sel].a)+'" aria-label="Accent color"><button class="sx-chip" data-a="accreset">Reset</button></div>'))+
- card('fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.',
+ card('sx-card-habits','fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.','Scoring',
   sub('Category weights')+'<div id="sx-w">'+weightsHtml()+'</div>'+
   sub('Streak freeze')+row('Free miss','One missed day per calendar month keeps your streak',sw('sx-fz',cfg.freeze.on,'Streak freeze'))+'<div id="sx-fzs" class="text-[11px] text-slate-500"></div>');
  arcLabels();gauge();fzStatus()}
