@@ -45,7 +45,7 @@ jobs:
           npm run build
 
       - name: Build Desktop Native Binary (Tauri 2.0)
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
