@@ -21,7 +21,7 @@
     "qrcode-generator": "^2.0.4"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.2.7",
+    "@tauri-apps/cli": "^2.12.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
