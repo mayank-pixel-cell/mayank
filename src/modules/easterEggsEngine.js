@@ -19,7 +19,7 @@
 
   function getDiscoveredEggs() {
     try {
-      const val = localStorage.getItem(STORAGE_KEY_EGGS) || localStorage.getItem('arc_secrets_found') || '[]';
+      const val = localStorage.getItem(STORAGE_KEY_EGGS) || '[]';
       return JSON.parse(val);
     } catch(e) {
       return [];
@@ -757,7 +757,7 @@
       return 'All 10 Easter eggs and the Extra Grand Achievement (Omniscient Architect) unlocked!';
     },
     reset: function() {
-      try { localStorage.removeItem(STORAGE_KEY_EGGS); localStorage.removeItem('arc_secrets_found'); } catch(e) {}
+      try { localStorage.removeItem(STORAGE_KEY_EGGS); } catch(e) {}
       const appState = (typeof state !== 'undefined' ? state : (window.state || (window.state = {})));
       if (appState && appState.gam && appState.gam.bd) {
         Object.keys(appState.gam.bd).forEach(k => {

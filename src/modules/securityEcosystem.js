@@ -183,8 +183,11 @@ window.ArcSecurity = (function() {
     if (depth > 12) return null;
     if (typeof obj === 'string') {
       return obj
+        .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
         .replace(/(?:javascript|data|vbscript):/gi, '');
     }
     if (Array.isArray(obj)) {
@@ -4190,7 +4193,7 @@ window.ArcGold = (function() {
               <div class="flex items-center gap-2">
                 <i class="fa-solid fa-ticket text-amber-400"></i>
                 <span class="text-xs font-bold text-white uppercase tracking-wider font-mono">Apply VIP Promo Code</span>
-                ${promo ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1"><i class="fa-solid fa-tag text-[9px]"></i> ${promo.code} ACTIVE</span>` : ''}
+                ${promo ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1"><i class="fa-solid fa-tag text-[9px]"></i> ${escapeHtml(promo.code)} ACTIVE</span>` : ''}
               </div>
               <p class="text-[11px] text-slate-400 mt-0.5">Apply promotional coupons for instant price reductions across all Arc Gold membership tiers.</p>
             </div>
@@ -4208,7 +4211,7 @@ window.ArcGold = (function() {
                   <i class="fa-solid fa-percent text-xs"></i>
                 </div>
                 <div>
-                  <span class="font-bold text-emerald-300 font-mono tracking-wide">${promo.code}</span>
+                  <span class="font-bold text-emerald-300 font-mono tracking-wide">${escapeHtml(promo.code)}</span>
                   <span class="text-slate-300 text-xs ml-1.5">applied: <b>${promo.label}</b></span>
                 </div>
               </div>
