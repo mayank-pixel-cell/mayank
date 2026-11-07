@@ -8,8 +8,10 @@ powershell.exe -NoProfile -Command ^
   "$conn = Get-NetTCPConnection -LocalPort 1420 -ErrorAction SilentlyContinue; " ^
   "if ($conn) { " ^
   "  $procIds = $conn | Select-Object -ExpandProperty OwningProcess -Unique; " ^
-  "  foreach ($pid in $procIds) { " ^
-  "    try { Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue; Write-Host ('[OK] Stopped server process PID ' + $pid) } catch {} " ^
+  "  foreach ($p in $procIds) { " ^
+  "    if ($p -and $p -ne 0) { " ^
+  "      try { Stop-Process -Id $p -Force -ErrorAction SilentlyContinue; Write-Host ('[OK] Stopped server process PID ' + $p) } catch {} " ^
+  "    } " ^
   "  } " ^
   "} else { " ^
   "  Write-Host '[INFO] No Arc Tracker server was running on port 1420.' " ^
