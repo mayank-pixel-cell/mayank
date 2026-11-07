@@ -56,7 +56,7 @@ jobs:
           prerelease: false
 
       - name: Upload Desktop Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact_name }}
           path: |
@@ -219,7 +219,7 @@ jobs:
           ls -la "$OUTPUT_DIR"
 
       - name: Upload Android Deliverables (APK & Google Play AAB)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Arc-Tracker-Android-APK
           path: |
@@ -305,7 +305,7 @@ jobs:
           ls -la output/ios
 
       - name: Upload iOS Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Arc-Tracker-iOS
           path: output/ios/*
