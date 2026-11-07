@@ -468,20 +468,6 @@ class ArcNotificationEngine {
     }
   }
 
-  // Test notification trigger for demonstration & user testing
-  testUpdateNotification() {
-    const testNum = Math.floor(Math.random() * 90) + 10;
-    this.notifyUpdate({
-      title: `⚡ Live Update #${testNum}: Performance Patch Released`,
-      message: 'Real-time telemetry sync, zero-latency habit validation, and battery-saver optimizers enabled.',
-      version: APP_VERSION,
-      features: [
-        'Instant background data synchronization verified',
-        'Tactile audio chime and push notification tested'
-      ]
-    });
-  }
-
   setFilter(filter) {
     this.activeFilter = filter;
     this.renderUi();

@@ -56,8 +56,8 @@ export function renderScreentimeView() {
                         <button role="button" onclick="openAccessibilityModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 hover:border-cyan-400 border border-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-universal-access text-cyan-400"></i> Permissions
                         </button>
-                        <button role="button" id="st-strict-mode-btn" onclick="toggleFocusStrictMode(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Arc Gold Strict Mode: Prevents ending focus sessions early">
-                            <i class="fa-solid fa-lock text-amber-400"></i> <span id="st-strict-btn-text">Strict Mode <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded border border-amber-500/30 font-bold">GOLD</span></span>
+                        <button role="button" id="st-strict-mode-btn" onclick="toggleFocusStrictMode(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Focus Strict Mode: Prevents ending focus sessions early (Free for all users)">
+                            <i class="fa-solid fa-lock text-amber-400"></i> <span id="st-strict-btn-text">Strict Mode <span class="text-[9px] bg-slate-700 text-emerald-300 px-1 rounded border border-slate-600 font-bold">FREE</span></span>
                         </button>
                         <button role="button" onclick="openAddCustomAppModal(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-cyan-500 active:bg-cyan-400 text-black text-xs font-extrabold uppercase tracking-wider transition shadow-lg shadow-cyan-500/20 hover:scale-105 flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Add App
@@ -140,17 +140,8 @@ export function renderScreentimeView() {
                         <button role="button" onclick="ArcScreenTimeStore.openLastMonthModal(); playSfx('modalOpen')" class="px-3 py-2 rounded-xl bg-purple-950/70 hover:bg-purple-900/70 border border-purple-500/40 text-purple-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="View Last Month's Screen Time, Pie Chart & App Trends">
                             <i class="fa-solid fa-chart-pie text-purple-400"></i> Last Month
                         </button>
-                        <button role="button" onclick="ArcScreenTimeStore.forceDailyRefresh(); playSfx('click')" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1 shadow-sm active:scale-95" title="Daily Refresh: Reset Today's Screen Time Counter">
-                            <i class="fa-solid fa-rotate text-emerald-400"></i> Refresh Today
-                        </button>
                         <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.syncNow();}else{updateCrossDeviceScreenTimeUI();}; playSfx('quantumHum'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'A');}" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Sync latest screen time across devices">
                             <i class="fa-solid fa-arrows-rotate text-cyan-400"></i> Sync Now
-                        </button>
-                        <button role="button" onclick="if(window.ArcGoogleSync&&ArcGoogleSync.simulateMobileTrackerSync){ArcGoogleSync.simulateMobileTrackerSync(225);}else{simulateMobileTime(225);}; playSfx('fanfare'); if(window.triggerGradeParticleBurst){const r=this.getBoundingClientRect(); triggerGradeParticleBurst(r.left+r.width/2, r.top+r.height/2, 'S');}" class="px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/70 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Simulate 3h 45m screen time from Mobile App Tracker">
-                            <i class="fa-solid fa-mobile-screen text-indigo-400"></i> Simulate Mobile Data
-                        </button>
-                        <button role="button" onclick="promptSetMobileTime(); playSfx('click')" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition" title="Manually adjust mobile screen time minutes">
-                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </div>
                 </div>
@@ -661,8 +652,8 @@ export function renderScreentimeView() {
                                         <div class="min-w-0 leading-tight">
                                             <div class="flex items-center gap-1.5 flex-wrap">
                                                 <span class="text-xs font-bold text-white">Strict Mode</span>
-                                                <span class="text-[9px] font-mono font-black px-1.5 py-0.2 rounded bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-amber-300 border border-amber-400/50 flex items-center gap-1 shadow-sm">
-                                                    <i class="fa-solid fa-crown text-[8px] text-amber-400"></i> GOLD
+                                                <span class="text-[9px] font-mono font-black px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center gap-1 shadow-sm">
+                                                    <i class="fa-solid fa-lock text-[8px] text-emerald-400"></i> FREE
                                                 </span>
                                             </div>
                                             <span class="text-[10px] text-slate-400 block truncate" id="phone-widget-strict-desc">Disables early exit until timer ends</span>
@@ -752,7 +743,6 @@ export function renderScreentimeView() {
                         <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-crosshairs text-cyan-400"></i> Active App Live Monitor
                         </h3>
-                        <p class="text-[11px] text-slate-400">Select an application below to track time on it or simulate running it. If a blocked app is chosen, the Lockout Shield triggers instantly.</p>
                     </div>
 
                     <div id="st-active-app-status-container" class="flex items-center gap-2">
@@ -760,10 +750,6 @@ export function renderScreentimeView() {
                             <span class="w-2 h-2 rounded-full bg-slate-500"></span> Standby / Standalone
                         </span>
                     </div>
-                </div>
-
-                <div id="st-app-launcher-pills" class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
-                    <!-- Populated dynamically -->
                 </div>
             </div>
 

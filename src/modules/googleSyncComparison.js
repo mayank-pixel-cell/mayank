@@ -732,39 +732,6 @@
     applyCloudState(simulatedPayload, true);
   }
 
-  // Mobile App Tracker dedicated sync simulation
-  function simulateMobileTrackerSync(customMinutes = 225) {
-    const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-    const simulatedSecs = Math.max(60, Number(customMinutes || 225) * 60);
-
-    const simulatedCloudState = JSON.parse(JSON.stringify(window.state || {}));
-    simulatedCloudState.deviceScreenTime = simulatedCloudState.deviceScreenTime || {};
-    simulatedCloudState.deviceScreenTime.mobile = {
-      seconds: simulatedSecs,
-      deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
-      lastUpdated: Date.now(),
-      todayKey: today,
-      isLinked: true
-    };
-
-    const simulatedPayload = {
-      app: 'ArcTracker',
-      updatedAt: Date.now(),
-      senderId: 'dev_mobile_app_tracker_sim',
-      deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
-      deviceRole: 'mobile',
-      todayScreenTimeSecs: simulatedSecs,
-      user: getUser() ? getUser().email : 'demo@gmail.com',
-      state: simulatedCloudState
-    };
-
-    applyCloudState(simulatedPayload, true);
-    if (typeof playSfx === 'function') playSfx('victory');
-    if (typeof showToast === 'function') {
-      showToast(`📱 Mobile App Tracker linked: Synced ${formatDuration(simulatedSecs)} screen time!`);
-    }
-  }
-
   /* ----------------------------------------------------
    * UI RENDERER (Supports Drawer and Full Settings View)
    * ---------------------------------------------------- */
@@ -953,7 +920,6 @@
     syncNow: () => performSync(false),
     triggerAutoSync: triggerAutoSync,
     simulateSecondDeviceSync: simulateSecondDeviceSync,
-    simulateMobileTrackerSync: simulateMobileTrackerSync,
     formatTimeAgo: formatTimeAgo,
     toggleAutoSync: function(checked) {
       setAutoSyncEnabled(checked);

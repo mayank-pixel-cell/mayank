@@ -191,7 +191,162 @@
                         opacity 0.38s var(--arc-fluid-decel) !important;
         }
 
-        /* 6. Reduced Motion Accessibility */
+        /* 6. Per-Habit Deep Analytics Slide-Over Drawer & Matrix Styles */
+        #arc-habit-analytics-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 89;
+            background: rgba(2, 6, 23, 0.78);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.38s var(--arc-fluid-decel),
+                        visibility 0s 0.38s !important;
+            will-change: opacity;
+        }
+
+        #arc-habit-analytics-backdrop.open {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            transition: opacity 0.38s var(--arc-fluid-decel),
+                        visibility 0s !important;
+        }
+
+        #arc-habit-analytics-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100dvh;
+            width: 100%;
+            max-width: 44rem;
+            z-index: 90;
+            visibility: hidden;
+            transform: translateX(105%) !important;
+            transition: transform 0.46s var(--arc-fluid-decel),
+                        visibility 0s 0.46s,
+                        background-color 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease !important;
+            will-change: transform, opacity;
+        }
+
+        #arc-habit-analytics-drawer.open {
+            visibility: visible !important;
+            transform: translateX(0%) !important;
+            transition: transform 0.52s var(--arc-spring-ease),
+                        visibility 0s,
+                        background-color 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease !important;
+        }
+
+        html[data-mode="light"] #arc-habit-analytics-drawer {
+            background: rgba(255, 255, 255, 0.98) !important;
+            color: #0f172a !important;
+            border-left: 1px solid rgba(203, 213, 225, 0.9) !important;
+            box-shadow: -12px 0 40px rgba(15, 23, 42, 0.15) !important;
+        }
+
+        html.arc-bw-mode #arc-habit-analytics-drawer {
+            border-color: rgba(234, 179, 8, 0.4) !important;
+        }
+
+        /* Habit Heatmap Matrix Styles */
+        .ha-matrix-grid {
+            display: grid;
+            grid-template-rows: repeat(7, 1fr);
+            grid-auto-flow: column;
+            gap: 3.5px;
+        }
+
+        .ha-cell {
+            aspect-ratio: 1;
+            min-width: 0 !important;
+            min-height: 0 !important;
+            padding: 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .ha-cell:hover:not(:disabled) {
+            transform: scale(1.22);
+            z-index: 10;
+        }
+
+        .ha-cell:active:not(:disabled) {
+            transform: scale(0.92);
+        }
+
+        .ha-cell.ha-done {
+            background: rgba(16, 185, 129, 0.28);
+            border: 1px solid rgba(52, 211, 153, 0.85);
+            color: #6ee7b7;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        body[data-arc="summer"] .ha-cell.ha-done {
+            background: rgba(251, 191, 36, 0.28);
+            border: 1px solid rgba(251, 191, 36, 0.85);
+            color: #fde68a;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+        }
+
+        .ha-cell.ha-missed {
+            background: rgba(244, 63, 94, 0.22);
+            border: 1px solid rgba(244, 63, 94, 0.75);
+            color: #fda4af;
+            box-shadow: 0 0 8px rgba(244, 63, 94, 0.2);
+        }
+
+        .ha-cell.ha-frozen {
+            background: rgba(6, 182, 212, 0.22);
+            border: 1px solid rgba(34, 211, 238, 0.75);
+            color: #a5f3fc;
+            box-shadow: 0 0 8px rgba(6, 182, 212, 0.25);
+        }
+
+        .ha-cell.ha-future {
+            background: rgba(30, 41, 59, 0.45);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+            color: #475569;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .ha-cell.ha-today {
+            outline: 2px solid #ffffff !important;
+            outline-offset: 1px !important;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /* Monthly Projected Striped Bar */
+        .ha-projected-stripe {
+            background-image: repeating-linear-gradient(
+                -45deg,
+                rgba(251, 191, 36, 0.32),
+                rgba(251, 191, 36, 0.32) 8px,
+                rgba(251, 191, 36, 0.1) 8px,
+                rgba(251, 191, 36, 0.1) 16px
+            );
+            background-size: 200% 100%;
+            animation: haStripeMove 18s linear infinite;
+        }
+
+        @keyframes haStripeMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+
+        /* 7. Reduced Motion Accessibility */
         @media (prefers-reduced-motion: reduce) {
             #arc-hud-card,
             #arc-notifications-drawer,
@@ -204,6 +359,8 @@
             details.faq-item > div,
             #pp12-drawer,
             #pp12-back,
+            #arc-habit-analytics-drawer,
+            #arc-habit-analytics-backdrop,
             .pp-modal,
             .pp-modal > div,
             #arc-gold-bw-upgrade-modal,

@@ -282,9 +282,6 @@ export function renderBlockerModals() {
                     <button role="button" onclick="closeFocusBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-black text-sm uppercase tracking-wider transition shadow-lg shadow-purple-500/25 hover:scale-[1.02]">
                         <i class="fa-solid fa-arrow-left mr-1.5"></i> Return to Focus Session
                     </button>
-                    <button role="button" onclick="closeFocusBlockerShield(); openFocusBlocklistModal();" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
-                        <i class="fa-solid fa-sliders mr-1.5"></i> Customize Focus Blocklist
-                    </button>
                 </div>
             </div>
         </div>
@@ -323,11 +320,8 @@ export function renderBlockerModals() {
 
                 <!-- ACTIONS -->
                 <div class="space-y-2 pt-1">
-                    <button role="button" onclick="closeYouTubeBlockerShield(); openYouTubeFilterModal();" class="w-full py-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white font-black text-sm uppercase tracking-wider transition shadow-lg shadow-red-500/25 hover:scale-[1.02]">
-                        <i class="fa-solid fa-sliders mr-1.5"></i> Manage YouTube Filter
-                    </button>
-                    <button role="button" onclick="closeYouTubeBlockerShield(); switchTab('screentime');" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
-                        Back to Screen Time Matrix
+                    <button role="button" onclick="closeYouTubeBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white font-black text-sm uppercase tracking-wider transition shadow-lg shadow-red-500/25 hover:scale-[1.02]">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Return to Focus Session
                     </button>
                 </div>
             </div>
@@ -627,18 +621,6 @@ export function renderBlockerModals() {
                     </div>
                 </div>
 
-                <!-- INTERACTIVE CHANNEL ACCESS TESTER -->
-                <div class="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-2">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Test Channel Access Barrier</span>
-                    <div class="flex gap-2">
-                        <input type="text" id="yt-test-channel-input" placeholder="Type @MrBeast or @freecodecamp..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
-                        <button role="button" onclick="runYouTubeChannelTest()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition border border-cyan-500/30">
-                            Test Channel
-                        </button>
-                    </div>
-                    <div id="yt-test-feedback-box" class="text-[11px] font-mono hidden pt-1"></div>
-                </div>
-
                 <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
                     <span class="text-[11px] text-slate-400">Educational creators remain open</span>
                     <button role="button" onclick="closeYouTubeFilterModal()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg shadow-red-600/20">
@@ -693,9 +675,6 @@ export function renderBlockerModals() {
                 <div class="space-y-2 pt-1">
                     <button role="button" onclick="closeWebsiteBlockerShield(); switchTab('tracker');" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-black text-sm uppercase tracking-wider transition shadow-lg shadow-cyan-500/25 hover:scale-[1.02]">
                         <i class="fa-solid fa-arrow-left mr-1.5"></i> Return to Focus Session
-                    </button>
-                    <button role="button" onclick="closeWebsiteBlockerShield(); openWebsiteFilterModal();" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs transition">
-                        <i class="fa-solid fa-sliders mr-1.5"></i> Manage Blocked Websites
                     </button>
                 </div>
             </div>
@@ -752,18 +731,6 @@ export function renderBlockerModals() {
                     <div id="web-modal-blocked-list" class="max-h-44 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
                         <!-- Populated dynamically -->
                     </div>
-                </div>
-
-                <!-- INTERACTIVE WEBSITE ACCESS TESTER -->
-                <div class="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-2">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Test Browser Website Barrier</span>
-                    <div class="flex gap-2">
-                        <input type="text" id="web-test-domain-input" placeholder="Type youtube.com, hotstar.com, or github.com..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-mono">
-                        <button role="button" onclick="runWebsiteAccessTest()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition border border-cyan-500/30">
-                            Test URL
-                        </button>
-                    </div>
-                    <div id="web-test-feedback-box" class="text-[11px] font-mono hidden pt-1"></div>
                 </div>
 
                 <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">

@@ -18,10 +18,6 @@ export function renderNotificationsView() {
                         <i class="fa-solid fa-arrows-rotate text-xs"></i>
                         <span>Check for Updates</span>
                     </button>
-                    <button role="button" onclick="ArcNotifications.testUpdateNotification()" class="px-3.5 py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate a new update arrival">
-                        <i class="fa-solid fa-bolt text-xs"></i>
-                        <span>Test Update Alert</span>
-                    </button>
                     <button role="button" onclick="ArcNotifications.markAllAsRead()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Mark all notifications as read">
                         <i class="fa-solid fa-check-double text-xs"></i>
                         <span>Mark All Read</span>

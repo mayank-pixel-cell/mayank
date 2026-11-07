@@ -162,15 +162,11 @@ export function renderFooterHud() {
             </button>
         </div>
 
-        <!-- Action Buttons: Check Updates & Test Alert -->
-        <div class="flex gap-2">
-            <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn flex-1 py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
+        <!-- Action Buttons: Check Updates -->
+        <div class="flex">
+            <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn w-full py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
                 <span>Check Updates</span>
-            </button>
-            <button type="button" onclick="ArcNotifications.testUpdateNotification()" class="flex-1 py-1.5 px-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition shadow-sm">
-                <i class="fa-solid fa-bolt text-[10px]"></i>
-                <span>Test Alert</span>
             </button>
         </div>
 

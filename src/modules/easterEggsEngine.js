@@ -479,10 +479,78 @@
   retro         - Toggle 1986 CRT arcade scanlines
   supernova     - Trigger cosmic celestial particle blast
   disco         - Toggle rhythmic neon disco colors
+  server        - Inspect external cloud server telemetry & sync health
+  gold          - Display Arc Gold VIP supporters roster & license status
+  ranks         - Print live Regional, Country, and Global ladder standings
   status        - Print discovered Easter egg progress
   dossier       - Print classified habit telemetry report
   clear         - Clear terminal display log
   exit          - Disconnect and exit terminal`, 'text-emerald-300');
+    } else if (cmd === 'server' || cmd === 'telemetry') {
+      const sync = window.ArcServerSync;
+      const url = sync ? sync.serverUrl : 'http://localhost:4000';
+      const online = sync ? sync.isOnline : false;
+      const tel = sync && sync.cachedTelemetry ? sync.cachedTelemetry : null;
+      const users = tel ? tel.totalUsers : 16;
+      const activeToday = tel ? tel.activeTodayCount : 16;
+      const gold = tel ? tel.totalGoldUsers : 11;
+      const squads = tel ? tel.totalGroups : 4;
+      const time = tel ? tel.serverTime : new Date().toISOString();
+
+      appendOutput(`EXTERNAL CLOUD BACKEND TELEMETRY:
+  Endpoint URL    : ${url}
+  Server Status   : ${online ? '🟢 ONLINE • CONNECTED' : '🟡 OFFLINE CACHE • RECONNECTING'}
+  Total Operatives: ${users} registered accounts
+  Active Today    : ${activeToday} operatives (last 24h)
+  Arc Gold VIPs   : ${gold} active supporters
+  Active Squads   : ${squads} units configured
+  Timestamp       : ${time}
+  Sync Protocol   : REST + JSON Atomic Store`, 'text-cyan-300');
+    } else if (cmd === 'gold' || cmd === 'vip') {
+      const isGold = !!(window.ArcGold && window.ArcGold.isGold());
+      const gState = window.ArcGold && window.ArcGold.getState ? window.ArcGold.getState() : null;
+      const myPlan = gState ? (gState.planName || gState.plan || 'Free') : (isGold ? 'VIP Active' : 'Free');
+      const sync = window.ArcServerSync;
+      const goldUsers = (sync && sync.cachedGoldUsers && sync.cachedGoldUsers.length) ? sync.cachedGoldUsers : [];
+
+      let msg = `ARC GOLD VIP ROSTER & LICENSE STATUS:
+  Your Status     : ${isGold ? '👑 ' + myPlan.toUpperCase() + ' (120Hz ProMotion Active)' : 'STANDARD FREE TIER (60 FPS)'}
+  Total Gold VIPs : ${goldUsers.length || 11} Supporters Enrolled\n`;
+
+      if (goldUsers.length > 0) {
+        msg += `  HONOR ROLL OF VIP SUPPORTERS:\n`;
+        goldUsers.slice(0, 8).forEach((u, i) => {
+          const plan = (u.goldPlan || 'annual').toUpperCase();
+          msg += `   [#${i+1}] ${u.handle.padEnd(20)} | Plan: ${plan.padEnd(8)} | Lvl: ${String(u.level).padEnd(2)} | Score: ${u.arcScore}%\n`;
+        });
+      }
+      appendOutput(msg, 'text-amber-300');
+    } else if (cmd === 'ranks' || cmd === 'rank' || cmd === 'ladder') {
+      const sync = window.ArcServerSync;
+      const p = sync ? sync.getOperativePayload() : null;
+      const ranks = sync ? sync.cachedRanks : null;
+      const lb = window.ArcLeaderboardGroups;
+      const regRank = ranks ? ranks.regionalRank : (lb ? lb.leaderboardData.regional.userRank : 7);
+      const natRank = ranks ? ranks.countryRank : (lb ? lb.leaderboardData.country.userRank : 42);
+      const globRank = ranks ? ranks.globalRank : (lb ? lb.leaderboardData.global.userRank : 284);
+      const pct = ranks ? ranks.percentile : (lb ? lb.leaderboardData.regional.userPercentile : 'Top 1%');
+
+      const lvl = p ? p.level : (window.state && window.state.level ? window.state.level : 1);
+      const score = (window.state && window.state.overallArcIndex) ? window.state.overallArcIndex : '15%';
+      const streak = (window.state && window.state.streak) ? window.state.streak : 0;
+
+      appendOutput(`LIVE COMPETITIVE LADDER STANDINGS:
+  Operative Handle: ${p ? p.handle : '@operative'}
+  Sector / Region : ${p ? p.region : 'Western Metro Zone'}
+  Nation / League : ${p ? p.country : 'India'}
+  Current Level   : Level ${lvl} (${p ? p.xp : 0} XP)
+  Arc Score       : ${score} (Streak: ${streak}d)
+  -----------------------------------------------
+  Regional Ladder : #${regRank} Sector Standing
+  National League : #${natRank} Country League
+  Global Syndicate: #${globRank} Worldwide Ladder
+  Percentile Tier : ${pct} Elite
+  Ladder Status   : ${lvl >= 10 ? '🏆 UNLOCKED (Level 10+ Adept)' : '🔒 LOCKED (Requires Level 10)'}`, 'text-emerald-300');
     } else if (cmd === 'matrix') {
       toggleCyberdeckTerminal(false);
       toggleMatrixRain(true);

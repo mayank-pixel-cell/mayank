@@ -394,8 +394,33 @@ import { arcStorage } from './storage.js';
             if (errorEl) errorEl.classList.add('hidden');
 
             if (challengeBox) {
-                if (appTrackerState.strictMode) {
+                const isFocus = isFocusActive();
+                const today = getTodayKey();
+                const extKey = 'arc_emergency_ext_' + today + '_' + appId;
+                const isUsedToday = Boolean(localStorage.getItem(extKey));
+
+                if (isFocus) {
+                    challengeBox.classList.add('hidden');
+                } else if (isUsedToday) {
+                    challengeBox.classList.remove('hidden');
+                    challengeBox.innerHTML = `<div class="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs text-center font-bold"><i class="fa-solid fa-ban mr-1.5"></i> Daily Emergency Extension Used — Limit 1 per app per day.</div>`;
+                } else if (appTrackerState.strictMode) {
+                    challengeBox.classList.remove('hidden');
                     challengeBox.innerHTML = `<div class="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs text-center font-bold"><i class="fa-solid fa-lock mr-1.5"></i> Strict Mode Active — No Emergency Extensions Permitted Today.</div>`;
+                } else {
+                    challengeBox.classList.remove('hidden');
+                    challengeBox.innerHTML = `
+                        <div class="flex items-center justify-between text-xs text-slate-300">
+                            <span>Emergency 5-Minute Extension</span>
+                            <span class="text-[10px] text-rose-400 font-mono font-bold">1 Use / Day</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 leading-tight">Type <strong class="text-white font-mono">UNBREAKABLE</strong> to grant an emergency grace extension.</p>
+                        <div class="flex gap-2 pt-1">
+                            <input type="text" id="blocker-challenge-input" placeholder="Type UNBREAKABLE" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono font-bold text-white uppercase focus:outline-none focus:border-rose-500">
+                            <button role="button" onclick="submitEmergencyExtension()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-extrabold text-xs transition">Submit</button>
+                        </div>
+                        <p id="blocker-challenge-error" class="text-[11px] text-rose-400 hidden font-bold"></p>
+                    `;
                 }
             }
 
@@ -513,6 +538,11 @@ import { arcStorage } from './storage.js';
         }
 
         function submitEmergencyExtension() {
+            if (isFocusActive()) {
+                alert("Emergency extensions are forbidden during active Focus sessions.");
+                return;
+            }
+
             if (appTrackerState.strictMode) {
                 alert("Strict Mode is turned on. Emergency extensions are disabled to protect your discipline.");
                 return;
@@ -520,7 +550,15 @@ import { arcStorage } from './storage.js';
 
             const input = document.getElementById('blocker-challenge-input');
             const errorEl = document.getElementById('blocker-challenge-error');
-            if (!input || !appTrackerState.blockedShieldAppId) return;
+            const appId = appTrackerState.blockedShieldAppId;
+            if (!input || !appId) return;
+
+            const today = getTodayKey();
+            const extKey = 'arc_emergency_ext_' + today + '_' + appId;
+            if (localStorage.getItem(extKey)) {
+                alert("Daily Emergency Extension limit reached: Only 1 extension per app per day is permitted.");
+                return;
+            }
 
             const val = input.value.trim().toUpperCase();
             if (val !== 'UNBREAKABLE') {
@@ -532,8 +570,13 @@ import { arcStorage } from './storage.js';
                 return;
             }
 
+            // Record single-use extension in localStorage
+            try {
+                localStorage.setItem(extKey, '1');
+            } catch (_) {}
+
             // Grant 5 extra minutes (300 seconds)
-            const app = appTrackerState.apps.find(a => a.id === appTrackerState.blockedShieldAppId);
+            const app = appTrackerState.apps.find(a => a.id === appId);
             if (app) {
                 app.dailyLimitSecs += 300;
                 saveAppTrackerData();
@@ -541,7 +584,7 @@ import { arcStorage } from './storage.js';
 
             closeBlockerShield();
             playSfx('fanfare');
-            showToast("+5 Minutes Emergency Extension granted. Use wisely.");
+            showToast("+5 Minutes Emergency Extension granted. (1/1 daily limit reached)");
             renderScreenTimeView();
         }
 
@@ -614,6 +657,11 @@ import { arcStorage } from './storage.js';
             const app = appTrackerState.apps.find(a => a.id === appId);
             if (!app) return;
 
+            if (isFocusActive() && app.blockInFocus) {
+                showToast("Focus sprint active: Cannot unblock apps mid-session.");
+                return;
+            }
+
             app.blockInFocus = !app.blockInFocus;
             saveAppTrackerData();
             playSfx('click');
@@ -623,6 +671,25 @@ import { arcStorage } from './storage.js';
         }
 
         function setAllAppsFocusBlock(type) {
+            if (isFocusActive()) {
+                if (type === false) {
+                    showToast("Focus sprint active: Cannot unblock apps mid-session.");
+                    return;
+                }
+                if (type === 'distractions') {
+                    appTrackerState.apps.forEach(app => {
+                        if (app.category === 'Social Media' || app.category === 'Entertainment' || app.category === 'Gaming' || app.category === 'Messaging') {
+                            app.blockInFocus = true;
+                        }
+                    });
+                    saveAppTrackerData();
+                    playSfx('check');
+                    showToast("Focus blocklist updated (distractions blocked).");
+                    renderScreenTimeView();
+                    renderFocusBlocklistModal();
+                    return;
+                }
+            }
             appTrackerState.apps.forEach(app => {
                 if (type === 'distractions') {
                     app.blockInFocus = (app.category === 'Social Media' || app.category === 'Entertainment' || app.category === 'Gaming' || app.category === 'Messaging');
@@ -659,8 +726,11 @@ import { arcStorage } from './storage.js';
             const listEl = document.getElementById('focus-modal-app-list');
             if (!listEl) return;
 
+            const focusRunning = isFocusActive();
+
             listEl.innerHTML = appTrackerState.apps.map(app => {
                 const isBlocked = Boolean(app.blockInFocus);
+                const isLockedUnchecking = focusRunning && isBlocked;
                 return `
                     <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800">
                         <div class="flex items-center space-x-2.5">
@@ -673,7 +743,7 @@ import { arcStorage } from './storage.js';
                             </div>
                         </div>
 
-                        <button role="button" onclick="toggleAppFocusBlock('${app.id}')" class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 ${isBlocked ? 'bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'}">
+                        <button role="button" ${isLockedUnchecking ? 'disabled title="Cannot unblock apps during active Focus session"' : `onclick="toggleAppFocusBlock('${app.id}')"`} class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 ${isBlocked ? (isLockedUnchecking ? 'bg-purple-600/20 text-purple-300/70 border border-purple-500/30 opacity-60 cursor-not-allowed' : 'bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50') : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'}">
                             <i class="fa-solid ${isBlocked ? 'fa-lock text-purple-400' : 'fa-lock-open text-slate-500'} text-[11px]"></i>
                             <span>${isBlocked ? 'BLOCKED' : 'ALLOWED'}</span>
                         </button>
@@ -706,6 +776,11 @@ import { arcStorage } from './storage.js';
         }
 
         function toggleYouTubeFilterEnabled() {
+            if (isFocusActive() && appTrackerState.youtubeFilter.enabled) {
+                showToast("Focus sprint active: Cannot disable YouTube Channel Filter.");
+                renderYouTubeFilterModal();
+                return;
+            }
             appTrackerState.youtubeFilter.enabled = !appTrackerState.youtubeFilter.enabled;
             saveAppTrackerData();
             playSfx('click');
@@ -714,6 +789,11 @@ import { arcStorage } from './storage.js';
         }
 
         function toggleYouTubeShortsBlock() {
+            if (isFocusActive() && appTrackerState.youtubeFilter.blockShorts) {
+                showToast("Focus sprint active: Cannot disable Shorts block.");
+                renderYouTubeFilterModal();
+                return;
+            }
             appTrackerState.youtubeFilter.blockShorts = !appTrackerState.youtubeFilter.blockShorts;
             saveAppTrackerData();
             playSfx('click');
@@ -755,6 +835,10 @@ import { arcStorage } from './storage.js';
         }
 
         function removeBlockedYouTubeChannel(handle) {
+            if (isFocusActive()) {
+                showToast("Focus sprint active: Cannot remove blocked channels until session ends.");
+                return;
+            }
             appTrackerState.youtubeFilter.blockedChannels = appTrackerState.youtubeFilter.blockedChannels.filter(c => c.handle.toLowerCase() !== handle.toLowerCase());
             saveAppTrackerData();
             playSfx('click');
@@ -786,9 +870,28 @@ import { arcStorage } from './storage.js';
             const shortsToggle = document.getElementById('yt-filter-shorts-toggle');
             const countBadge = document.getElementById('yt-blocked-count-badge');
             const listEl = document.getElementById('yt-modal-blocked-list');
+            const focusRunning = isFocusActive();
 
-            if (masterToggle) masterToggle.checked = appTrackerState.youtubeFilter.enabled;
-            if (shortsToggle) shortsToggle.checked = appTrackerState.youtubeFilter.blockShorts;
+            if (masterToggle) {
+                masterToggle.checked = appTrackerState.youtubeFilter.enabled;
+                if (focusRunning && appTrackerState.youtubeFilter.enabled) {
+                    masterToggle.disabled = true;
+                    masterToggle.title = "Cannot disable YouTube Channel Filter during active Focus session";
+                } else {
+                    masterToggle.disabled = false;
+                    masterToggle.title = "Enable YouTube Channel Filter";
+                }
+            }
+            if (shortsToggle) {
+                shortsToggle.checked = appTrackerState.youtubeFilter.blockShorts;
+                if (focusRunning && appTrackerState.youtubeFilter.blockShorts) {
+                    shortsToggle.disabled = true;
+                    shortsToggle.title = "Cannot disable Shorts block during active Focus session";
+                } else {
+                    shortsToggle.disabled = false;
+                    shortsToggle.title = "Block YouTube Shorts Feed";
+                }
+            }
             if (countBadge) countBadge.textContent = appTrackerState.youtubeFilter.blockedChannels.length;
 
             if (listEl) {
@@ -809,35 +912,12 @@ import { arcStorage } from './storage.js';
                                 </div>
                             </div>
 
-                            <button role="button" onclick="removeBlockedYouTubeChannel('${item.handle}')" title="Unblock channel" aria-label="Unblock ${item.handle}" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-400 flex items-center justify-center transition border border-slate-800">
+                            <button role="button" ${focusRunning ? 'disabled title="Cannot unblock channels during active Focus sprint"' : `onclick="removeBlockedYouTubeChannel('${item.handle}')" title="Unblock channel"`} aria-label="Unblock ${item.handle}" class="w-7 h-7 rounded-lg bg-slate-900 ${focusRunning ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-950 text-slate-400 hover:text-rose-400'} flex items-center justify-center transition border border-slate-800">
                                 <i class="fa-solid fa-trash text-xs"></i>
                             </button>
                         </div>
                     `;
                 }).join('');
-            }
-        }
-
-        function runYouTubeChannelTest() {
-            const input = document.getElementById('yt-test-channel-input');
-            const feedback = document.getElementById('yt-test-feedback-box');
-            const val = input?.value.trim();
-            if (!val || !feedback) return;
-
-            const check = isYouTubeChannelBlocked(val);
-            feedback.classList.remove('hidden');
-
-            if (check && check.blocked) {
-                feedback.className = "text-[11px] font-mono text-rose-400 bg-rose-950/40 p-2 rounded-xl border border-rose-500/30 flex items-center justify-between";
-                feedback.innerHTML = `
-                    <span>⛔ <strong>${check.channel}</strong> is RESTRICTED (${check.reason})</span>
-                    <button role="button" onclick="showYouTubeBlockerShield('${check.channel}', '${check.reason}')" class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">Simulate Block</button>
-                `;
-                showYouTubeBlockerShield(check.channel, check.reason);
-            } else {
-                feedback.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30";
-                feedback.innerHTML = `✓ <strong>${val}</strong> is ALLOWED. Educational/Permitted channel.`;
-                playSfx('check');
             }
         }
 
@@ -871,6 +951,11 @@ import { arcStorage } from './storage.js';
         }
 
         function toggleWebsiteFilterEnabled() {
+            if (isFocusActive() && appTrackerState.websiteFilter.enabled) {
+                showToast("Focus sprint active: Cannot disable Website Filter.");
+                renderWebsiteFilterModal();
+                return;
+            }
             appTrackerState.websiteFilter.enabled = !appTrackerState.websiteFilter.enabled;
             saveAppTrackerData();
             playSfx('click');
@@ -922,6 +1007,10 @@ import { arcStorage } from './storage.js';
         }
 
         function removeBlockedWebsite(domain) {
+            if (isFocusActive()) {
+                showToast("Focus sprint active: Cannot remove blocked websites until session ends.");
+                return;
+            }
             appTrackerState.websiteFilter.blockedWebsites = appTrackerState.websiteFilter.blockedWebsites.filter(w => w.domain.toLowerCase() !== domain.toLowerCase());
             saveAppTrackerData();
             playSfx('click');
@@ -952,8 +1041,18 @@ import { arcStorage } from './storage.js';
             const masterToggle = document.getElementById('web-filter-master-toggle');
             const countBadge = document.getElementById('web-blocked-count-badge');
             const listEl = document.getElementById('web-modal-blocked-list');
+            const focusRunning = isFocusActive();
 
-            if (masterToggle) masterToggle.checked = appTrackerState.websiteFilter.enabled;
+            if (masterToggle) {
+                masterToggle.checked = appTrackerState.websiteFilter.enabled;
+                if (focusRunning && appTrackerState.websiteFilter.enabled) {
+                    masterToggle.disabled = true;
+                    masterToggle.title = "Cannot disable Website filter during active Focus session";
+                } else {
+                    masterToggle.disabled = false;
+                    masterToggle.title = "Enable Website Filter during Focus";
+                }
+            }
             if (countBadge) countBadge.textContent = appTrackerState.websiteFilter.blockedWebsites.length;
 
             if (listEl) {
@@ -970,35 +1069,12 @@ import { arcStorage } from './storage.js';
                                 </div>
                             </div>
 
-                            <button role="button" onclick="removeBlockedWebsite('${site.domain}')" title="Unblock website" aria-label="Unblock ${site.domain}" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-400 flex items-center justify-center transition border border-slate-800">
+                            <button role="button" ${focusRunning ? 'disabled title="Cannot unblock websites during active Focus sprint"' : `onclick="removeBlockedWebsite('${site.domain}')" title="Unblock website"`} aria-label="Unblock ${site.domain}" class="w-7 h-7 rounded-lg bg-slate-900 ${focusRunning ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-950 text-slate-400 hover:text-rose-400'} flex items-center justify-center transition border border-slate-800">
                                 <i class="fa-solid fa-trash text-xs"></i>
                             </button>
                         </div>
                     `;
                 }).join('');
-            }
-        }
-
-        function runWebsiteAccessTest() {
-            const input = document.getElementById('web-test-domain-input');
-            const feedback = document.getElementById('web-test-feedback-box');
-            const val = input?.value.trim();
-            if (!val || !feedback) return;
-
-            const check = isWebsiteBlocked(val);
-            feedback.classList.remove('hidden');
-
-            if (check && check.blocked) {
-                feedback.className = "text-[11px] font-mono text-cyan-400 bg-cyan-950/40 p-2 rounded-xl border border-cyan-500/30 flex items-center justify-between";
-                feedback.innerHTML = `
-                    <span>⛔ <strong>${check.domain}</strong> is RESTRICTED in Chrome (${check.reason})</span>
-                    <button role="button" onclick="showWebsiteBlockerShield('${check.domain}', '${check.reason}')" class="px-2 py-0.5 rounded bg-cyan-500 text-black text-[10px] font-bold">Simulate Block</button>
-                `;
-                showWebsiteBlockerShield(check.domain, check.reason);
-            } else {
-                feedback.className = "text-[11px] font-mono text-emerald-400 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/30";
-                feedback.innerHTML = `✓ <strong>${val}</strong> is ALLOWED. Work/Research site permitted in Chrome.`;
-                playSfx('check');
             }
         }
 
@@ -1054,10 +1130,30 @@ import { arcStorage } from './storage.js';
             const titleEl = document.getElementById('limit-modal-title');
             const inputEl = document.getElementById('limit-modal-mins-input');
             const toggleEl = document.getElementById('limit-modal-block-toggle');
+            const focusRunning = isFocusActive();
 
             if (titleEl) titleEl.textContent = `Set Daily Limit for ${app.name}`;
-            if (inputEl) inputEl.value = Math.round(app.dailyLimitSecs / 60);
-            if (toggleEl) toggleEl.checked = app.blockEnabled;
+            const limitMins = Math.round(app.dailyLimitSecs / 60);
+            if (inputEl) {
+                inputEl.value = limitMins;
+                if (focusRunning) {
+                    inputEl.max = limitMins;
+                    inputEl.title = `Focus session active: Limit can only be tightened (max ${limitMins}m)`;
+                } else {
+                    inputEl.removeAttribute('max');
+                    inputEl.title = "";
+                }
+            }
+            if (toggleEl) {
+                toggleEl.checked = app.blockEnabled;
+                if (focusRunning && app.blockEnabled) {
+                    toggleEl.disabled = true;
+                    toggleEl.title = "Cannot disable lockout enforcement during active Focus session";
+                } else {
+                    toggleEl.disabled = false;
+                    toggleEl.title = "Enforce Hard Lockout";
+                }
+            }
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -1072,6 +1168,16 @@ import { arcStorage } from './storage.js';
         }
 
         function setPresetLimit(mins) {
+            if (isFocusActive()) {
+                const modal = document.getElementById('arc-limit-config-modal');
+                const appId = modal?.dataset?.appId;
+                const app = appId ? appTrackerState.apps.find(a => a.id === appId) : null;
+                const currentLimitMins = app ? Math.round((app.dailyLimitSecs || 0) / 60) : Infinity;
+                if (mins > currentLimitMins) {
+                    showToast(`Focus sprint active: Cannot raise limit above ${currentLimitMins}m.`);
+                    return;
+                }
+            }
             const inputEl = document.getElementById('limit-modal-mins-input');
             if (inputEl) inputEl.value = mins;
         }
@@ -1091,6 +1197,18 @@ import { arcStorage } from './storage.js';
             if (isNaN(mins) || mins < 1) {
                 alert("Please enter a valid time limit in minutes (at least 1 minute).");
                 return;
+            }
+
+            if (isFocusActive()) {
+                const currentLimitMins = Math.round((app.dailyLimitSecs || 0) / 60);
+                if (mins > currentLimitMins) {
+                    showToast(`Focus sprint active: Cannot raise daily limit above ${currentLimitMins}m until session ends.`);
+                    return;
+                }
+                if (app.blockEnabled && toggleEl && !toggleEl.checked) {
+                    showToast("Focus sprint active: Cannot disable lockout enforcement until session ends.");
+                    return;
+                }
             }
 
             app.dailyLimitSecs = mins * 60;
@@ -1162,6 +1280,10 @@ import { arcStorage } from './storage.js';
         }
 
         function deleteCustomApp(appId) {
+            if (isFocusActive()) {
+                showToast("Focus sprint active: Cannot delete tracked apps mid-session.");
+                return;
+            }
             if (!confirm("Are you sure you want to stop tracking this app?")) return;
             appTrackerState.apps = appTrackerState.apps.filter(a => a.id !== appId);
             delete appTrackerState.usage[appId];
@@ -1199,8 +1321,6 @@ import { arcStorage } from './storage.js';
         }
 
         function isFocusStrictModeActive() {
-            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
-            if (!isGold) return false;
             const stateObj = (typeof appTrackerState !== 'undefined') ? appTrackerState : (window.appTrackerState || null);
             return !!(stateObj && stateObj.strictMode);
         }
@@ -1213,13 +1333,6 @@ import { arcStorage } from './storage.js';
         }
 
         function toggleFocusStrictMode(explicitVal) {
-            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
-            if (!isGold) {
-                openGoldStrictModal();
-                updateStrictModeUI();
-                return false;
-            }
-
             const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
             if (active && appTrackerState.strictMode) {
                 triggerStrictModeLockoutNotice();
@@ -1239,7 +1352,7 @@ import { arcStorage } from './storage.js';
 
             if (appTrackerState.strictMode) {
                 playSfx('fanfare');
-                showToast("👑 Arc Gold Strict Mode Armed: Next focus session cannot be ended early!");
+                showToast("🔒 Focus Strict Mode Armed: Next focus session cannot be ended early!");
             } else {
                 playSfx('click');
                 showToast("Strict Mode Disabled.");
@@ -1314,7 +1427,6 @@ import { arcStorage } from './storage.js';
         }
 
         function updateStrictModeUI() {
-            const isGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
             const isStrictActive = isFocusStrictModeActive();
             const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
 
@@ -1323,7 +1435,7 @@ import { arcStorage } from './storage.js';
             const strictContainer = document.getElementById('phone-widget-strict-container');
 
             if (strictToggle) {
-                strictToggle.checked = !!(isGold && window.appTrackerState && window.appTrackerState.strictMode);
+                strictToggle.checked = !!(window.appTrackerState && window.appTrackerState.strictMode);
                 strictToggle.disabled = (active && isStrictActive);
             }
             if (strictDesc) {
@@ -1331,10 +1443,8 @@ import { arcStorage } from './storage.js';
                     strictDesc.innerHTML = '<span class="text-amber-400 font-bold">🔒 LOCKED IN SPRINT (No exit)</span>';
                 } else if (isStrictActive) {
                     strictDesc.innerHTML = '<span class="text-amber-300 font-medium">Armed · Cannot exit early</span>';
-                } else if (!isGold) {
-                    strictDesc.innerHTML = '<span class="text-amber-400/80">👑 Gold Exclusive · Tap to unlock</span>';
                 } else {
-                    strictDesc.textContent = 'Disables early exit until timer ends';
+                    strictDesc.textContent = 'Disables early exit until timer ends (Free)';
                 }
             }
             if (strictContainer) {
@@ -1350,17 +1460,17 @@ import { arcStorage } from './storage.js';
             if (toolbarBtn && toolbarText) {
                 if (isStrictActive) {
                     toolbarBtn.className = "px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/25 to-yellow-500/25 border-2 border-amber-400/70 text-amber-300 text-xs font-black transition flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]";
-                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-amber-400"></i> Strict Focus: ON <span class="text-[9px] bg-amber-500/30 px-1 rounded text-amber-200">GOLD</span>';
+                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-amber-400"></i> Strict Focus: ON <span class="text-[9px] bg-amber-500/30 px-1 rounded text-amber-200">ACTIVE</span>';
                 } else {
                     toolbarBtn.className = "px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
-                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-slate-400"></i> Strict Mode <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1 rounded border border-amber-500/30 font-bold">GOLD</span>';
+                    toolbarText.innerHTML = '<i class="fa-solid fa-lock text-slate-400"></i> Strict Mode <span class="text-[9px] bg-slate-700 text-emerald-300 px-1 rounded border border-slate-600 font-bold">FREE</span>';
                 }
             }
 
             const goldCardStrictToggle = document.getElementById('gold-toggle-strict-mode');
             if (goldCardStrictToggle) {
-                goldCardStrictToggle.checked = !!(isGold && window.appTrackerState && window.appTrackerState.strictMode);
-                goldCardStrictToggle.disabled = (active && isStrictActive) || !isGold;
+                goldCardStrictToggle.checked = !!(window.appTrackerState && window.appTrackerState.strictMode);
+                goldCardStrictToggle.disabled = (active && isStrictActive);
             }
         }
 
@@ -2053,17 +2163,27 @@ window.formatDurationShort = formatDurationShort;
             } catch(e) {}
         }
 
-        function simulateMobileTime(extraMins = 225) {
+        function simulateMobileTime(customMinutes = 225) {
+            const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
+            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
+            const targetSecs = Math.max(60, Number(customMinutes) * 60);
+
+            if (targetSecs < currentMobileSecs) {
+                if (typeof showToast === 'function') {
+                    showToast(`Monotonic rule: Logged mobile time cannot be reduced below current total (${Math.ceil(currentMobileSecs/60)}m).`);
+                }
+                return;
+            }
+
             if (window.ArcGoogleSync && typeof window.ArcGoogleSync.simulateMobileTrackerSync === 'function') {
-                window.ArcGoogleSync.simulateMobileTrackerSync(extraMins);
+                window.ArcGoogleSync.simulateMobileTrackerSync(customMinutes);
             } else {
-                const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-                const simulatedSecs = Math.max(60, Number(extraMins || 225) * 60);
-                window.state = window.state || {};
-                window.state.deviceScreenTime = window.state.deviceScreenTime || {};
+                if (!window.state) window.state = {};
+                if (!window.state.deviceScreenTime) window.state.deviceScreenTime = {};
                 window.state.deviceScreenTime.mobile = {
-                    seconds: simulatedSecs,
-                    deviceName: '📱 Pixel 9 Pro (Android Mobile Tracker)',
+                    seconds: targetSecs,
+                    deviceName: '📱 Mobile App Tracker',
                     lastUpdated: Date.now(),
                     todayKey: today,
                     isLinked: true
@@ -2071,30 +2191,34 @@ window.formatDurationShort = formatDurationShort;
                 try {
                     localStorage.setItem('arc_cross_device_screentime', JSON.stringify(window.state.deviceScreenTime));
                 } catch(e) {}
-                updateCrossDeviceScreenTimeUI();
-                renderScreenTime();
-                if (typeof playSfx === 'function') playSfx('fanfare');
-                if (typeof triggerGradeParticleBurst === 'function') {
-                    triggerGradeParticleBurst(window.innerWidth / 2, window.innerHeight / 2, 'S');
-                }
-                if (typeof spawnFloatingCombatText === 'function') {
-                    spawnFloatingCombatText(`📱 SYNCED: +${formatDuration(simulatedSecs)} MOBILE TRACKER`, window.innerWidth / 2 - 100, window.innerHeight / 2);
-                }
+                if (typeof updateCrossDeviceScreenTimeUI === 'function') updateCrossDeviceScreenTimeUI();
                 if (typeof showToast === 'function') {
-                    showToast(`📱 Mobile Screen Time simulated: ${formatDuration(simulatedSecs)}`);
+                    showToast(`📱 Mobile time updated to ${formatDuration(targetSecs)}`);
                 }
             }
         }
 
         function promptSetMobileTime() {
-            const entered = prompt("Enter Mobile App Tracker screen time in minutes:\n(e.g., 225 for 3h 45m)", "225");
+            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
+            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
+            const currentMobileMins = Math.ceil(currentMobileSecs / 60);
+
+            const entered = prompt(`Enter Mobile App Tracker screen time in minutes:\n(Current logged: ${currentMobileMins} mins. Monotonic rule: Entries can only increase today's total):`, `${Math.max(currentMobileMins, 225)}`);
             if (entered !== null) {
                 const num = parseInt(entered, 10);
-                if (!isNaN(num) && num >= 0) {
-                    simulateMobileTime(num);
+                if (isNaN(num)) return;
+                if (num < currentMobileMins) {
+                    if (typeof showToast === 'function') {
+                        showToast(`Monotonic screen time rule: Entered time (${num}m) cannot reduce today's duration below ${currentMobileMins}m.`);
+                    }
+                    return;
                 }
+                simulateMobileTime(num);
             }
         }
+
+        window.promptSetMobileTime = promptSetMobileTime;
+        window.simulateMobileTime = simulateMobileTime;
 
         // Expose to window for global access
         window.ArcAppTracker = {
@@ -2120,7 +2244,6 @@ window.formatDurationShort = formatDurationShort;
             closeYouTubeFilterModal,
             submitAddBlockedChannel,
             removeBlockedYouTubeChannel,
-            runYouTubeChannelTest,
             isWebsiteBlocked,
             toggleWebsiteFilterEnabled,
             submitAddBlockedWebsite,
@@ -2128,7 +2251,6 @@ window.formatDurationShort = formatDurationShort;
             removeBlockedWebsite,
             openWebsiteFilterModal,
             closeWebsiteFilterModal,
-            runWebsiteAccessTest,
             showWebsiteBlockerShield,
             closeWebsiteBlockerShield,
             showFocusBlockerShield,

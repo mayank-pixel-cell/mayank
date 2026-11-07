@@ -1,0 +1,579 @@
+{
+  "users": [
+    {
+      "userId": "op_seed_001",
+      "handle": "@vanguard_rex",
+      "displayName": "Vanguard Rex",
+      "avatar": "R",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 24,
+      "xp": 1820,
+      "arcScore": 99.4,
+      "streak": 44,
+      "isGold": true,
+      "goldPlan": "annual",
+      "goldPurchasedAt": "2026-10-08T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-5am",
+        "squad-iron"
+      ],
+      "createdAt": "2026-09-08T03:54:08.554Z",
+      "lastSeenAt": "2026-11-07T01:30:08.554Z"
+    },
+    {
+      "userId": "op_seed_002",
+      "handle": "@valkyrie_focus",
+      "displayName": "Valkyrie Focus",
+      "avatar": "V",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 22,
+      "xp": 1450,
+      "arcScore": 98.1,
+      "streak": 39,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-09-23T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-deepwork"
+      ],
+      "createdAt": "2026-09-18T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T23:06:08.554Z"
+    },
+    {
+      "userId": "op_seed_003",
+      "handle": "@iron_discipline",
+      "displayName": "Iron Discipline",
+      "avatar": "I",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 21,
+      "xp": 1200,
+      "arcScore": 97.5,
+      "streak": 36,
+      "isGold": false,
+      "goldPlan": null,
+      "goldPurchasedAt": null,
+      "joinedGroupIds": [
+        "squad-iron",
+        "squad-cold"
+      ],
+      "createdAt": "2026-09-23T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T20:42:08.554Z"
+    },
+    {
+      "userId": "op_seed_004",
+      "handle": "@solitary_monk",
+      "displayName": "Solitary Monk",
+      "avatar": "M",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 19,
+      "xp": 980,
+      "arcScore": 95.8,
+      "streak": 32,
+      "isGold": true,
+      "goldPlan": "monthly",
+      "goldPurchasedAt": "2026-10-26T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-5am"
+      ],
+      "createdAt": "2026-09-28T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T18:18:08.554Z"
+    },
+    {
+      "userId": "op_seed_005",
+      "handle": "@deep_work_titan",
+      "displayName": "Deep Work Titan",
+      "avatar": "D",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 17,
+      "xp": 760,
+      "arcScore": 94.2,
+      "streak": 29,
+      "isGold": false,
+      "goldPlan": null,
+      "goldPurchasedAt": null,
+      "joinedGroupIds": [
+        "squad-deepwork"
+      ],
+      "createdAt": "2026-10-03T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T15:54:08.554Z"
+    },
+    {
+      "userId": "op_seed_006",
+      "handle": "@zenith_operative",
+      "displayName": "Zenith Operative",
+      "avatar": "Z",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 15,
+      "xp": 610,
+      "arcScore": 93,
+      "streak": 24,
+      "isGold": false,
+      "goldPlan": null,
+      "goldPurchasedAt": null,
+      "joinedGroupIds": [
+        "squad-5am"
+      ],
+      "createdAt": "2026-10-08T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T13:30:08.554Z"
+    },
+    {
+      "userId": "op_seed_007",
+      "handle": "@cold_shower_sam",
+      "displayName": "Cold Shower Sam",
+      "avatar": "S",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 14,
+      "xp": 490,
+      "arcScore": 91.5,
+      "streak": 21,
+      "isGold": true,
+      "goldPlan": "annual",
+      "goldPurchasedAt": "2026-10-18T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-cold"
+      ],
+      "createdAt": "2026-10-10T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T08:42:08.554Z"
+    },
+    {
+      "userId": "op_seed_008",
+      "handle": "@arjuna_focus",
+      "displayName": "Arjuna Focus",
+      "avatar": "A",
+      "region": "Northern Ridge Sector",
+      "country": "India",
+      "level": 32,
+      "xp": 3400,
+      "arcScore": 99.8,
+      "streak": 58,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-09-13T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-deepwork",
+        "squad-iron"
+      ],
+      "createdAt": "2026-08-09T03:54:08.554Z",
+      "lastSeenAt": "2026-11-07T01:30:08.554Z"
+    },
+    {
+      "userId": "op_seed_009",
+      "handle": "@kavach_iron",
+      "displayName": "Kavach Iron",
+      "avatar": "K",
+      "region": "Northern Ridge Sector",
+      "country": "India",
+      "level": 29,
+      "xp": 2900,
+      "arcScore": 99.1,
+      "streak": 51,
+      "isGold": true,
+      "goldPlan": "annual",
+      "goldPurchasedAt": "2026-09-28T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-iron"
+      ],
+      "createdAt": "2026-08-19T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T20:42:08.554Z"
+    },
+    {
+      "userId": "op_seed_010",
+      "handle": "@dharma_warrior",
+      "displayName": "Dharma Warrior",
+      "avatar": "D",
+      "region": "Northern Ridge Sector",
+      "country": "India",
+      "level": 23,
+      "xp": 1680,
+      "arcScore": 97.9,
+      "streak": 41,
+      "isGold": false,
+      "goldPlan": null,
+      "goldPurchasedAt": null,
+      "joinedGroupIds": [
+        "squad-5am"
+      ],
+      "createdAt": "2026-09-18T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T15:54:08.554Z"
+    },
+    {
+      "userId": "op_seed_011",
+      "handle": "@kratos_lockin",
+      "displayName": "Kratos Lockin",
+      "avatar": "K",
+      "region": "Pacific Coast Sector",
+      "country": "United States",
+      "level": 42,
+      "xp": 5600,
+      "arcScore": 100,
+      "streak": 78,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-08-24T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-iron",
+        "squad-cold"
+      ],
+      "createdAt": "2026-07-10T03:54:08.554Z",
+      "lastSeenAt": "2026-11-07T02:42:08.554Z"
+    },
+    {
+      "userId": "op_seed_012",
+      "handle": "@shinobi_discipline",
+      "displayName": "Shinobi Discipline",
+      "avatar": "S",
+      "region": "Kanto Central Sector",
+      "country": "Japan",
+      "level": 38,
+      "xp": 4800,
+      "arcScore": 99.9,
+      "streak": 69,
+      "isGold": true,
+      "goldPlan": "annual",
+      "goldPurchasedAt": "2026-09-03T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-5am",
+        "squad-deepwork"
+      ],
+      "createdAt": "2026-07-20T03:54:08.554Z",
+      "lastSeenAt": "2026-11-07T01:30:08.554Z"
+    },
+    {
+      "userId": "op_seed_013",
+      "handle": "@nordic_stoic",
+      "displayName": "Nordic Stoic",
+      "avatar": "N",
+      "region": "Bavaria Sector",
+      "country": "Germany",
+      "level": 35,
+      "xp": 4100,
+      "arcScore": 99.5,
+      "streak": 62,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-09-08T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-cold"
+      ],
+      "createdAt": "2026-07-30T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T23:06:08.554Z"
+    },
+    {
+      "userId": "op_seed_014",
+      "handle": "@spartan_iron",
+      "displayName": "Spartan Iron",
+      "avatar": "S",
+      "region": "Atlantic Coast Sector",
+      "country": "United States",
+      "level": 30,
+      "xp": 3100,
+      "arcScore": 98.7,
+      "streak": 53,
+      "isGold": true,
+      "goldPlan": "monthly",
+      "goldPurchasedAt": "2026-10-23T03:54:08.554Z",
+      "joinedGroupIds": [
+        "squad-iron"
+      ],
+      "createdAt": "2026-08-24T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T20:42:08.554Z"
+    },
+    {
+      "userId": "op_seed_015",
+      "handle": "@cyber_monk",
+      "displayName": "Cyber Monk",
+      "avatar": "C",
+      "region": "London Central Sector",
+      "country": "United Kingdom",
+      "level": 25,
+      "xp": 2200,
+      "arcScore": 97.4,
+      "streak": 43,
+      "isGold": false,
+      "goldPlan": null,
+      "goldPurchasedAt": null,
+      "joinedGroupIds": [
+        "squad-deepwork"
+      ],
+      "createdAt": "2026-09-08T03:54:08.554Z",
+      "lastSeenAt": "2026-11-06T18:18:08.554Z"
+    },
+    {
+      "userId": "test_user_01",
+      "handle": "@cadet_prime",
+      "displayName": "Cadet Prime",
+      "avatar": "C",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 12,
+      "xp": 2500,
+      "arcScore": 91,
+      "streak": 14,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-11-07T03:54:25.581Z",
+      "joinedGroupIds": [
+        "squad-5am"
+      ],
+      "createdAt": "2026-11-07T03:54:14.822Z",
+      "lastSeenAt": "2026-11-07T03:54:25.581Z"
+    },
+    {
+      "userId": "test_sync_usr",
+      "handle": "@operative_test",
+      "displayName": "Test Operative",
+      "avatar": "T",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 18,
+      "xp": 1200,
+      "arcScore": 94.5,
+      "streak": 22,
+      "isGold": true,
+      "goldPlan": "annual",
+      "goldPurchasedAt": "2026-11-07T04:07:56.429Z",
+      "joinedGroupIds": [
+        "squad-5am"
+      ],
+      "createdAt": "2026-11-07T04:07:56.415Z",
+      "lastSeenAt": "2026-11-07T04:07:56.486Z"
+    },
+    {
+      "userId": "g_user_arc_tracker_gmail_com",
+      "handle": "@operative",
+      "displayName": "Primary Operative",
+      "avatar": "P",
+      "region": "Western Metro Zone",
+      "country": "India",
+      "level": 10,
+      "xp": 9105,
+      "arcScore": 0,
+      "streak": 0,
+      "isGold": true,
+      "goldPlan": "lifetime",
+      "goldPurchasedAt": "2026-10-25T17:29:16.223Z",
+      "joinedGroupIds": [
+        "squad-custom-1793766445727"
+      ],
+      "createdAt": "2026-11-07T04:09:29.280Z",
+      "lastSeenAt": "2026-11-07T04:31:43.674Z"
+    }
+  ],
+  "gold_purchases": [
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_001-R4G7",
+      "userId": "op_seed_001",
+      "handle": "@vanguard_rex",
+      "planTier": "annual",
+      "amount": 365,
+      "currency": "INR",
+      "purchasedAt": "2026-10-08T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_002-8FL8",
+      "userId": "op_seed_002",
+      "handle": "@valkyrie_focus",
+      "planTier": "lifetime",
+      "amount": 700,
+      "currency": "INR",
+      "purchasedAt": "2026-09-23T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_004-8LZU",
+      "userId": "op_seed_004",
+      "handle": "@solitary_monk",
+      "planTier": "monthly",
+      "amount": 59,
+      "currency": "INR",
+      "purchasedAt": "2026-10-26T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_007-ECZP",
+      "userId": "op_seed_007",
+      "handle": "@cold_shower_sam",
+      "planTier": "annual",
+      "amount": 365,
+      "currency": "INR",
+      "purchasedAt": "2026-10-18T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_008-VIGA",
+      "userId": "op_seed_008",
+      "handle": "@arjuna_focus",
+      "planTier": "lifetime",
+      "amount": 700,
+      "currency": "INR",
+      "purchasedAt": "2026-09-13T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_009-YPYN",
+      "userId": "op_seed_009",
+      "handle": "@kavach_iron",
+      "planTier": "annual",
+      "amount": 365,
+      "currency": "INR",
+      "purchasedAt": "2026-09-28T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_011-704Y",
+      "userId": "op_seed_011",
+      "handle": "@kratos_lockin",
+      "planTier": "lifetime",
+      "amount": 700,
+      "currency": "INR",
+      "purchasedAt": "2026-08-24T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_012-QTZG",
+      "userId": "op_seed_012",
+      "handle": "@shinobi_discipline",
+      "planTier": "annual",
+      "amount": 365,
+      "currency": "INR",
+      "purchasedAt": "2026-09-03T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_013-QP6N",
+      "userId": "op_seed_013",
+      "handle": "@nordic_stoic",
+      "planTier": "lifetime",
+      "amount": 700,
+      "currency": "INR",
+      "purchasedAt": "2026-09-08T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-OP_SEED_014-J8Y9",
+      "userId": "op_seed_014",
+      "handle": "@spartan_iron",
+      "planTier": "monthly",
+      "amount": 59,
+      "currency": "INR",
+      "purchasedAt": "2026-10-23T03:54:08.554Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-MW5VDBQL-9Y85",
+      "userId": "test_user_01",
+      "handle": "@cadet_prime",
+      "planTier": "lifetime",
+      "amount": 700,
+      "currency": "INR",
+      "purchasedAt": "2026-11-07T03:54:25.581Z",
+      "status": "active"
+    },
+    {
+      "purchaseId": "ARC-GOLD-MW5VUPE5-6ZQ0",
+      "userId": "test_sync_usr",
+      "handle": "@operative_test",
+      "planTier": "annual",
+      "amount": 365,
+      "currency": "INR",
+      "purchasedAt": "2026-11-07T04:07:56.429Z",
+      "status": "active"
+    }
+  ],
+  "groups": [
+    {
+      "groupId": "squad-5am",
+      "name": "5 AM Club Elite",
+      "motto": "Rise in the dark, execute before the world wakes.",
+      "category": "Mindset",
+      "createdByUserId": "op_seed_001",
+      "createdByHandle": "@vanguard_rex",
+      "icon": "fa-solid fa-sun",
+      "color": "from-amber-500 to-yellow-400",
+      "memberIds": [
+        "op_seed_001",
+        "op_seed_004",
+        "op_seed_006",
+        "op_seed_010",
+        "op_seed_012",
+        "test_user_01",
+        "test_sync_usr"
+      ],
+      "createdAt": "2026-08-19T03:54:08.554Z"
+    },
+    {
+      "groupId": "squad-iron",
+      "name": "Iron Willpower Syndicate",
+      "motto": "Heavy lifts, zero social media, non-negotiable discipline.",
+      "category": "Physical",
+      "createdByUserId": "op_seed_003",
+      "createdByHandle": "@iron_discipline",
+      "icon": "fa-solid fa-dumbbell",
+      "color": "from-cyan-500 to-blue-500",
+      "memberIds": [
+        "op_seed_001",
+        "op_seed_003",
+        "op_seed_008",
+        "op_seed_009",
+        "op_seed_011",
+        "op_seed_014"
+      ],
+      "createdAt": "2026-08-19T03:54:08.554Z"
+    },
+    {
+      "groupId": "squad-deepwork",
+      "name": "Hyper-Focus Titans",
+      "motto": "4 hours undistracted code and deep study every day.",
+      "category": "Productivity",
+      "createdByUserId": "op_seed_002",
+      "createdByHandle": "@valkyrie_focus",
+      "icon": "fa-solid fa-brain",
+      "color": "from-purple-500 to-pink-500",
+      "memberIds": [
+        "op_seed_002",
+        "op_seed_005",
+        "op_seed_008",
+        "op_seed_012",
+        "op_seed_015"
+      ],
+      "createdAt": "2026-08-24T03:54:08.554Z"
+    },
+    {
+      "groupId": "squad-cold",
+      "name": "Cold Shower & Dopamine Detox",
+      "motto": "Embrace physical discomfort, eradicate cheap digital dopamine.",
+      "category": "Discipline",
+      "createdByUserId": "op_seed_007",
+      "createdByHandle": "@cold_shower_sam",
+      "icon": "fa-solid fa-snowflake",
+      "color": "from-teal-500 to-emerald-400",
+      "memberIds": [
+        "op_seed_003",
+        "op_seed_007",
+        "op_seed_011",
+        "op_seed_013"
+      ],
+      "createdAt": "2026-08-29T03:54:08.554Z"
+    },
+    {
+      "groupId": "squad-mw5vupfq-57q",
+      "name": "Shadow Syndicate Test",
+      "motto": "Moving in silence.",
+      "category": "Discipline",
+      "createdByUserId": "test_sync_usr",
+      "createdByHandle": "@operative_test",
+      "icon": "fa-solid fa-shield-halved",
+      "color": "from-amber-400 to-yellow-500",
+      "memberIds": [],
+      "createdAt": "2026-11-07T04:07:56.486Z"
+    }
+  ]
+}

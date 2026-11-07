@@ -130,6 +130,9 @@
             if (window.ArcGoogleSync && typeof window.ArcGoogleSync.triggerAutoSync === 'function') {
                 window.ArcGoogleSync.triggerAutoSync();
             }
+            if (window.ArcServerSync && typeof window.ArcServerSync.scheduleDebouncedSync === 'function') {
+                window.ArcServerSync.scheduleDebouncedSync(1500);
+            }
         }
 
         /* Debouncing wrapper for Reflection textarea */
@@ -197,6 +200,12 @@
 
         function getTodayKey() {
             return formatDateKey(getEffectiveToday());
+        }
+
+        function getYesterdayKey() {
+            const d = new Date(getEffectiveToday());
+            d.setDate(d.getDate() - 1);
+            return formatDateKey(d);
         }
 
         function getTodayFocusSeconds() {
@@ -295,6 +304,7 @@ if (typeof window !== 'undefined') {
   window.getArcWindow = getArcWindow;
   window.getEffectiveToday = getEffectiveToday;
   window.getTodayKey = getTodayKey;
+  window.getYesterdayKey = getYesterdayKey;
   window.getTodayFocusSeconds = getTodayFocusSeconds;
   window.updateDynamicDayCounter = updateDynamicDayCounter;
   window.syncDayState = syncDayState;
@@ -1190,6 +1200,9 @@ if (typeof window !== 'undefined') {
                 if (window.ArcLeaderboardGroups && typeof window.ArcLeaderboardGroups.render === 'function') {
                     window.ArcLeaderboardGroups.render();
                 }
+                if (window.ArcHabitAnalytics && typeof window.ArcHabitAnalytics.refresh === 'function') {
+                    window.ArcHabitAnalytics.refresh();
+                }
             }
             if (tabName === 'rules') {
                 renderRulesBlueprint();
@@ -1219,6 +1232,7 @@ if (typeof window !== 'undefined') {
             if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
 
             const p20Account = document.getElementById('p20-google-account');
+            const p20ServerSync = document.getElementById('p20-server-sync');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
             const faqCard = document.getElementById('settings-additional-faq-card');
@@ -1242,12 +1256,16 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = '';
                 if (screenNotifCard) screenNotifCard.style.display = '';
+                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
                 if (faqCard) faqCard.style.display = '';
                 if (founderCard) founderCard.style.display = '';
                 if (goldCard) goldCard.style.display = '';
+                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
+                    window.ArcServerSync.renderSettingsCard();
+                }
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
@@ -1255,6 +1273,7 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
@@ -1268,6 +1287,7 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -1277,6 +1297,9 @@ if (typeof window !== 'undefined') {
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
+                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
+                    window.ArcServerSync.renderSettingsCard();
+                }
             } else if (category === 'faq') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -1284,6 +1307,7 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -1301,6 +1325,7 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
+                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -1377,9 +1402,14 @@ if (typeof window !== 'undefined') {
                                 </div>
                             </label>
                         </div>
-                        <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2.5 sm:p-2 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="ArcHabitAnalytics.openDrawer('${habit.id}'); event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-8 h-8 rounded-xl bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
+                                <i class="fa-solid fa-chart-line text-xs"></i>
+                            </button>
+                            <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2.5 sm:p-2 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1395,6 +1425,9 @@ if (typeof window !== 'undefined') {
             renderSpiderWeb();
             updateDynamicDayCounter();
             if (window.renderHabitManager) renderHabitManager();
+            if (window.ArcHabitAnalytics && typeof window.ArcHabitAnalytics.refresh === 'function') {
+                window.ArcHabitAnalytics.refresh();
+            }
         }
 
         function toggleHabit(id) {
@@ -1422,10 +1455,19 @@ if (typeof window !== 'undefined') {
             }
         }
 
-        /* Any past or current day can be edited; only that date's entry in state.dailyHabits changes. */
+        /* Grace window: only Today and Yesterday can be edited. Historical dates older than yesterday are immutable. */
         function toggleHabitForDate(dateKey, id) {
-            if (dateKey > getTodayKey()) return;
-            if (dateKey === getTodayKey()) return toggleHabit(id);
+            const todayKey = getTodayKey();
+            const yesterdayKey = getYesterdayKey();
+            if (dateKey > todayKey) {
+                if (typeof showToast === 'function') showToast("Future dates are locked.");
+                return;
+            }
+            if (dateKey < yesterdayKey) {
+                if (typeof showToast === 'function') showToast("Locked History: Habit records older than yesterday cannot be modified.");
+                return;
+            }
+            if (dateKey === todayKey) return toggleHabit(id);
             const h = state.habits.find(x => x.id === id);
             if (!h) return;
             const day = state.dailyHabits[dateKey] || (state.dailyHabits[dateKey] = {});
@@ -1598,9 +1640,7 @@ function toggleStreakFreezeFromRules(checked) {
 
         function renderCalendar() {
             const monthYearTracker = document.getElementById('tracker-calendar-month-year');
-            const monthYearResults = document.getElementById('calendar-month-year');
             const gridTracker = document.getElementById('tracker-calendar-days-grid');
-            const gridResults = document.getElementById('calendar-days-grid');
 
             if (!monthYearTracker || !gridTracker) return;
 
@@ -1609,7 +1649,6 @@ function toggleStreakFreezeFromRules(checked) {
             const monthName = calendarCurrentDate.toLocaleString('default', { month: 'long' });
 
             monthYearTracker.textContent = `${monthName} ${year}`;
-            if (monthYearResults) monthYearResults.textContent = `${monthName} ${year}`;
 
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -1653,7 +1692,6 @@ function toggleStreakFreezeFromRules(checked) {
             }
 
             gridTracker.innerHTML = daysHtml;
-            if (gridResults) gridResults.innerHTML = daysHtml;
 
             if (!selectedCalendarDateStr) selectedCalendarDateStr = getTodayKey();
             renderCalendarDayDetail(selectedCalendarDateStr);
@@ -1851,52 +1889,110 @@ function toggleStreakFreezeFromRules(checked) {
             const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
             const dateTitle = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-            ['tracker-calendar', 'calendar'].forEach(prefix => {
-                const titleEl = document.getElementById(`${prefix}-selected-date-title`);
-                const pctEl = document.getElementById(`${prefix}-selected-pct`);
-                const barEl = document.getElementById(`${prefix}-selected-bar`);
-                const container = document.getElementById(`${prefix}-selected-habits-container`);
+            const prefix = 'tracker-calendar';
+            const titleEl = document.getElementById(`${prefix}-selected-date-title`);
+            const pctEl = document.getElementById(`${prefix}-selected-pct`);
+            const barEl = document.getElementById(`${prefix}-selected-bar`);
+            const container = document.getElementById(`${prefix}-selected-habits-container`) || document.getElementById('calendar-selected-habits-container');
 
-                if (titleEl) titleEl.textContent = dateTitle;
+            if (titleEl) titleEl.textContent = dateTitle;
 
-                let totalW = 0, compW = 0;
-                const habitData = state.dailyHabits[dateKey] || {};
+            const todayKey = getTodayKey();
+            const yesterdayKey = getYesterdayKey();
+            const isFuture = dateKey > todayKey;
+            const isLockedHistory = dateKey < yesterdayKey;
+            const isEditable = !isFuture && !isLockedHistory;
 
-                state.habits.forEach(h => {
-                    totalW += h.weight;
-                    if (dateKey === getTodayKey() ? h.completed : habitData[h.id]) compW += h.weight;
-                });
+            let totalW = 0, compW = 0;
+            const habitData = state.dailyHabits[dateKey] || {};
 
-                const pct = totalW > 0 ? Math.round((compW / totalW) * 100) : 0;
-                const hasHistory = !!state.dailyHabits[dateKey] || dateKey === getTodayKey();
-                const gradeInfo = getGradeInfo(pct, hasHistory);
+            state.habits.forEach(h => {
+                totalW += h.weight;
+                if (dateKey === todayKey ? h.completed : habitData[h.id]) compW += h.weight;
+            });
 
-                if (pctEl) {
-                    pctEl.innerHTML = `${pct}% <span class="ml-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-black ${gradeInfo.badgeClass}">RANK ${gradeInfo.grade}</span>`;
-                }
-                if (barEl) {
-                    barEl.style.width = `${pct}%`;
-                    barEl.className = `h-full transition-all duration-300 ${
-                        gradeInfo.grade === 'S' ? 'animate-shimmer-s shadow-[0_0_12px_rgba(16,185,129,0.8)]' :
-                        gradeInfo.grade === 'A' ? 'animate-shimmer shadow-[0_0_8px_rgba(6,182,212,0.6)]' :
-                        gradeInfo.grade === 'B' ? 'bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.4)]' :
-                        gradeInfo.grade === 'C' ? 'bg-amber-500' :
-                        gradeInfo.grade === 'F' ? 'bg-rose-500' : 'bg-slate-700'
-                    }`;
-                }
+            const pct = totalW > 0 ? Math.round((compW / totalW) * 100) : 0;
+            const hasHistory = !!state.dailyHabits[dateKey] || dateKey === todayKey;
+            const gradeInfo = getGradeInfo(pct, hasHistory);
 
-                if (container) {
-                    container.innerHTML = state.habits.map(h => {
-                        const isDone = dateKey === getTodayKey() ? h.completed : habitData[h.id];
-                        return `
-                            <button type="button" role="checkbox" aria-checked="${!!isDone}" ${dateKey > getTodayKey() ? 'disabled title="Future days are locked"' : ''} onclick="toggleHabitForDate('${dateKey}','${h.id}')" class="habit-row w-full text-left flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                                <span class="flex items-center gap-2 min-w-0"><i class="fa-solid ${isDone ? 'fa-square-check text-emerald-400' : 'fa-square text-slate-600'} text-sm"></i><span class="truncate ${isDone ? 'line-through text-slate-400' : 'text-slate-200'}">${h.name}</span></span>
-                                <span class="text-[10px] font-bold ${isDone ? 'text-emerald-400' : 'text-slate-500'}">${isDone ? 'Done' : 'Pending'}</span>
+            if (pctEl) {
+                pctEl.innerHTML = `${pct}% <span class="ml-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-black ${gradeInfo.badgeClass}">RANK ${gradeInfo.grade}</span>`;
+            }
+            if (barEl) {
+                barEl.style.width = `${pct}%`;
+                barEl.className = `h-full transition-all duration-300 ${
+                    gradeInfo.grade === 'S' ? 'animate-shimmer-s shadow-[0_0_12px_rgba(16,185,129,0.8)]' :
+                    gradeInfo.grade === 'A' ? 'animate-shimmer shadow-[0_0_8px_rgba(6,182,212,0.6)]' :
+                    gradeInfo.grade === 'B' ? 'bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.4)]' :
+                    gradeInfo.grade === 'C' ? 'bg-amber-500' :
+                    gradeInfo.grade === 'F' ? 'bg-rose-500' : 'bg-slate-700'
+                }`;
+            }
+
+            if (container) {
+                container.innerHTML = state.habits.map(h => {
+                    const isDone = dateKey === todayKey ? h.completed : habitData[h.id];
+                    let actionHtml = '';
+                    let rowClick = '';
+
+                    if (isLockedHistory) {
+                        rowClick = `onclick="if(typeof showToast==='function')showToast('Locked History: Habit records older than yesterday cannot be modified.');"`;
+                        actionHtml = `
+                            <button type="button" role="checkbox" aria-checked="${!!isDone}" disabled aria-disabled="true" title="Locked History: Habit records older than yesterday cannot be modified" class="flex-1 text-left flex items-center justify-between gap-2 min-w-0 opacity-70 cursor-not-allowed focus:outline-none">
+                                <span class="flex items-center gap-2 min-w-0">
+                                    <i class="fa-solid ${isDone ? 'fa-square-check text-emerald-400' : 'fa-square text-slate-600'} text-sm"></i>
+                                    <span class="truncate ${isDone ? 'line-through text-slate-400' : 'text-slate-300'}">${h.name}</span>
+                                </span>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 inline-flex items-center gap-1">
+                                        <i class="fa-solid fa-lock text-[8px]"></i> Locked History
+                                    </span>
+                                    <span class="text-[10px] font-bold ${isDone ? 'text-emerald-400' : 'text-slate-500'}">${isDone ? 'Done' : 'Missed'}</span>
+                                </div>
                             </button>
                         `;
-                    }).join('') + `<button type="button" onclick="openHabitManager()" class="w-full mt-1 p-2 rounded-xl border border-dashed border-slate-700 text-[11px] font-semibold text-cyan-300 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit habit list</button>`;
-                }
-            });
+                    } else if (isFuture) {
+                        rowClick = `onclick="if(typeof showToast==='function')showToast('Future dates are locked.');"`;
+                        actionHtml = `
+                            <button type="button" role="checkbox" aria-checked="${!!isDone}" disabled aria-disabled="true" title="Future days are locked" class="flex-1 text-left flex items-center justify-between gap-2 min-w-0 opacity-50 cursor-not-allowed focus:outline-none">
+                                <span class="flex items-center gap-2 min-w-0">
+                                    <i class="fa-solid fa-square text-slate-700 text-sm"></i>
+                                    <span class="truncate text-slate-400">${h.name}</span>
+                                </span>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700 inline-flex items-center gap-1">
+                                        <i class="fa-solid fa-lock text-[8px]"></i> Locked
+                                    </span>
+                                    <span class="text-[10px] font-bold text-slate-500">Upcoming</span>
+                                </div>
+                            </button>
+                        `;
+                    } else {
+                        // Today or Yesterday: Editable Grace Window
+                        actionHtml = `
+                            <button type="button" role="checkbox" aria-checked="${!!isDone}" onclick="toggleHabitForDate('${dateKey}','${h.id}')" class="flex-1 text-left flex items-center justify-between gap-2 min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
+                                <span class="flex items-center gap-2 min-w-0">
+                                    <i class="fa-solid ${isDone ? 'fa-square-check text-emerald-400' : 'fa-square text-slate-600'} text-sm"></i>
+                                    <span class="truncate ${isDone ? 'line-through text-slate-400' : 'text-slate-200'}">${h.name}</span>
+                                </span>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    ${dateKey === yesterdayKey ? '<span class="px-1.5 py-0.2 rounded text-[8px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">Grace Day</span>' : ''}
+                                    <span class="text-[10px] font-bold ${isDone ? 'text-emerald-400' : 'text-slate-500'}">${isDone ? 'Done' : 'Pending'}</span>
+                                </div>
+                            </button>
+                        `;
+                    }
+
+                    return `
+                        <div ${rowClick} class="habit-row w-full flex items-center justify-between gap-1.5 p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs transition-all duration-300 ease-out hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]">
+                            ${actionHtml}
+                            <button type="button" onclick="ArcHabitAnalytics.openDrawer('${h.id}'); event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-7 h-7 rounded-lg bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
+                                <i class="fa-solid fa-chart-line text-[10px]"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('') + `<button type="button" onclick="openHabitManager()" class="w-full mt-1 p-2 rounded-xl border border-dashed border-slate-700 text-[11px] font-semibold text-cyan-300 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-95 hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit habit list</button>`;
+            }
         }
 
         function renderMatrix() {
@@ -2407,6 +2503,7 @@ function toggleStreakFreezeFromRules(checked) {
           window.setLocalStorageItem = setLocalStorageItem;
           window.lsGetRaw = lsGetRaw;
           window.getTodayKey = getTodayKey;
+          window.getYesterdayKey = getYesterdayKey;
           window.getEffectiveToday = getEffectiveToday;
           window.renderScreenTime = renderScreenTime;
         }

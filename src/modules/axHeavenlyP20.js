@@ -188,6 +188,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
+  '<section id="p20-server-sync" class="mb-2" aria-label="Live External Cloud Server Telemetry"></section>'+
   '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
  /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
@@ -220,6 +221,7 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
    '<input value="'+esc(h.name)+'" maxlength="80" onchange="p20.rn(\''+h.id+'\',this.value)" aria-label="Habit name" class="'+IN+' flex-1 min-w-0">'+
    '<select onchange="p20.ct(\''+h.id+'\',this.value)" aria-label="Category" class="'+IN+' hidden sm:block">'+catOpts(h.category)+'</select>'+
    '<select onchange="p20.wt(\''+h.id+'\',this.value)" aria-label="Weight" class="'+IN+' shrink-0 text-xs py-1 px-1.5 w-16 sm:w-20">'+wOpts(h.weight)+'</select>'+
+   '<button type="button" onclick="ArcHabitAnalytics.openDrawer(\''+h.id+'\'); event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-8 h-8 rounded-xl bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chart-line text-xs"></i></button>'+
    '<button type="button" onclick="p20.rm(\''+h.id+'\')" aria-label="Delete '+esc(h.name)+'" class="p-1.5 text-sm text-slate-500 hover:text-rose-400 shrink-0">\u2715</button></div>').join('')
    :'<div class="text-xs text-slate-500 italic">No habits yet. Add one below.</div>';
  };

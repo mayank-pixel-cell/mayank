@@ -145,10 +145,6 @@ export function renderSettingsView() {
                             <i class="fa-solid fa-bell"></i>
                             <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
                         </button>
-                        <button role="button" onclick="ArcScreenTimeNotifier.testNotification()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95" title="Test &amp; Preview Notification">
-                            <i class="fa-solid fa-eye text-purple-400"></i>
-                            <span>Preview</span>
-                        </button>
                     </div>
                 </div>
             </div>

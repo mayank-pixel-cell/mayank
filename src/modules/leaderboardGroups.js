@@ -9,10 +9,11 @@ class ArcLeaderboardGroupsEngine {
   constructor() {
     this.activeView = 'leaderboard'; // 'leaderboard' | 'groups'
     this.activeCategory = 'regional'; // 'regional' | 'country' | 'global'
-    this.devOverride = false;
     this.isCompacted = true; // COMPACT BY DEFAULT
     this.joinedSquadId = null;
     this.customSquads = [];
+    this.serverGroups = [];
+    this.expandedRosters = new Set();
 
     // Unlimited Capacity Squads (No member limit)
     this.defaultSquads = [
@@ -137,6 +138,11 @@ class ArcLeaderboardGroupsEngine {
     this.checkUnlockNotification(false);
 
     this.render();
+
+    if (window.ArcServerSync && typeof window.ArcServerSync.fetchLeaderboard === 'function') {
+      window.ArcServerSync.fetchLeaderboard(this.activeCategory);
+      window.ArcServerSync.fetchGroups();
+    }
   }
 
   getUserLevel() {
@@ -148,7 +154,6 @@ class ArcLeaderboardGroupsEngine {
   }
 
   isUnlocked() {
-    if (this.devOverride) return true;
     return this.getUserLevel() >= 10;
   }
 
@@ -161,9 +166,9 @@ class ArcLeaderboardGroupsEngine {
     this.render();
   }
 
-  checkUnlockNotification(isDevSimulation = false) {
+  checkUnlockNotification() {
     const userLevel = this.getUserLevel();
-    if (!isDevSimulation && userLevel < 10) return;
+    if (userLevel < 10) return;
 
     const storageKey = 'arc_lb_unlocked_notified';
     let alreadyNotified = false;
@@ -171,20 +176,14 @@ class ArcLeaderboardGroupsEngine {
       alreadyNotified = localStorage.getItem(storageKey) === 'true';
     } catch (_) {}
 
-    if (alreadyNotified && !isDevSimulation) return;
+    if (alreadyNotified) return;
 
-    if (!isDevSimulation) {
-      try {
-        localStorage.setItem(storageKey, 'true');
-      } catch (_) {}
-    }
+    try {
+      localStorage.setItem(storageKey, 'true');
+    } catch (_) {}
 
-    const title = isDevSimulation
-      ? '🏆 Note: Leaderboards are now unlocked! (Dev Preview)'
-      : '🏆 Note: Leaderboards are now unlocked!';
-    const message = isDevSimulation
-      ? 'Level 10 reached! Note: Leaderboards are now unlocked. Regional, Country, and Global ranked competition is now accessible.'
-      : 'Level 10 reached! Note: Leaderboards are now unlocked. Check your standings in Results across Regional, Country, and Global ladders.';
+    const title = '🏆 Note: Leaderboards are now unlocked!';
+    const message = 'Level 10 reached! Note: Leaderboards are now unlocked. Check your standings in Results across Regional, Country, and Global ladders.';
 
     if (window.ArcNotifications && typeof window.ArcNotifications.notify === 'function') {
       window.ArcNotifications.notify({
@@ -248,34 +247,36 @@ class ArcLeaderboardGroupsEngine {
     });
 
     this.renderLeaderboard();
+
+    if (window.ArcServerSync && typeof window.ArcServerSync.fetchLeaderboard === 'function') {
+      window.ArcServerSync.fetchLeaderboard(category);
+    }
   }
 
-  toggleDevOverride() {
-    this.devOverride = !this.devOverride;
-    if (typeof window.playSfx === 'function') window.playSfx('check');
-    if (typeof window.showToast === 'function') {
-      window.showToast(this.devOverride ? '🏆 Note: Leaderboards are now unlocked! (Dev Preview)' : '🔒 Restored to actual Operative Level');
+  toggleSquadRoster(squadId) {
+    if (!this.expandedRosters) this.expandedRosters = new Set();
+    if (this.expandedRosters.has(squadId)) {
+      this.expandedRosters.delete(squadId);
+    } else {
+      this.expandedRosters.add(squadId);
     }
-    if (this.devOverride) {
-      this.checkUnlockNotification(true);
-    }
-    this.render();
+    if (typeof window.playSfx === 'function') window.playSfx('click');
+    this.renderGroups();
   }
 
   joinSquad(squadId) {
-    if (this.joinedSquadId && this.joinedSquadId !== squadId) {
-      const prev = [...this.defaultSquads, ...this.customSquads].find(s => s.id === this.joinedSquadId);
-      if (prev && prev.members > 0) prev.members--;
-    }
-
     this.joinedSquadId = squadId;
     try {
       localStorage.setItem('arc_joined_squad_id', squadId);
     } catch (_) {}
 
-    const allSquads = [...this.defaultSquads, ...this.customSquads];
-    const target = allSquads.find(s => s.id === squadId);
-    if (target) target.members++;
+    if (window.ArcServerSync && typeof window.ArcServerSync.joinSquad === 'function') {
+      window.ArcServerSync.joinSquad(squadId);
+    }
+
+    const allSquads = [...this.defaultSquads, ...(this.serverGroups || []), ...this.customSquads];
+    const target = allSquads.find(s => (s.groupId || s.id) === squadId);
+    if (target && target.members && typeof target.members === 'number') target.members++;
 
     if (typeof window.playSfx === 'function') window.playSfx('check');
     if (typeof window.showToast === 'function') {
@@ -284,14 +285,19 @@ class ArcLeaderboardGroupsEngine {
     this.renderGroups();
   }
 
-  leaveSquad() {
-    const prev = [...this.defaultSquads, ...this.customSquads].find(s => s.id === this.joinedSquadId);
-    if (prev && prev.members > 1) prev.members--;
+  leaveSquad(squadId) {
+    const targetId = squadId || this.joinedSquadId;
+    if (window.ArcServerSync && typeof window.ArcServerSync.leaveSquad === 'function') {
+      window.ArcServerSync.leaveSquad(targetId);
+    }
 
-    this.joinedSquadId = null;
-    try {
-      localStorage.removeItem('arc_joined_squad_id');
-    } catch (_) {}
+    if (this.joinedSquadId === targetId) {
+      this.joinedSquadId = null;
+      try {
+        localStorage.removeItem('arc_joined_squad_id');
+      } catch (_) {}
+    }
+
     if (typeof window.playSfx === 'function') window.playSfx('click');
     if (typeof window.showToast === 'function') {
       window.showToast('Left squad.');
@@ -321,6 +327,10 @@ class ArcLeaderboardGroupsEngine {
     const category = catEl ? catEl.value : 'All Pillars';
 
     if (!name) return;
+
+    if (window.ArcServerSync && typeof window.ArcServerSync.createSquad === 'function') {
+      window.ArcServerSync.createSquad(name, motto, category);
+    }
 
     const newSquad = {
       id: 'squad-custom-' + Date.now(),
@@ -423,10 +433,7 @@ class ArcLeaderboardGroupsEngine {
             <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
               <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500" style="width: ${pct}%"></div>
             </div>
-            <div class="flex items-center justify-between text-[10px] pt-0.5">
-              <button type="button" onclick="ArcLeaderboardGroups.toggleDevOverride()" class="text-amber-400 hover:text-amber-300 font-mono font-bold flex items-center gap-1 transition">
-                <i class="fa-solid fa-flask text-[9px]"></i> Preview Level 10 (Dev Mode)
-              </button>
+            <div class="flex items-center justify-end text-[10px] pt-0.5">
               <button type="button" onclick="ArcLeaderboardGroups.toggleCompact()" class="text-slate-400 hover:text-white flex items-center gap-1 transition font-mono">
                 Details <i class="fa-solid fa-chevron-down text-[8px]"></i>
               </button>
@@ -465,13 +472,6 @@ class ArcLeaderboardGroupsEngine {
                 <span class="text-cyan-400">Earn XP from Habits &amp; Pomodoro</span>
               </div>
             </div>
-
-            <div class="pt-1 flex items-center justify-center gap-2">
-              <button type="button" onclick="ArcLeaderboardGroups.toggleDevOverride()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate Level 10 to preview all 3 leaderboard categories">
-                <i class="fa-solid fa-flask text-amber-400"></i>
-                <span>Preview Level 10 (Dev Mode)</span>
-              </button>
-            </div>
           </div>
         `;
       }
@@ -500,6 +500,11 @@ class ArcLeaderboardGroupsEngine {
       }
     } catch (_) {}
 
+    const isUserGold = !!(window.ArcGold && typeof window.ArcGold.isGold === 'function' && window.ArcGold.isGold());
+    const userGoldBadge = isUserGold
+      ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[8px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>'
+      : '';
+
     const userStats = document.getElementById('lb-user-stats');
     const userHandle = document.getElementById('lb-user-handle');
     const userAvatar = document.getElementById('lb-user-avatar');
@@ -509,7 +514,9 @@ class ArcLeaderboardGroupsEngine {
     const arcScore = (window.state && window.state.overallArcIndex) ? window.state.overallArcIndex : '15%';
     const streak = (window.state && window.state.streak) ? window.state.streak : 0;
 
-    if (userHandle) userHandle.textContent = handle;
+    if (userHandle) {
+      userHandle.innerHTML = `<span class="truncate">${handle}</span>${userGoldBadge}`;
+    }
     if (userAvatar) userAvatar.textContent = avatarChar;
     if (userStats) userStats.textContent = `Level ${userLevel} • ${arcScore} Score • ${streak}d Streak`;
 
@@ -532,6 +539,7 @@ class ArcLeaderboardGroupsEngine {
         tier: userLevel >= 25 ? 'Master' : (userLevel >= 15 ? 'Diamond' : 'Platinum'),
         avatar: avatarChar,
         isUser: true,
+        isGold: isUserGold,
         color: 'from-cyan-400 to-indigo-500'
       };
 
@@ -575,6 +583,10 @@ class ArcLeaderboardGroupsEngine {
           ? 'border-cyan-400/80 bg-cyan-950/30 shadow-[0_0_15px_rgba(0,240,255,0.15)] ring-1 ring-cyan-400/50'
           : 'border-slate-800/80 bg-slate-900/60 hover:border-slate-700';
 
+        const rowGoldBadge = op.isGold
+          ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[8px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>'
+          : '';
+
         return `
           <div class="p-1.5 sm:p-2 rounded-xl border ${rowBorder} flex items-center justify-between text-xs transition-all">
             <div class="flex items-center gap-2 min-w-0">
@@ -585,6 +597,7 @@ class ArcLeaderboardGroupsEngine {
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <span class="font-bold ${op.isUser ? 'text-cyan-300' : 'text-slate-200'} text-[11px] truncate">${op.handle}</span>
+                  ${rowGoldBadge}
                   <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700">Lvl ${op.level}</span>
                 </div>
               </div>
@@ -600,36 +613,99 @@ class ArcLeaderboardGroupsEngine {
   }
 
   renderGroups() {
-    const allSquads = [...this.defaultSquads, ...this.customSquads];
-    const joined = allSquads.find(s => s.id === this.joinedSquadId);
+    const serverSquads = this.serverGroups || [];
+    const customSquads = this.customSquads || [];
 
-    // 1. Active Squad Banner (Unlimited capacity, sleek)
+    const squadMap = new Map();
+    this.defaultSquads.forEach(s => squadMap.set(s.id, { ...s, groupId: s.id }));
+    serverSquads.forEach(s => squadMap.set(s.groupId || s.id, { ...s, id: s.groupId || s.id }));
+    customSquads.forEach(s => squadMap.set(s.id, { ...s, groupId: s.id }));
+
+    const allSquads = Array.from(squadMap.values());
+
+    const joinedIds = window.ArcServerSync
+      ? window.ArcServerSync.getJoinedGroupIds()
+      : (this.joinedSquadId ? [this.joinedSquadId] : []);
+
+    const joinedSquads = allSquads.filter(s => joinedIds.includes(s.groupId || s.id));
+
+    // 1. Active Squad Banner (Supporting all joined squads + expandable roster modal/drawer)
     const activeBanner = document.getElementById('groups-active-banner');
     if (activeBanner) {
-      if (joined) {
+      if (joinedSquads.length > 0) {
         activeBanner.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <div class="space-y-0.5 min-w-0">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
               <span class="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                <i class="fa-solid fa-circle-check"></i> ACTIVE OPERATIVE SQUAD
+                <i class="fa-solid fa-circle-check"></i> ACTIVE OPERATIVE SQUADS (${joinedSquads.length} JOINED)
               </span>
-              <h5 class="text-xs font-black text-white truncate">${joined.name}</h5>
-              <p class="text-[10px] text-slate-300 line-clamp-1">${joined.motto}</p>
+              <span class="text-[9px] font-mono text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-1.5 py-0.2 rounded">Unlimited Capacity</span>
             </div>
-            <button type="button" onclick="ArcLeaderboardGroups.leaveSquad()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 text-[10px] font-bold transition shrink-0 active:scale-95">
-              Leave
-            </button>
-          </div>
-          <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
-            <span>Members: <b class="text-cyan-300">${joined.members.toLocaleString()}</b> <span class="text-emerald-400 font-sans text-[9px]">(Unlimited)</span></span>
-            <span>Avg Score: <b class="text-amber-300">${joined.avgScore}</b></span>
-            <span>Streak: <b class="text-emerald-300">${joined.streak}d</b></span>
+            ${joinedSquads.map(joined => {
+              const sId = joined.groupId || joined.id;
+              const isRosterOpen = this.expandedRosters && this.expandedRosters.has(sId);
+              const members = joined.members || [];
+              const memberCount = joined.memberCount || (Array.isArray(joined.members) ? joined.members.length : (joined.members || 1));
+
+              return `
+                <div class="p-2 sm:p-2.5 rounded-xl bg-slate-950/80 border border-cyan-500/40 space-y-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="space-y-0.5 min-w-0">
+                      <h5 class="text-xs font-black text-white truncate flex items-center gap-1.5">
+                        <i class="${joined.icon || 'fa-solid fa-shield-halved'} text-cyan-400 text-[10px]"></i>
+                        <span>${joined.name}</span>
+                      </h5>
+                      <p class="text-[10px] text-slate-300 line-clamp-1">${joined.motto}</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onclick="ArcLeaderboardGroups.toggleSquadRoster('${sId}')" class="px-2 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold transition active:scale-95 flex items-center gap-1">
+                        <i class="fa-solid fa-users text-[9px]"></i>
+                        <span>${isRosterOpen ? 'Close Roster' : 'View Roster'}</span>
+                      </button>
+                      <button type="button" onclick="ArcLeaderboardGroups.leaveSquad('${sId}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-950/40 text-rose-300 hover:text-rose-200 border border-rose-500/30 text-[10px] font-bold transition active:scale-95">
+                        Leave
+                      </button>
+                    </div>
+                  </div>
+                  <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                    <span>Members: <b class="text-cyan-300">${Number(memberCount).toLocaleString()}</b> <span class="text-emerald-400 font-sans text-[9px]">(Unlimited)</span></span>
+                    <span>Avg Score: <b class="text-amber-300">${joined.avgScore}</b></span>
+                    <span>Streak: <b class="text-emerald-300">${joined.streak || 30}d</b></span>
+                  </div>
+
+                  ${isRosterOpen ? `
+                    <div class="pt-2 border-t border-slate-800/80 space-y-1.5 animate-fade-in">
+                      <div class="text-[10px] font-mono text-slate-400 flex items-center justify-between">
+                        <span>Squad Operatives Roster</span>
+                        <span class="text-amber-300">${Array.isArray(members) ? members.filter(m => m.isGold).length : 0} Gold VIPs</span>
+                      </div>
+                      <div class="max-h-36 overflow-y-auto space-y-1 custom-scroll pr-1">
+                        ${(!Array.isArray(members) || members.length === 0) ? '<div class="text-[10px] text-slate-500 italic py-1">No member details available</div>' : members.map(m => `
+                          <div class="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 flex items-center justify-between text-[11px]">
+                            <div class="flex items-center gap-1.5 min-w-0">
+                              <div class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-bold grid place-items-center shrink-0 border border-cyan-400/30">
+                                ${m.avatar || (m.handle ? m.handle.charAt(1).toUpperCase() : 'O')}
+                              </div>
+                              <span class="font-bold text-white truncate">${m.handle}</span>
+                              ${m.isGold ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[8px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>' : ''}
+                            </div>
+                            <div class="font-mono text-[9px] text-slate-400 shrink-0">
+                              Lvl ${m.level || 1} • <span class="text-cyan-300 font-bold">${typeof m.arcScore === 'number' ? m.arcScore.toFixed(1) + '%' : (m.arcScore || '0%')}</span>
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
           </div>
         `;
       } else {
         activeBanner.innerHTML = `
-          <div class="text-center py-1.5 space-y-0.5">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">No Active Squad</span>
+          <div class="text-center py-2 space-y-1">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">No Active Squad</span>
             <p class="text-[10px] text-slate-400">Join an unlimited accountability squad below to link streak telemetry with peer operatives.</p>
           </div>
         `;
@@ -664,7 +740,12 @@ class ArcLeaderboardGroupsEngine {
       }
 
       squadsList.innerHTML = allSquads.map(s => {
-        const isJoined = s.id === this.joinedSquadId;
+        const sId = s.groupId || s.id;
+        const isJoined = joinedIds.includes(sId);
+        const isRosterOpen = this.expandedRosters && this.expandedRosters.has(sId);
+        const members = s.members || [];
+        const memberCount = s.memberCount || (Array.isArray(s.members) ? s.members.length : (s.members || 1));
+
         return `
           <div class="p-2 sm:p-2.5 rounded-xl border ${isJoined ? 'border-cyan-400/80 bg-cyan-950/20 ring-1 ring-cyan-400/40' : 'border-slate-800 bg-slate-900/60 hover:border-slate-700'} space-y-1.5 transition-all">
             <div class="flex items-start justify-between gap-2">
@@ -677,13 +758,17 @@ class ArcLeaderboardGroupsEngine {
                   <p class="text-[10px] text-slate-400 leading-snug line-clamp-1">${s.motto}</p>
                 </div>
               </div>
-              <div class="shrink-0">
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="ArcLeaderboardGroups.toggleSquadRoster('${sId}')" class="px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[9px] font-bold transition flex items-center gap-1">
+                  <i class="fa-solid fa-users text-[8px]"></i>
+                  <span>${isRosterOpen ? 'Hide' : 'Roster'}</span>
+                </button>
                 ${isJoined ? `
-                  <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-bold flex items-center gap-1">
+                  <button type="button" onclick="ArcLeaderboardGroups.leaveSquad('${sId}')" class="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-bold flex items-center gap-1 hover:bg-rose-950/40 hover:text-rose-300 transition">
                     <i class="fa-solid fa-check text-[8px]"></i> Joined
-                  </span>
+                  </button>
                 ` : `
-                  <button type="button" onclick="ArcLeaderboardGroups.joinSquad('${s.id}')" class="px-2.5 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-slate-700 text-[10px] font-bold transition active:scale-95">
+                  <button type="button" onclick="ArcLeaderboardGroups.joinSquad('${sId}')" class="px-2.5 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-slate-700 text-[10px] font-bold transition active:scale-95">
                     Join
                   </button>
                 `}
@@ -692,11 +777,36 @@ class ArcLeaderboardGroupsEngine {
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/60">
               <span class="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 text-[9px] font-sans">${s.category}</span>
               <div class="flex items-center gap-2">
-                <span class="flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-slate-500"></i> ${s.members.toLocaleString()} <span class="text-emerald-400 font-mono text-[9px]">∞</span></span>
-                <span><i class="fa-solid fa-fire text-[9px] text-amber-400"></i> ${s.streak}d</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-slate-500"></i> ${Number(memberCount).toLocaleString()} <span class="text-emerald-400 font-mono text-[9px]">∞</span></span>
+                <span><i class="fa-solid fa-fire text-[9px] text-amber-400"></i> ${s.streak || 30}d</span>
                 <span class="text-cyan-300 font-bold">${s.avgScore}</span>
               </div>
             </div>
+
+            ${isRosterOpen ? `
+              <div class="pt-2 border-t border-slate-800/80 space-y-1 animate-fade-in">
+                <div class="text-[9px] font-mono text-slate-400 flex items-center justify-between">
+                  <span>Squad Roster (${Array.isArray(members) ? members.length : 0} Members)</span>
+                  <span class="text-amber-300">${Array.isArray(members) ? members.filter(m => m.isGold).length : 0} Gold VIPs</span>
+                </div>
+                <div class="max-h-32 overflow-y-auto space-y-1 custom-scroll pr-1">
+                  ${(!Array.isArray(members) || members.length === 0) ? '<div class="text-[9px] text-slate-500 italic py-1">No member details available</div>' : members.map(m => `
+                    <div class="p-1 rounded-lg bg-slate-950/70 border border-slate-800/80 flex items-center justify-between text-[10px]">
+                      <div class="flex items-center gap-1.5 min-w-0">
+                        <div class="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 text-[8px] font-bold grid place-items-center shrink-0">
+                          ${m.avatar || (m.handle ? m.handle.charAt(1).toUpperCase() : 'O')}
+                        </div>
+                        <span class="font-bold text-white truncate">${m.handle}</span>
+                        ${m.isGold ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[7px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>' : ''}
+                      </div>
+                      <div class="font-mono text-[9px] text-slate-400 shrink-0">
+                        Lvl ${m.level || 1} • <span class="text-cyan-300 font-bold">${typeof m.arcScore === 'number' ? m.arcScore.toFixed(1) + '%' : (m.arcScore || '0%')}</span>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
           </div>
         `;
       }).join('');

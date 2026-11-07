@@ -203,7 +203,7 @@ export function renderResultsView() {
                                 <!-- Rendered dynamically based on isCompacted state -->
                             </div>
 
-                            <!-- Unlocked State Container (Shown if Level >= 10 or Dev Override) -->
+                            <!-- Unlocked State Container (Shown if Level >= 10) -->
                             <div id="lb-unlocked-container" class="hidden space-y-2.5">
                                 <!-- Level 10 Milestone Note Banner -->
                                 <div id="lb-unlocked-note-banner" class="p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-yellow-400/10 to-emerald-500/15 border border-amber-400/35 text-amber-300 text-[11px] font-bold flex items-center justify-between gap-2 shadow-sm animate-fade-in">
@@ -308,72 +308,8 @@ export function renderResultsView() {
                 </div>
             </div>
 
-            <!-- CALENDAR & HABIT PANEL IN RESULTS TAB -->
-            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4 border-t-2 border-t-cyan-400 glow-cyan">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                        <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-cyan-400"></i> Detailed Habit Completion Calendar
-                        </h3>
-                        <p class="text-xs text-slate-400">Tap any day or press <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">◀</kbd> <kbd class="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-cyan-400 font-bold">▶</kbd> to switch days</p>
-                    </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2 bg-slate-900/90 p-1 rounded-xl border border-slate-800 self-start sm:self-auto w-full sm:w-auto">
-                        <button role="button" onclick="changeCalendarMonth(-1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Previous Month Results Calendar"><i class="fa-solid fa-chevron-left"></i></button>
-                        <span id="calendar-month-year" class="text-xs font-mono font-bold text-cyan-400 flex-1 text-center min-w-[100px]">October 2026</span>
-                        <button role="button" onclick="changeCalendarMonth(1); playSfx('slideNext')" class="px-2.5 py-1 rounded-lg bg-slate-800 active:bg-slate-700 text-xs text-slate-300 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Next Month Results Calendar"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-1.5 text-[9px] sm:text-[10px] font-mono pb-2 border-b border-slate-800">
-                    <span class="text-slate-400 font-sans font-bold uppercase tracking-wider mr-1">Grades:</span>
-                    <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-bold">S (90%+)</span>
-                    <span class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold">A (75%+)</span>
-                    <span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-400/40 font-bold">B (60%+)</span>
-                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 font-bold">C (40%+)</span>
-                    <span class="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/40 font-bold">F (&lt;40%)</span>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start pt-1">
-                    <div class="lg:col-span-8 space-y-2">
-                        <div class="grid grid-cols-7 gap-1 text-center font-bold text-[10px] sm:text-[11px] text-slate-400 pb-1 uppercase tracking-wider">
-                            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-                        </div>
-                        <div id="calendar-days-grid" class="grid grid-cols-7 gap-1 sm:gap-1.5 text-center text-xs"></div>
-                    </div>
-
-                    <div class="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Selected Day Progress</span>
-                            <div class="flex items-center gap-1">
-                                <button type="button" onclick="stepCalendarDay(-1); playSfx('slideNext')" title="Previous Day (Left Arrow)" aria-label="Previous Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button type="button" onclick="stepCalendarDay(1); playSfx('slideNext')" title="Next Day (Right Arrow)" aria-label="Next Day" class="px-1.5 py-0.5 rounded bg-slate-800 active:bg-slate-700 hover:bg-slate-700 text-slate-300 hover:text-cyan-400 text-[10px] transition border border-slate-700/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"><i class="fa-solid fa-chevron-right"></i></button>
-                                <span class="text-[9px] sm:text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 ml-1">Edit Below</span>
-                            </div>
-                        </div>
-                        <div id="calendar-selected-date-title" class="text-sm sm:text-base font-extrabold text-white">Sunday, October 4, 2026</div>
-                        
-                        <div class="space-y-1">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="text-slate-400">Completion Score:</span>
-                                <span id="calendar-selected-pct" class="font-bold text-cyan-400 text-xs sm:text-sm">0%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div id="calendar-selected-bar" class="animate-shimmer h-full w-0 transition-all duration-300"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-2 border-t border-slate-800 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[10px] sm:text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="fa-solid fa-list-check text-cyan-400"></i> Day Habits Completion
-                                </span>
-                                <span class="text-[9px] text-slate-400">Tap to toggle</span>
-                            </div>
-                            <div id="calendar-selected-habits-container" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- PER-HABIT DEEP ANALYTICS & VELOCITY PANEL (SURFACE B) -->
+            <div id="habit-deep-analytics-panel" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-5 border-t-2 border-t-emerald-400 glow-cyan transition-all duration-300"></div>
 
             <!-- CONSISTENCY MATRIX -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">

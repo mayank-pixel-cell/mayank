@@ -32,6 +32,8 @@ import "./modules/easterEggsEngine.js";
 import "./modules/googleSyncComparison.js";
 import "./modules/mobilePermissions.js";
 import "./modules/multiUserEngine.js";
+import "./modules/habitAnalyticsEngine.js";
+import "./modules/serverSyncEngine.js";
 
 async function bootstrapArcTracker() {
   try {
@@ -43,6 +45,12 @@ async function bootstrapArcTracker() {
     }
     if (window.ArcMultiUser && typeof window.ArcMultiUser.init === "function") {
       window.ArcMultiUser.init();
+    }
+    if (window.ArcHabitAnalytics && typeof window.ArcHabitAnalytics.init === "function") {
+      window.ArcHabitAnalytics.init();
+    }
+    if (window.ArcServerSync && typeof window.ArcServerSync.init === "function") {
+      window.ArcServerSync.init();
     }
   } catch (err) {
     console.error("[ArcMain] Bootstrap error:", err);

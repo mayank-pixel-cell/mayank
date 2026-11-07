@@ -1,0 +1,14 @@
+{
+  "name": "arc-cloud-server",
+  "version": "1.0.0",
+  "description": "Arc Tracker External Backend Server for Operatives, Gold VIPs, Leaderboards, and Squads",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

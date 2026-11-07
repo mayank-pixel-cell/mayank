@@ -3326,6 +3326,9 @@ window.ArcGold = (function() {
         showToast('🎁 Welcome! Your 30-Day Free Arc Gold VIP trial (Dual-User) has been activated!');
       }
     }
+    if (window.ArcServerSync && typeof window.ArcServerSync.recordGoldPurchase === 'function') {
+      window.ArcServerSync.recordGoldPurchase('trial', user);
+    }
     return true;
   }
 
@@ -3394,6 +3397,9 @@ window.ArcGold = (function() {
     if (typeof showToast === 'function') {
       const promoMsg = promo ? ` (Coupon ${promo.code} applied · Saved ₹${plan.price - finalPrice})` : '';
       showToast('👑 Arc Gold Activated (' + plan.name + ' · ₹' + finalPrice + promoMsg + ') · 120Hz ProMotion Unlocked!');
+    }
+    if (window.ArcServerSync && typeof window.ArcServerSync.recordGoldPurchase === 'function') {
+      window.ArcServerSync.recordGoldPurchase(planId, user);
     }
     return true;
   }
@@ -6230,6 +6236,8 @@ window.ArcScreenTimeStore = (function() {
       phoneSecs: pSecs,
       combinedSecs: lSecs + pSecs,
       phoneLinked: linked,
+      verified: linked,
+      manualReduction: false,
       apps: existing.apps && Object.keys(existing.apps).length ? existing.apps : {
         'Visual Studio Code': Math.floor(lSecs * 0.55),
         'Google Chrome': Math.floor(lSecs * 0.30),
@@ -6261,6 +6269,16 @@ window.ArcScreenTimeStore = (function() {
     let weekCombined = 0;
     let weekDaysCount = 0;
     let daysUnder4HoursInWeek = 0;
+    let all7DaysVerified = true;
+    let hasManualReductions = false;
+
+    if (localStorage.getItem('arc_manual_reductions_count') && Number(localStorage.getItem('arc_manual_reductions_count')) > 0) {
+      hasManualReductions = true;
+    }
+    if (hist && hist.hasManualReductions) {
+      hasManualReductions = true;
+    }
+
     const weeklyApps = {};
     const weekDaysDetails = [];
 
@@ -6268,18 +6286,32 @@ window.ArcScreenTimeStore = (function() {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
       const k = d.toISOString().split('T')[0];
-      const entry = hist.days[k] || { laptopSecs: 6800, phoneSecs: 3600, combinedSecs: 10400 };
-      weekLaptop += entry.laptopSecs;
-      weekPhone += entry.phoneSecs;
-      weekCombined += entry.combinedSecs;
+      const hasGenuineEntry = hist && hist.days && !!hist.days[k];
+      const entry = hasGenuineEntry ? hist.days[k] : { laptopSecs: 6800, phoneSecs: 3600, combinedSecs: 10400 };
+
+      // Verified device tracking: genuine entry in history, phoneLinked true, verified !== false, and no manual reductions
+      const isDayVerified = hasGenuineEntry && !!entry.phoneLinked && entry.verified !== false && !entry.manualReduction;
+      if (!isDayVerified) {
+        all7DaysVerified = false;
+      }
+      if (entry.manualReduction) {
+        hasManualReductions = true;
+      }
+
+      weekLaptop += entry.laptopSecs || 0;
+      weekPhone += entry.phoneSecs || 0;
+      weekCombined += entry.combinedSecs || 0;
       weekDaysCount++;
-      const isUnder4 = entry.combinedSecs < 4 * 3600;
-      if (isUnder4) daysUnder4HoursInWeek++;
+      const isUnder4 = (entry.combinedSecs || 0) < 4 * 3600;
+      if (isUnder4 && isDayVerified) {
+        daysUnder4HoursInWeek++;
+      }
       weekDaysDetails.push({
         dayName: d.toLocaleDateString(undefined, { weekday: 'short' }),
         dateKey: k,
-        combinedSecs: entry.combinedSecs,
-        isUnder4
+        combinedSecs: entry.combinedSecs || 0,
+        isUnder4,
+        isVerified: isDayVerified
       });
 
       if (entry.apps) {
@@ -6288,6 +6320,8 @@ window.ArcScreenTimeStore = (function() {
         }
       }
     }
+
+    const isSub4WeekAchieved = (daysUnder4HoursInWeek >= 7) && all7DaysVerified && !hasManualReductions;
 
     // Top app this week
     let topApp = { name: 'Visual Studio Code', seconds: 0, category: 'Productive Focus (IDE)', icon: 'fa-code' };
@@ -6334,7 +6368,9 @@ window.ArcScreenTimeStore = (function() {
         dailyAvgCombined: weekDaysCount > 0 ? Math.round(weekCombined / weekDaysCount) : 0,
         daysCount: weekDaysCount,
         daysUnder4Hours: daysUnder4HoursInWeek,
-        isSub4WeekAchieved: daysUnder4HoursInWeek >= 7,
+        all7DaysVerified: all7DaysVerified,
+        hasManualReductions: hasManualReductions,
+        isSub4WeekAchieved: isSub4WeekAchieved,
         daysDetails: weekDaysDetails.reverse()
       },
       monthly: {
@@ -6353,7 +6389,7 @@ window.ArcScreenTimeStore = (function() {
 
   function checkSub4WeekAchievement() {
     const comp = getComparisons();
-    if (comp.lastWeek.isSub4WeekAchieved) {
+    if (comp.lastWeek.isSub4WeekAchieved && comp.lastWeek.all7DaysVerified && !comp.lastWeek.hasManualReductions) {
       if (window.state && window.state.gam) {
         window.state.gam.bd = window.state.gam.bd || {};
         if (!window.state.gam.bd['st_zen_week']) {
@@ -6361,7 +6397,7 @@ window.ArcScreenTimeStore = (function() {
           if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
           if (typeof playSfx === 'function') playSfx('victory');
           if (typeof showToast === 'function') {
-            showToast('🏆 Achievement Unlocked: Digital Ascetic (< 4h screen time for entire week)!');
+            showToast('🏆 Achievement Unlocked: Digital Ascetic (Verified < 4h screen time for all 7 days)!');
           }
         }
       }
@@ -6475,20 +6511,37 @@ window.ArcScreenTimeStore = (function() {
     const sub4Counter = document.getElementById('st-sub4-counter-text');
     const sub4Pill = document.getElementById('st-sub4-badge-pill');
     if (sub4Counter) {
-      sub4Counter.textContent = comp.lastWeek.daysUnder4Hours + ' / 7 Days Under 4h';
-      sub4Counter.className = comp.lastWeek.isSub4WeekAchieved ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold';
+      if (comp.lastWeek.isSub4WeekAchieved) {
+        sub4Counter.textContent = '7 / 7 Days Under 4h (Verified Sync)';
+        sub4Counter.className = 'text-emerald-400 font-bold';
+      } else if (comp.lastWeek.daysUnder4Hours >= 7 && !comp.lastWeek.all7DaysVerified) {
+        sub4Counter.textContent = '7 / 7 Days (Unverified - Requires Linked Phone Sync)';
+        sub4Counter.className = 'text-amber-400 font-bold';
+      } else {
+        sub4Counter.textContent = comp.lastWeek.daysUnder4Hours + ' / 7 Days Under 4h';
+        sub4Counter.className = comp.lastWeek.isSub4WeekAchieved ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold';
+      }
     }
     if (sub4Pill) {
-      sub4Pill.textContent = comp.lastWeek.isSub4WeekAchieved ? '✓ ACHIEVED (Digital Ascetic)' : 'IN PROGRESS (' + comp.lastWeek.daysUnder4Hours + '/7)';
-      sub4Pill.className = comp.lastWeek.isSub4WeekAchieved
-        ? 'text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase'
-        : 'text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold uppercase';
+      if (comp.lastWeek.isSub4WeekAchieved) {
+        sub4Pill.textContent = '✓ ACHIEVED (Digital Ascetic - Verified)';
+        sub4Pill.className = 'text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase';
+      } else if (comp.lastWeek.daysUnder4Hours >= 7 && !comp.lastWeek.all7DaysVerified) {
+        sub4Pill.textContent = 'UNVERIFIED (Device Sync Required)';
+        sub4Pill.className = 'text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold uppercase';
+      } else {
+        sub4Pill.textContent = 'IN PROGRESS (' + comp.lastWeek.daysUnder4Hours + '/7)';
+        sub4Pill.className = 'text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold uppercase';
+      }
     }
     if (sub4Matrix && comp.lastWeek.daysDetails.length) {
       sub4Matrix.innerHTML = comp.lastWeek.daysDetails.map(d => {
-        return '<div class="text-center p-1.5 rounded-lg ' + (d.isUnder4 ? 'bg-emerald-950/40 border border-emerald-500/40' : 'bg-rose-950/40 border border-rose-500/40') + '">' +
+        const borderClass = d.isUnder4 ? (d.isVerified ? 'bg-emerald-950/40 border border-emerald-500/40' : 'bg-amber-950/30 border border-amber-500/40') : 'bg-rose-950/40 border border-rose-500/40';
+        const labelClass = d.isUnder4 ? (d.isVerified ? 'text-emerald-400' : 'text-amber-300') : 'text-rose-400';
+        const labelText = d.isUnder4 ? (d.isVerified ? '✓ &lt;4h' : '⚡ &lt;4h (Unverified)') : '✗ &gt;4h';
+        return '<div class="text-center p-1.5 rounded-lg ' + borderClass + '">' +
           '<div class="text-[9px] font-mono text-slate-400">' + d.dayName + '</div>' +
-          '<div class="text-[10px] font-bold ' + (d.isUnder4 ? 'text-emerald-400' : 'text-rose-400') + '">' + (d.isUnder4 ? '✓ &lt;4h' : '✗ &gt;4h') + '</div>' +
+          '<div class="text-[10px] font-bold ' + labelClass + '">' + labelText + '</div>' +
           '<div class="text-[8px] font-mono text-slate-400">' + fmtSecs(d.combinedSecs) + '</div>' +
         '</div>';
       }).join('');
