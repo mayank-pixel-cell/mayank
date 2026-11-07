@@ -30,11 +30,6 @@ Else
         WshShell.Run "http://localhost:1420", 1, False
     End If
 End If
-Set fso = CreateObject("Scripting.FileSystemObject"
-scriptDir = fso.GetParentFolderName(WScript.ScriptFullName) 
-WshShell.CurrentDirectory = scriptDir 
-WshShell.Run "cmd.exe /c """ & scriptDir & "\Launch-ArcTracker.bat""", 0, False 
-Set fso = CreateObject("Scripting.FileSystemObject"
-scriptDir = fso.GetParentFolderName(WScript.ScriptFullName) 
-WshShell.CurrentDirectory = scriptDir 
-WshShell.Run "cmd.exe /c """ & scriptDir & "\Launch-ArcTracker.bat""", 0, False 
+
+Set fso = Nothing
+Set WshShell = Nothing
