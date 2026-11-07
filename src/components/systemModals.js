@@ -1866,51 +1866,66 @@ export function renderSystemModals() {
     <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
       <div class="flex items-center gap-2 text-cyan-400 font-black text-base">
         <i class="fa-solid fa-file-contract text-lg"></i>
-        <h3>Arc Tracker Terms &amp; Conditions (Protocol v2026.1)</h3>
+        <h3>Arc Tracker Terms &amp; Conditions (Protocol v2026.2)</h3>
       </div>
       <button type="button" onclick="ArcTermsOnboarding.closeTermsReader()" class="text-slate-400 hover:text-white text-sm p-1"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <div class="max-h-[55vh] overflow-y-auto space-y-3.5 pr-2 text-xs text-slate-300 select-text leading-relaxed">
       <div class="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/30">
-        <h4 class="font-bold text-cyan-300 mb-1">Covenant of Self-Discipline &amp; Privacy</h4>
+        <h4 class="font-bold text-cyan-300 mb-1">Covenant of Self-Discipline, Privacy &amp; Local Sovereignty</h4>
         <p>By registering or using Arc Tracker, you agree to these Terms and Conditions. Arc Tracker is an airgapped, high-accountability operating system designed for self-mastery, screen time moderation, and habit execution.</p>
       </div>
 
       <div class="space-y-1">
         <h5 class="font-bold text-white text-sm">01. First-Time Registration &amp; Operative Identity</h5>
-        <p>You choose a display name, handle (@operative), and lock-in motto. Participation in the Winter Arc and Summer Arc protocols is voluntary and intended solely for personal self-improvement.</p>
+        <p>You choose a display name, handle (@operative), and lock-in motto stored locally on your device. Participation in the Winter Arc and Summer Arc protocols is voluntary and intended solely for personal self-improvement.</p>
       </div>
 
       <div class="space-y-1">
         <h5 class="font-bold text-white text-sm">02. Local Data Sovereignty &amp; Zero Exfiltration</h5>
-        <p>100% of habit data, check-ins, journal notes, and screen time records reside on your personal device storage (LocalStorage and IndexedDB). No data is covertly sold, tracked, or monetized.</p>
+        <p>100% of habit data, check-ins, journal notes, and screen time records reside on your personal device hardware (LocalStorage, IndexedDB, and Tauri Store). No data is covertly sold, tracked, or monetized.</p>
       </div>
 
       <div class="space-y-1">
-        <h5 class="font-bold text-white text-sm">03. Focus Mode &amp; Application Lockout Authorization</h5>
-        <p>Enabling Focus Sessions or Strict Mode authorizes Arc Tracker to detect foreground distraction apps and active browser tabs, actively blocking or shielding distractions according to your blocklist rules.</p>
+        <h5 class="font-bold text-white text-sm">03. Multi-User Account Governance &amp; Shared Devices</h5>
+        <p>Operative profiles on a shared terminal operate in isolated storage partitions. Each user is responsible for locking their account with a PIN. Arc Gold VIP binds to up to 2 authorized profiles per device.</p>
       </div>
 
       <div class="space-y-1">
-        <h5 class="font-bold text-white text-sm">04. Arc Gold VIP &amp; Customization</h5>
-        <p>Gold VIP unlocks 4K wallpapers, custom avatar lining rings, Black &amp; White Monochrome mode, and advanced telemetry exports without deceptive auto-renewals.</p>
+        <h5 class="font-bold text-white text-sm">04. Focus Mode &amp; Application Lockout Authorization</h5>
+        <p>Enabling Focus Sessions or Strict Mode authorizes Arc Tracker to inspect foreground distraction apps and active browser tabs in volatile memory, actively shielding distractions according to your custom blocklist rules.</p>
       </div>
 
       <div class="space-y-1">
-        <h5 class="font-bold text-white text-sm">05. Security PIN, Two-Factor Authentication &amp; Backups</h5>
-        <p>You are the sole custodian of your PIN and 2FA recovery codes. Backups use client-side AES-256 encryption. Lost passcodes cannot be retrieved by third parties.</p>
+        <h5 class="font-bold text-white text-sm">05. Optional Cloud Sync &amp; End-to-End Encryption</h5>
+        <p>Sync via Google Drive AppData or private server is opt-in and client-side encrypted (AES-256-GCM / PBKDF2). You are the sole custodian of your password; lost keys cannot be recovered by third parties.</p>
       </div>
 
       <div class="space-y-1">
-        <h5 class="font-bold text-white text-sm">06. Fair Execution &amp; Integrity</h5>
-        <p>Streaks, levels, and milestone badges represent truthful execution. Progress export renders local canvas images for personal sharing.</p>
+        <h5 class="font-bold text-white text-sm">06. Leaderboards, Groups &amp; Fair Execution (Level 10+)</h5>
+        <p>Leaderboard and group features unlock at Level 10. You agree to honest check-ins without bot automation or clock-tampering. Only aggregate XP and level ranks are shared under your chosen handle.</p>
+      </div>
+
+      <div class="space-y-1">
+        <h5 class="font-bold text-white text-sm">07. Arc Gold VIP &amp; Customization</h5>
+        <p>Gold VIP unlocks 4K wallpapers, custom avatar lining rings, Black &amp; White Monochrome mode, 120Hz ProMotion UI responsiveness, and advanced exports without deceptive auto-renewals.</p>
+      </div>
+
+      <div class="space-y-1">
+        <h5 class="font-bold text-white text-sm">08. Security PIN, Two-Factor Authentication &amp; Backups</h5>
+        <p>You are the sole custodian of your PIN and 2FA recovery codes. Backups use client-side AES-256 encryption. Anti-spy keypad layouts and 45s clipboard wipes safeguard credentials.</p>
+      </div>
+
+      <div class="space-y-1">
+        <h5 class="font-bold text-white text-sm">09. Health &amp; Wellness Disclaimer</h5>
+        <p>Arc Tracker is a self-discipline productivity tool and does not provide medical, psychiatric, or clinical addiction advice. Consult healthcare professionals for health concerns.</p>
       </div>
     </div>
 
     <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
       <span id="arc-terms-reader-status" class="text-[11px] font-mono text-emerald-400 font-bold flex items-center gap-1.5">
-        <i class="fa-solid fa-check"></i> Terms Accepted (v2026.1)
+        <i class="fa-solid fa-check"></i> Terms Accepted (v2026.2)
       </span>
       <div class="flex gap-2">
         <a href="./terms-and-conditions.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition">

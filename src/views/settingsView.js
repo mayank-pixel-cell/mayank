@@ -482,7 +482,7 @@ export function renderSettingsView() {
                 </div>
 
                 <p class="text-xs text-slate-300 leading-relaxed">
-                    Arc Tracker is governed by the Covenant of Self-Discipline and Local Data Sovereignty (Protocol v2026.1). Review the complete terms, privacy protections, and focus lockout authorizations below.
+                    Arc Tracker is governed by the Covenant of Self-Discipline and Local Data Sovereignty (Protocol v2026.2). Review the complete terms, privacy protections, and focus lockout authorizations below.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-2.5 pt-1">

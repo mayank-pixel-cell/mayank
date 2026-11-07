@@ -1,11 +1,11 @@
 /**
  * Arc Tracker - Terms and Conditions & First-Time Onboarding Engine
- * Protocol: v2026.1 // Local Data Sovereignty & Covenant of Discipline
+ * Protocol: v2026.2 // Local Data Sovereignty, Multi-User Governance & Covenant of Discipline
  */
 
 const TERMS_KEY = 'arc_terms_accepted_v1';
 const TERMS_TIMESTAMP_KEY = 'arc_terms_accepted_at';
-const TERMS_VERSION = 'v2026.1';
+const TERMS_VERSION = 'v2026.2';
 
 export const arcTermsOnboarding = {
   isAccepted() {
@@ -151,14 +151,14 @@ export const arcTermsOnboarding = {
       if (typeof window.ArcNotifications.notify === 'function') {
         window.ArcNotifications.notify({
           title: '📜 Covenant of Discipline Accepted',
-          message: `You have successfully agreed to the Arc Tracker Terms & Conditions (v2026.1). Welcome to the protocol, Operative @${handle}.`,
+          message: `You have successfully agreed to the Arc Tracker Terms & Conditions (v2026.2). Welcome to the protocol, Operative @${handle}.`,
           category: 'Governance',
           icon: 'fa-solid fa-file-contract'
         });
       } else if (typeof window.ArcNotifications.addNotification === 'function') {
         window.ArcNotifications.addNotification({
           title: '📜 Covenant of Discipline Accepted',
-          desc: `You have successfully agreed to the Arc Tracker Terms & Conditions (v2026.1). Welcome to the protocol, Operative @${handle}.`,
+          desc: `You have successfully agreed to the Arc Tracker Terms & Conditions (v2026.2). Welcome to the protocol, Operative @${handle}.`,
           category: 'Governance'
         });
       }
@@ -174,7 +174,7 @@ export const arcTermsOnboarding = {
     const dateStr = this.getAcceptedDate();
     if (isAcc) {
       statusEl.className = 'text-[11px] font-mono text-emerald-400 font-bold flex items-center gap-1.5';
-      statusEl.innerHTML = `<i class="fa-solid fa-check"></i> Accepted on ${dateStr || 'Initial Setup'} (v2026.1)`;
+      statusEl.innerHTML = `<i class="fa-solid fa-check"></i> Accepted on ${dateStr || 'Initial Setup'} (v2026.2)`;
     } else {
       statusEl.className = 'text-[11px] font-mono text-amber-400 font-bold flex items-center gap-1.5';
       statusEl.innerHTML = `<i class="fa-solid fa-clock"></i> Acceptance Pending`;
@@ -202,7 +202,7 @@ export const arcTermsOnboarding = {
     if (profileStatus) {
       if (isAcc) {
         profileStatus.className = 'text-[10px] font-mono font-bold text-emerald-400 flex items-center gap-1';
-        profileStatus.innerHTML = `<i class="fa-solid fa-check"></i> Accepted (${dateStr || 'v2026.1'})`;
+        profileStatus.innerHTML = `<i class="fa-solid fa-check"></i> Accepted (${dateStr || 'v2026.2'})`;
       } else {
         profileStatus.className = 'text-[10px] font-mono font-bold text-amber-400 flex items-center gap-1';
         profileStatus.innerHTML = `<i class="fa-solid fa-clock"></i> Not Yet Accepted`;

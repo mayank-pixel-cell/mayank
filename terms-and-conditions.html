@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#090d16">
   <meta name="mobile-web-app-capable" content="yes">
   <title>Terms and Conditions - Arc Tracker</title>
-  <meta name="description" content="Official Terms & Conditions and User Agreement for Arc Tracker 2026. Self-discipline protocol, local data sovereignty, screen time tracking, and focus shield terms.">
+  <meta name="description" content="Official Terms & Conditions and User Agreement for Arc Tracker 2026. Self-discipline protocol, local data sovereignty, screen time tracking, multi-user governance, and focus shield terms.">
   <link rel="icon" type="image/png" href="./icons/128x128.png">
   <style>
     :root {
@@ -42,7 +42,7 @@
     }
 
     .container {
-      max-width: 860px;
+      max-width: 880px;
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -51,6 +51,47 @@
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
       -webkit-backdrop-filter: blur(16px);
       backdrop-filter: blur(16px);
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: #ffffff;
+      transform: translateX(-3px);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
     }
 
     header {
@@ -86,6 +127,12 @@
       background: rgba(245, 158, 11, 0.15);
       border-color: rgba(245, 158, 11, 0.4);
       color: var(--gold);
+    }
+
+    .badge-pill.purple {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.4);
+      color: var(--purple);
     }
 
     .badge-dot {
@@ -128,16 +175,16 @@
     }
 
     .summary-card p {
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       color: #cbd5e1;
     }
 
     section {
-      margin-bottom: 2rem;
+      margin-bottom: 2.25rem;
     }
 
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 0.75rem;
@@ -149,7 +196,7 @@
     h2 span.num {
       color: var(--accent);
       font-family: ui-monospace, monospace;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
     p {
@@ -159,14 +206,25 @@
     }
 
     ul {
-      margin-left: 1.5rem;
+      list-style-type: none;
+      padding-left: 0;
       margin-bottom: 1rem;
-      color: #cbd5e1;
     }
 
     li {
+      position: relative;
+      padding-left: 1.5rem;
       margin-bottom: 0.5rem;
-      font-size: 0.95rem;
+      color: #cbd5e1;
+      font-size: 0.925rem;
+    }
+
+    li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
     }
 
     li strong {
@@ -178,126 +236,207 @@
       border: 1px solid rgba(245, 158, 11, 0.25);
       border-radius: 12px;
       padding: 1rem 1.25rem;
-      margin: 1rem 0;
-      font-size: 0.875rem;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+      color: #cbd5e1;
     }
 
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      transition: all 0.2s;
-    }
-
-    .back-btn:hover {
-      color: #ffffff;
-      transform: translateX(-3px);
+    .highlight-box strong {
+      color: #fbbf24;
     }
 
     footer {
       border-top: 1px solid var(--border);
       padding-top: 1.5rem;
       margin-top: 2rem;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       color: var(--muted);
       text-align: center;
+      width: 100%;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1.25rem;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      .nav-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <a href="./index.html" class="back-btn">&larr; Return to Arc Tracker</a>
+    <div class="nav-bar">
+      <a href="./index.html" class="back-btn">&larr; Return to Arc Tracker</a>
+      <div class="nav-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="https://github.com/mayank-pixel-cell/mayank" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
 
     <header>
       <div class="badge-row">
         <span class="badge-pill"><span class="badge-dot"></span> Terms &amp; Conditions</span>
-        <span class="badge-pill gold">Operative Protocol v2026.1</span>
+        <span class="badge-pill gold">Operative Protocol v2026.2</span>
+        <span class="badge-pill purple">Multi-User Governance</span>
       </div>
       <h1>Terms &amp; Conditions</h1>
       <p class="meta">
-        <strong>Effective Date:</strong> October 2026 &bull; 
-        <strong>Application:</strong> Arc Tracker 2026 (Web, Chrome Desktop PWA, Android, Windows &amp; iOS)
+        <strong>Effective Date:</strong> November 7, 2026 &bull; 
+        <strong>Application:</strong> Arc Tracker 2026 (Web, Chrome Desktop PWA, Android, Windows Desktop &amp; iOS) &bull;
+        <strong>Developer:</strong> Mayank / Arc Tracker Team
       </p>
     </header>
 
     <div class="summary-card">
       <h3><span>&bull;</span> Operative Covenant</h3>
-      <p>By registering, signing up, or initializing Arc Tracker for the first time, you agree to these Terms and Conditions. Arc Tracker is an airgapped, high-accountability discipline operating system designed for self-mastery, screen time moderation, and daily habit execution.</p>
+      <p>
+        By installing, registering, signing up, or initializing Arc Tracker, you agree to be bound by these Terms and Conditions. Arc Tracker is an airgapped, high-accountability discipline operating system designed for self-mastery, screen time moderation, and daily habit execution. If you do not agree to these terms, do not initialize or use the application.
+      </p>
     </div>
 
     <section>
       <h2><span class="num">01.</span> First-Time Registration &amp; Operative Identity</h2>
-      <p>When you create an account or set up your operative profile for the first time:</p>
+      <p>When you create a profile or set up your operative identity for the first time:</p>
       <ul>
-        <li><strong>Account Setup:</strong> You choose a call sign (Display Name), a unique handle (e.g. <code>@operative</code>), and an optional motto. You agree to provide accurate representation and acknowledge that your identity is tied to your local device state.</li>
-        <li><strong>Voluntary Commitment:</strong> You acknowledge that participation in the Winter Arc and Summer Arc protocols is voluntary, intended exclusively for self-improvement and productivity.</li>
-        <li><strong>Device Ownership:</strong> You confirm that you have the right and authority to install and run Arc Tracker on your personal hardware (PC, laptop, smartphone, or tablet).</li>
+        <li><strong>Account Setup:</strong> You choose a call sign (Display Name), a unique handle (e.g. <code>@operative</code>), and an optional lock-in motto. You agree that this identity is stored strictly locally on your device hardware.</li>
+        <li><strong>Voluntary Commitment:</strong> You acknowledge that participation in the Winter Arc, Summer Arc, and custom lock-in protocols is strictly voluntary, intended exclusively for personal productivity and self-discipline.</li>
+        <li><strong>Hardware Authority:</strong> You confirm that you have the right and legal authorization to install and operate Arc Tracker on your personal hardware (PC, laptop, smartphone, or tablet).</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">02.</span> Local Data Sovereignty &amp; Zero Tracking</h2>
-      <p>Our foundational architectural rule is total user privacy:</p>
+      <h2><span class="num">02.</span> Local Data Sovereignty &amp; Zero Exfiltration Covenant</h2>
+      <p>Our foundational architectural rule is total user privacy and local data sovereignty:</p>
       <ul>
-        <li><strong>Zero Data Exfiltration:</strong> 100% of your habits, daily check-ins, journal entries, streaks, and screen time telemetry remain strictly within your device's local storage (LocalStorage and IndexedDB).</li>
-        <li><strong>No Account Lock-in:</strong> We do not sell, rent, monetize, or transmit your behavioral data to external telemetry farms, advertisers, or third-party servers.</li>
-        <li><strong>Optional Cloud Sync:</strong> If you elect to connect Google Sign-In, sync payloads are encrypted and transferred solely between your own authenticated devices via Google Drive AppData folder or local peer bus.</li>
+        <li><strong>Zero Data Exfiltration:</strong> 100% of your habit completions, daily check-ins, journal reflections, streaks, and screen time records reside strictly within your local hardware storage (LocalStorage, IndexedDB, and Tauri Plugin Store).</li>
+        <li><strong>No Telemetry or Behavioral Tracking:</strong> We do not sell, rent, monetize, or transmit your behavioral patterns to external telemetry brokers, ad networks, or third-party servers.</li>
+        <li><strong>Network Firewall Protection:</strong> The application features an active client-side outbound firewall designed to intercept unauthorized network egress, guaranteeing a true air-gapped operating environment.</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">03.</span> Focus Mode &amp; Application Lockout Authorization</h2>
-      <p>Arc Tracker features strict dopamine defense mechanisms:</p>
+      <h2><span class="num">03.</span> Multi-User Account Governance &amp; Shared Terminals</h2>
+      <p>Arc Tracker features multi-user session management on a single hardware installation:</p>
       <ul>
-        <li><strong>Shield Enforcement:</strong> By initiating a Focus Session or enabling Strict Focus Mode, you explicitly authorize Arc Tracker to monitor foreground app titles and active browser tabs for blocked domains and distraction applications (such as social media, gaming, and streaming platforms).</li>
-        <li><strong>Lockout Compliance:</strong> During an active focus sprint, distracting applications and filtered URLs will be actively shielded or closed according to your custom blocklist rules.</li>
-        <li><strong>Emergency Override:</strong> Strict Mode may enforce a cooldown penalty to deter impulsive procrastination. You accept full responsibility for managing your focus schedules appropriately.</li>
+        <li><strong>Isolated Storage Partitions:</strong> Each operative profile on the device operates within an isolated scoped storage partition (<code>u:${userId}:*</code>). Habits, logs, reflections, and security credentials of one user are inaccessible to other profiles.</li>
+        <li><strong>Shared Terminal Responsibility:</strong> If you use Arc Tracker on a shared family, school, or workplace computer, you are solely responsible for setting an App Security PIN, locking your profile, and properly switching accounts to prevent unauthorized access by other physical users.</li>
+        <li><strong>Arc Gold Dual-Profile Allocation:</strong> Arc Gold VIP membership binds to up to two (2) authorized operative profiles per device installation (<code>MAX_AUTHORIZED_USERS = 2</code>).</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">04.</span> Arc Gold VIP &amp; Premium Features</h2>
-      <p>Arc Gold unlocks advanced cosmetic and customization capabilities:</p>
+      <h2><span class="num">04.</span> Focus Mode &amp; Application Lockout Authorization</h2>
+      <p>Arc Tracker features strict dopamine defense and application lockout mechanisms:</p>
       <ul>
-        <li><strong>Gold Benefits:</strong> Gold VIP members receive exclusive access to 4K widescreen wallpapers, custom avatar lining rings, Black &amp; White Monochrome mode, and advanced telemetry exports.</li>
-        <li><strong>Local Persistence:</strong> Gold licenses and trial statuses are stored securely on your device. Clearing browser cache without an exported backup may reset local VIP flags.</li>
-        <li><strong>No Recurring Hidden Charges:</strong> Arc Tracker does not employ deceptive auto-renewals or unexpected recurring billing.</li>
+        <li><strong>Process &amp; Window Monitoring Authorization:</strong> By starting a Focus Session or enabling Strict Focus Mode, you explicitly authorize Arc Tracker to inspect foreground window titles, process handles, and active browser tabs strictly in volatile RAM to detect distraction applications (e.g. social media, streaming, and gaming platforms).</li>
+        <li><strong>Lockout Enforcement:</strong> During active focus sprints, distracting applications and filtered URLs will be actively shielded, blocked, or minimized according to your user-configured blocklist.</li>
+        <li><strong>Strict Mode &amp; Emergency Cooldowns:</strong> Strict Mode enforces a mandatory cooldown penalty to deter impulsive procrastination. You accept full responsibility for configuring your blocklists and acknowledge that critical communication tools should remain allowlisted.</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">05.</span> Security PIN, Two-Factor Authentication &amp; Backups</h2>
-      <p>You are the sole custodian of your security credentials:</p>
+      <h2><span class="num">05.</span> Optional Cloud Sync &amp; End-to-End Encryption</h2>
+      <p>For users who elect to synchronize progress across multiple devices:</p>
+      <ul>
+        <li><strong>Opt-In Cloud Sync:</strong> Optional synchronization via Google Drive AppData folder or private peer server is disabled by default and requires explicit user activation.</li>
+        <li><strong>Client-Side Zero-Knowledge Encryption:</strong> Sync payloads are encrypted client-side using W3C WebCrypto (PBKDF2 SHA-256 and AES-GCM 256-bit) before leaving your hardware. Neither Google, cloud servers, nor the Arc Tracker team hold decryption keys.</li>
+        <li><strong>Sole Key Custody:</strong> You are the sole custodian of your encryption password and recovery keys. If you forget your passphrase, encrypted cloud backups cannot be recovered by anyone.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">06.</span> Leaderboards, Custom Groups &amp; Fair Execution</h2>
+      <p>Arc Tracker includes community leaderboards and groups unlocked at Level 10:</p>
+      <ul>
+        <li><strong>Fair Play Covenant:</strong> Progression (XP, levels, streak counts, and milestone badges) represents honest, daily execution. Falsifying completion through automated bot scripts, clock-tampering, or malicious payload manipulation violates this agreement.</li>
+        <li><strong>Operative Pseudonymity &amp; Conduct:</strong> Group interactions and leaderboards display your public operative handle (e.g. <code>@operative</code>) and motto. You agree not to select defamatory, obscene, hateful, or harassing handles or mottos.</li>
+        <li><strong>No Sensitive Data Broadcast:</strong> Only aggregate XP, streaks, and level ranks are shared with peers. Your private habit details, reflective notes, and application screen time are NEVER shared.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">07.</span> Arc Gold VIP &amp; Premium Features</h2>
+      <p>Arc Gold unlocks advanced aesthetic and performance capabilities:</p>
+      <ul>
+        <li><strong>Gold VIP Benefits:</strong> Gold members receive exclusive access to 4K widescreen (16:9) and mobile (9:16) wallpapers, custom avatar lining rings, Black &amp; White Monochrome mode, 120Hz ProMotion UI responsiveness, and advanced telemetry exports.</li>
+        <li><strong>Local Persistence:</strong> Gold licenses and trial statuses are stored securely on your local device. Always maintain an exported backup before clearing browser data or re-formatting drives.</li>
+        <li><strong>No Hidden Recurring Charges:</strong> Arc Tracker does not employ deceptive auto-renewals, unexpected credit card charges, or subscription traps.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">08.</span> Security PIN, Two-Factor Authentication &amp; Backups</h2>
+      <p>You are the sole custodian of your access credentials:</p>
       <ul>
         <li><strong>Passcode &amp; PIN Security:</strong> If you configure an App Security PIN or Two-Factor Authentication (2FA), you are responsible for maintaining knowledge of your PIN and safely recording your offline emergency backup recovery codes.</li>
-        <li><strong>Client-Side Encrypted Backups:</strong> Backup files are encrypted on your device using AES-256. If you forget your encryption password, data cannot be recovered by any third party due to zero-knowledge architecture.</li>
+        <li><strong>Anti-Spy Safeguards:</strong> The terminal provides randomized PIN keypad layouts and automated 45-second clipboard wipes to mitigate shoulder-surfing and credential theft.</li>
+        <li><strong>Client-Side Encrypted Backups (.arcenc):</strong> Backup files exported from the app are encrypted using AES-256. If you lose your password, data cannot be reconstructed by any third party.</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">06.</span> Fair Execution &amp; Community Integrity</h2>
-      <p>The spirit of the Arc is built upon personal integrity:</p>
+      <h2><span class="num">09.</span> Intellectual Property, Ownership &amp; Limited License</h2>
+      <p>Ownership and licensing boundaries are established as follows:</p>
       <ul>
-        <li><strong>Truthful Check-ins:</strong> Level progress, XP, streaks, and milestone badges represent your honest daily execution. Falsifying completion defeats the personal purpose of the system.</li>
-        <li><strong>Export &amp; Sharing:</strong> When utilizing the built-in Screen Time Share card or progression export, you grant Arc Tracker permission to render a local canvas image of your selected stats for social sharing.</li>
+        <li><strong>Proprietary Assets:</strong> All software code, visual styling, animations, soundscapes, 4K wallpapers, badges, and protocol specifications are the exclusive intellectual property of Arc Tracker and its developer.</li>
+        <li><strong>Limited Personal License:</strong> You are granted a personal, non-exclusive, revocable, non-transferable license to install and run Arc Tracker solely for personal productivity purposes.</li>
+        <li><strong>User Content Ownership:</strong> You retain 100% full, exclusive ownership of all habit descriptions, reflections, personal notes, and goal data created within the application.</li>
       </ul>
     </section>
 
     <section>
-      <h2><span class="num">07.</span> Disclaimer of Warranties &amp; Limitation of Liability</h2>
-      <p>Arc Tracker is provided "as is" and "as available" without warranties of any kind. Arc Tracker is an executive function and productivity aid and does not replace medical, psychiatric, or professional health advice.</p>
+      <h2><span class="num">10.</span> Medical, Psychological &amp; Wellness Disclaimer</h2>
+      <div class="highlight-box">
+        <strong>Important Health Notice:</strong> Arc Tracker is an executive function, habit formation, and personal productivity tool. It is <strong>NOT</strong> a medical device, psychiatric intervention, clinical addiction treatment tool, or medical diagnostic system. Arc Tracker does not provide medical, psychiatric, or psychological advice. Always consult qualified healthcare professionals regarding physical, psychological, or medical concerns.
+      </div>
     </section>
 
     <section>
-      <h2><span class="num">08.</span> Updates &amp; Contact</h2>
-      <p>We reserve the right to refine these Terms &amp; Conditions to reflect platform updates, new offline features, and OS compliance. Any modifications will be broadcast via the internal Notification Center.</p>
+      <h2><span class="num">11.</span> Disclaimer of Warranties &amp; Limitation of Liability</h2>
+      <p>
+        Arc Tracker is provided "AS IS" and "AS AVAILABLE" without warranties of any kind, whether express, implied, or statutory.
+      </p>
+      <ul>
+        <li>To the maximum extent permitted by applicable law, Arc Tracker and its developers disclaim all warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
+        <li>We shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of data, hardware failure, operating system conflicts, or missed focus quotas.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">12.</span> Account Termination &amp; Permanent Data Erasure</h2>
+      <p>
+        You may terminate this agreement at any time by executing a Factory Reset or Cryptographic Shred:
+      </p>
+      <ul>
+        <li><strong>Right to Complete Erasure:</strong> Inside <em>Settings &rarr; System &amp; Data</em>, selecting <em>Factory Reset</em> or the <em>Cryptographic Secure Shredder</em> immediately overwrites and destroys all local databases, PINs, and records.</li>
+        <li><strong>Zero Residual Footprint:</strong> Because no data is held on remote servers, local deletion results in the immediate, irreversible, and total destruction of all user records.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">13.</span> Amendments, Governing Law &amp; Inquiries</h2>
+      <p>
+        We reserve the right to refine these Terms &amp; Conditions to reflect platform updates, OS compliance, and security enhancements. Any modifications will be announced via the internal Notification Center.
+      </p>
       <div class="highlight-box">
-        <strong>Direct Inquiries:</strong> For questions regarding these Terms or the Privacy Policy, access the in-app FAQ center under <em>Settings &rarr; Additional Settings &rarr; FAQ &amp; Knowledge Center</em>.
+        <strong>Direct Inquiries:</strong> For questions regarding these Terms or the Privacy Policy, access the in-app FAQ center under <em>Settings &rarr; Additional Settings &rarr; FAQ &amp; Knowledge Center</em>, or submit an inquiry at our official GitHub repository: <a href="https://github.com/mayank-pixel-cell/mayank/issues" target="_blank" rel="noopener">https://github.com/mayank-pixel-cell/mayank/issues</a>.
       </div>
     </section>
 
