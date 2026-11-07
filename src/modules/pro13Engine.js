@@ -42,7 +42,7 @@ function syncEasterEggBadges() {
   if (!state.gam.bd) state.gam.bd = {};
   let found = [];
   try {
-    found = JSON.parse(localStorage.getItem('arc_secrets_found') || '[]');
+    found = JSON.parse(localStorage.getItem('arc_discovered_eggs') || localStorage.getItem('arc_secrets_found') || '[]');
   } catch(e) { found = []; }
   
   Object.keys(state.gam.bd).forEach(k => {

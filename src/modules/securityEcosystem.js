@@ -1,4 +1,22 @@
 window.ArcSecurity = (function() {
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeJsString(str) {
+    return String(str == null ? '' : str)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
   'use strict';
   let _pinBuffer = '';
   let _pendingQuarantinePayload = null;
@@ -167,8 +185,7 @@ window.ArcSecurity = (function() {
       return obj
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/javascript:/gi, '')
-        .replace(/data:text\/html/gi, '');
+        .replace(/(?:javascript|data|vbscript):/gi, '');
     }
     if (Array.isArray(obj)) {
       return obj.map(item => sanitizeObject(item, depth + 1));
@@ -748,7 +765,7 @@ window.ArcSecurity = (function() {
         if (u.origin === window.location.origin) return true;
         if (u.protocol === 'file:' || u.protocol === 'tauri:' || u.protocol === 'asset:') return true;
         if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return true;
-        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com') || u.hostname.endsWith('.supabase.co')) return true;
+        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com') || u.hostname.endsWith('.supabase.co') || u.hostname === 'api.github.com' || u.hostname === 'raw.githubusercontent.com' || u.hostname === 'github.com') return true;
         return false;
       } catch (_) {
         if (typeof url === 'string' && (url.startsWith('./') || url.startsWith('/') || url.startsWith('#'))) return true;
@@ -2007,8 +2024,17 @@ if not exist "!APP_DIR!\\Launch-ArcTracker.bat" (
     )
 )
 
-:: 3. Create Launch-ArcTracker.vbs if missing
+:: 3. Create Start-PreviewServer.vbs and Launch-ArcTracker.vbs if missing
 if exist "!APP_DIR!\\Launch-ArcTracker.bat" (
+    if not exist "!APP_DIR!\\Start-PreviewServer.vbs" (
+        echo Option Explicit > "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Dim WshShell, fso, scriptDir >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Set WshShell = CreateObject("WScript.Shell") >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Set fso = CreateObject("Scripting.FileSystemObject") >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo scriptDir = fso.GetParentFolderName(WScript.ScriptFullName) >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo WshShell.CurrentDirectory = scriptDir >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo WshShell.Run "cmd.exe /c npm.cmd run preview", 0, False >> "!APP_DIR!\\Start-PreviewServer.vbs"
+    )
     if not exist "!APP_DIR!\\Launch-ArcTracker.vbs" (
         echo Option Explicit > "!APP_DIR!\\Launch-ArcTracker.vbs"
         echo Dim WshShell, fso, scriptDir >> "!APP_DIR!\\Launch-ArcTracker.vbs"
@@ -3697,7 +3723,7 @@ window.ArcGold = (function() {
                       </span>
                     </div>
                     <p class="text-slate-200 text-xs mt-1 leading-relaxed">
-                      Your ${notice.isTrial ? 'first month free trial' : 'membership'} will expire on <b>${expiresFormatted}</b>. Choose an Annual (₹365/yr) or Lifetime (₹700) pass below to keep your 120Hz ProMotion Engine and Custom Wallpaper active.
+                      Your ${notice.isTrial ? 'first month free trial' : 'membership'} will expire on <b>${escapeHtml(expiresFormatted)}</b>. Choose an Annual (₹365/yr) or Lifetime (₹700) pass below to keep your 120Hz ProMotion Engine and Custom Wallpaper active.
                     </p>
                   </div>
                 </div>
@@ -4409,7 +4435,7 @@ window.ArcGold = (function() {
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div class="space-y-1">
                 <div class="font-bold ${state.isTrial ? 'text-emerald-300' : 'text-amber-300'} flex items-center gap-2">
-                  <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${state.orderId || 'ARC-GOLD-VIP'}
+                  <i class="fa-solid ${state.isTrial ? 'fa-gift' : 'fa-receipt'}"></i> Active License: ${escapeHtml(state.orderId || 'ARC-GOLD-VIP')}
                   ${state.isTrial ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase">First Month Free</span>' : ''}
                 </div>
                 <div class="text-[11px] text-slate-400">
@@ -4455,10 +4481,10 @@ window.ArcGold = (function() {
                         </div>
                         <div class="min-w-0">
                           <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                            <span>${users[0] ? users[0].name : 'Primary User'}</span>
+                            <span>${escapeHtml(users[0] ? users[0].name : 'Primary User')}</span>
                             <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">Slot 1</span>
                           </div>
-                          <div class="text-[10px] text-slate-400 truncate">${users[0] ? users[0].id : 'Primary Device'}</div>
+                          <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[0] ? users[0].id : 'Primary Device')}</div>
                         </div>
                       </div>
                       <span class="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">Primary</span>
@@ -4473,13 +4499,13 @@ window.ArcGold = (function() {
                           </div>
                           <div class="min-w-0">
                             <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                              <span>${users[1].name}</span>
+                              <span>${escapeHtml(users[1].name)}</span>
                               <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-mono">Slot 2</span>
                             </div>
-                            <div class="text-[10px] text-slate-400 truncate">${users[1].id}</div>
+                            <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[1].id)}</div>
                           </div>
                         </div>
-                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${users[1].id}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
+                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${escapeJsString(users[1].id)}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
                           <i class="fa-solid fa-xmark mr-1"></i> Remove
                         </button>
                       </div>
@@ -6559,15 +6585,31 @@ window.ArcScreenTimeStore = (function() {
   function getUniqueUserPairingInfo() {
     let uid = localStorage.getItem('arc_unique_user_id');
     if (!uid) {
-      const rnd = Math.random().toString(36).substring(2, 6).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
+      let rnd = '';
+      if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+        const bytes = new Uint8Array(6);
+        crypto.getRandomValues(bytes);
+        rnd = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('').toUpperCase().slice(0, 8);
+      } else if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        rnd = crypto.randomUUID().replace(/-/g, '').toUpperCase().slice(0, 8);
+      } else {
+        rnd = Date.now().toString(36).toUpperCase().slice(-8);
+      }
       uid = 'ARC-' + rnd;
       try { localStorage.setItem('arc_unique_user_id', uid); } catch(e) {}
     }
 
     let pairingCode = localStorage.getItem('arc_device_pairing_code');
     if (!pairingCode) {
-      const num = Math.floor(1000 + Math.random() * 9000);
-      pairingCode = 'ARC-' + num + '-MOB';
+      let numStr = '4829';
+      if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        numStr = crypto.randomUUID().replace(/\D/g, '').slice(0, 4) || '5821';
+      } else if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+        const b = new Uint8Array(2);
+        crypto.getRandomValues(b);
+        numStr = String(1000 + (((b[0] << 8) | b[1]) % 9000));
+      }
+      pairingCode = 'ARC-' + numStr + '-MOB';
       try { localStorage.setItem('arc_device_pairing_code', pairingCode); } catch(e) {}
     }
 
@@ -7357,7 +7399,7 @@ window.ArcScreenTimeStore = (function() {
           'Z'
         ].join(' ');
 
-        const safeName = app.name.replace(/'/g, "\\'");
+        const safeName = escapeJsString(app.name);
         const durationStr = formatDuration(app.secs);
         svgHtml += `
           <path d="${d}" fill="${app.color}" fill-opacity="0.88" stroke="#090d16" stroke-width="2" class="transition-all duration-200 cursor-pointer hover:fill-opacity-100 hover:filter hover:brightness-125"
@@ -7378,7 +7420,7 @@ window.ArcScreenTimeStore = (function() {
         const durationStr = formatDuration(app.secs);
         return `
           <div class="p-2 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 transition flex flex-col gap-1.5 cursor-pointer"
-               onmouseenter="ArcScreenTimeStore.hoverAppSlice('${app.name.replace(/'/g, "\\'")}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
+               onmouseenter="ArcScreenTimeStore.hoverAppSlice('${escapeJsString(app.name)}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
                onmouseleave="ArcScreenTimeStore.resetAppSlice()">
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center gap-2 truncate">

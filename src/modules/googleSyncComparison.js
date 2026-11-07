@@ -1,5 +1,14 @@
 (function() {
   'use strict';
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
 
   // Storage Keys
   const USER_KEY = 'arc_google_user';
@@ -791,7 +800,7 @@
             <div class="p-3 rounded-lg bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div class="flex items-center gap-3">
                 ${user.picture ? `
-                  <img src="${user.picture}" alt="${user.name}" class="w-10 h-10 rounded-full border border-cyan-400/50 shadow-md">
+                  <img src="${escapeHtml(user.picture)}" alt="${escapeHtml(user.name)}" class="w-10 h-10 rounded-full border border-cyan-400/50 shadow-md">
                 ` : `
                   <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center font-bold text-base">
                     ${(user.name || 'G').charAt(0).toUpperCase()}
@@ -799,10 +808,10 @@
                 `}
                 <div class="min-w-0">
                   <div class="font-bold text-xs text-white truncate flex items-center gap-1.5">
-                    ${user.name}
+                    ${escapeHtml(user.name)}
                     ${user.isDemo ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">DEMO MODE</span>' : '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>'}
                   </div>
-                  <div class="text-[11px] text-slate-400 truncate">${user.email}</div>
+                  <div class="text-[11px] text-slate-400 truncate">${escapeHtml(user.email)}</div>
                   <div class="text-[10px] text-cyan-400/90 font-mono mt-0.5">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i>Last synced: ${formatTimeAgo(lastSync)}
                   </div>
@@ -827,7 +836,7 @@
                 <span>Auto-sync when checking habits &amp; opening app</span>
               </label>
               <span class="text-[10px] font-mono text-slate-400">
-                ${deviceName} • ID: ${deviceId}
+                ${escapeHtml(deviceName)} • ID: ${escapeHtml(deviceId)}
               </span>
             </div>
 
@@ -870,7 +879,7 @@
                 To use your own Google Cloud Project, enter your OAuth 2.0 Client ID below:
               </p>
               <div class="flex gap-2">
-                <input id="arc-sync-client-id-in" type="text" value="${clientId}" placeholder="123456789-xyz.apps.googleusercontent.com" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono">
+                <input id="arc-sync-client-id-in" type="text" value="${escapeHtml(clientId)}" placeholder="123456789-xyz.apps.googleusercontent.com" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-mono">
                 <button type="button" onclick="ArcGoogleSync.saveCustomClientId()" class="px-3 py-1.5 rounded-lg bg-cyan-500 text-black font-bold text-xs hover:bg-cyan-400 transition active:scale-95">Save</button>
               </div>
               <div class="text-[10px] text-slate-400 space-y-1">

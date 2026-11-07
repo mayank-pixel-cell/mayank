@@ -189,7 +189,17 @@ class ArcMultiUserEngine {
       return;
     }
 
-    const newUserId = "usr_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 6);
+    let randSuffix = '';
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      randSuffix = crypto.randomUUID().replace(/-/g, '').slice(0, 6);
+    } else if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      const b = new Uint8Array(4);
+      crypto.getRandomValues(b);
+      randSuffix = Array.from(b, x => x.toString(16).padStart(2, '0')).join('').slice(0, 6);
+    } else {
+      randSuffix = Date.now().toString(36).slice(-4);
+    }
+    const newUserId = "usr_" + Date.now().toString(36) + "_" + randSuffix;
     const gradient = AVATAR_GRADIENTS[reg.length % AVATAR_GRADIENTS.length];
 
     const newOperative = {

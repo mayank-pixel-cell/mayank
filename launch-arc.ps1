@@ -49,10 +49,25 @@ if ($Mode -eq "tauri-dev" -or $Mode -eq "tauri-build") {
 }
 
 # 5. Launch Production Server + Native Frameless Desktop Window (Edge/Chrome --app mode)
-Write-Host "[2/3] Starting Arc Tracker Local Production Server on http://localhost:1420 ..." -ForegroundColor Green
-$ServerJob = Start-Process -FilePath "npm.cmd" -ArgumentList "run", "preview", "--", "--port", "1420", "--strictPort", "--host" -PassThru -WindowStyle Hidden
+$isResponding = $false
+try {
+    $req = [System.Net.WebRequest]::Create('http://localhost:1420')
+    $req.Timeout = 1000
+    $resp = $req.GetResponse()
+    $resp.Close()
+    $isResponding = $true
+} catch {
+    $isResponding = $false
+}
 
-Start-Sleep -Seconds 2
+$ServerJob = $null
+if (-not $isResponding) {
+    Write-Host "[2/3] Starting Arc Tracker Local Production Server on http://localhost:1420 ..." -ForegroundColor Green
+    $ServerJob = Start-Process -FilePath "npm.cmd" -ArgumentList "run", "preview", "--", "--port", "1420", "--strictPort", "--host" -PassThru -WindowStyle Hidden
+    Start-Sleep -Seconds 2
+} else {
+    Write-Host "[2/3] Arc Tracker Local Production Server is already active on http://localhost:1420" -ForegroundColor Green
+}
 
 $EdgePaths = @(
     "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe",
@@ -74,5 +89,9 @@ if ($AppBrowser) {
 }
 
 Write-Host ""
-Write-Host "Arc Tracker is running! Press Ctrl+C in this terminal when you are done to stop the background server." -ForegroundColor Green
-Wait-Process -Id $ServerJob.Id
+if ($ServerJob) {
+    Write-Host "Arc Tracker is running! Press Ctrl+C in this terminal when you are done to stop the background server." -ForegroundColor Green
+    Wait-Process -Id $ServerJob.Id
+} else {
+    Write-Host "Arc Tracker is running with background server!" -ForegroundColor Green
+}

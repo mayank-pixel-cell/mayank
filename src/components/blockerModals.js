@@ -492,40 +492,6 @@ export function renderBlockerModals() {
                 </div>
             </div>
         </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-bolt-lightning text-cyan-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">ProMotion 120Hz</div>
-                            <div class="text-[10px] text-slate-400">Uncapped ultra-smooth animations</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-image text-purple-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Custom Wallpaper</div>
-                            <div class="text-[10px] text-slate-400">Personalize with high-res photos</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-crown text-yellow-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">VIP Crown Badge</div>
-                            <div class="text-[10px] text-slate-400">Golden aura in header &amp; profile</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="space-y-2 pt-2">
-                    <button role="button" onclick="closeGoldStrictModal(); if(window.ArcGold){window.ArcGold.scrollToGoldCard();} playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/25 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-crown text-slate-950"></i> Upgrade To Arc Gold (from ₹1/day)
-                    </button>
-                    <button role="button" onclick="closeGoldStrictModal(); playSfx('modalClose')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition">
-                        Maybe Later
-                    </button>
-                </div>
-            </div>
-        </div>
 
                 <!-- ARC GOLD BLACK & WHITE MODE MODAL (ALIGNED WITH 100% FREE MANIFESTO) -->
         <div id="arc-gold-bw-upgrade-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
@@ -590,40 +556,6 @@ export function renderBlockerModals() {
                     </button>
                     <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); playSfx('modalClose')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
                         Close
-                    </button>
-                </div>
-            </div>
-        </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-brain text-cyan-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Dopamine Detox</div>
-                            <div class="text-[10px] text-slate-400">Eliminates hyper-stimulating interface hues</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-keyboard text-purple-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Instant Hotkey (Alt+B)</div>
-                            <div class="text-[10px] text-slate-400">Quick-switch between color and B&amp;W</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-crown text-amber-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Full Arc Gold Suite</div>
-                            <div class="text-[10px] text-slate-400">Strict Mode, 120Hz &amp; dual-user license</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="space-y-2 pt-1">
-                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); switchTab('settings'); if(window.ArcGold)window.ArcGold.scrollToGoldCard(); playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/30 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-crown text-slate-950"></i> Upgrade to Arc Gold (From ₹1/day)
-                    </button>
-                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); playSfx('modalClose')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
-                        Maybe Later
                     </button>
                 </div>
             </div>

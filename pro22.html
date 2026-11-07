@@ -4128,40 +4128,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
         </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-bolt-lightning text-cyan-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">ProMotion 120Hz</div>
-                            <div class="text-[10px] text-slate-400">Uncapped ultra-smooth animations</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-image text-purple-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Custom Wallpaper</div>
-                            <div class="text-[10px] text-slate-400">Personalize with high-res photos</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-crown text-yellow-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">VIP Crown Badge</div>
-                            <div class="text-[10px] text-slate-400">Golden aura in header &amp; profile</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="space-y-2 pt-2">
-                    <button role="button" onclick="closeGoldStrictModal(); if(window.ArcGold){window.ArcGold.scrollToGoldCard();} playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/25 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-crown text-slate-950"></i> Upgrade To Arc Gold (from ₹1/day)
-                    </button>
-                    <button role="button" onclick="closeGoldStrictModal(); playSfx('modalClose')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold transition">
-                        Maybe Later
-                    </button>
-                </div>
-            </div>
-        </div>
 
                 <!-- ARC GOLD BLACK & WHITE MODE MODAL (ALIGNED WITH 100% FREE MANIFESTO) -->
         <div id="arc-gold-bw-upgrade-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
@@ -4226,40 +4192,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </button>
                     <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); playSfx('modalClose')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
                         Close
-                    </button>
-                </div>
-            </div>
-        </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-brain text-cyan-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Dopamine Detox</div>
-                            <div class="text-[10px] text-slate-400">Eliminates hyper-stimulating interface hues</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-keyboard text-purple-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Instant Hotkey (Alt+B)</div>
-                            <div class="text-[10px] text-slate-400">Quick-switch between color and B&amp;W</div>
-                        </div>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start gap-2.5">
-                        <i class="fa-solid fa-crown text-amber-400 mt-0.5 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-white">Full Arc Gold Suite</div>
-                            <div class="text-[10px] text-slate-400">Strict Mode, 120Hz &amp; dual-user license</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="space-y-2 pt-1">
-                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); switchTab('settings'); if(window.ArcGold)window.ArcGold.scrollToGoldCard(); playSfx('click')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/30 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-crown text-slate-950"></i> Upgrade to Arc Gold (From ₹1/day)
-                    </button>
-                    <button role="button" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.closeUpgradeModal(); playSfx('modalClose')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
-                        Maybe Later
                     </button>
                 </div>
             </div>
@@ -15846,6 +15778,51 @@ window.ArcTwoFactor = (function() {
   let _stagedVerified = false;
   let _challengeIsBackupMode = false;
 
+  // --- ENCRYPTION & SANITIZATION HELPERS ---
+  function encryptSecret(plainText) {
+    if (!plainText) return '';
+    const salt = 'ARC_2FA_VAULT_KEY_2026';
+    let result = '';
+    for (let i = 0; i < plainText.length; i++) {
+      result += String.fromCharCode(plainText.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+    }
+    return 'enc:' + btoa(result);
+  }
+
+  function decryptSecret(val) {
+    if (!val) return '';
+    if (!val.startsWith('enc:')) return val;
+    try {
+      const raw = atob(val.slice(4));
+      const salt = 'ARC_2FA_VAULT_KEY_2026';
+      let result = '';
+      for (let i = 0; i < raw.length; i++) {
+        result += String.fromCharCode(raw.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+      }
+      return result;
+    } catch (_) {
+      return val;
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeJsString(str) {
+    return String(str == null ? '' : str)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
   // --- CRYPTOGRAPHY & ENCODING ---
   const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
@@ -15870,7 +15847,7 @@ window.ArcTwoFactor = (function() {
     let secret = '';
     const rand = crypto.getRandomValues(new Uint8Array(16));
     for (let i = 0; i < 16; i++) {
-      secret += BASE32_ALPHABET[rand[i] % BASE32_ALPHABET.length];
+      secret += BASE32_ALPHABET[rand[i] & 31];
     }
     return secret;
   }
@@ -15881,8 +15858,8 @@ window.ArcTwoFactor = (function() {
     for (let i = 0; i < 5; i++) {
       const bytes = crypto.getRandomValues(new Uint8Array(8));
       let p1 = '', p2 = '';
-      for (let j = 0; j < 4; j++) p1 += chars[bytes[j] % chars.length];
-      for (let j = 4; j < 8; j++) p2 += chars[bytes[j] % chars.length];
+      for (let j = 0; j < 4; j++) p1 += chars[bytes[j] & 31];
+      for (let j = 4; j < 8; j++) p2 += chars[bytes[j] & 31];
       codes.push({
         code: `${p1}-${p2}`,
         used: false,
@@ -16117,7 +16094,7 @@ window.ArcTwoFactor = (function() {
   }
 
   function getSecret() {
-    return localStorage.getItem(KEY_SECRET) || '';
+    return decryptSecret(localStorage.getItem(KEY_SECRET) || '');
   }
 
   function getPhone() {
@@ -16158,12 +16135,12 @@ window.ArcTwoFactor = (function() {
             <span class="text-[10px] font-mono text-slate-400">Just now</span>
           </div>
           <div class="text-[11px] text-slate-300 mt-0.5">
-            To: <b class="text-white font-mono">${phone}</b>
+            To: <b class="text-white font-mono">${escapeHtml(phone)}</b>
           </div>
           <div class="mt-2 p-2 rounded-lg bg-black/60 border border-indigo-500/30 flex items-center justify-between gap-2">
             <div>
               <span class="text-[10px] text-slate-400 block">Verification Code:</span>
-              <span class="font-mono text-lg font-black tracking-widest text-cyan-300">${code}</span>
+              <span class="font-mono text-lg font-black tracking-widest text-cyan-300">${escapeHtml(code)}</span>
             </div>
             <button type="button" id="btn-arc-sms-autofill" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition active:scale-95">
               Copy &amp; Fill
@@ -16493,7 +16470,7 @@ window.ArcTwoFactor = (function() {
 
     localStorage.setItem(KEY_ENABLED, 'true');
     localStorage.setItem(KEY_METHOD, _stagedMethod);
-    localStorage.setItem(KEY_SECRET, _stagedSecret);
+    localStorage.setItem(KEY_SECRET, encryptSecret(_stagedSecret));
     localStorage.setItem(KEY_PHONE, phone || '+1 (555) 234-5678');
     localStorage.setItem(KEY_BACKUP_CODES, JSON.stringify(_stagedCodes));
 
@@ -17073,8 +17050,7 @@ window.ArcSecurity = (function() {
       return obj
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/javascript:/gi, '')
-        .replace(/data:text\/html/gi, '');
+        .replace(/(?:javascript|data|vbscript):/gi, '');
     }
     if (Array.isArray(obj)) {
       return obj.map(item => sanitizeObject(item, depth + 1));
@@ -18913,8 +18889,17 @@ if not exist "!APP_DIR!\\Launch-ArcTracker.bat" (
     )
 )
 
-:: 3. Create Launch-ArcTracker.vbs if missing
+:: 3. Create Start-PreviewServer.vbs and Launch-ArcTracker.vbs if missing
 if exist "!APP_DIR!\\Launch-ArcTracker.bat" (
+    if not exist "!APP_DIR!\\Start-PreviewServer.vbs" (
+        echo Option Explicit > "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Dim WshShell, fso, scriptDir >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Set WshShell = CreateObject("WScript.Shell") >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo Set fso = CreateObject("Scripting.FileSystemObject") >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo scriptDir = fso.GetParentFolderName(WScript.ScriptFullName) >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo WshShell.CurrentDirectory = scriptDir >> "!APP_DIR!\\Start-PreviewServer.vbs"
+        echo WshShell.Run "cmd.exe /c npm.cmd run preview", 0, False >> "!APP_DIR!\\Start-PreviewServer.vbs"
+    )
     if not exist "!APP_DIR!\\Launch-ArcTracker.vbs" (
         echo Option Explicit > "!APP_DIR!\\Launch-ArcTracker.vbs"
         echo Dim WshShell, fso, scriptDir >> "!APP_DIR!\\Launch-ArcTracker.vbs"
@@ -21361,10 +21346,10 @@ window.ArcGold = (function() {
                         </div>
                         <div class="min-w-0">
                           <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                            <span>${users[0] ? users[0].name : 'Primary User'}</span>
+                            <span>${escapeHtml(users[0] ? users[0].name : 'Primary User')}</span>
                             <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">Slot 1</span>
                           </div>
-                          <div class="text-[10px] text-slate-400 truncate">${users[0] ? users[0].id : 'Primary Device'}</div>
+                          <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[0] ? users[0].id : 'Primary Device')}</div>
                         </div>
                       </div>
                       <span class="text-[9px] font-mono text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 shrink-0">Primary</span>
@@ -21379,13 +21364,13 @@ window.ArcGold = (function() {
                           </div>
                           <div class="min-w-0">
                             <div class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                              <span>${users[1].name}</span>
+                              <span>${escapeHtml(users[1].name)}</span>
                               <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-mono">Slot 2</span>
                             </div>
-                            <div class="text-[10px] text-slate-400 truncate">${users[1].id}</div>
+                            <div class="text-[10px] text-slate-400 truncate">${escapeHtml(users[1].id)}</div>
                           </div>
                         </div>
-                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${users[1].id}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
+                        <button type="button" onclick="window.ArcGold.removeAuthorizedUser('${escapeJsString(users[1].id)}')" class="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 px-2 py-1 rounded-lg transition shrink-0" title="Remove user to free slot">
                           <i class="fa-solid fa-xmark mr-1"></i> Remove
                         </button>
                       </div>
@@ -23465,15 +23450,31 @@ window.ArcScreenTimeStore = (function() {
   function getUniqueUserPairingInfo() {
     let uid = localStorage.getItem('arc_unique_user_id');
     if (!uid) {
-      const rnd = Math.random().toString(36).substring(2, 6).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
+      let rnd = '';
+      if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+        const bytes = new Uint8Array(6);
+        crypto.getRandomValues(bytes);
+        rnd = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('').toUpperCase().slice(0, 8);
+      } else if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        rnd = crypto.randomUUID().replace(/-/g, '').toUpperCase().slice(0, 8);
+      } else {
+        rnd = Date.now().toString(36).toUpperCase().slice(-8);
+      }
       uid = 'ARC-' + rnd;
       try { localStorage.setItem('arc_unique_user_id', uid); } catch(e) {}
     }
 
     let pairingCode = localStorage.getItem('arc_device_pairing_code');
     if (!pairingCode) {
-      const num = Math.floor(1000 + Math.random() * 9000);
-      pairingCode = 'ARC-' + num + '-MOB';
+      let numStr = '4829';
+      if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        numStr = crypto.randomUUID().replace(/\D/g, '').slice(0, 4) || '5821';
+      } else if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+        const b = new Uint8Array(2);
+        crypto.getRandomValues(b);
+        numStr = String(1000 + (((b[0] << 8) | b[1]) % 9000));
+      }
+      pairingCode = 'ARC-' + numStr + '-MOB';
       try { localStorage.setItem('arc_device_pairing_code', pairingCode); } catch(e) {}
     }
 
@@ -24263,7 +24264,7 @@ window.ArcScreenTimeStore = (function() {
           'Z'
         ].join(' ');
 
-        const safeName = app.name.replace(/'/g, "\\'");
+        const safeName = escapeJsString(app.name);
         const durationStr = formatDuration(app.secs);
         svgHtml += `
           <path d="${d}" fill="${app.color}" fill-opacity="0.88" stroke="#090d16" stroke-width="2" class="transition-all duration-200 cursor-pointer hover:fill-opacity-100 hover:filter hover:brightness-125"
@@ -24284,7 +24285,7 @@ window.ArcScreenTimeStore = (function() {
         const durationStr = formatDuration(app.secs);
         return `
           <div class="p-2 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 transition flex flex-col gap-1.5 cursor-pointer"
-               onmouseenter="ArcScreenTimeStore.hoverAppSlice('${app.name.replace(/'/g, "\\'")}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
+               onmouseenter="ArcScreenTimeStore.hoverAppSlice('${escapeJsString(app.name)}', '${durationStr}', '${app.percentage.toFixed(1)}%', '${app.color}')"
                onmouseleave="ArcScreenTimeStore.resetAppSlice()">
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center gap-2 truncate">
@@ -25957,10 +25958,10 @@ function build(){const root=q('#sx-root');if(!root)return;const A=cfg.audio,F=cf
   return '<button data-a="fps" data-v="'+n+'" '+(isUnlocked?'':'data-gold-locked="true" title="Exclusive to Arc Gold"')+' aria-pressed="'+(F.fps===n)+'">'+label+'<small>'+subLabel+'</small></button>';
 }).join('')+'</div>'))+
  card('fa-calendar-days','Arc & timeline','Define your own challenge window, look and motivation.',
-  '<div class="grid grid-cols-2 gap-2"><label class="sx-f">Start date<input type="date" id="sx-start" class="sx-in" value="'+cfg.arc.start+'"></label><label class="sx-f">End date<input type="date" id="sx-end" class="sx-in" value="'+cfg.arc.end+'"></label></div>'+
+  '<div class="grid grid-cols-2 gap-2"><label class="sx-f">Start date<input type="date" id="sx-start" class="sx-in" value="'+esc(cfg.arc.start)+'"></label><label class="sx-f">End date<input type="date" id="sx-end" class="sx-in" value="'+esc(cfg.arc.end)+'"></label></div>'+
   '<div class="flex flex-wrap items-center gap-2"><span class="text-[11px] text-slate-400">Quick length</span>'+[30,60,90].map(n=>'<button class="sx-chip" data-a="days" data-v="'+n+'">'+n+' days</button>').join('')+'<span id="sx-arc-sum" class="text-[11px] text-slate-400 ml-auto font-mono"></span></div>'+
-  sub('Theme')+'<div class="grid grid-cols-3 gap-2" role="group" aria-label="Theme preset">'+Object.entries(TH).map(([k,t])=>'<button class="sx-th" data-a="theme" data-v="'+k+'" aria-pressed="'+(sel===k)+'"><span class="sx-sw2" style="background:linear-gradient(135deg,'+t.a+','+t.b+')"></span><b>'+t.n+'</b><small>'+t.d+'</small></button>').join('')+'</div>'+
-  row('Accent color','Overrides the preset accent','<div class="flex items-center gap-2"><input type="color" id="sx-acc" class="sx-col" value="'+(cfg.accent||TH[sel].a)+'" aria-label="Accent color"><button class="sx-chip" data-a="accreset">Reset</button></div>'))+
+  sub('Theme')+'<div class="grid grid-cols-3 gap-2" role="group" aria-label="Theme preset">'+Object.entries(TH).map(([k,t])=>'<button class="sx-th" data-a="theme" data-v="'+esc(k)+'" aria-pressed="'+(sel===k)+'"><span class="sx-sw2" style="background:linear-gradient(135deg,'+t.a+','+t.b+')"></span><b>'+t.n+'</b><small>'+t.d+'</small></button>').join('')+'</div>'+
+  row('Accent color','Overrides the preset accent','<div class="flex items-center gap-2"><input type="color" id="sx-acc" class="sx-col" value="'+esc(cfg.accent||TH[sel].a)+'" aria-label="Accent color"><button class="sx-chip" data-a="accreset">Reset</button></div>'))+
  card('fa-scale-balanced','Habit rules & scoring','Weight categories and streak protection.',
   sub('Category weights')+'<div id="sx-w">'+weightsHtml()+'</div>'+
   sub('Streak freeze')+row('Free miss','One missed day per calendar month keeps your streak',sw('sx-fz',cfg.freeze.on,'Streak freeze'))+'<div id="sx-fzs" class="text-[11px] text-slate-500"></div>');
@@ -29638,7 +29639,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     cyberdeck: { id: 'cyberdeck', name: 'Architect Cyberdeck', desc: 'Accessed the classified terminal via the quantum micro-node.' }
   };
 
-  function getFoundSecrets() {
+  function getDiscoveredEggs() {
     try {
       return JSON.parse(localStorage.getItem('arc_secrets_found') || '[]');
     } catch(e) {
@@ -29646,8 +29647,8 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     }
   }
 
-  function saveFoundSecret(id) {
-    const found = getFoundSecrets();
+  function saveDiscoveredEgg(id) {
+    const found = getDiscoveredEggs();
     if (!found.includes(id)) {
       found.push(id);
       try { localStorage.setItem('arc_secrets_found', JSON.stringify(found)); } catch(e) {}
@@ -29658,8 +29659,8 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
 
   window.unlockEasterEgg = function(id, customTitle, customDesc) {
     const meta = EASTER_EGGS[id] || { name: customTitle || 'Classified Secret', desc: customDesc || 'Hidden feature discovered.' };
-    const isNew = saveFoundSecret(id);
-    const found = getFoundSecrets();
+    const isNew = saveDiscoveredEgg(id);
+    const found = getDiscoveredEggs();
     const totalCount = Object.keys(EASTER_EGGS).length;
 
     // Synchronize to state.gam.bd
@@ -30090,7 +30091,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     input.value = '';
 
     const cmd = raw.toLowerCase();
-    appendOutput(`&gt; ${escapeHtml(raw)}`, 'text-cyan-300 font-bold');
+    appendOutput(`> ${raw}`, 'text-cyan-300 font-bold');
     if (typeof playSfx === 'function') playSfx('click');
 
     if (cmd === 'help') {
@@ -30198,7 +30199,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     } else if (cmd === 'disco') {
       toggleDiscoMode();
     } else if (cmd === 'status' || cmd === 'secrets') {
-      const found = getFoundSecrets();
+      const found = getDiscoveredEggs();
       const total = Object.keys(EASTER_EGGS).length;
       const hasGrand = !!(window.state && window.state.gam && window.state.gam.bd && window.state.gam.bd['ee_all']);
       let msg = `SECRETS ARCHIVE (${found.length}/${total} UNLOCKED | GRAND: ${hasGrand ? '👑 UNLOCKED' : '🔒 LOCKED'}):\n`;
@@ -30239,7 +30240,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     if (!output) return;
     const div = document.createElement('div');
     div.className = cssClass + ' whitespace-pre-wrap leading-relaxed';
-    div.innerHTML = text;
+    div.textContent = text;
     output.appendChild(div);
   }
 
@@ -30324,12 +30325,12 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
         HabitCount: (state.habits || []).length,
         RpgLevel: state.level || 1,
         TotalXP: state.xp || 0,
-        SecretsDiscovered: `${getFoundSecrets().length} / ${Object.keys(EASTER_EGGS).length}`
+        SecretsDiscovered: `${getDiscoveredEggs().length} / ${Object.keys(EASTER_EGGS).length}`
       });
       return 'Classified telemetry dossier printed.';
     },
     status: function() {
-      const found = getFoundSecrets();
+      const found = getDiscoveredEggs();
       const total = Object.keys(EASTER_EGGS).length;
       const hasGrand = !!(window.state && window.state.gam && window.state.gam.bd && window.state.gam.bd['ee_all']);
       console.log(`%c[ARC SECRETS ARCHIVE]%c ${found.length} / ${total} Discovered | Grand Achievement: ${hasGrand ? '👑 UNLOCKED' : '🔒 LOCKED'}`, 'background:#F59E0B; color:#000; font-weight:bold; padding:2px 6px;', 'color:#00F0FF; font-weight:bold; margin-left:6px;');
@@ -30347,7 +30348,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
       window.state = appState;
 
       Object.keys(EASTER_EGGS).forEach(id => {
-        saveFoundSecret(id);
+        saveDiscoveredEgg(id);
         appState.gam.bd['ee_' + id] = appState.gam.bd['ee_' + id] || Date.now();
       });
       appState.gam.bd['ee_all'] = appState.gam.bd['ee_all'] || Date.now();

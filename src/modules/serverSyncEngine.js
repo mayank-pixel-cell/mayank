@@ -126,7 +126,17 @@ class ArcServerSyncEngine {
       }
       let uid = safeStorage.getItem(UID_KEY);
       if (!uid) {
-        uid = 'op_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+        let randStr = '';
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+          randStr = crypto.randomUUID().replace(/-/g, '').slice(0, 10);
+        } else if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+          const bytes = new Uint8Array(8);
+          crypto.getRandomValues(bytes);
+          randStr = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+        } else {
+          randStr = Date.now().toString(36);
+        }
+        uid = 'op_' + randStr + Date.now().toString(36);
         safeStorage.setItem(UID_KEY, uid);
       }
       return uid;

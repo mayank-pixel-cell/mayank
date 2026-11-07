@@ -281,7 +281,10 @@ class ArcNotificationEngine {
     features = [],
     version = APP_VERSION,
     silent = false,
-    appId = null
+    appId = null,
+    downloadUrl = null,
+    releaseUrl = null,
+    id = null
   }) {
     if (typeof window !== 'undefined' && window.ArcNotificationBlocker && typeof window.ArcNotificationBlocker.shouldBlock === 'function') {
       if (window.ArcNotificationBlocker.shouldBlock({ appId, category, title, message })) {
@@ -291,7 +294,7 @@ class ArcNotificationEngine {
     }
 
     const notif = {
-      id: 'notif-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      id: id || ('notif-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7)),
       version,
       title: title || 'New Notification',
       message: message || '',
@@ -300,7 +303,9 @@ class ArcNotificationEngine {
       icon,
       timestamp: Date.now(),
       read: false,
-      features
+      features,
+      downloadUrl,
+      releaseUrl
     };
 
     this.notifications.unshift(notif);
@@ -413,6 +418,9 @@ class ArcNotificationEngine {
 
   // Check for updates (can be called manually or in background)
   async checkForUpdates(manual = false) {
+    if (typeof window !== 'undefined' && window.ArcUpdateEngine && typeof window.ArcUpdateEngine.checkForUpdates === 'function') {
+      return window.ArcUpdateEngine.checkForUpdates({ manual });
+    }
     if (this.isChecking) return;
     this.isChecking = true;
 
@@ -655,7 +663,12 @@ class ArcNotificationEngine {
                 ${featuresHtml}
               </div>
             </div>
-            <div class="flex flex-col items-end gap-1 shrink-0">
+            <div class="flex flex-col items-end gap-1.5 shrink-0">
+              ${isUpdate ? `
+                <button type="button" onclick="if(window.ArcUpdateEngine)ArcUpdateEngine.showUpdateModalById('${n.id}'); if(window.playSfx)playSfx('click')" class="text-[10px] text-slate-950 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 font-extrabold px-2 py-0.5 rounded shadow-sm transition flex items-center gap-1 active:scale-95" title="View Update Details & Install">
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i> Update
+                </button>
+              ` : ''}
               ${isUnread ? `
                 <button type="button" onclick="ArcNotifications.markAsRead('${n.id}')" class="text-[10px] text-cyan-400 hover:text-cyan-300 font-semibold px-1.5 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800 transition" title="Mark as read">
                   Mark read

@@ -17,6 +17,42 @@ window.ArcTwoFactor = (function() {
   let _stagedVerified = false;
   let _challengeIsBackupMode = false;
 
+  // --- ENCRYPTION & SANITIZATION HELPERS ---
+  function encryptSecret(plainText) {
+    if (!plainText) return '';
+    const salt = 'ARC_2FA_VAULT_KEY_2026';
+    let result = '';
+    for (let i = 0; i < plainText.length; i++) {
+      result += String.fromCharCode(plainText.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+    }
+    return 'enc:' + btoa(result);
+  }
+
+  function decryptSecret(val) {
+    if (!val) return '';
+    if (!val.startsWith('enc:')) return val; // Legacy backward-compatibility
+    try {
+      const raw = atob(val.slice(4));
+      const salt = 'ARC_2FA_VAULT_KEY_2026';
+      let result = '';
+      for (let i = 0; i < raw.length; i++) {
+        result += String.fromCharCode(raw.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+      }
+      return result;
+    } catch (_) {
+      return val;
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   // --- CRYPTOGRAPHY & ENCODING ---
   const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
@@ -41,7 +77,7 @@ window.ArcTwoFactor = (function() {
     let secret = '';
     const rand = crypto.getRandomValues(new Uint8Array(16));
     for (let i = 0; i < 16; i++) {
-      secret += BASE32_ALPHABET[rand[i] % BASE32_ALPHABET.length];
+      secret += BASE32_ALPHABET[rand[i] & 31];
     }
     return secret;
   }
@@ -52,8 +88,8 @@ window.ArcTwoFactor = (function() {
     for (let i = 0; i < 5; i++) {
       const bytes = crypto.getRandomValues(new Uint8Array(8));
       let p1 = '', p2 = '';
-      for (let j = 0; j < 4; j++) p1 += chars[bytes[j] % chars.length];
-      for (let j = 4; j < 8; j++) p2 += chars[bytes[j] % chars.length];
+      for (let j = 0; j < 4; j++) p1 += chars[bytes[j] & 31];
+      for (let j = 4; j < 8; j++) p2 += chars[bytes[j] & 31];
       codes.push({
         code: `${p1}-${p2}`,
         used: false,
@@ -288,7 +324,7 @@ window.ArcTwoFactor = (function() {
   }
 
   function getSecret() {
-    return localStorage.getItem(KEY_SECRET) || '';
+    return decryptSecret(localStorage.getItem(KEY_SECRET) || '');
   }
 
   function getPhone() {
@@ -329,12 +365,12 @@ window.ArcTwoFactor = (function() {
             <span class="text-[10px] font-mono text-slate-400">Just now</span>
           </div>
           <div class="text-[11px] text-slate-300 mt-0.5">
-            To: <b class="text-white font-mono">${phone}</b>
+            To: <b class="text-white font-mono">${escapeHtml(phone)}</b>
           </div>
           <div class="mt-2 p-2 rounded-lg bg-black/60 border border-indigo-500/30 flex items-center justify-between gap-2">
             <div>
               <span class="text-[10px] text-slate-400 block">Verification Code:</span>
-              <span class="font-mono text-lg font-black tracking-widest text-cyan-300">${code}</span>
+              <span class="font-mono text-lg font-black tracking-widest text-cyan-300">${escapeHtml(code)}</span>
             </div>
             <button type="button" id="btn-arc-sms-autofill" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition active:scale-95">
               Copy &amp; Fill
@@ -664,7 +700,7 @@ window.ArcTwoFactor = (function() {
 
     localStorage.setItem(KEY_ENABLED, 'true');
     localStorage.setItem(KEY_METHOD, _stagedMethod);
-    localStorage.setItem(KEY_SECRET, _stagedSecret);
+    localStorage.setItem(KEY_SECRET, encryptSecret(_stagedSecret));
     localStorage.setItem(KEY_PHONE, phone || '+1 (555) 234-5678');
     localStorage.setItem(KEY_BACKUP_CODES, JSON.stringify(_stagedCodes));
 

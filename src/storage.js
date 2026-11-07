@@ -526,9 +526,16 @@ export function getOrCreateUserId() {
     : (typeof localStorage !== "undefined" ? localStorage : null);
 
   if (!storage) {
-    const fallbackUuid = (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function")
-      ? crypto.randomUUID()
-      : Math.random().toString(36).substring(2, 15);
+    let fallbackUuid;
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      fallbackUuid = crypto.randomUUID();
+    } else if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      fallbackUuid = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    } else {
+      fallbackUuid = Date.now().toString(36) + "0000";
+    }
     return `user_${fallbackUuid}`;
   }
 
@@ -581,12 +588,15 @@ export function getOrCreateUserId() {
     let uuid;
     if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
       uuid = crypto.randomUUID();
+    } else if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      const buf = new Uint8Array(16);
+      crypto.getRandomValues(buf);
+      buf[6] = (buf[6] & 0x0f) | 0x40; // RFC4122 v4
+      buf[8] = (buf[8] & 0x3f) | 0x80; // RFC4122 variant
+      const hex = Array.from(buf, b => b.toString(16).padStart(2, '0')).join('');
+      uuid = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
     } else {
-      uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        const r = (Math.random() * 16) | 0;
-        const v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
+      uuid = "00000000-0000-4000-8000-000000000000";
     }
 
     const newId = `user_${uuid}`;

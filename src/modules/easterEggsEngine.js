@@ -15,19 +15,22 @@
     cyberdeck: { id: 'cyberdeck', name: 'Architect Cyberdeck', desc: 'Accessed the classified terminal via the quantum micro-node.' }
   };
 
-  function getFoundSecrets() {
+  const STORAGE_KEY_EGGS = 'arc_discovered_eggs';
+
+  function getDiscoveredEggs() {
     try {
-      return JSON.parse(localStorage.getItem('arc_secrets_found') || '[]');
+      const val = localStorage.getItem(STORAGE_KEY_EGGS) || localStorage.getItem('arc_secrets_found') || '[]';
+      return JSON.parse(val);
     } catch(e) {
       return [];
     }
   }
 
-  function saveFoundSecret(id) {
-    const found = getFoundSecrets();
-    if (!found.includes(id)) {
-      found.push(id);
-      try { localStorage.setItem('arc_secrets_found', JSON.stringify(found)); } catch(e) {}
+  function saveDiscoveredEgg(id) {
+    const list = getDiscoveredEggs();
+    if (!list.includes(id)) {
+      list.push(id);
+      try { localStorage.setItem(STORAGE_KEY_EGGS, JSON.stringify(list)); } catch(e) {}
       return true;
     }
     return false;
@@ -35,8 +38,8 @@
 
   window.unlockEasterEgg = function(id, customTitle, customDesc) {
     const meta = EASTER_EGGS[id] || { name: customTitle || 'Classified Secret', desc: customDesc || 'Hidden feature discovered.' };
-    const isNew = saveFoundSecret(id);
-    const found = getFoundSecrets();
+    const isNew = saveDiscoveredEgg(id);
+    const found = getDiscoveredEggs();
     const totalCount = Object.keys(EASTER_EGGS).length;
 
     // Synchronize to state.gam.bd
@@ -467,7 +470,7 @@
     input.value = '';
 
     const cmd = raw.toLowerCase();
-    appendOutput(`&gt; ${escapeHtml(raw)}`, 'text-cyan-300 font-bold');
+    appendOutput(`> ${raw}`, 'text-cyan-300 font-bold');
     if (typeof playSfx === 'function') playSfx('click');
 
     if (cmd === 'help') {
@@ -575,7 +578,7 @@
     } else if (cmd === 'disco') {
       toggleDiscoMode();
     } else if (cmd === 'status' || cmd === 'secrets') {
-      const found = getFoundSecrets();
+      const found = getDiscoveredEggs();
       const total = Object.keys(EASTER_EGGS).length;
       const hasGrand = !!(window.state && window.state.gam && window.state.gam.bd && window.state.gam.bd['ee_all']);
       let msg = `SECRETS ARCHIVE (${found.length}/${total} UNLOCKED | GRAND: ${hasGrand ? '👑 UNLOCKED' : '🔒 LOCKED'}):\n`;
@@ -616,7 +619,7 @@
     if (!output) return;
     const div = document.createElement('div');
     div.className = cssClass + ' whitespace-pre-wrap leading-relaxed';
-    div.innerHTML = text;
+    div.textContent = text;
     output.appendChild(div);
   }
 
@@ -701,12 +704,12 @@
         HabitCount: (state.habits || []).length,
         RpgLevel: state.level || 1,
         TotalXP: state.xp || 0,
-        SecretsDiscovered: `${getFoundSecrets().length} / ${Object.keys(EASTER_EGGS).length}`
+        SecretsDiscovered: `${getDiscoveredEggs().length} / ${Object.keys(EASTER_EGGS).length}`
       });
       return 'Classified telemetry dossier printed.';
     },
     status: function() {
-      const found = getFoundSecrets();
+      const found = getDiscoveredEggs();
       const total = Object.keys(EASTER_EGGS).length;
       const hasGrand = !!(window.state && window.state.gam && window.state.gam.bd && window.state.gam.bd['ee_all']);
       console.log(`%c[ARC SECRETS ARCHIVE]%c ${found.length} / ${total} Discovered | Grand Achievement: ${hasGrand ? '👑 UNLOCKED' : '🔒 LOCKED'}`, 'background:#F59E0B; color:#000; font-weight:bold; padding:2px 6px;', 'color:#00F0FF; font-weight:bold; margin-left:6px;');
@@ -724,7 +727,7 @@
       window.state = appState;
 
       Object.keys(EASTER_EGGS).forEach(id => {
-        saveFoundSecret(id);
+        saveDiscoveredEgg(id);
         appState.gam.bd['ee_' + id] = appState.gam.bd['ee_' + id] || Date.now();
       });
       appState.gam.bd['ee_all'] = appState.gam.bd['ee_all'] || Date.now();
@@ -754,7 +757,7 @@
       return 'All 10 Easter eggs and the Extra Grand Achievement (Omniscient Architect) unlocked!';
     },
     reset: function() {
-      try { localStorage.removeItem('arc_secrets_found'); } catch(e) {}
+      try { localStorage.removeItem(STORAGE_KEY_EGGS); localStorage.removeItem('arc_secrets_found'); } catch(e) {}
       const appState = (typeof state !== 'undefined' ? state : (window.state || (window.state = {})));
       if (appState && appState.gam && appState.gam.bd) {
         Object.keys(appState.gam.bd).forEach(k => {

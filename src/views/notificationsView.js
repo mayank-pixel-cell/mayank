@@ -18,6 +18,10 @@ export function renderNotificationsView() {
                         <i class="fa-solid fa-arrows-rotate text-xs"></i>
                         <span>Check for Updates</span>
                     </button>
+                    <button role="button" onclick="if(window.ArcUpdateEngine)ArcUpdateEngine.simulateUpdate(); else ArcNotifications.simulateUpdate?.(); if(window.playSfx)playSfx('click')" class="px-3 py-2 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/40 text-indigo-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate a new update arrival to test notifications, top banner, and the startup update modal">
+                        <i class="fa-solid fa-vial text-xs"></i>
+                        <span>Test Update Alert</span>
+                    </button>
                     <button role="button" onclick="ArcNotifications.markAllAsRead()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Mark all notifications as read">
                         <i class="fa-solid fa-check-double text-xs"></i>
                         <span>Mark All Read</span>
@@ -28,9 +32,9 @@ export function renderNotificationsView() {
             <!-- STATS CARDS -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-cyan-400">
-                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Total Releases</div>
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Current Version</div>
                     <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.6.0</div>
-                    <div class="text-[10px] text-cyan-400 mt-0.5">Latest Engine Version</div>
+                    <div class="text-[10px] text-cyan-400 mt-0.5">Installed Engine</div>
                 </div>
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-amber-400">
                     <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Unread Alerts</div>
@@ -38,9 +42,9 @@ export function renderNotificationsView() {
                     <div class="text-[10px] text-slate-400 mt-0.5">Requiring Attention</div>
                 </div>
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-emerald-400">
-                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Update Pipeline</div>
+                    <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Update Detection</div>
                     <div class="text-lg sm:text-2xl font-black text-emerald-400 font-mono mt-1">ACTIVE</div>
-                    <div class="text-[10px] text-slate-400 mt-0.5">Auto-checks every 10m</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Live GitHub &amp; Startup Check</div>
                 </div>
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-purple-400">
                     <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">OS Push Alerts</div>

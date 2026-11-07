@@ -1,4 +1,5 @@
 import { renderHeaderNav } from "./components/headerNav.js";
+import { renderUpdateModal, renderUpdateTopBanner } from "./components/updateModal.js";
 import { renderTrackerView } from "./views/trackerView.js";
 import { renderRulesView } from "./views/rulesView.js";
 import { renderResultsView } from "./views/resultsView.js";
@@ -29,6 +30,7 @@ export function mountAppShell() {
 
   shell.innerHTML = [
     renderHeaderNav(),
+    renderUpdateTopBanner(),
     `<main class="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow">`,
     renderTrackerView(),
     renderRulesView(),
@@ -42,7 +44,8 @@ export function mountAppShell() {
     renderFooterHud(),
     renderShowcaseEasterModals(),
     renderSystemModals(),
-    renderMultiUserModal()
+    renderMultiUserModal(),
+    renderUpdateModal()
   ].join("\n");
 
   shell.dataset.mounted = "true";

@@ -1,6 +1,7 @@
 import "./styles/main.css";
 import { mountAppShell } from "./shell.js";
 import "./globals.js";
+import "./modules/settingsAccordion.js";
 
 // 1. Mount DOM synchronously so all IDs exist immediately
 mountAppShell();
@@ -16,6 +17,7 @@ import "./apptracker.js";
 import "./screentime.js";
 import "./terms.js";
 import "./notifications.js";
+import "./modules/updateEngine.js";
 import "./faq.js";
 import "./founder.js";
 import "./modules/leaderboardGroups.js";
@@ -43,6 +45,9 @@ async function bootstrapArcTracker() {
     if (typeof window.initApp === "function") {
       window.initApp();
     }
+    if (window.ArcNotifications && typeof window.ArcNotifications.init === "function") {
+      await window.ArcNotifications.init();
+    }
     if (window.ArcMultiUser && typeof window.ArcMultiUser.init === "function") {
       window.ArcMultiUser.init();
     }
@@ -51,6 +56,11 @@ async function bootstrapArcTracker() {
     }
     if (window.ArcServerSync && typeof window.ArcServerSync.init === "function") {
       window.ArcServerSync.init();
+    }
+
+    // Auto-check for updates and show update modal on startup if a new release is available
+    if (window.ArcUpdateEngine && typeof window.ArcUpdateEngine.init === "function") {
+      window.ArcUpdateEngine.init();
     }
 
     // Auto-sync active user data & screentime to Supabase on app load
