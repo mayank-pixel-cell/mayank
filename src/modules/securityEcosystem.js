@@ -748,7 +748,7 @@ window.ArcSecurity = (function() {
         if (u.origin === window.location.origin) return true;
         if (u.protocol === 'file:' || u.protocol === 'tauri:' || u.protocol === 'asset:') return true;
         if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return true;
-        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com')) return true;
+        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com') || u.hostname.endsWith('.supabase.co')) return true;
         return false;
       } catch (_) {
         if (typeof url === 'string' && (url.startsWith('./') || url.startsWith('/') || url.startsWith('#'))) return true;

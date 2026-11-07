@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
     <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync & External Cloud Server -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' http://localhost:4000 http://127.0.0.1:4000 ws://localhost:4000 https://*.arctracker.app https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' http://localhost:4000 http://127.0.0.1:4000 ws://localhost:4000 https://*.arctracker.app https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
     <!-- Strict Referrer Policy: Zero Outbound URL / State Leakage -->
     <meta name="referrer" content="no-referrer">
     <!-- Tailwind CSS -->
@@ -17466,7 +17466,7 @@ window.ArcSecurity = (function() {
         if (u.origin === window.location.origin) return true;
         if (u.protocol === 'file:' || u.protocol === 'tauri:' || u.protocol === 'asset:') return true;
         if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return true;
-        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com')) return true;
+        if (u.hostname === 'accounts.google.com' || u.hostname.endsWith('.googleapis.com') || u.hostname.endsWith('.supabase.co')) return true;
         return false;
       } catch (_) {
         if (typeof url === 'string' && (url.startsWith('./') || url.startsWith('/') || url.startsWith('#'))) return true;

@@ -1,3 +1,5 @@
+import { supabase } from "./supabaseClient.js";
+
 /**
  * ArcStorage — High-Durability 4-Tier Transactional Multi-User Storage Engine
  * Tier 1: Synchronous In-Memory Map (0ms read/write latency for UI)
@@ -473,10 +475,42 @@ class ArcDurableStorage {
   }
 }
 
+
+/**
+ * Upserts user habit and application data into Supabase cloud storage (user_data table).
+ * Local storage operations remain completely unaffected and sovereign.
+ *
+ * @param {string} userEmail
+ * @param {object|any} appStats
+ * @returns {Promise<{success: boolean, data?: any, error?: any}>}
+ */
+export async function syncUserData(userEmail, appStats) {
+  try {
+    const { data, error } = await supabase
+      .from('user_data')
+      .upsert({
+        email: userEmail,
+        data: appStats,
+        last_active: new Date().toISOString()
+      })
+
+    if (error) {
+      console.error('Error syncing to Supabase:', error.message)
+      return { success: false, error }
+    }
+    return { success: true, data }
+  } catch (err) {
+    console.error('Unexpected sync error:', err)
+    return { success: false, error: err }
+  }
+}
+
 const arcStorage = new ArcDurableStorage();
+arcStorage.syncUserData = syncUserData;
 if (typeof window !== "undefined") {
   window.ArcStorage = arcStorage;
   window.arcStorage = arcStorage;
+  window.syncUserData = syncUserData;
 }
 export { arcStorage, ArcDurableStorage };
 export default arcStorage;
