@@ -1572,12 +1572,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <!-- ACTION BUTTONS -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
-                <!-- Inbuilt Mobile Widgets Launcher -->
-                <button type="button" id="btn-header-phone-widgets" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 shrink-0" title="Open Phone Homescreen & Inbuilt Widgets">
-                    <i class="fa-solid fa-mobile-screen text-xs text-purple-400"></i>
-                    <span class="hidden xl:inline text-[11px]">Widgets</span>
-                </button>
-
                 <!-- Dedicated Notifications & System Updates Bell Icon -->
                 <button type="button" id="btn-header-notifications" onclick="ArcNotifications.toggleDrawer(); if(window.playSfx)playSfx('click')" class="relative w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Notifications &amp; System Updates (Press N)" aria-label="Notifications &amp; Updates" aria-expanded="false" aria-controls="arc-notifications-drawer">
                     <i id="arc-notif-bell-icon" class="fa-solid fa-bell text-sm transition-transform duration-200 group-hover:rotate-12"></i>
@@ -1597,14 +1591,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span id="header-profile-name" class="sr-only">Operative</span>
                     <span id="header-profile-user" class="sr-only">@operative</span>
                 </div>
-
-
-                <!-- Black & White Mode Toggle (Arc Gold VIP) -->
-                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • 100% Free Forever)">
-                    <i id="header-bw-icon" class="fa-solid fa-circle-half-stroke text-xs"></i>
-                    <span class="hidden xl:inline text-[11px]">B&amp;W</span>
-                    
-                </button>
 
 
                 <!-- Share Tracker Button -->
@@ -2417,6 +2403,50 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                                 <i id="header-arc-switch-icon" class="fa-solid fa-snowflake text-cyan-400 mr-2 text-sm"></i>
                                 <span id="arc-switch-btn-text">Switch to Winter Arc</span>
                             </button>
+                            <button role="button" id="settings-theme-bw-btn" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-zinc-300 hover:text-white shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400" aria-label="Toggle Black & White Mode" title="Toggle Black & White Mode (Alt+B)">
+                                <i id="settings-theme-bw-icon" class="fa-solid fa-circle-half-stroke text-zinc-300 mr-2 text-sm"></i>
+                                <span id="settings-theme-bw-label">B&amp;W Mode: Off</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLACK & WHITE MODE (DOPAMINE DETOX) (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+            <div id="settings-bw-mode-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-zinc-300 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-bw-mode-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-bw-mode-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-zinc-500/20 border border-zinc-400/40 flex items-center justify-center text-zinc-300 shrink-0">
+                            <i class="fa-solid fa-circle-half-stroke text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Black &amp; White Mode (Monochrome)</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-zinc-500/20 text-zinc-300 border border-zinc-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">DOPAMINE DETOX</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">100% FREE</span>
+                            <span id="settings-bw-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">DISABLED</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400" aria-label="Toggle Black & White Mode card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-bw-mode-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Converts the entire application interface into a high-contrast grayscale (E-Ink / Noir) display. Stripping away vibrant colors neutralizes algorithmic dopamine triggers, reducing screen addiction and sharpening deep focus.
+                        </p>
+                        <div class="flex items-center gap-3 flex-wrap pt-1">
+                            <button role="button" id="btn-settings-toggle-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 border border-slate-700 shadow-md">
+                                <i class="fa-solid fa-circle-half-stroke"></i>
+                                <span id="btn-settings-toggle-bw-text">Enable Black &amp; White Mode (Alt+B)</span>
+                            </button>
+                            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-400 text-xs">
+                                <i class="fa-solid fa-keyboard text-slate-500"></i>
+                                <span>Hotkey:</span>
+                                <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[10px] text-cyan-300">Alt + B</kbd>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2571,6 +2601,56 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             <button role="button" id="btn-toggle-perm-notif" onclick="ArcScreenTimeNotifier.toggle()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20">
                                 <i class="fa-solid fa-bell"></i>
                                 <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INBUILT MOBILE & HOMESCREEN WIDGETS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+            <div id="settings-widgets-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-widgets-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-widgets-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
+                            <i class="fa-solid fa-mobile-screen text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Phone Homescreen &amp; Inbuilt Widgets</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">MOBILE WIDGETS</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-purple-300 border border-purple-500/30 shrink-0">SIMULATOR READY</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400" aria-label="Toggle Phone Homescreen & Inbuilt Widgets card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-widgets-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Simulate and interact with your Android / iOS homescreen widgets directly on your device. Check off daily habits, monitor live screen time telemetry, and trigger 1-click focus mode timers.
+                        </p>
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1">
+                            <button role="button" id="btn-settings-open-widgets" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/30">
+                                <i class="fa-solid fa-mobile-screen text-cyan-300"></i>
+                                <span>Open Phone Widgets Simulator</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('habits'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-fire text-amber-400"></i>
+                                <span>Habits Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-hourglass-half text-purple-400"></i>
+                                <span>Screen Time Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-bullseye text-cyan-400"></i>
+                                <span>Focus Mode Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.refresh(); playSfx('click')" class="px-3 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 active:scale-95" title="Refresh widget telemetry">
+                                <i class="fa-solid fa-arrows-rotate text-slate-400"></i>
+                                <span>Refresh Telemetry</span>
                             </button>
                         </div>
                     </div>
@@ -6963,6 +7043,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
                 if (window.ArcCustomBackground && typeof window.ArcCustomBackground.renderCard === 'function') window.ArcCustomBackground.renderCard();
                 if (window.ArcLiquidGlass && typeof window.ArcLiquidGlass.updateUI === 'function') window.ArcLiquidGlass.updateUI();
+                if (window.ArcBlackWhiteMode && typeof window.ArcBlackWhiteMode.updateUI === 'function') window.ArcBlackWhiteMode.updateUI();
             }
         }
 
@@ -6994,12 +7075,16 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (faqBtn && category !== 'faq') faqBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
             if (founderBtn && category !== 'founder') founderBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
 
+            const bwCard = document.getElementById('settings-bw-mode-card');
+            const widgetsCard = document.getElementById('settings-widgets-card');
             const themeArcCard = document.getElementById('settings-theme-arc-card');
             const liquidGlassCard = document.getElementById('settings-liquid-glass-card');
             const customBgCard = document.getElementById('settings-custom-bg-card');
             const hwCard = document.getElementById('settings-hardware-profiler-card');
             if (category === 'all') {
                 if (themeArcCard) themeArcCard.style.display = '';
+                if (bwCard) bwCard.style.display = '';
+                if (widgetsCard) widgetsCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
                 if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
@@ -7018,6 +7103,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 }
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
+                if (bwCard) bwCard.style.display = '';
+                if (widgetsCard) widgetsCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
                 if (customBgCard) customBgCard.style.display = '';
                 if (hwCard) hwCard.style.display = '';
@@ -7033,6 +7120,8 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (termsCard) termsCard.style.display = 'none';
             } else if (category === 'account') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
+                if (bwCard) bwCard.style.display = 'none';
+                if (widgetsCard) widgetsCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
                 if (customBgCard) customBgCard.style.display = 'none';
                 if (hwCard) hwCard.style.display = 'none';
@@ -22050,10 +22139,41 @@ window.ArcBlackWhiteMode = (function() {
       }
     }
 
-    // 2. SettingsApp toggle
+    // 2. SettingsApp toggle & Settings View controls
     const sxToggle = document.getElementById('sx-bw-toggle');
     if (sxToggle) {
       sxToggle.checked = active;
+    }
+
+    const bwPill = document.getElementById('settings-bw-status-pill');
+    if (bwPill) {
+      bwPill.textContent = active ? 'ACTIVE' : 'DISABLED';
+      bwPill.className = active
+        ? 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 text-slate-950 font-bold border border-white shrink-0'
+        : 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0';
+    }
+
+    const setBwBtn = document.getElementById('btn-settings-toggle-bw');
+    const setBwBtnText = document.getElementById('btn-settings-toggle-bw-text');
+    if (setBwBtn) {
+      if (active) {
+        setBwBtn.className = 'px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-white/20';
+        if (setBwBtnText) setBwBtnText.textContent = 'Disable Black & White Mode (Alt+B)';
+      } else {
+        setBwBtn.className = 'px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 border border-slate-700 shadow-md';
+        if (setBwBtnText) setBwBtnText.textContent = 'Enable Black & White Mode (Alt+B)';
+      }
+    }
+
+    const themeBwBtn = document.getElementById('settings-theme-bw-btn');
+    const themeBwLabel = document.getElementById('settings-theme-bw-label');
+    if (themeBwLabel) {
+      themeBwLabel.textContent = active ? 'B&W Mode: Active' : 'B&W Mode: Off';
+    }
+    if (themeBwBtn) {
+      themeBwBtn.classList.toggle('border-zinc-300', active);
+      themeBwBtn.classList.toggle('bg-zinc-200', active && isLight);
+      themeBwBtn.classList.toggle('text-black', active && isLight);
     }
 
     // 3. PP12 drawer toggle
@@ -24892,8 +25012,8 @@ window.ArcScreenTimeStore = (function() {
 <script id="pp12-js">
 (function(){'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-const DEF={masterVolume:.8,sfxVolume:.9,ambientVolume:.6,sfxEnabled:true,tuningFreq:440,ambientPreset:'solar',sleepTimerMinutes:0,particleDensity:'medium',audioReactiveParticles:true,snowflakeParticles:true,winterParticleShape:'snowflakes',noiseOverlay:true,noiseOpacity:.15,performanceMode:false,theme:'deep-nebula',customAccentHex:'#8b5cf6',customAccentOn:false,mode:'dark',transition:'slide',pulsarBpm:90,focusWork:25,focusBreak:5,focusSyncAudio:true,focusBlocker:true};
-const TH={'lunar':['🌑','Lunar Monolith','#e5e7eb','#94a3b8','#0a0a0b'],'solar':['☀️','Solar Flare','#f59e0b','#ea580c','#14100b'],'deep-nebula':['🌌','Deep Nebula','#00f0ff','#d946ef','#060913'],'saturn':['🪐','Saturn Dust','#d4a937','#a8a29e','#1a1714'],'void':['🕳️','Void Black','#39ff14','#22c55e','#000000'],'aurora':['🌿','Aurora Teal','#34d399','#14b8a6','#04120e'],'cyber':['💠','Cyber Magenta','#ec4899','#8b5cf6','#12061a'],'crimson':['🔻','Crimson Void','#f43f5e','#be123c','#14060a']};
+const DEF={masterVolume:.8,sfxVolume:.9,ambientVolume:.6,sfxEnabled:true,tuningFreq:440,ambientPreset:'solar',sleepTimerMinutes:0,particleDensity:'medium',audioReactiveParticles:true,snowflakeParticles:true,winterParticleShape:'snowflakes',noiseOverlay:true,noiseOpacity:.15,performanceMode:false,theme:'default',customAccentHex:'#8b5cf6',customAccentOn:false,mode:'dark',transition:'slide',pulsarBpm:90,focusWork:25,focusBreak:5,focusSyncAudio:true,focusBlocker:true};
+const TH={};
 const PRE=[['solar','☀️','Solar Wind & Flares'],['lunar','🌙','Lunar Silence & Resonance'],['saturn','🪐','Saturn Rings Vibration'],['nebula','🌌','Deep Nebula Drift'],['pulsar','💫','Pulsar Rhythmic Pulses'],['blackhole','🕳️','Singularity Hum'],['cmb','📡','Cosmic Microwave Background']];
 const DN={low:30,medium:75,high:150,ultra:300,off:0};
 const S=()=>state.settings||DEF,save=()=>{try{saveToLocalStorage()}catch(e){}},toast=m=>{try{showToast(m)}catch(e){}};
@@ -25010,18 +25130,22 @@ function density(){if(typeof fxParticles==='undefined')return;const n=DN[S().par
  while(fxParticles.length>n)fxParticles.pop();while(fxParticles.length<n)fxParticles.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,radius:Math.random()*2.8+.5,vx:(Math.random()-.5)*.5,vy:Math.random()*.8+.3,alpha:Math.random()*.5+.2});if(window.__fxStart)window.__fxStart()}
 
 /* ---------- THEMES ---------- */
-function applyTheme(){const s=S(),t=TH[s.theme]||TH['deep-nebula'],r=document.documentElement,isLight=s.mode==='light';
+function applyTheme(){const s=S(),r=document.documentElement,isLight=s.mode==='light',isNight=s.mode==='night';
+ const isSummer=typeof state!=='undefined'&&state.currentArc==='summer';
+ const defAcc=isLight?'#0284c7':(isSummer?'#f59e0b':'#00f0ff');
+ const defAcc2=isLight?'#9333ea':(isSummer?'#ea580c':'#d946ef');
+ const defBg=isNight?'#000000':(isLight?'#f8fafc':(isSummer?'#0F0B03':'#060913'));
  const isBw=(window.ArcBlackWhiteMode&&window.ArcBlackWhiteMode.isEnabled())||r.classList.contains('arc-bw-mode');
- const acc=isBw?(isLight?'#000000':'#ffffff'):(s.customAccentOn?s.customAccentHex:(isLight?'#0284c7':t[2]));
- const acc2=isBw?(isLight?'#000000':'#ffffff'):t[3];
- const bg=isBw?(isLight?'#ffffff':'#000000'):(isLight?'#f8fafc':t[4]);
+ const acc=isBw?(isLight?'#000000':'#ffffff'):(s.customAccentOn?s.customAccentHex:defAcc);
+ const acc2=isBw?(isLight?'#000000':'#ffffff'):defAcc2;
+ const bg=isBw?(isLight?'#ffffff':'#000000'):defBg;
  r.style.setProperty('--pp-accent',acc);r.style.setProperty('--pp-accent2',acc2);r.style.setProperty('--pp-bg',bg);r.style.setProperty('--pp-noise-op',isLight?0.02:s.noiseOpacity);R.col=rgb(acc);
- if(isBw&&document.body)document.body.style.backgroundColor=bg;
+ if(document.body)document.body.style.backgroundColor=bg;
  if(window.__fxRGB!==undefined)window.__fxRGB=isBw?(isLight?'0, 0, 0':'255, 255, 255'):(isLight?'2, 132, 199':R.col);
- r.setAttribute('data-theme',s.theme);r.setAttribute('data-mode',s.mode);r.setAttribute('data-transition',s.transition);
- r.classList.toggle('dark',!isLight);r.classList.toggle('pp-themed',s.theme!=='deep-nebula'||!!s.customAccentOn);r.classList.toggle('pp-eco',!!s.performanceMode);
+ r.removeAttribute('data-theme');r.setAttribute('data-mode',s.mode);r.setAttribute('data-transition',s.transition);
+ r.classList.toggle('dark',!isLight);r.classList.toggle('pp-themed',!!s.customAccentOn);r.classList.toggle('pp-eco',!!s.performanceMode);
  const n=$('.bg-noise');if(n)n.style.display=s.noiseOverlay?'':'none';
- try{localStorage.setItem('arc_app_theme',s.theme);localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}
+ try{localStorage.removeItem('arc_app_theme');localStorage.setItem('arc_app_mode',s.mode);localStorage.setItem('arc_app_transition',s.transition)}catch(e){}
  const mb=$('#header-mode-toggle-btn'),mi=$('#header-mode-toggle-icon'),ml=$('#header-mode-toggle-label');
  if(mb&&mi){mi.className=isLight?'fa-solid fa-moon text-indigo-400':'fa-solid fa-sun text-amber-400';if(ml)ml.textContent=isLight?'Dark Mode':'Light Mode';mb.title=isLight?'Switch to Dark Mode':'Switch to Light Mode';mb.setAttribute('aria-label',isLight?'Switch to Dark Mode':'Switch to Light Mode')}
  try{if(typeof window.renderSpiderWeb==='function')window.renderSpiderWeb()}catch(e){};try{if(window.ArcCustomBackground&&typeof window.ArcCustomBackground.apply==='function')window.ArcCustomBackground.apply()}catch(e){};try{if(window.ArcBlackWhiteMode&&typeof window.ArcBlackWhiteMode.updateUI==='function')window.ArcBlackWhiteMode.updateUI()}catch(e){};try{if(window.ArcNotifications&&typeof window.ArcNotifications.renderUi==='function')window.ArcNotifications.renderUi()}catch(e){};try{if(window.ArcFaq&&typeof window.ArcFaq.render==='function')window.ArcFaq.render()}catch(e){}}
@@ -25090,7 +25214,6 @@ row('Pulsar Tempo','bpm pulse clock',sl('pulsarBpm',60,120,1,'Pulsar tempo in BP
 row('Sleep Timer','auto off focus fade minutes',sel('sleepTimerMinutes','Sleep timer',[[0,'Off'],[15,'15 mins'],[30,'30 mins'],[45,'45 mins'],[60,'60 mins']]))+
 row('Global Mute','silence',`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-mute-btn">Mute (M)</button>`)+
 `</section><section class="pp-panel" data-p="vis">`+
-row('Cosmic Theme','color palette lunar solar nebula saturn void aurora cyber crimson',`<div class="pp-grid">${Object.entries(TH).map(([k,v])=>`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-theme-set="${k}">${v[0]} ${v[1]}</button>`).join('')}</div>`)+
 row('Accent Color','custom hex picker',`<div class="flex gap-2 items-center"><input class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" type="color" data-set="customAccentHex" aria-label="Custom accent color" style="width:3rem;height:2rem"><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-acc-reset">Use theme accent</button></div>`)+
 row('Display Mode','dark light oled night glass',`<div class="grid grid-cols-3 gap-2">${[['dark','🌙 Dark'],['light','☀️ Light'],['night','🕶 OLED']].map(m=>`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-mode-set="${m[0]}">${m[1]}</button>`).join('')}</div>`)+
 row('Black &amp; White Mode','monochrome grayscale noir e-ink dopamine detox black white gold',`<div class="flex items-center justify-between gap-3"><div class="space-y-0.5"><div class="text-xs text-slate-300 flex items-center gap-1.5 font-bold"><span>Monochrome Display</span><span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 uppercase font-black">100% FREE</span></div><div class="text-[10px] text-slate-400">Strips all colors for radical dopamine detox</div></div><label class="sx-sw"><input type="checkbox" id="pp-bw-toggle" onchange="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle(this.checked)" aria-label="Toggle Black &amp; White Mode"><span></span></label></div>`)+
@@ -25211,7 +25334,7 @@ function bind(){D=$('#pp12-drawer');
   else if(b.dataset.modeSet){S().mode=b.dataset.modeSet;applyTheme();save();ui()}
   else if(b.dataset.rb!==undefined)rollback(+b.dataset.rb);
   else switch(b.id){case'pp-close':closeDrawer();break;case'pp-amb-btn':toggleAmb();break;case'pp-mute-btn':toggleAudioMute();break;
-   case'pp-acc-reset':S().customAccentOn=false;applyTheme();save();break;case'pp-f-go':F.run?fpause():fstart();break;case'pp-f-reset':if(typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive()){triggerStrictModeLockoutNotice();break;}fpause();F.mode='work';fset();fui();break;
+   case'pp-acc-reset':S().customAccentOn=false;applyTheme();save();ui();break;case'pp-f-go':F.run?fpause():fstart();break;case'pp-f-reset':if(typeof isFocusStrictModeActive === 'function' && isFocusStrictModeActive()){triggerStrictModeLockoutNotice();break;}fpause();F.mode='work';fset();fui();break;
    case'pp-exp-json':expJSON();break;case'pp-exp-csv':expCSV();break;case'pp-imp-btn':$('#pp-file').click();break;case'pp-rst-open':$('#pp-rst-in').value='';$('#pp-rst-go').disabled=true;openM('#pp-rst');break;case'pp-keys-open':openM('#pp-keys');break;
    case'btn-sec-run-scan':if(window.ArcSecurity)window.ArcSecurity.triggerAuditUi();break;
    case'btn-sec-clear-log':{const t=$('#sec-scan-terminal');if(t)t.innerHTML='<div class="text-slate-400">> Log cleared. System protected.</div>';}break;
@@ -25243,8 +25366,11 @@ case'btn-sec-toggle-pin':if(window.ArcSecurity)window.ArcSecurity.openPinModal()
  $('#pp-rst-in').addEventListener('input',e=>{$('#pp-rst-go').disabled=e.target.value!=='RESET'});
  $('#pp-rst-go').addEventListener('click',()=>{if($('#pp-rst-in').value!=='RESET')return;try{clearInterval(state.laptop.interval)}catch(e){}window.saveToLocalStorage=()=>{};try{localStorage.clear()}catch(e){}location.reload()})}
 function init(){const had=state.settings&&Object.keys(state.settings).length;ensureState();
- if(!had){try{const th=localStorage.getItem('arc_app_theme'),md=localStorage.getItem('arc_app_mode'),tr=localStorage.getItem('arc_app_transition'),s=state.settings;
-  if(th)s.theme=th==='cosmic'?'deep-nebula':th;if(md)s.mode=md;if(tr)s.transition=tr}catch(e){}if(!TH[state.settings.theme])state.settings.theme='deep-nebula'}
+ const cosmicThemes=['lunar','solar','deep-nebula','saturn','void','aurora','cyber','crimson','cosmic'];
+ try{const th=localStorage.getItem('arc_app_theme');if(cosmicThemes.includes(th))localStorage.removeItem('arc_app_theme');
+  const md=localStorage.getItem('arc_app_mode'),tr=localStorage.getItem('arc_app_transition'),s=state.settings;
+  if(md)s.mode=md;if(tr)s.transition=tr}catch(e){}
+ if(!state.settings.theme||cosmicThemes.includes(state.settings.theme))state.settings.theme='default';
  build();bind();tab('audio');applyTheme();density();rs();try{ensure()}catch(e){};addEventListener('resize',()=>{clearTimeout(rs._t);rs._t=setTimeout(rs,120)});fset();ui();snap();pRaf=requestAnimationFrame(frame);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!pRaf)pRaf=requestAnimationFrame(frame)});
  setInterval(()=>{snap();logLaptop();save();if(D.classList.contains('open')&&TAB==='focus')stats()},6e4)}
 
@@ -25253,7 +25379,7 @@ const _ps=window.playSfx;window.playSfx=function(){if(!S().sfxEnabled)return;ret
 const _th=window.toggleHabit;window.toggleHabit=function(id){const r=_th.apply(this,arguments);const h=state.habits.find(x=>x.id===id);if(h)announce(h.name+(h.completed?' completed':' marked incomplete'));if(D&&D.classList.contains('open')&&TAB==='habit')heat();return r};
 const _tm=window.toggleAudioMute;window.toggleAudioMute=function(){const r=_tm.apply(this,arguments);A.muted=isMuted;vol();ui();announce(isMuted?'Audio muted':'Audio unmuted');return r};
 /* Pro 12 API compatibility */
-window.setAppTheme=t=>{S().theme=t==='cosmic'?'deep-nebula':t;S().customAccentOn=false;applyTheme();save();ui()};
+window.setAppTheme=t=>{S().customAccentOn=false;applyTheme();save();ui()};
 window.setAppMode=m=>{S().mode=m;applyTheme();save();ui()};window.setAppTransition=t=>{S().transition=t;applyTheme();save();ui()};
 window.toggleLightDarkMode=()=>{const cur=S().mode||document.documentElement.getAttribute('data-mode')||'dark';const next=cur==='light'?'dark':'light';window.setAppMode(next);if(typeof playSfx==='function')playSfx('themeShift');if(typeof showToast==='function')showToast(next==='light'?'☀️ Elevated Light Mode Activated':'🌙 Cyberpunk Dark Mode Activated');};
 window.toggleCelestialAudio=toggleAmb;window.setCelestialVolume=v=>{S().ambientVolume=v/100;vol();save();ui()};
@@ -26656,8 +26782,24 @@ document.readyState==='loading'?document.addEventListener('DOMContentLoaded',ini
 (function(){'use strict';
 const S=window.SettingsApp,q=s=>document.querySelector(s),H=document.documentElement,sr=q('#sx-root');
 if(!S||!sr)return;
+const isAndroidBuild=()=>{
+  if(typeof window==='undefined')return false;
+  if(window.__IS_ANDROID_BUILD__===true||window.__ARC_ANDROID__===true)return true;
+  if(window.__IS_ANDROID_BUILD__===false||window.__ARC_ANDROID__===false)return false;
+  try{
+    const sp=new URLSearchParams(window.location.search);
+    if(sp.get('platform')==='android'||sp.get('build')==='android')return true;
+    if(sp.get('platform')==='desktop'||sp.get('build')==='desktop'||sp.get('build')==='web')return false;
+    if(localStorage.getItem('arc_platform')==='android')return true;
+    if(localStorage.getItem('arc_platform')==='desktop'||localStorage.getItem('arc_platform')==='web')return false;
+  }catch(_){}
+  const ua=(navigator.userAgent||navigator.vendor||window.opera||'');
+  const platform=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'';
+  return /Android/i.test(ua)||/Android/i.test(platform);
+};
+window.isAndroidBuild=isAndroidBuild;
 const C=()=>S.get().ax,sv=()=>S.save(),say=m=>{const l=q('#ax-live');if(l)l.textContent=m};
-const buzz=()=>{try{const n=[0,8,15,30][C().hap];if(n&&navigator.vibrate)navigator.vibrate(n)}catch(e){}};
+const buzz=()=>{if(!isAndroidBuild())return;try{const n=[0,8,15,30][C().hap];if(n&&navigator.vibrate)navigator.vibrate(n)}catch(e){}};
 let bat=null,rv=0;
 const sw=(id,l,on)=>'<label class="sx-sw"><input type="checkbox" id="'+id+'" aria-label="'+l+'"'+(on?' checked':'')+'><span></span></label>';
 const row=(l,h,c)=>'<div class="sx-row"><div class="min-w-0"><div class="text-xs font-semibold text-slate-200">'+l+'</div>'+(h?'<div class="text-[10px] text-slate-500">'+h+'</div>':'')+'</div>'+c+'</div>';
@@ -26669,22 +26811,24 @@ const ax=mk('div','ax-root');ax.className='space-y-4 mb-4';sr.parentNode.insertB
 const tint=mk('div','ax-tint'),sh=mk('div','ax-sh','<div><i class="fa-solid fa-shield-halved text-3xl"></i><p class="mt-2 text-xs">Hidden for privacy</p></div>'),live=mk('div','ax-live');
 live.className='sr-only';live.setAttribute('role','status');live.setAttribute('aria-live','polite');document.body.append(tint,sh,live);
 
-function look(){const a=C(),o=a.out.on,t=o?Math.max(a.text,125):a.text;H.style.fontSize=t===100?'':t+'%';H.classList.toggle('ax-hc',a.hc||o);H.classList.toggle('ax-rm',a.rm);document.body.classList.toggle('ax-reach',a.reach)}
+function look(){const a=C(),o=a.out.on,t=o?Math.max(a.text,125):a.text;H.style.fontSize=t===100?'':t+'%';H.classList.toggle('ax-hc',a.hc||o);H.classList.toggle('ax-rm',a.rm);document.body.classList.toggle('ax-reach',isAndroidBuild()&&!!a.reach)}
 function mode(){const a=C(),n=new Date(),m=n.getHours()*60+n.getMinutes(),t=s=>{const p=String(s).split(':');return(+p[0]||0)*60+(+p[1]||0)},f=t(a.night.from),e=t(a.night.to),
  night=a.night.on&&(f>e?m>=f||m<e:m>=f&&m<e),low=a.saver.on&&!!bat&&bat.level<.2&&!bat.charging;
  tint.style.background=night?'rgba(24,12,0,.24)':'transparent';
  if(low&&!a.saver.act){a.saver.act=true;a.saver.pf=S.get().fx.fps;fps(30);sv()}else if(!low&&a.saver.act){a.saver.act=false;fps(a.saver.pf);sv()}
  look();const on=[night&&'Night',low&&'Battery saver',a.out.on&&'Outdoor boost'].filter(Boolean),el=q('#ax-act');if(el)el.textContent=on.length?'Active mode: '+on.join(' + '):'No context mode active'}
 const press=(k,v)=>ax.querySelectorAll('[data-x='+k+']').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===v));
-function paint(){const a=C(),b=bat?Math.round(bat.level*100)+'% now':'battery status unavailable here';
+function paint(){const a=C(),b=bat?Math.round(bat.level*100)+'% now':'battery status unavailable here',isAndroid=isAndroidBuild();
  ax.innerHTML='<div id="ax-act" class="text-[11px] font-mono text-slate-400" role="status"></div>'+
  card('universal-access','Comfort & accessibility','Presets apply instantly. Text changes auto-revert unless you keep them.',
   row('Text size','Scales the whole app',seg('text','Text size',[[100,'100%'],[115,'115%'],[130,'130%'],[150,'150%']],a.text))+
   '<div id="ax-keep" class="hidden sx-hr text-[11px] text-slate-200"><span class="flex-1" id="ax-kt"></span><button class="sx-chip" data-x="keep">Keep</button></div>'+
   row('High contrast','Brighter text and borders',sw('ax-hc','High contrast',a.hc))+
   row('Reduce motion','Stops animations and particles',sw('ax-rm','Reduce motion',a.rm))+
-  row('Haptics','Vibration on taps, on supported phones','<div class="flex items-center gap-2">'+seg('hap','Haptic strength',[[0,'Off'],[1,'Subtle'],[2,'Normal'],[3,'Strong']],a.hap)+'<button class="sx-chip" data-x="feel">Feel it</button></div>')+
-  row('Reach mode','Moves content into thumb range',sw('ax-reach','Reach mode',a.reach)))+
+  (isAndroid ? (
+    row('Haptics','Vibration on taps, on supported phones','<div class="flex items-center gap-2">'+seg('hap','Haptic strength',[[0,'Off'],[1,'Subtle'],[2,'Normal'],[3,'Strong']],a.hap)+'<button class="sx-chip" data-x="feel">Feel it</button></div>')+
+    row('Reach mode','Moves content into thumb range',sw('ax-reach','Reach mode',a.reach))
+  ) : ''))+
  card('shield-halved','Privacy & sensors','Everything stays on this device. Nothing is uploaded.',
   row('Privacy shield','Hides the app when you switch away',sw('ax-shield','Privacy shield',a.shield))+
   row('Quiet & still','One tap turns sounds and particles off','<button class="sx-btn" data-x="quiet" id="ax-quiet"><i class="fa-solid fa-volume-xmark"></i> Mute all</button>'))+
@@ -26699,19 +26843,19 @@ function quiet(){['sx-a-click','sx-a-check','sx-a-fanfare','sx-fx-on'].forEach(i
 ax.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(!b)return;const x=b.dataset.x,v=+b.dataset.v,a=C();
  if(x==='text')tryText(v);
  else if(x==='keep'){clearTimeout(rv);q('#ax-keep').classList.add('hidden');sv();say('Text size kept')}
- else if(x==='hap'){a.hap=v;sv();press('hap',v);buzz()}
- else if(x==='feel')buzz();
+ else if(x==='hap'){if(isAndroidBuild()){a.hap=v;sv();press('hap',v);buzz()}}
+ else if(x==='feel'){if(isAndroidBuild())buzz()}
  else if(x==='quiet')quiet()});
-ax.addEventListener('change',e=>{const t=e.target,a=C(),m={'ax-hc':()=>a.hc=t.checked,'ax-rm':()=>a.rm=t.checked,'ax-reach':()=>a.reach=t.checked,'ax-shield':()=>a.shield=t.checked,'ax-night':()=>a.night.on=t.checked,'ax-saver':()=>a.saver.on=t.checked,'ax-out':()=>a.out.on=t.checked,'ax-nf':()=>a.night.from=t.value,'ax-nt':()=>a.night.to=t.value};
+ax.addEventListener('change',e=>{const t=e.target,a=C(),m={'ax-hc':()=>a.hc=t.checked,'ax-rm':()=>a.rm=t.checked,'ax-reach':()=>{if(isAndroidBuild())a.reach=t.checked},'ax-shield':()=>a.shield=t.checked,'ax-night':()=>a.night.on=t.checked,'ax-saver':()=>a.saver.on=t.checked,'ax-out':()=>a.out.on=t.checked,'ax-nf':()=>a.night.from=t.value,'ax-nt':()=>a.night.to=t.value};
  if(!m[t.id])return;m[t.id]();sv();mode();say((t.getAttribute('aria-label')||'Setting')+(t.type==='checkbox'?(t.checked?' on':' off'):' updated'))});
-document.addEventListener('click',e=>{if(e.target.closest('button,label,select,input'))buzz()},true);
+document.addEventListener('click',e=>{if(isAndroidBuild()&&e.target.closest('button,label,select,input'))buzz()},true);
 document.addEventListener('visibilitychange',()=>{sh.style.display=C().shield&&document.hidden?'grid':'none'});
 addEventListener('pagehide',()=>{if(C().shield)sh.style.display='grid'});
 
 /* Ask Settings: intent search, recents, deep links (#s=id) */
-const X=[['text','Text size','font bigger larger smaller zoom read size scale','[data-x=text]'],['hc','High contrast','contrast readable sunlight glare clarity','#ax-hc'],['rm','Reduce motion','animation motion dizzy still calm','#ax-rm'],['hap','Haptic feedback','vibrate vibration buzz touch feel','[data-x=hap]'],['reach','Reach mode (one-handed)','one hand thumb reach lower bottom big phone','#ax-reach'],['shield','Privacy shield','privacy hide blur recents switch lock','#ax-shield'],['quiet','Quiet & still','mute silence quiet stop sound particles pause','#ax-quiet'],['night','Night mode','night evening dim sleep bedtime schedule time','#ax-night'],['saver','Battery saver','battery power drain low save fps charge','#ax-saver'],['out','Outdoor boost','outside outdoor sun sunlight bright glare','#ax-out'],
+const X=[['text','Text size','font bigger larger smaller zoom read size scale','[data-x=text]'],['hc','High contrast','contrast readable sunlight glare clarity','#ax-hc'],['rm','Reduce motion','animation motion dizzy still calm','#ax-rm'],...(isAndroidBuild()?[['hap','Haptic feedback','vibrate vibration buzz touch feel','[data-x=hap]'],['reach','Reach mode (one-handed)','one hand thumb reach lower bottom big phone','#ax-reach']]:[]),['shield','Privacy shield','privacy hide blur recents switch lock','#ax-shield'],['quiet','Quiet & still','mute silence quiet stop sound particles pause','#ax-quiet'],['night','Night mode','night evening dim sleep bedtime schedule time','#ax-night'],['saver','Battery saver','battery power drain low save fps charge','#ax-saver'],['out','Outdoor boost','outside outdoor sun sunlight bright glare','#ax-out'],
 ['vol','Master volume','volume loud sound audio quiet','#sx-vol'],['fx','Particle canvas','particles effects canvas animation performance lag','#sx-fx-on'],['fps','Frame rate cap','fps frame smooth battery 30 60 120 200 max hz refresh','[data-a=fps]'],['theme','Theme & accent','theme color dark winter summer cyberpunk accent look','[data-a=theme]'],['arc','Arc dates','arc start end date days challenge window','#sx-start'],['quotes','My quotes','quote motivation custom','#sx-qt'],['weights','Category weights','weight category points score habit','#sx-w'],['order','Checklist order','reorder order habit list move sort','#sx-ho'],['freeze','Streak freeze','streak freeze miss skip protect','#sx-fz'],['export','Export backup','backup export download save data json','[data-a=export]'],['import','Import backup','restore import upload json','#json-sync-input'],['clear','Clear all data','delete wipe reset erase factory clear','[data-a=clear]']];
-const V={text:()=>C().text+'%',hc:()=>C().hc?'On':'Off',rm:()=>C().rm?'On':'Off',hap:()=>['Off','Subtle','Normal','Strong'][C().hap],reach:()=>C().reach?'On':'Off',shield:()=>C().shield?'On':'Off',night:()=>C().night.on?'On':'Off',saver:()=>C().saver.on?'On':'Off',out:()=>C().out.on?'On':'Off',vol:()=>S.get().audio.volume+'%',fx:()=>S.get().fx.enabled?'On':'Off',fps:()=>S.get().fx.fps===200?'Max':S.get().fx.fps+' FPS',theme:()=>S.get().theme||'winter',freeze:()=>S.get().freeze.on?'On':'Off'};
+const V={text:()=>C().text+'%',hc:()=>C().hc?'On':'Off',rm:()=>C().rm?'On':'Off',hap:()=>isAndroidBuild()?['Off','Subtle','Normal','Strong'][C().hap]:'N/A',reach:()=>isAndroidBuild()?(C().reach?'On':'Off'):'N/A',shield:()=>C().shield?'On':'Off',night:()=>C().night.on?'On':'Off',saver:()=>C().saver.on?'On':'Off',out:()=>C().out.on?'On':'Off',vol:()=>S.get().audio.volume+'%',fx:()=>S.get().fx.enabled?'On':'Off',fps:()=>S.get().fx.fps===200?'Max':S.get().fx.fps+' FPS',theme:()=>S.get().theme||'winter',freeze:()=>S.get().freeze.on?'On':'Off'};
 const AUTO=[[/outside|outdoor|sun|glare/,'out','Outdoor boost'],[/night|evening|bed|sleep/,'night','Night mode'],[/battery|low power|drain/,'saver','Battery saver']];
 const st=w=>w.length>3?w.replace(/s$/,''):w,toks=s=>s.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w.length>1).map(st);
 function find(s){const T=toks(s);return X.map(x=>{const t=toks(x[1]),k=toks(x[2]);let n=0;T.forEach(w=>{if(t.includes(w))n+=3;if(k.includes(w))n+=3;else if(k.some(z=>z.length>3&&(z.startsWith(w)||w.startsWith(z))))n+=1});return[n,x]}).filter(r=>r[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,5).map(r=>r[1])}

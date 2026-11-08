@@ -1,8 +1,24 @@
 (function(){'use strict';
 const S=window.SettingsApp,q=s=>document.querySelector(s),H=document.documentElement,sr=q('#sx-root');
 if(!S||!sr)return;
+const isAndroidBuild=()=>{
+  if(typeof window==='undefined')return false;
+  if(window.__IS_ANDROID_BUILD__===true||window.__ARC_ANDROID__===true)return true;
+  if(window.__IS_ANDROID_BUILD__===false||window.__ARC_ANDROID__===false)return false;
+  try{
+    const sp=new URLSearchParams(window.location.search);
+    if(sp.get('platform')==='android'||sp.get('build')==='android')return true;
+    if(sp.get('platform')==='desktop'||sp.get('build')==='desktop'||sp.get('build')==='web')return false;
+    if(localStorage.getItem('arc_platform')==='android')return true;
+    if(localStorage.getItem('arc_platform')==='desktop'||localStorage.getItem('arc_platform')==='web')return false;
+  }catch(_){}
+  const ua=(navigator.userAgent||navigator.vendor||window.opera||'');
+  const platform=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'';
+  return /Android/i.test(ua)||/Android/i.test(platform);
+};
+window.isAndroidBuild=isAndroidBuild;
 const C=()=>S.get().ax,sv=()=>S.save(),say=m=>{const l=q('#ax-live');if(l)l.textContent=m};
-const buzz=()=>{try{const n=[0,8,15,30][C().hap];if(n&&navigator.vibrate)navigator.vibrate(n)}catch(e){}};
+const buzz=()=>{if(!isAndroidBuild())return;try{const n=[0,8,15,30][C().hap];if(n&&navigator.vibrate)navigator.vibrate(n)}catch(e){}};
 let bat=null,rv=0;
 const sw=(id,l,on)=>'<label class="sx-sw"><input type="checkbox" id="'+id+'" aria-label="'+l+'"'+(on?' checked':'')+'><span></span></label>';
 const row=(l,h,c)=>'<div class="sx-row"><div class="min-w-0"><div class="text-xs font-semibold text-slate-200">'+l+'</div>'+(h?'<div class="text-[10px] text-slate-500">'+h+'</div>':'')+'</div>'+c+'</div>';
@@ -14,22 +30,24 @@ const ax=mk('div','ax-root');ax.className='space-y-4 mb-4';sr.parentNode.insertB
 const tint=mk('div','ax-tint'),sh=mk('div','ax-sh','<div><i class="fa-solid fa-shield-halved text-3xl"></i><p class="mt-2 text-xs">Hidden for privacy</p></div>'),live=mk('div','ax-live');
 live.className='sr-only';live.setAttribute('role','status');live.setAttribute('aria-live','polite');document.body.append(tint,sh,live);
 
-function look(){const a=C(),o=a.out.on,t=o?Math.max(a.text,125):a.text;H.style.fontSize=t===100?'':t+'%';H.classList.toggle('ax-hc',a.hc||o);H.classList.toggle('ax-rm',a.rm);document.body.classList.toggle('ax-reach',a.reach)}
+function look(){const a=C(),o=a.out.on,t=o?Math.max(a.text,125):a.text;H.style.fontSize=t===100?'':t+'%';H.classList.toggle('ax-hc',a.hc||o);H.classList.toggle('ax-rm',a.rm);document.body.classList.toggle('ax-reach',isAndroidBuild()&&!!a.reach)}
 function mode(){const a=C(),n=new Date(),m=n.getHours()*60+n.getMinutes(),t=s=>{const p=String(s).split(':');return(+p[0]||0)*60+(+p[1]||0)},f=t(a.night.from),e=t(a.night.to),
  night=a.night.on&&(f>e?m>=f||m<e:m>=f&&m<e),low=a.saver.on&&!!bat&&bat.level<.2&&!bat.charging;
  tint.style.background=night?'rgba(24,12,0,.24)':'transparent';
  if(low&&!a.saver.act){a.saver.act=true;a.saver.pf=S.get().fx.fps;fps(30);sv()}else if(!low&&a.saver.act){a.saver.act=false;fps(a.saver.pf);sv()}
  look();const on=[night&&'Night',low&&'Battery saver',a.out.on&&'Outdoor boost'].filter(Boolean),el=q('#ax-act');if(el)el.textContent=on.length?'Active mode: '+on.join(' + '):'No context mode active'}
 const press=(k,v)=>ax.querySelectorAll('[data-x='+k+']').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===v));
-function paint(){const a=C(),b=bat?Math.round(bat.level*100)+'% now':'battery status unavailable here';
+function paint(){const a=C(),b=bat?Math.round(bat.level*100)+'% now':'battery status unavailable here',isAndroid=isAndroidBuild();
  ax.innerHTML='<div id="ax-act" class="text-[11px] font-mono text-slate-400" role="status"></div>'+
  card('universal-access','Comfort & accessibility','Presets apply instantly. Text changes auto-revert unless you keep them.',
   row('Text size','Scales the whole app',seg('text','Text size',[[100,'100%'],[115,'115%'],[130,'130%'],[150,'150%']],a.text))+
   '<div id="ax-keep" class="hidden sx-hr text-[11px] text-slate-200"><span class="flex-1" id="ax-kt"></span><button class="sx-chip" data-x="keep">Keep</button></div>'+
   row('High contrast','Brighter text and borders',sw('ax-hc','High contrast',a.hc))+
   row('Reduce motion','Stops animations and particles',sw('ax-rm','Reduce motion',a.rm))+
-  row('Haptics','Vibration on taps, on supported phones','<div class="flex items-center gap-2">'+seg('hap','Haptic strength',[[0,'Off'],[1,'Subtle'],[2,'Normal'],[3,'Strong']],a.hap)+'<button class="sx-chip" data-x="feel">Feel it</button></div>')+
-  row('Reach mode','Moves content into thumb range',sw('ax-reach','Reach mode',a.reach)))+
+  (isAndroid ? (
+    row('Haptics','Vibration on taps, on supported phones','<div class="flex items-center gap-2">'+seg('hap','Haptic strength',[[0,'Off'],[1,'Subtle'],[2,'Normal'],[3,'Strong']],a.hap)+'<button class="sx-chip" data-x="feel">Feel it</button></div>')+
+    row('Reach mode','Moves content into thumb range',sw('ax-reach','Reach mode',a.reach))
+  ) : ''))+
  card('shield-halved','Privacy & sensors','Everything stays on this device. Nothing is uploaded.',
   row('Privacy shield','Hides the app when you switch away',sw('ax-shield','Privacy shield',a.shield))+
   row('Quiet & still','One tap turns sounds and particles off','<button class="sx-btn" data-x="quiet" id="ax-quiet"><i class="fa-solid fa-volume-xmark"></i> Mute all</button>'))+
@@ -44,19 +62,19 @@ function quiet(){['sx-a-click','sx-a-check','sx-a-fanfare','sx-fx-on'].forEach(i
 ax.addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(!b)return;const x=b.dataset.x,v=+b.dataset.v,a=C();
  if(x==='text')tryText(v);
  else if(x==='keep'){clearTimeout(rv);q('#ax-keep').classList.add('hidden');sv();say('Text size kept')}
- else if(x==='hap'){a.hap=v;sv();press('hap',v);buzz()}
- else if(x==='feel')buzz();
+ else if(x==='hap'){if(isAndroidBuild()){a.hap=v;sv();press('hap',v);buzz()}}
+ else if(x==='feel'){if(isAndroidBuild())buzz()}
  else if(x==='quiet')quiet()});
-ax.addEventListener('change',e=>{const t=e.target,a=C(),m={'ax-hc':()=>a.hc=t.checked,'ax-rm':()=>a.rm=t.checked,'ax-reach':()=>a.reach=t.checked,'ax-shield':()=>a.shield=t.checked,'ax-night':()=>a.night.on=t.checked,'ax-saver':()=>a.saver.on=t.checked,'ax-out':()=>a.out.on=t.checked,'ax-nf':()=>a.night.from=t.value,'ax-nt':()=>a.night.to=t.value};
+ax.addEventListener('change',e=>{const t=e.target,a=C(),m={'ax-hc':()=>a.hc=t.checked,'ax-rm':()=>a.rm=t.checked,'ax-reach':()=>{if(isAndroidBuild())a.reach=t.checked},'ax-shield':()=>a.shield=t.checked,'ax-night':()=>a.night.on=t.checked,'ax-saver':()=>a.saver.on=t.checked,'ax-out':()=>a.out.on=t.checked,'ax-nf':()=>a.night.from=t.value,'ax-nt':()=>a.night.to=t.value};
  if(!m[t.id])return;m[t.id]();sv();mode();say((t.getAttribute('aria-label')||'Setting')+(t.type==='checkbox'?(t.checked?' on':' off'):' updated'))});
-document.addEventListener('click',e=>{if(e.target.closest('button,label,select,input'))buzz()},true);
+document.addEventListener('click',e=>{if(isAndroidBuild()&&e.target.closest('button,label,select,input'))buzz()},true);
 document.addEventListener('visibilitychange',()=>{sh.style.display=C().shield&&document.hidden?'grid':'none'});
 addEventListener('pagehide',()=>{if(C().shield)sh.style.display='grid'});
 
 /* Ask Settings: intent search, recents, deep links (#s=id) */
-const X=[['text','Text size','font bigger larger smaller zoom read size scale','[data-x=text]'],['hc','High contrast','contrast readable sunlight glare clarity','#ax-hc'],['rm','Reduce motion','animation motion dizzy still calm','#ax-rm'],['hap','Haptic feedback','vibrate vibration buzz touch feel','[data-x=hap]'],['reach','Reach mode (one-handed)','one hand thumb reach lower bottom big phone','#ax-reach'],['shield','Privacy shield','privacy hide blur recents switch lock','#ax-shield'],['quiet','Quiet & still','mute silence quiet stop sound particles pause','#ax-quiet'],['night','Night mode','night evening dim sleep bedtime schedule time','#ax-night'],['saver','Battery saver','battery power drain low save fps charge','#ax-saver'],['out','Outdoor boost','outside outdoor sun sunlight bright glare','#ax-out'],
+const X=[['text','Text size','font bigger larger smaller zoom read size scale','[data-x=text]'],['hc','High contrast','contrast readable sunlight glare clarity','#ax-hc'],['rm','Reduce motion','animation motion dizzy still calm','#ax-rm'],...(isAndroidBuild()?[['hap','Haptic feedback','vibrate vibration buzz touch feel','[data-x=hap]'],['reach','Reach mode (one-handed)','one hand thumb reach lower bottom big phone','#ax-reach']]:[]),['shield','Privacy shield','privacy hide blur recents switch lock','#ax-shield'],['quiet','Quiet & still','mute silence quiet stop sound particles pause','#ax-quiet'],['night','Night mode','night evening dim sleep bedtime schedule time','#ax-night'],['saver','Battery saver','battery power drain low save fps charge','#ax-saver'],['out','Outdoor boost','outside outdoor sun sunlight bright glare','#ax-out'],
 ['vol','Master volume','volume loud sound audio quiet','#sx-vol'],['fx','Particle canvas','particles effects canvas animation performance lag','#sx-fx-on'],['fps','Frame rate cap','fps frame smooth battery 30 60 120 200 max hz refresh','[data-a=fps]'],['theme','Theme & accent','theme color dark winter summer cyberpunk accent look','[data-a=theme]'],['arc','Arc dates','arc start end date days challenge window','#sx-start'],['quotes','My quotes','quote motivation custom','#sx-qt'],['weights','Category weights','weight category points score habit','#sx-w'],['order','Checklist order','reorder order habit list move sort','#sx-ho'],['freeze','Streak freeze','streak freeze miss skip protect','#sx-fz'],['export','Export backup','backup export download save data json','[data-a=export]'],['import','Import backup','restore import upload json','#json-sync-input'],['clear','Clear all data','delete wipe reset erase factory clear','[data-a=clear]']];
-const V={text:()=>C().text+'%',hc:()=>C().hc?'On':'Off',rm:()=>C().rm?'On':'Off',hap:()=>['Off','Subtle','Normal','Strong'][C().hap],reach:()=>C().reach?'On':'Off',shield:()=>C().shield?'On':'Off',night:()=>C().night.on?'On':'Off',saver:()=>C().saver.on?'On':'Off',out:()=>C().out.on?'On':'Off',vol:()=>S.get().audio.volume+'%',fx:()=>S.get().fx.enabled?'On':'Off',fps:()=>S.get().fx.fps===200?'Max':S.get().fx.fps+' FPS',theme:()=>S.get().theme||'winter',freeze:()=>S.get().freeze.on?'On':'Off'};
+const V={text:()=>C().text+'%',hc:()=>C().hc?'On':'Off',rm:()=>C().rm?'On':'Off',hap:()=>isAndroidBuild()?['Off','Subtle','Normal','Strong'][C().hap]:'N/A',reach:()=>isAndroidBuild()?(C().reach?'On':'Off'):'N/A',shield:()=>C().shield?'On':'Off',night:()=>C().night.on?'On':'Off',saver:()=>C().saver.on?'On':'Off',out:()=>C().out.on?'On':'Off',vol:()=>S.get().audio.volume+'%',fx:()=>S.get().fx.enabled?'On':'Off',fps:()=>S.get().fx.fps===200?'Max':S.get().fx.fps+' FPS',theme:()=>S.get().theme||'winter',freeze:()=>S.get().freeze.on?'On':'Off'};
 const AUTO=[[/outside|outdoor|sun|glare/,'out','Outdoor boost'],[/night|evening|bed|sleep/,'night','Night mode'],[/battery|low power|drain/,'saver','Battery saver']];
 const st=w=>w.length>3?w.replace(/s$/,''):w,toks=s=>s.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w.length>1).map(st);
 function find(s){const T=toks(s);return X.map(x=>{const t=toks(x[1]),k=toks(x[2]);let n=0;T.forEach(w=>{if(t.includes(w))n+=3;if(k.includes(w))n+=3;else if(k.some(z=>z.length>3&&(z.startsWith(w)||w.startsWith(z))))n+=1});return[n,x]}).filter(r=>r[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,5).map(r=>r[1])}
