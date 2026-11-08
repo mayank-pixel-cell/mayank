@@ -100,6 +100,9 @@ export class ArcFaqEngine {
   }
 
   toggleSection(forceState) {
+    if (typeof window !== 'undefined' && window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+      return window.ArcSettingsAccordion.toggle('settings-additional-faq-card', forceState);
+    }
     if (typeof forceState === 'boolean') {
       this.isSectionExpanded = forceState;
     } else {

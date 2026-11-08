@@ -9,7 +9,7 @@ batPath = scriptDir & "\Launch-ArcTracker.bat"
 
 If fso.FileExists(batPath) Then
     WshShell.CurrentDirectory = scriptDir
-    WshShell.Run "cmd.exe /c """" & batPath & """", 0, False
+    WshShell.Run "cmd.exe /c """ & batPath & """", 0, False
 Else
     ' Fallback to direct app launch if bat is missing
     Dim edgePath, chromePath

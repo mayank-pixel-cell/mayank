@@ -10,7 +10,7 @@ WshShell.CurrentDirectory = scriptDir
 viteBin = scriptDir & "\node_modules\vite\bin\vite.js"
 
 If fso.FileExists(viteBin) Then
-    cmd = "node """ & viteBin & """ preview --port 1420 --strictPort"
+    cmd = "cmd.exe /c node """ & viteBin & """ preview --port 1420 --strictPort"
 Else
     cmd = "cmd.exe /c npm.cmd run preview"
 End If

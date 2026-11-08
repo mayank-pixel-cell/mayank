@@ -14,6 +14,9 @@ export class ArcAboutFounderEngine {
   }
 
   toggle(forceState) {
+    if (typeof window !== 'undefined' && window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.toggle === 'function') {
+      return window.ArcSettingsAccordion.toggle('settings-about-founder-card', forceState);
+    }
     if (typeof forceState === 'boolean') {
       this.isExpanded = forceState;
     } else {

@@ -24,7 +24,7 @@ if not exist "%~dp0Start-PreviewServer.vbs" (
         echo WshShell.CurrentDirectory = scriptDir
         echo viteBin = scriptDir ^& "\node_modules\vite\bin\vite.js"
         echo If fso.FileExists^(viteBin^) Then
-        echo     cmd = "node """ ^& viteBin ^& """ preview --port 1420 --strictPort"
+        echo     cmd = "cmd.exe /c node """ ^& viteBin ^& """ preview --port 1420 --strictPort"
         echo Else
         echo     cmd = "cmd.exe /c npm.cmd run preview"
         echo End If
