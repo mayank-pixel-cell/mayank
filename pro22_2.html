@@ -7090,7 +7090,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
 
             const p20Account = document.getElementById('p20-google-account');
-            const p20ServerSync = document.getElementById('p20-server-sync');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
             const faqCard = document.getElementById('settings-additional-faq-card');
@@ -7115,7 +7114,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = '';
                 if (screenNotifCard) screenNotifCard.style.display = '';
-                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
@@ -7123,9 +7121,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (founderCard) founderCard.style.display = '';
                 if (goldCard) goldCard.style.display = '';
                 if (termsCard) termsCard.style.display = '';
-                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
-                    window.ArcServerSync.renderSettingsCard();
-                }
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
@@ -7133,7 +7128,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
@@ -7148,7 +7142,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -7159,9 +7152,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
-                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
-                    window.ArcServerSync.renderSettingsCard();
-                }
             } else if (category === 'faq') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -7169,7 +7159,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -25440,7 +25429,6 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
-  '<section id="p20-server-sync" class="mb-2" aria-label="Live External Cloud Server Telemetry"></section>'+
   '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
  /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
@@ -32117,9 +32105,10 @@ if (typeof window !== 'undefined') {
     updateOfflineIndicator(isOffline) {
       const ind = document.getElementById('arc-offline-indicator');
       if (ind) {
-        ind.remove();
-      }
-    } else {
+        if (isOffline && typeof navigator !== 'undefined' && navigator.onLine === false) {
+          ind.classList.remove('hidden');
+          ind.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>OFFLINE CACHE</span>';
+        } else {
           ind.classList.add('hidden');
         }
       }
