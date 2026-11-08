@@ -24,6 +24,17 @@
     <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="./assets/fonts/inter.css">
 
+    
+    <script>
+        (function() {
+            try {
+                var scale = localStorage.getItem('arc_ui_font_scale');
+                if (scale && scale !== '100') {
+                    document.documentElement.style.fontSize = scale + '%';
+                }
+            } catch(e) {}
+        })();
+    </script>
     <!-- Early anti-FOUC check for Black & White Mode -->
     <script>
         (function() {

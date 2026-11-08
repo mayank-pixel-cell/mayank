@@ -31,7 +31,7 @@ export function mountAppShell() {
   shell.innerHTML = [
     renderHeaderNav(),
     renderUpdateTopBanner(),
-    `<main class="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow">`,
+    `<main class="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-32 md:pb-24 flex-grow">`,
     renderTrackerView(),
     renderRulesView(),
     renderResultsView(),

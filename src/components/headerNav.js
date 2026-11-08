@@ -5,7 +5,7 @@ export function renderHeaderNav() {
     <!-- CUSTOM BACKGROUND WALLPAPER LAYER (ARC GOLD EXCLUSIVE) -->
     <div id="arc-custom-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-cover bg-center bg-no-repeat transition-all duration-500">
         <div id="arc-custom-bg-overlay" class="absolute inset-0 bg-slate-950/45 transition-colors duration-300"></div>
-        <div id="arc-custom-bg-quote" class="absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] pointer-events-none opacity-0 transition-all duration-500 hidden z-10">
+        <div id="arc-custom-bg-quote" class="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-[92vw] pointer-events-none opacity-0 transition-all duration-500 hidden z-0">
             <div class="arc-sparkle-quote-pill px-3 py-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.7)] border-amber-400/40">
                 <span class="arc-sparkle-star text-[10px]">✦</span>
                 <span id="arc-custom-bg-quote-text" class="arc-sparkle-text text-[11px] sm:text-xs font-extrabold max-w-[80vw]"></span>
@@ -96,10 +96,10 @@ export function renderHeaderNav() {
 
 
                 <!-- Black & White Mode Toggle (Arc Gold VIP) -->
-                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • Arc Gold VIP)">
+                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • 100% Free Forever)">
                     <i id="header-bw-icon" class="fa-solid fa-circle-half-stroke text-xs"></i>
                     <span class="hidden xl:inline text-[11px]">B&amp;W</span>
-                    <span class="hidden xl:inline text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
+                    
                 </button>
 
 

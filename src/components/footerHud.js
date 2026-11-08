@@ -1,7 +1,7 @@
 export function renderFooterHud() {
   return `<!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR (ADAPTS ACROSS ALL ANDROID MODELS: 320px to 440px+) -->
-    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1 sm:px-2.5 pt-1 pb-[max(0.5rem,calc(0.35rem+env(safe-area-inset-bottom,0px))] flex items-center justify-between gap-0.5 sm:gap-1 shadow-2xl select-none">
+    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1 sm:px-2.5 pt-1 pb-[max(0.5rem,calc(0.35rem+env(safe-area-inset-bottom,0px)))] flex items-center justify-between gap-0.5 sm:gap-1 shadow-2xl select-none">
         <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
                 <i class="fa-solid fa-list-check text-sm sm:text-base"></i>

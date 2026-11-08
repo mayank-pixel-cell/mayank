@@ -56,6 +56,18 @@
             will-change: grid-template-rows, opacity, transform;
         }
 
+        .arc-fluid-accordion.hidden {
+            display: none !important;
+        }
+
+        #view-settings .glass-card:empty,
+        #view-settings .glass-card:not(:has(> :not(.hidden))) {
+            display: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+
         .arc-fluid-accordion > div,
         .arc-fluid-accordion > * {
             overflow: hidden;

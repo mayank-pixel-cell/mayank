@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon" href="./icons/128x128@2x.png">
     <!-- Offline Airgap & Data Leak Protection Content Security Policy with Google Account Sync & External Cloud Server -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://*.arctracker.app https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' ipc: http://ipc.localhost https://*.arctracker.app https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://content.googleapis.com https://*.supabase.co wss://*.supabase.co https://api.github.com https://raw.githubusercontent.com https://github.com; frame-src 'self' https://accounts.google.com; media-src 'self' data:; object-src 'none'; form-action 'none'; base-uri 'self';">
     <!-- Strict Referrer Policy: Zero Outbound URL / State Leakage -->
     <meta name="referrer" content="no-referrer">
     <!-- Tailwind CSS -->
@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
     <!-- Inter Font -->
     <link rel="stylesheet" href="./assets/fonts/inter.css">
-    <script type="module" src="./src/main.js"></script>
     <!-- Google Identity Services for Cross-Device Account Syncing -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -1173,6 +1172,18 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             will-change: grid-template-rows, opacity, transform;
         }
 
+        .arc-fluid-accordion.hidden {
+            display: none !important;
+        }
+
+        #view-settings .glass-card:empty,
+        #view-settings .glass-card:not(:has(> :not(.hidden))) {
+            display: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+
         .arc-fluid-accordion > div,
         .arc-fluid-accordion > * {
             overflow: hidden;
@@ -1498,7 +1509,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
     <!-- CUSTOM BACKGROUND WALLPAPER LAYER (ARC GOLD EXCLUSIVE) -->
     <div id="arc-custom-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-cover bg-center bg-no-repeat transition-all duration-500">
         <div id="arc-custom-bg-overlay" class="absolute inset-0 bg-slate-950/45 transition-colors duration-300"></div>
-        <div id="arc-custom-bg-quote" class="absolute bottom-6 left-1/2 -translate-x-1/2 max-w-[92vw] pointer-events-none opacity-0 transition-all duration-500 hidden z-10">
+        <div id="arc-custom-bg-quote" class="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-[92vw] pointer-events-none opacity-0 transition-all duration-500 hidden z-0">
             <div class="arc-sparkle-quote-pill px-3 py-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.7)] border-amber-400/40">
                 <span class="arc-sparkle-star text-[10px]">✦</span>
                 <span id="arc-custom-bg-quote-text" class="arc-sparkle-text text-[11px] sm:text-xs font-extrabold max-w-[80vw]"></span>
@@ -1583,10 +1594,10 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
 
                 <!-- Black & White Mode Toggle (Arc Gold VIP) -->
-                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • Arc Gold VIP)">
+                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • 100% Free Forever)">
                     <i id="header-bw-icon" class="fa-solid fa-circle-half-stroke text-xs"></i>
                     <span class="hidden xl:inline text-[11px]">B&amp;W</span>
-                    <span class="hidden xl:inline text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
+                    
                 </button>
 
 
@@ -1601,7 +1612,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </div>
     </header>
 
-    <main class="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow">
+    <main class="relative z-10 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-32 md:pb-24 flex-grow">
 
         <!-- WINTER ARC FINISHED BANNER -->
         <div id="arc-completion-banner" class="hidden glass-card rounded-2xl p-4 sm:p-6 border-2 border-cyan-400 bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 space-y-4 mb-4 sm:mb-6 shadow-2xl relative overflow-hidden transition-all duration-300">
@@ -1644,7 +1655,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </div>
 
         <!-- VIEW 1: DAILY TRACKER VIEW -->
-        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
+        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24">
             <!-- DAILY MINDSET QUOTE -->
             <div id="quote-card-container" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all duration-300">
                 <div class="space-y-1 max-w-3xl">
@@ -1911,7 +1922,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 2: NON-NEGOTIABLES & RULES VIEW -->
-        <section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
+        <section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24">
             <div class="glass-card rounded-2xl p-4 sm:p-6">
                 <h2 id="blueprint-title" class="text-lg sm:text-xl font-extrabold text-white mb-1 flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-cyan-400"></i> Winter Arc Master Blueprint
@@ -1967,7 +1978,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 3: RESULTS & ANALYTICS VIEW -->
-        <section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter pb-24 md:pb-8">
+        <section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter pb-32 md:pb-24">
             <div class="glass-card rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 border-l-cyan-400">
                 <div class="space-y-1 text-center md:text-left">
                     <span class="text-[10px] sm:text-xs font-bold text-cyan-400 tracking-wider uppercase">Analytics Breakdown</span>
@@ -2014,7 +2025,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <span class="text-[9px] sm:text-[11px] text-amber-400/80 font-mono mt-0.5 block truncate" id="res-grand-total-detail">Combined Spent</span>
                     </div>
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-sm sm:text-lg">
-                        <i class="fa-solid fa-hourglass-hourglass"></i>
+                        <i class="fa-solid fa-hourglass-end"></i>
                     </div>
                 </div>
 
@@ -2286,7 +2297,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
         </section>
         <!-- VIEW 4: PROGRESSION, LEVEL-UP & KNOWLEDGE BASE (KB) VIEW -->
-        <section id="view-progression" class="hidden space-y-6 tab-view-enter pb-24 md:pb-8">
+        <section id="view-progression" class="hidden space-y-6 tab-view-enter pb-32 md:pb-24">
             <!-- Header Banner -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-l-amber-400 shadow-xl">
                 <div class="space-y-1">
@@ -2329,7 +2340,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
         
         <!-- SETTINGS VIEW -->
-        <section id="view-settings" class="hidden pb-24 md:pb-8" aria-label="Settings &amp; Controls">
+        <section id="view-settings" class="hidden pb-32 md:pb-24" aria-label="Settings &amp; Controls">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400">
@@ -2360,10 +2371,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     </button>
                 </div>
             </div>
+            <!-- INLINE DOCKED ASK SETTINGS / NATURAL LANGUAGE COMMAND BAR -->
+            <div id="ax-bar-dock" class="mb-4"></div>
 
             <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
             <div id="settings-theme-arc-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-theme-arc-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
                             <i class="fa-solid fa-palette text-sm"></i>
@@ -2400,9 +2413,32 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
 
+            <!-- HARDWARE PROFILER & SMOOTHNESS ENGINE -->
+            <div id="settings-hardware-profiler-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-hardware-profiler-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i class="fa-solid fa-microchip text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Hardware Profiler &amp; Smoothness Engine</h3>
+                            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+                                60 FPS Cap
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80 mt-3"></div>
+            </div>
+
             <!-- LIQUID GLASS UI & FLUID SPRING ANIMATIONS (ARC GOLD EXCLUSIVE) -->
             <div id="settings-liquid-glass-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-liquid-glass-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
@@ -2435,11 +2471,34 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             </div>
 
             <!-- CUSTOM BACKGROUND WALLPAPER (ARC GOLD EXCLUSIVE) -->
-            <div id="settings-custom-bg-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300"></div>
+                        <!-- CUSTOM BACKGROUND WALLPAPER (ARC GOLD EXCLUSIVE) -->
+            <div id="settings-custom-bg-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-custom-bg-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : (window.ArcCustomBackground && window.ArcCustomBackground.toggleBox ? window.ArcCustomBackground.toggleBox() : null)">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-amber-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-image text-base"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-sm sm:text-base font-extrabold text-white tracking-wide truncate">Custom &amp; 4K Wallpapers</h3>
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                    <i class="fa-solid fa-crown text-[9px]"></i> Arc Gold Perk
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : (window.ArcCustomBackground && window.ArcCustomBackground.toggleBox ? window.ArcCustomBackground.toggleBox() : null)">
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80 mt-3"></div>
+            </div>
 
             <!-- AUTO-START ON DEVICE BOOT SETTINGS CARD -->
             <div id="settings-autostart-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-autostart-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-power-off text-sm"></i>
@@ -2477,7 +2536,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             <!-- PERMANENT SCREEN TIME NOTIFICATION CARD -->
             <div id="settings-screentime-notif-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-screentime-notif-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
                             <i class="fa-solid fa-bell text-sm"></i>
@@ -2515,7 +2574,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <!-- ADDITIONAL SETTINGS & FREQUENTLY ASKED QUESTIONS (FAQ) (Compact by Default) -->
             <section id="settings-additional-faq-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Additional Settings &amp; Frequently Asked Questions">
                 <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-additional-faq-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                             <i class="fa-solid fa-circle-question text-base"></i>
@@ -2599,7 +2658,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <!-- ABOUT THE FOUNDER SECTION (Compact by Default) -->
             <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="About the Founder">
                 <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-about-founder-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-sm shrink-0 border border-purple-400/30">
                             <i class="fa-solid fa-user-astronaut text-base"></i>
@@ -2812,7 +2871,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             <!-- TERMS & CONDITIONS & LEGAL AGREEMENT CARD -->
             <section id="settings-terms-legal-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Terms and Conditions and Legal Agreement">
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-terms-legal-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-scale-balanced text-sm"></i>
@@ -2859,7 +2918,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
         </section>
 
         <!-- VIEW 6: SCREEN TIME & APP BLOCKER MATRIX -->
-                <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden pb-24 md:pb-8">
+                <section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden pb-32 md:pb-24">
             <!-- TOP HERO BANNER & STATS -->
             <div class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
@@ -4394,7 +4453,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
 
         <!-- VIEW 7: NOTIFICATIONS & SYSTEM UPDATES HUB -->
-        <section id="view-notifications" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8" aria-label="Notifications & Updates Hub">
+        <section id="view-notifications" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24" aria-label="Notifications & Updates Hub">
             <!-- HERO BANNER -->
             <div class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-300">
                 <div class="space-y-1.5 max-w-2xl">
@@ -4484,7 +4543,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR -->
     <!-- SMARTPHONE BOTTOM NAVIGATION BAR (ADAPTS ACROSS ALL ANDROID MODELS: 320px to 440px+) -->
-    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1 sm:px-2.5 pt-1 pb-[max(0.5rem,calc(0.35rem+env(safe-area-inset-bottom,0px))] flex items-center justify-between gap-0.5 sm:gap-1 shadow-2xl select-none">
+    <nav role="tablist" aria-label="Mobile Bottom Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-slate-800/90 bg-slate-950/95 backdrop-blur-xl px-1 sm:px-2.5 pt-1 pb-[max(0.5rem,calc(0.35rem+env(safe-area-inset-bottom,0px)))] flex items-center justify-between gap-0.5 sm:gap-1 shadow-2xl select-none">
         <button id="mobile-tab-tracker" role="tab" aria-selected="true" aria-controls="view-tracker" onclick="switchTab('tracker')" class="flex-1 min-w-0 py-1 px-0.5 sm:px-1 rounded-xl flex flex-col items-center justify-center transition-all duration-200 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.25)] font-bold active:scale-95 select-none touch-manipulation min-h-[46px]">
             <div class="relative flex items-center justify-center">
                 <i class="fa-solid fa-list-check text-sm sm:text-base"></i>
@@ -7020,6 +7079,23 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 if (window.renderHabitManager) renderHabitManager(true);
             }
             if (window.SettingsApp) SettingsApp.onTab(tabName);
+            const bgQuote = document.getElementById('arc-custom-bg-quote');
+            if (bgQuote) {
+                if (tabName === 'tracker') {
+                    const quoteText = document.getElementById('arc-custom-bg-quote-text');
+                    if (quoteText && quoteText.textContent && quoteText.textContent.trim()) {
+                        bgQuote.classList.remove('hidden');
+                        requestAnimationFrame(() => {
+                            bgQuote.classList.remove('opacity-0');
+                            bgQuote.classList.add('opacity-100');
+                        });
+                    }
+                } else {
+                    bgQuote.classList.add('opacity-0');
+                    bgQuote.classList.add('hidden');
+                }
+            }
+
             if (tabName === 'settings') {
                 if (window.renderHabitManager) renderHabitManager(true);
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
@@ -8093,19 +8169,65 @@ function toggleStreakFreezeFromRules(checked) {
             renderScreenTime();
         }
 
-        function startLaptopTimer() {
+        function startLaptopTracker() {
             if (state.laptop.interval) clearInterval(state.laptop.interval);
             state.laptop.interval = setInterval(() => {
-                if (state.laptop.isRunning && !document.hidden) {
-                    state.laptop.totalSeconds++;
+                if (document.visibilityState === 'visible' && !state.laptop.isAutoPaused && state.laptop.isRunning !== false) {
+                    state.laptop.totalSeconds = (state.laptop.totalSeconds || 0) + 1;
+                    const secs = state.laptop.totalSeconds;
+                    const formatted = formatDuration(secs);
+
+                    // 1. Tracker view display
                     const display = document.getElementById('laptop-timer-display');
-                    if (display) display.textContent = formatDuration(state.laptop.totalSeconds);
+                    if (display) display.textContent = formatted;
+
+                    // 2. Bottom HUD total timer & PC time
+                    const hudTimer = document.getElementById('arc-hud-timer');
+                    if (hudTimer) hudTimer.textContent = formatted;
+                    const pcEl = document.getElementById('arc-hud-pc-time');
+                    if (pcEl) {
+                        const h = Math.floor(secs / 3600);
+                        const m = Math.floor((secs % 3600) / 60);
+                        pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
+                    }
+
+                    // 3. Screen Time view desktop card
+                    const deskEl = document.getElementById('st-desktop-time-val');
+                    if (deskEl) deskEl.textContent = formatted;
+
+                    // 4. Combined time (Desktop + Mobile phone)
+                    const combEl = document.getElementById('st-combined-time-val');
+                    if (combEl) {
+                        let phoneSecs = 0;
+                        try {
+                            if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
+                                phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
+                            }
+                        } catch(e) {}
+                        combEl.textContent = formatDuration(secs + phoneSecs);
+                    }
+
+                    // 5. Screen time notifier tick
                     if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
-                        window.ArcScreenTimeNotifier.tick(state.laptop.totalSeconds);
+                        window.ArcScreenTimeNotifier.tick(secs);
+                    }
+
+                    // 6. Persist to localStorage
+                    if (typeof saveToLocalStorage === 'function') {
+                        saveToLocalStorage();
+                    } else {
+                        try {
+                            localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
+                        } catch(e) {}
                     }
                 }
             }, 1000);
         }
+        function startLaptopTimer() {
+            startLaptopTracker();
+        }
+        window.startLaptopTracker = startLaptopTracker;
+        window.startLaptopTimer = startLaptopTimer;
 
         /* ==========================================================================
            6. INITIALIZATION ENTRY POINT
@@ -20784,9 +20906,18 @@ window.ArcBlackWhiteMode = (function() {
     const current = isEnabled();
     const target = (typeof forcedState === 'boolean') ? forcedState : !current;
 
+    // 100% Free Forever: Unconditionally toggle Black & White mode for all users
+    try {
+      localStorage.setItem(STORAGE_KEY, target ? 'true' : 'false');
+    } catch (e) {}
+
     if (target) {
+      document.documentElement.classList.add('arc-bw-mode');
+      if (document.body) document.body.classList.add('arc-bw-mode');
       return enable();
     } else {
+      document.documentElement.classList.remove('arc-bw-mode');
+      if (document.body) document.body.classList.remove('arc-bw-mode');
       return disable(true);
     }
   }
@@ -21937,7 +22068,7 @@ window.ArcCustomBackground = (function() {
           </div>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-          <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : window.ArcCustomBackground.toggleBox()">
+          <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="event.stopPropagation(); window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : window.ArcCustomBackground.toggleBox()">
             <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
           </button>
         </div>
@@ -23862,7 +23993,7 @@ row('Global Mute','silence',`<button role="button" class="pp-btn focus-visible:o
 row('Cosmic Theme','color palette lunar solar nebula saturn void aurora cyber crimson',`<div class="pp-grid">${Object.entries(TH).map(([k,v])=>`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-theme-set="${k}">${v[0]} ${v[1]}</button>`).join('')}</div>`)+
 row('Accent Color','custom hex picker',`<div class="flex gap-2 items-center"><input class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" type="color" data-set="customAccentHex" aria-label="Custom accent color" style="width:3rem;height:2rem"><button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="pp-acc-reset">Use theme accent</button></div>`)+
 row('Display Mode','dark light oled night glass',`<div class="grid grid-cols-3 gap-2">${[['dark','🌙 Dark'],['light','☀️ Light'],['night','🕶 OLED']].map(m=>`<button role="button" class="pp-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" data-mode-set="${m[0]}">${m[1]}</button>`).join('')}</div>`)+
-row('Black &amp; White Mode','monochrome grayscale noir e-ink dopamine detox black white gold',`<div class="flex items-center justify-between gap-3"><div class="space-y-0.5"><div class="text-xs text-slate-300 flex items-center gap-1.5 font-bold"><span>Monochrome Display</span><span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 uppercase font-black">ARC GOLD</span></div><div class="text-[10px] text-slate-400">Strips all colors for radical dopamine detox</div></div><label class="sx-sw"><input type="checkbox" id="pp-bw-toggle" onchange="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle(this.checked)" aria-label="Toggle Black &amp; White Mode"><span></span></label></div>`)+
+row('Black &amp; White Mode','monochrome grayscale noir e-ink dopamine detox black white gold',`<div class="flex items-center justify-between gap-3"><div class="space-y-0.5"><div class="text-xs text-slate-300 flex items-center gap-1.5 font-bold"><span>Monochrome Display</span><span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 uppercase font-black">100% FREE</span></div><div class="text-[10px] text-slate-400">Strips all colors for radical dopamine detox</div></div><label class="sx-sw"><input type="checkbox" id="pp-bw-toggle" onchange="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle(this.checked)" aria-label="Toggle Black &amp; White Mode"><span></span></label></div>`)+
 row('Liquid Glass UI &amp; Animations','liquid glass ios frosted blur refraction specular spring physics gold',`<div class="flex items-center justify-between gap-3"><div class="space-y-0.5"><div class="text-xs text-slate-300 flex items-center gap-1.5 font-bold"><span>Liquid Glass UI &amp; Animations</span><span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 uppercase font-black">GOLD</span></div><div class="text-[10px] text-slate-400">Enable iOS-style translucent liquid glass surfaces, refractive highlights, and fluid spring animations.</div></div><div id="drawer-liquid-glass-ctrl"></div></div>`)+
 row('View Transition','animation slide zoom flip blur bounce',sel('transition','View transition',[['slide','Smooth Slide'],['zoom','Quantum Zoom'],['flip','3D Horizon Flip'],['blur','Nebula Blur'],['bounce','Spring Bounce']]))+
 row('Particle Density','particles low medium high ultra off canvas',sel('particleDensity','Particle density',[['low','Low (30)'],['medium','Medium (75)'],['high','High (150)'],['ultra','Ultra (300)'],['off','Off']]))+
@@ -23931,8 +24062,8 @@ function tab(n){TAB=n;$$('.pp-tab').forEach(b=>{const on=b.dataset.t===n;b.class
 
 /* ---------- MODALS, FOCUS TRAP, HOTKEYS ---------- */
 const foc=c=>$$('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])',c).filter(x=>!x.disabled&&x.offsetParent!==null);
-function openDrawer(){opener=document.activeElement;D.classList.add('open');D.setAttribute('aria-hidden','false');$('#pp12-back').classList.add('open');const g=$('#btn-open-settings');if(g)g.setAttribute('aria-expanded','true');playSfx('modalOpen');ui();setTimeout(()=>{const f=foc(D)[0];if(f)f.focus()},60)}
-function closeDrawer(){D.classList.remove('open');D.setAttribute('aria-hidden','true');$('#pp12-back').classList.remove('open');const g=$('#btn-open-settings');if(g)g.setAttribute('aria-expanded','false');playSfx('modalClose');if(opener&&opener.focus)opener.focus()}
+function openDrawer(){opener=document.activeElement;D.classList.add('open');D.setAttribute('aria-hidden','false');$('#pp12-back').classList.add('open');const g=$('#pp12-gear-btn') || $('#btn-open-settings');if(g)g.setAttribute('aria-expanded','true');playSfx('modalOpen');ui();setTimeout(()=>{const f=foc(D)[0];if(f)f.focus()},60)}
+function closeDrawer(){D.classList.remove('open');D.setAttribute('aria-hidden','true');$('#pp12-back').classList.remove('open');const g=$('#pp12-gear-btn') || $('#btn-open-settings');if(g)g.setAttribute('aria-expanded','false');playSfx('modalClose');if(opener&&opener.focus)opener.focus()}
 const toggleDrawer=()=>D.classList.contains('open')?closeDrawer():openDrawer();
 function openM(sel){const m=$(sel);opener=document.activeElement;m.style.display='flex';void m.offsetWidth;m.classList.add('open');playSfx('modalOpen');const f=foc(m)[0];if(f)f.focus()}
 function closeM(m){m.classList.remove('open');m.classList.remove('active');playSfx('modalClose');setTimeout(()=>{if(!m.classList.contains('open'))m.style.display='none';},340);if(opener&&opener.focus)opener.focus()}
@@ -23959,8 +24090,10 @@ function onKey(e){const t=e.target;
 /* ---------- WIRING ---------- */
 function bind(){D=$('#pp12-drawer');
  const ab=$('#btn-audio-toggle'),cls='hidden sm:flex p-2 rounded-xl bg-slate-800/80 text-cyan-400 border border-cyan-500/30 text-xs font-bold transition items-center justify-center w-8 h-8 sm:w-9 sm:h-9';
- if(ab)ab.insertAdjacentHTML('afterend',`<button role="button" id="btn-ambient-toggle" onmouseenter="playSfx('hover')" aria-label="Toggle ambient soundscape" aria-pressed="false" class="${cls} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><i class="fa-solid fa-atom"></i></button><button role="button" id="btn-open-settings" onmouseenter="playSfx('hover')" aria-label="Open settings" aria-expanded="false" aria-controls="pp12-drawer" class="${cls} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><i class="fa-solid fa-gear"></i></button>`);
- $('#btn-ambient-toggle').addEventListener('click',toggleAmb);$('#btn-open-settings').addEventListener('click',toggleDrawer);
+ if(document.getElementById('pp12-gear-btn') || document.getElementById('btn-open-settings')) return;
+ if(ab)ab.insertAdjacentHTML('afterend',`<button role="button" id="btn-ambient-toggle" onmouseenter="playSfx('hover')" aria-label="Toggle ambient soundscape" aria-pressed="false" class="${cls} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><i class="fa-solid fa-atom"></i></button><button role="button" id="pp12-gear-btn" onmouseenter="playSfx('hover')" aria-label="Open settings" aria-expanded="false" aria-controls="pp12-drawer" class="${cls} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"><i class="fa-solid fa-gear"></i></button>`);
+ const ambBtn=$('#btn-ambient-toggle'); if(ambBtn) ambBtn.addEventListener('click',toggleAmb);
+ const gearBtn=$('#pp12-gear-btn') || $('#btn-open-settings'); if(gearBtn) gearBtn.addEventListener('click',toggleDrawer);
  $('#pp12-back').addEventListener('click',closeDrawer);$('#pp12-hud').addEventListener('click',()=>F.run?fpause():fstart());
  $$('.pp-modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m)}));
  document.addEventListener('click',e=>{const x=e.target.closest('[data-close]');if(x)closeM(x.closest('.pp-modal'))});
@@ -25399,13 +25532,12 @@ document.readyState==='loading'?document.addEventListener('DOMContentLoaded',ini
 </script>
 <style id="ax-css">
 #sx-root{padding-bottom:5.5rem}
-#ax-bar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 4.6rem);z-index:45;display:flex;flex-direction:column-reverse;gap:.4rem;max-width:40rem;margin:0 auto;padding:0 .75rem;pointer-events:none}
+#ax-bar{position:relative;left:auto;right:auto;bottom:auto;z-index:10;display:flex;flex-direction:column;gap:.4rem;width:100%;max-width:100%;margin:0 0 1rem 0;padding:0;pointer-events:auto}
 #ax-bar>*{pointer-events:auto}
-@media(min-width:768px){#ax-bar{bottom:1rem}}
 .ax-sb{display:flex;align-items:center;gap:.5rem;padding:.3rem .7rem;border-radius:99px;background:rgba(11,18,32,.96);border:1px solid #334155;box-shadow:0 8px 28px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .ax-sb:focus-within{border-color:var(--pp-accent,#22d3ee)}.ax-sb>i{color:var(--pp-accent,#22d3ee)}
 .ax-sb input{flex:1;min-width:0;background:none;border:0;outline:0;color:#e2e8f0;font-size:.85rem;min-height:2.6rem}
-#ax-res{display:flex;flex-direction:column-reverse;gap:.35rem;max-height:42vh;overflow:auto}
+#ax-res{display:flex;flex-direction:column;gap:.35rem;max-height:42vh;overflow:auto}
 .ax-r{display:flex;justify-content:space-between;align-items:center;gap:.5rem;text-align:left;padding:.7rem .9rem;min-height:3rem;border-radius:.9rem;background:rgba(11,18,32,.97);border:1px solid #334155;color:#e2e8f0;font-size:.8rem}
 .ax-r small{color:var(--pp-accent,#22d3ee);font:600 .7rem monospace}
 .ax-r:hover,.ax-r:focus-visible{border-color:var(--pp-accent,#22d3ee);outline:0}
@@ -25484,23 +25616,104 @@ const AUTO=[[/outside|outdoor|sun|glare/,'out','Outdoor boost'],[/night|evening|
 const st=w=>w.length>3?w.replace(/s$/,''):w,toks=s=>s.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w.length>1).map(st);
 function find(s){const T=toks(s);return X.map(x=>{const t=toks(x[1]),k=toks(x[2]);let n=0;T.forEach(w=>{if(t.includes(w))n+=3;if(k.includes(w))n+=3;else if(k.some(z=>z.length>3&&(z.startsWith(w)||w.startsWith(z))))n+=1});return[n,x]}).filter(r=>r[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,5).map(r=>r[1])}
 const bar=mk('div','ax-bar','<div id="ax-res" role="listbox" aria-label="Search results"></div><div class="ax-sb"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><input id="ax-q" type="search" placeholder="Ask settings: make text bigger outside" aria-label="Ask settings" autocomplete="off"><button id="ax-mic" class="sx-ib" style="display:none" aria-label="Voice search"><i class="fa-solid fa-microphone"></i></button></div>');
-document.body.appendChild(bar);
+const dock = document.getElementById('ax-bar-dock');
+if (dock) {
+  dock.appendChild(bar);
+} else {
+  const viewSettings = document.getElementById('view-settings');
+  const subtabsRow = viewSettings ? viewSettings.firstElementChild : null;
+  if (subtabsRow && subtabsRow.nextSibling) {
+    subtabsRow.parentNode.insertBefore(bar, subtabsRow.nextSibling);
+  } else {
+    document.body.appendChild(bar);
+  }
+}
 function show(s){const el=q('#ax-res'),l=s.toLowerCase(),r=s?find(s):C().recents.map(i=>X.find(x=>x[0]===i)).filter(Boolean),c=/\b(when|while|whenever|if|every)\b/.test(l)&&AUTO.find(a=>a[0].test(l));
  let h=c?'<button class="ax-r" data-auto="'+c[1]+'"><b>Make it automatic</b><small>Turn on '+c[2]+'</small></button>':'';
  h+=r.map(x=>'<button class="ax-r" role="option" data-go="'+x[0]+'"><b>'+x[1]+'</b><small>'+(V[x[0]]?V[x[0]]():'Open')+'</small></button>').join('');
  if(s&&!r.length&&!c)h='<div class="ax-r">No match. Try sound, battery or backup.</div>';
+ if(s&&/text|size|font|bigger|larger|smaller|outdoor|outside|reset/i.test(s)){
+  h = '<button class="ax-r" data-cmd="make text bigger"><b>🔍 Make text bigger</b><small>+15%</small></button>' +
+      '<button class="ax-r" data-cmd="smaller text"><b>🔍 Make text smaller</b><small>-15%</small></button>' +
+      '<button class="ax-r" data-cmd="make text bigger outside"><b>☀️ Outdoor boost (125%)</b><small>High Contrast</small></button>' +
+      '<button class="ax-r" data-cmd="reset text size"><b>↺ Reset text size</b><small>100%</small></button>' + h;
+ }
  el.innerHTML=h+(!s&&r.length?'<div class="ax-h">Recent</div>':'')}
 function go(id){const x=X.find(z=>z[0]===id);if(!x)return;try{switchTab('settings')}catch(e){}
  const a=C();a.recents=[id].concat(a.recents.filter(z=>z!==id)).slice(0,5);sv();
  setTimeout(()=>{const t=q(x[3]);if(!t)return;const r=t.closest('.sx-row,section,li')||t;r.scrollIntoView({block:'center',behavior:a.rm?'auto':'smooth'});r.classList.add('ax-hit');setTimeout(()=>r.classList.remove('ax-hit'),1800);if(t.focus)t.focus({preventScroll:true})},150);
  history.replaceState(null,'','#s='+id);say('Opened '+x[1])}
-bar.addEventListener('click',e=>{const g=e.target.closest('[data-go]'),u=e.target.closest('[data-auto]'),i=q('#ax-q');
+
+function handleAskSettingsCommand(rawQuery) {
+  if (!rawQuery || typeof rawQuery !== 'string') return false;
+  const q = rawQuery.trim().toLowerCase();
+  
+  if (/make text bigger outside|bigger text outside|outdoor boost|outside/i.test(q)) {
+    document.documentElement.style.fontSize = '125%';
+    try { localStorage.setItem('arc_ui_font_scale', '125'); } catch(e){}
+    try { const a = C(); a.out.on = true; a.text = 125; sv(); } catch(e){}
+    const msg = '🔍 Outdoor Boost: Text size increased to 125%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/make text bigger|bigger text|larger text|increase text|zoom in|larger font/i.test(q)) {
+    let currentScale = parseInt(localStorage.getItem('arc_ui_font_scale') || '100', 10);
+    let newScale = Math.min(160, currentScale + 15);
+    document.documentElement.style.fontSize = newScale + '%';
+    try { localStorage.setItem('arc_ui_font_scale', String(newScale)); } catch(e){}
+    try { const a = C(); a.text = newScale; sv(); } catch(e){}
+    const msg = '🔍 Text size increased to ' + newScale + '%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/smaller text|make text smaller|decrease text|zoom out|smaller font/i.test(q)) {
+    let currentScale = parseInt(localStorage.getItem('arc_ui_font_scale') || '100', 10);
+    let newScale = Math.max(85, currentScale - 15);
+    document.documentElement.style.fontSize = newScale + '%';
+    try { localStorage.setItem('arc_ui_font_scale', String(newScale)); } catch(e){}
+    try { const a = C(); a.text = newScale; sv(); } catch(e){}
+    const msg = '🔍 Text size decreased to ' + newScale + '%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/reset text size|reset text|normal text|default text/i.test(q)) {
+    document.documentElement.style.fontSize = '';
+    try { localStorage.setItem('arc_ui_font_scale', '100'); } catch(e){}
+    try { const a = C(); a.text = 100; a.out.on = false; sv(); } catch(e){}
+    const msg = '🔍 Text size reset to 100%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  return false;
+}
+
+bar.addEventListener('click',e=>{const g=e.target.closest('[data-go]'),u=e.target.closest('[data-auto]'),cmd=e.target.closest('[data-cmd]'),i=q('#ax-q');
+ if(cmd){handleAskSettingsCommand(cmd.dataset.cmd);i.value='';q('#ax-res').innerHTML='';i.blur();return;}
  if(g){go(g.dataset.go)}else if(u){const a=C();a[u.dataset.auto].on=true;sv();paint();say('Automatic mode turned on')}else return;
  i.value='';q('#ax-res').innerHTML='';i.blur()});
 bar.addEventListener('input',e=>{if(e.target.id==='ax-q')show(e.target.value)});
 bar.addEventListener('focusin',()=>show(q('#ax-q').value));
 bar.addEventListener('focusout',()=>setTimeout(()=>{if(!bar.contains(document.activeElement))q('#ax-res').innerHTML=''},200));
-bar.addEventListener('keydown',e=>{if(e.key==='Escape'){q('#ax-q').value='';q('#ax-res').innerHTML=''}});
+bar.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    const i=q('#ax-q');
+    if(i&&i.value){
+      if(handleAskSettingsCommand(i.value)){
+        i.value='';q('#ax-res').innerHTML='';i.blur();
+      }
+    }
+  }else if(e.key==='Escape'){
+    q('#ax-q').value='';q('#ax-res').innerHTML='';
+  }
+});
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(SR){const m=q('#ax-mic');m.style.display='grid';m.onclick=()=>{try{const r=new SR();r.lang=navigator.language||'en-US';r.onresult=e=>{const i=q('#ax-q');i.value=e.results[0][0].transcript;show(i.value)};r.start();say('Listening')}catch(e){}}}
 const vis=()=>{const v=q('#view-settings');bar.style.display=v&&v.offsetParent!==null?'':'none'};

@@ -1,5 +1,5 @@
 export function renderScreentimeView() {
-  return `<section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden pb-24 md:pb-8">
+  return `<section id="view-screentime" class="space-y-4 sm:space-y-6 tab-view-enter hidden pb-32 md:pb-24">
             <!-- TOP HERO BANNER & STATS -->
             <div class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-cyan-400 relative overflow-hidden space-y-4 shadow-xl">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">

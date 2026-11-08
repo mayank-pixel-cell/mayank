@@ -1,5 +1,5 @@
 export function renderResultsView() {
-  return `<section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter pb-24 md:pb-8">
+  return `<section id="view-results" class="hidden space-y-6 sm:space-y-8 tab-view-enter pb-32 md:pb-24">
             <div class="glass-card rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 border-l-cyan-400">
                 <div class="space-y-1 text-center md:text-left">
                     <span class="text-[10px] sm:text-xs font-bold text-cyan-400 tracking-wider uppercase">Analytics Breakdown</span>
@@ -46,7 +46,7 @@ export function renderResultsView() {
                         <span class="text-[9px] sm:text-[11px] text-amber-400/80 font-mono mt-0.5 block truncate" id="res-grand-total-detail">Combined Spent</span>
                     </div>
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-sm sm:text-lg">
-                        <i class="fa-solid fa-hourglass-hourglass"></i>
+                        <i class="fa-solid fa-hourglass-end"></i>
                     </div>
                 </div>
 

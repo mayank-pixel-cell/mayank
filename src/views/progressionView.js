@@ -1,5 +1,5 @@
 export function renderProgressionView() {
-  return `<section id="view-progression" class="hidden space-y-6 tab-view-enter pb-24 md:pb-8">
+  return `<section id="view-progression" class="hidden space-y-6 tab-view-enter pb-32 md:pb-24">
             <!-- Header Banner -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-l-amber-400 shadow-xl">
                 <div class="space-y-1">

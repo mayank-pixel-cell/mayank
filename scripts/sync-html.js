@@ -3,7 +3,7 @@ import path from 'path';
 
 const rootDir = process.cwd();
 const pro22Path = path.join(rootDir, 'pro22.html');
-const pro222Path = path.join(rootDir, 'pro22_2.html');
+// const pro222Path = path.join(rootDir, 'pro22_2.html');
 const serverSyncPath = path.join(rootDir, 'src', 'modules', 'serverSyncEngine.js');
 const lbPath = path.join(rootDir, 'src', 'modules', 'leaderboardGroups.js');
 
@@ -38,5 +38,5 @@ pro22Html = pro22Html.slice(0, startIdx) + combinedNewBlock + pro22Html.slice(en
 fs.writeFileSync(pro22Path, pro22Html, 'utf-8');
 console.log('Successfully updated pro22.html');
 
-fs.writeFileSync(pro222Path, pro22Html, 'utf-8');
+// fs.writeFileSync(pro222Path, pro22Html, 'utf-8');
 console.log('Successfully created/updated pro22_2.html');

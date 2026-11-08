@@ -1211,6 +1211,23 @@ if (typeof window !== 'undefined') {
                 if (window.renderHabitManager) renderHabitManager(true);
             }
             if (window.SettingsApp) SettingsApp.onTab(tabName);
+            const bgQuote = document.getElementById('arc-custom-bg-quote');
+            if (bgQuote) {
+                if (tabName === 'tracker') {
+                    const quoteText = document.getElementById('arc-custom-bg-quote-text');
+                    if (quoteText && quoteText.textContent && quoteText.textContent.trim()) {
+                        bgQuote.classList.remove('hidden');
+                        requestAnimationFrame(() => {
+                            bgQuote.classList.remove('opacity-0');
+                            bgQuote.classList.add('opacity-100');
+                        });
+                    }
+                } else {
+                    bgQuote.classList.add('opacity-0');
+                    bgQuote.classList.add('hidden');
+                }
+            }
+
             if (tabName === 'settings') {
                 if (window.renderHabitManager) renderHabitManager(true);
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
@@ -1221,94 +1238,63 @@ if (typeof window !== 'undefined') {
 
         function filterSettingsView(category) {
             playSfx('click');
-            const allBtn = document.getElementById('settings-subtab-all');
-            const habitsBtn = document.getElementById('settings-subtab-habits');
-            const accountBtn = document.getElementById('settings-subtab-account');
-            
-            [allBtn, habitsBtn, accountBtn].forEach(b => {
-                if (!b) return;
-                b.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
+            const subtabs = ['all', 'habits', 'account', 'faq', 'founder'].map(id => document.getElementById('settings-subtab-' + id)).filter(Boolean);
+            subtabs.forEach(b => {
+                b.className = "shrink-0 px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
             });
-            
-            const activeBtn = document.getElementById(`settings-subtab-${category}`);
-            if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
+            const activeBtn = document.getElementById('settings-subtab-' + category);
+            if (activeBtn) activeBtn.className = "shrink-0 px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
 
             const p20Account = document.getElementById('p20-google-account');
+            const p20ServerSync = document.getElementById('p20-server-sync');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
-            const faqCard = document.getElementById('settings-additional-faq-card');
-            const founderCard = document.getElementById('settings-about-founder-card');
-            const autoStartCard = document.getElementById('settings-autostart-card');
-            const screenNotifCard = document.getElementById('settings-screentime-notif-card');
-            const goldCard = document.getElementById('settings-gold-card');
-            const termsCard = document.getElementById('settings-terms-legal-card');
-            const faqBtn = document.getElementById('settings-subtab-faq');
-            const founderBtn = document.getElementById('settings-subtab-founder');
-            if (faqBtn && category !== 'faq') faqBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
-            if (founderBtn && category !== 'founder') founderBtn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition";
-
+            const axRoot = document.getElementById('ax-root');
+            const axBar = document.getElementById('ax-bar') || document.getElementById('ax-bar-dock');
             const themeArcCard = document.getElementById('settings-theme-arc-card');
+            const hwCard = document.getElementById('settings-hardware-profiler-card');
             const liquidGlassCard = document.getElementById('settings-liquid-glass-card');
             const customBgCard = document.getElementById('settings-custom-bg-card');
-            const hwCard = document.getElementById('settings-hardware-profiler-card');
+            const autoStartCard = document.getElementById('settings-autostart-card');
+            const screenNotifCard = document.getElementById('settings-screentime-notif-card');
+            const faqCard = document.getElementById('settings-additional-faq-card');
+            const founderCard = document.getElementById('settings-about-founder-card');
+            const goldCard = document.getElementById('settings-gold-card');
+            const termsCard = document.getElementById('settings-terms-legal-card');
+
+            const allCards = [
+                themeArcCard, hwCard, liquidGlassCard, customBgCard, autoStartCard,
+                screenNotifCard, p20Account, p20ServerSync, p20Day, sxRoot, axRoot,
+                faqCard, founderCard, goldCard, termsCard
+            ];
+
             if (category === 'all') {
+                allCards.forEach(c => { if (c) c.style.display = ''; });
+                if (axBar) axBar.style.display = '';
+            } else if (category === 'habits') {
+                allCards.forEach(c => { if (c) c.style.display = 'none'; });
                 if (themeArcCard) themeArcCard.style.display = '';
+                if (hwCard) hwCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
                 if (customBgCard) customBgCard.style.display = '';
-                if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = '';
                 if (screenNotifCard) screenNotifCard.style.display = '';
-                if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
-                if (faqCard) faqCard.style.display = '';
-                if (founderCard) founderCard.style.display = '';
+                if (axRoot) axRoot.style.display = '';
                 if (goldCard) goldCard.style.display = '';
-                if (termsCard) termsCard.style.display = '';
-            } else if (category === 'habits') {
-                if (themeArcCard) themeArcCard.style.display = '';
-                if (liquidGlassCard) liquidGlassCard.style.display = '';
-                if (customBgCard) customBgCard.style.display = '';
-                if (hwCard) hwCard.style.display = '';
-                if (autoStartCard) autoStartCard.style.display = 'none';
-                if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20Account) p20Account.style.display = 'none';
-                if (p20Day) p20Day.style.display = '';
-                if (sxRoot) sxRoot.style.display = '';
-                if (faqCard) faqCard.style.display = 'none';
-                if (founderCard) founderCard.style.display = 'none';
-                if (goldCard) goldCard.style.display = '';
-                if (termsCard) termsCard.style.display = 'none';
+                if (axBar) axBar.style.display = '';
             } else if (category === 'account') {
-                if (themeArcCard) themeArcCard.style.display = 'none';
-                if (liquidGlassCard) liquidGlassCard.style.display = 'none';
-                if (customBgCard) customBgCard.style.display = 'none';
-                if (hwCard) hwCard.style.display = 'none';
-                if (autoStartCard) autoStartCard.style.display = 'none';
-                if (screenNotifCard) screenNotifCard.style.display = 'none';
+                allCards.forEach(c => { if (c) c.style.display = 'none'; });
                 if (p20Account) p20Account.style.display = '';
-                if (p20Day) p20Day.style.display = 'none';
-                if (sxRoot) sxRoot.style.display = 'none';
-                if (faqCard) faqCard.style.display = 'none';
-                if (founderCard) founderCard.style.display = 'none';
-                if (goldCard) goldCard.style.display = 'none';
-                if (termsCard) termsCard.style.display = 'none';
+                if (p20ServerSync) p20ServerSync.style.display = '';
+                if (axBar) axBar.style.display = 'none';
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
             } else if (category === 'faq') {
-                if (themeArcCard) themeArcCard.style.display = 'none';
-                if (liquidGlassCard) liquidGlassCard.style.display = 'none';
-                if (customBgCard) customBgCard.style.display = 'none';
-                if (hwCard) hwCard.style.display = 'none';
-                if (autoStartCard) autoStartCard.style.display = 'none';
-                if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20Account) p20Account.style.display = 'none';
-                if (p20Day) p20Day.style.display = 'none';
-                if (sxRoot) sxRoot.style.display = 'none';
-                if (goldCard) goldCard.style.display = 'none';
-                if (founderCard) founderCard.style.display = 'none';
-                if (termsCard) termsCard.style.display = 'none';
+                allCards.forEach(c => { if (c) c.style.display = 'none'; });
+                if (axBar) axBar.style.display = 'none';
                 if (faqCard) {
                     faqCard.style.display = '';
                     faqCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1320,19 +1306,8 @@ if (typeof window !== 'undefined') {
                 }
                 if (window.ArcFaq && typeof window.ArcFaq.render === 'function') window.ArcFaq.render();
             } else if (category === 'founder') {
-                if (themeArcCard) themeArcCard.style.display = 'none';
-                if (liquidGlassCard) liquidGlassCard.style.display = 'none';
-                if (customBgCard) customBgCard.style.display = 'none';
-                if (hwCard) hwCard.style.display = 'none';
-                if (autoStartCard) autoStartCard.style.display = 'none';
-                if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = 'none';
-                if (p20Account) p20Account.style.display = 'none';
-                if (p20Day) p20Day.style.display = 'none';
-                if (sxRoot) sxRoot.style.display = 'none';
-                if (faqCard) faqCard.style.display = 'none';
-                if (goldCard) goldCard.style.display = 'none';
-                if (termsCard) termsCard.style.display = 'none';
+                allCards.forEach(c => { if (c) c.style.display = 'none'; });
+                if (axBar) axBar.style.display = 'none';
                 if (founderCard) {
                     founderCard.style.display = '';
                     founderCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2274,19 +2249,65 @@ function toggleStreakFreezeFromRules(checked) {
             renderScreenTime();
         }
 
-        function startLaptopTimer() {
+        function startLaptopTracker() {
             if (state.laptop.interval) clearInterval(state.laptop.interval);
             state.laptop.interval = setInterval(() => {
-                if (state.laptop.isRunning && !document.hidden) {
-                    state.laptop.totalSeconds++;
+                if (document.visibilityState === 'visible' && !state.laptop.isAutoPaused && state.laptop.isRunning !== false) {
+                    state.laptop.totalSeconds = (state.laptop.totalSeconds || 0) + 1;
+                    const secs = state.laptop.totalSeconds;
+                    const formatted = formatDuration(secs);
+
+                    // 1. Tracker view display
                     const display = document.getElementById('laptop-timer-display');
-                    if (display) display.textContent = formatDuration(state.laptop.totalSeconds);
+                    if (display) display.textContent = formatted;
+
+                    // 2. Bottom HUD total timer & PC time
+                    const hudTimer = document.getElementById('arc-hud-timer');
+                    if (hudTimer) hudTimer.textContent = formatted;
+                    const pcEl = document.getElementById('arc-hud-pc-time');
+                    if (pcEl) {
+                        const h = Math.floor(secs / 3600);
+                        const m = Math.floor((secs % 3600) / 60);
+                        pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
+                    }
+
+                    // 3. Screen Time view desktop card
+                    const deskEl = document.getElementById('st-desktop-time-val');
+                    if (deskEl) deskEl.textContent = formatted;
+
+                    // 4. Combined time (Desktop + Mobile phone)
+                    const combEl = document.getElementById('st-combined-time-val');
+                    if (combEl) {
+                        let phoneSecs = 0;
+                        try {
+                            if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
+                                phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
+                            }
+                        } catch(e) {}
+                        combEl.textContent = formatDuration(secs + phoneSecs);
+                    }
+
+                    // 5. Screen time notifier tick
                     if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
-                        window.ArcScreenTimeNotifier.tick(state.laptop.totalSeconds);
+                        window.ArcScreenTimeNotifier.tick(secs);
+                    }
+
+                    // 6. Persist to localStorage
+                    if (typeof saveToLocalStorage === 'function') {
+                        saveToLocalStorage();
+                    } else {
+                        try {
+                            localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
+                        } catch(e) {}
                     }
                 }
             }, 1000);
         }
+        function startLaptopTimer() {
+            startLaptopTracker();
+        }
+        window.startLaptopTracker = startLaptopTracker;
+        window.startLaptopTimer = startLaptopTimer;
 
         /* ==========================================================================
            6. INITIALIZATION ENTRY POINT

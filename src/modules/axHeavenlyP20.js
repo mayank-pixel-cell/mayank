@@ -61,23 +61,104 @@ const AUTO=[[/outside|outdoor|sun|glare/,'out','Outdoor boost'],[/night|evening|
 const st=w=>w.length>3?w.replace(/s$/,''):w,toks=s=>s.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w.length>1).map(st);
 function find(s){const T=toks(s);return X.map(x=>{const t=toks(x[1]),k=toks(x[2]);let n=0;T.forEach(w=>{if(t.includes(w))n+=3;if(k.includes(w))n+=3;else if(k.some(z=>z.length>3&&(z.startsWith(w)||w.startsWith(z))))n+=1});return[n,x]}).filter(r=>r[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,5).map(r=>r[1])}
 const bar=mk('div','ax-bar','<div id="ax-res" role="listbox" aria-label="Search results"></div><div class="ax-sb"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><input id="ax-q" type="search" placeholder="Ask settings: make text bigger outside" aria-label="Ask settings" autocomplete="off"><button id="ax-mic" class="sx-ib" style="display:none" aria-label="Voice search"><i class="fa-solid fa-microphone"></i></button></div>');
-document.body.appendChild(bar);
+const dock = document.getElementById('ax-bar-dock');
+if (dock) {
+  dock.appendChild(bar);
+} else {
+  const viewSettings = document.getElementById('view-settings');
+  const subtabsRow = viewSettings ? viewSettings.firstElementChild : null;
+  if (subtabsRow && subtabsRow.nextSibling) {
+    subtabsRow.parentNode.insertBefore(bar, subtabsRow.nextSibling);
+  } else {
+    document.body.appendChild(bar);
+  }
+}
 function show(s){const el=q('#ax-res'),l=s.toLowerCase(),r=s?find(s):C().recents.map(i=>X.find(x=>x[0]===i)).filter(Boolean),c=/\b(when|while|whenever|if|every)\b/.test(l)&&AUTO.find(a=>a[0].test(l));
  let h=c?'<button class="ax-r" data-auto="'+c[1]+'"><b>Make it automatic</b><small>Turn on '+c[2]+'</small></button>':'';
  h+=r.map(x=>'<button class="ax-r" role="option" data-go="'+x[0]+'"><b>'+x[1]+'</b><small>'+(V[x[0]]?V[x[0]]():'Open')+'</small></button>').join('');
  if(s&&!r.length&&!c)h='<div class="ax-r">No match. Try sound, battery or backup.</div>';
+ if(s&&/text|size|font|bigger|larger|smaller|outdoor|outside|reset/i.test(s)){
+  h = '<button class="ax-r" data-cmd="make text bigger"><b>🔍 Make text bigger</b><small>+15%</small></button>' +
+      '<button class="ax-r" data-cmd="smaller text"><b>🔍 Make text smaller</b><small>-15%</small></button>' +
+      '<button class="ax-r" data-cmd="make text bigger outside"><b>☀️ Outdoor boost (125%)</b><small>High Contrast</small></button>' +
+      '<button class="ax-r" data-cmd="reset text size"><b>↺ Reset text size</b><small>100%</small></button>' + h;
+ }
  el.innerHTML=h+(!s&&r.length?'<div class="ax-h">Recent</div>':'')}
 function go(id){const x=X.find(z=>z[0]===id);if(!x)return;try{switchTab('settings')}catch(e){}
  const a=C();a.recents=[id].concat(a.recents.filter(z=>z!==id)).slice(0,5);sv();
  setTimeout(()=>{const t=q(x[3]);if(!t)return;const r=t.closest('.sx-row,section,li')||t;r.scrollIntoView({block:'center',behavior:a.rm?'auto':'smooth'});r.classList.add('ax-hit');setTimeout(()=>r.classList.remove('ax-hit'),1800);if(t.focus)t.focus({preventScroll:true})},150);
  history.replaceState(null,'','#s='+id);say('Opened '+x[1])}
-bar.addEventListener('click',e=>{const g=e.target.closest('[data-go]'),u=e.target.closest('[data-auto]'),i=q('#ax-q');
+
+function handleAskSettingsCommand(rawQuery) {
+  if (!rawQuery || typeof rawQuery !== 'string') return false;
+  const q = rawQuery.trim().toLowerCase();
+  
+  if (/make text bigger outside|bigger text outside|outdoor boost|outside/i.test(q)) {
+    document.documentElement.style.fontSize = '125%';
+    try { localStorage.setItem('arc_ui_font_scale', '125'); } catch(e){}
+    try { const a = C(); a.out.on = true; a.text = 125; sv(); } catch(e){}
+    const msg = '🔍 Outdoor Boost: Text size increased to 125%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/make text bigger|bigger text|larger text|increase text|zoom in|larger font/i.test(q)) {
+    let currentScale = parseInt(localStorage.getItem('arc_ui_font_scale') || '100', 10);
+    let newScale = Math.min(160, currentScale + 15);
+    document.documentElement.style.fontSize = newScale + '%';
+    try { localStorage.setItem('arc_ui_font_scale', String(newScale)); } catch(e){}
+    try { const a = C(); a.text = newScale; sv(); } catch(e){}
+    const msg = '🔍 Text size increased to ' + newScale + '%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/smaller text|make text smaller|decrease text|zoom out|smaller font/i.test(q)) {
+    let currentScale = parseInt(localStorage.getItem('arc_ui_font_scale') || '100', 10);
+    let newScale = Math.max(85, currentScale - 15);
+    document.documentElement.style.fontSize = newScale + '%';
+    try { localStorage.setItem('arc_ui_font_scale', String(newScale)); } catch(e){}
+    try { const a = C(); a.text = newScale; sv(); } catch(e){}
+    const msg = '🔍 Text size decreased to ' + newScale + '%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  if (/reset text size|reset text|normal text|default text/i.test(q)) {
+    document.documentElement.style.fontSize = '';
+    try { localStorage.setItem('arc_ui_font_scale', '100'); } catch(e){}
+    try { const a = C(); a.text = 100; a.out.on = false; sv(); } catch(e){}
+    const msg = '🔍 Text size reset to 100%';
+    if (typeof showToast === 'function') showToast(msg);
+    else if (typeof toast === 'function') toast(msg);
+    say(msg);
+    return true;
+  }
+  return false;
+}
+
+bar.addEventListener('click',e=>{const g=e.target.closest('[data-go]'),u=e.target.closest('[data-auto]'),cmd=e.target.closest('[data-cmd]'),i=q('#ax-q');
+ if(cmd){handleAskSettingsCommand(cmd.dataset.cmd);i.value='';q('#ax-res').innerHTML='';i.blur();return;}
  if(g){go(g.dataset.go)}else if(u){const a=C();a[u.dataset.auto].on=true;sv();paint();say('Automatic mode turned on')}else return;
  i.value='';q('#ax-res').innerHTML='';i.blur()});
 bar.addEventListener('input',e=>{if(e.target.id==='ax-q')show(e.target.value)});
 bar.addEventListener('focusin',()=>show(q('#ax-q').value));
 bar.addEventListener('focusout',()=>setTimeout(()=>{if(!bar.contains(document.activeElement))q('#ax-res').innerHTML=''},200));
-bar.addEventListener('keydown',e=>{if(e.key==='Escape'){q('#ax-q').value='';q('#ax-res').innerHTML=''}});
+bar.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    const i=q('#ax-q');
+    if(i&&i.value){
+      if(handleAskSettingsCommand(i.value)){
+        i.value='';q('#ax-res').innerHTML='';i.blur();
+      }
+    }
+  }else if(e.key==='Escape'){
+    q('#ax-q').value='';q('#ax-res').innerHTML='';
+  }
+});
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(SR){const m=q('#ax-mic');m.style.display='grid';m.onclick=()=>{try{const r=new SR();r.lang=navigator.language||'en-US';r.onresult=e=>{const i=q('#ax-q');i.value=e.results[0][0].transcript;show(i.value)};r.start();say('Listening')}catch(e){}}}
 const vis=()=>{const v=q('#view-settings');bar.style.display=v&&v.offsetParent!==null?'':'none'};
@@ -366,3 +447,10 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
  renderDayControl();renderHabitManager(true);
  if(window.ArcGoogleSync&&typeof window.ArcGoogleSync.renderUi==='function')window.ArcGoogleSync.renderUi();
 })();
+
+try {
+  const savedScale = localStorage.getItem('arc_ui_font_scale');
+  if (savedScale && savedScale !== '100') {
+    document.documentElement.style.fontSize = savedScale + '%';
+  }
+} catch(e) {}

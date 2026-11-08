@@ -1,5 +1,5 @@
 export function renderSettingsView() {
-  return `<section id="view-settings" class="hidden pb-24 md:pb-8" aria-label="Settings &amp; Controls">
+  return `<section id="view-settings" class="hidden pb-32 md:pb-24" aria-label="Settings &amp; Controls">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400">
@@ -30,10 +30,12 @@ export function renderSettingsView() {
                     </button>
                 </div>
             </div>
+            <!-- INLINE DOCKED ASK SETTINGS / NATURAL LANGUAGE COMMAND BAR -->
+            <div id="ax-bar-dock" class="mb-4"></div>
 
             <!-- APPEARANCE & ARC SEASON CONTROLS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
             <div id="settings-theme-arc-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-theme-arc-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
                             <i class="fa-solid fa-palette text-sm"></i>
@@ -70,9 +72,32 @@ export function renderSettingsView() {
                 </div>
             </div>
 
+            <!-- HARDWARE PROFILER & SMOOTHNESS ENGINE -->
+            <div id="settings-hardware-profiler-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-hardware-profiler-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i class="fa-solid fa-microchip text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Hardware Profiler &amp; Smoothness Engine</h3>
+                            <span class="text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+                                60 FPS Cap
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80 mt-3"></div>
+            </div>
+
             <!-- LIQUID GLASS UI & FLUID SPRING ANIMATIONS (ARC GOLD EXCLUSIVE) -->
             <div id="settings-liquid-glass-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-liquid-glass-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
@@ -105,11 +130,34 @@ export function renderSettingsView() {
             </div>
 
             <!-- CUSTOM BACKGROUND WALLPAPER (ARC GOLD EXCLUSIVE) -->
-            <div id="settings-custom-bg-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300"></div>
+                        <!-- CUSTOM BACKGROUND WALLPAPER (ARC GOLD EXCLUSIVE) -->
+            <div id="settings-custom-bg-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-custom-bg-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : (window.ArcCustomBackground && window.ArcCustomBackground.toggleBox ? window.ArcCustomBackground.toggleBox() : null)">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-amber-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-image text-base"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-sm sm:text-base font-extrabold text-white tracking-wide truncate">Custom &amp; 4K Wallpapers</h3>
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                    <i class="fa-solid fa-crown text-[9px]"></i> Arc Gold Perk
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : (window.ArcCustomBackground && window.ArcCustomBackground.toggleBox ? window.ArcCustomBackground.toggleBox() : null)">
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80 mt-3"></div>
+            </div>
 
             <!-- AUTO-START ON DEVICE BOOT SETTINGS CARD -->
             <div id="settings-autostart-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-autostart-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-power-off text-sm"></i>
@@ -147,7 +195,7 @@ export function renderSettingsView() {
 
             <!-- PERMANENT SCREEN TIME NOTIFICATION CARD -->
             <div id="settings-screentime-notif-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div class="flex items-center justify-between gap-3" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-screentime-notif-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
                             <i class="fa-solid fa-bell text-sm"></i>
@@ -185,7 +233,7 @@ export function renderSettingsView() {
             <!-- ADDITIONAL SETTINGS & FREQUENTLY ASKED QUESTIONS (FAQ) (Compact by Default) -->
             <section id="settings-additional-faq-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Additional Settings &amp; Frequently Asked Questions">
                 <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-additional-faq-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                             <i class="fa-solid fa-circle-question text-base"></i>
@@ -269,7 +317,7 @@ export function renderSettingsView() {
             <!-- ABOUT THE FOUNDER SECTION (Compact by Default) -->
             <section id="settings-about-founder-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-400 bg-slate-900/90 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="About the Founder">
                 <!-- COMPACT HEADER BAR (Strict Arrow-Button & Arrow-Key Trigger Only) -->
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-about-founder-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 via-indigo-600 to-purple-800 flex items-center justify-center text-white shadow-sm shrink-0 border border-purple-400/30">
                             <i class="fa-solid fa-user-astronaut text-base"></i>
@@ -482,7 +530,7 @@ export function renderSettingsView() {
 
             <!-- TERMS & CONDITIONS & LEGAL AGREEMENT CARD -->
             <section id="settings-terms-legal-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 bg-slate-900/90 mb-6 shadow-xl relative overflow-hidden transition-all duration-300" aria-label="Terms and Conditions and Legal Agreement">
-                <div class="flex items-center justify-between gap-3 select-none" tabindex="0" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
+                <div class="flex items-center justify-between gap-3 select-none cursor-pointer" tabindex="0" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-terms-legal-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
                     <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shrink-0">
                             <i class="fa-solid fa-scale-balanced text-sm"></i>

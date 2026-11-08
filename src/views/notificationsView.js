@@ -1,5 +1,5 @@
 export function renderNotificationsView() {
-  return `<section id="view-notifications" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8" aria-label="Notifications & Updates Hub">
+  return `<section id="view-notifications" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24" aria-label="Notifications & Updates Hub">
             <!-- HERO BANNER -->
             <div class="glass-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-cyan-400 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-300">
                 <div class="space-y-1.5 max-w-2xl">

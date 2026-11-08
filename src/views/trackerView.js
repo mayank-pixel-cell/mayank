@@ -44,7 +44,7 @@ export function renderTrackerView() {
         </div>
 
         <!-- VIEW 1: DAILY TRACKER VIEW -->
-        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
+        <section id="view-tracker" class="space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24">
             <!-- DAILY MINDSET QUOTE -->
             <div id="quote-card-container" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all duration-300">
                 <div class="space-y-1 max-w-3xl">

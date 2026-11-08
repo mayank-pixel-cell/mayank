@@ -1,5 +1,5 @@
 export function renderRulesView() {
-  return `<section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-24 md:pb-8">
+  return `<section id="view-rules" class="hidden space-y-4 sm:space-y-6 tab-view-enter pb-32 md:pb-24">
             <div class="glass-card rounded-2xl p-4 sm:p-6">
                 <h2 id="blueprint-title" class="text-lg sm:text-xl font-extrabold text-white mb-1 flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-cyan-400"></i> Winter Arc Master Blueprint

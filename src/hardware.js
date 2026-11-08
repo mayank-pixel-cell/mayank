@@ -427,7 +427,7 @@ export class ArcHardwareGatekeeper {
     card.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "settings-hardware-profiler-card")');
 
     card.innerHTML = `
-      <div class="flex items-center justify-between gap-3 select-none">
+      <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-hardware-profiler-card')">
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
             <i class="fa-solid fa-microchip text-base"></i>

@@ -3648,7 +3648,7 @@ window.ArcGold = (function() {
 
     container.innerHTML = `
       <div class="glass-card rounded-2xl border border-amber-500/40 p-4 transition-all duration-300 bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.08)] hover:border-amber-400/60" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-gold-card')">
-        <div class="flex items-center justify-between gap-3 select-none">
+        <div class="flex items-center justify-between gap-3 select-none cursor-pointer" onclick="event.stopPropagation(); window.ArcSettingsAccordion ? window.ArcSettingsAccordion.toggle('settings-custom-bg-card') : window.ArcCustomBackground.toggleBox()">
           <div class="flex items-center gap-3 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
               <i class="fa-solid fa-crown text-base"></i>
