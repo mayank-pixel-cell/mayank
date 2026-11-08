@@ -34,6 +34,16 @@ class ArcSettingsAccordionManager {
       ? accordion.classList.contains('expanded')
       : this.expandedCards.has(actualId);
 
+    // Guard against rapid duplicate clicks (e.g., event bubbling from button to header)
+    const now = Date.now();
+    this._lastToggleTime = this._lastToggleTime || {};
+    if (actualId && typeof forceState !== 'boolean') {
+      if (now - (this._lastToggleTime[actualId] || 0) < 150) {
+        return;
+      }
+      this._lastToggleTime[actualId] = now;
+    }
+
     const willExpand = (typeof forceState === 'boolean') ? forceState : !currentlyExpanded;
 
     if (willExpand) {

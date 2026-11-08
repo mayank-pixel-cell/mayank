@@ -48,7 +48,7 @@ export function renderSettingsView() {
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400" aria-label="Toggle Display Mode &amp; Active Season card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-theme-arc-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400" aria-label="Toggle Display Mode &amp; Active Season card" aria-expanded="false" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-theme-arc-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-theme-arc-card')">
                             <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
@@ -112,7 +112,7 @@ export function renderSettingsView() {
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Liquid Glass UI &amp; Animations card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-liquid-glass-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Liquid Glass UI &amp; Animations card" aria-expanded="false" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-liquid-glass-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-liquid-glass-card')">
                             <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
@@ -169,7 +169,7 @@ export function renderSettingsView() {
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Auto-Start card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-autostart-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Auto-Start card" aria-expanded="false" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-autostart-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-autostart-card')">
                             <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
@@ -207,7 +207,7 @@ export function renderSettingsView() {
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400" aria-label="Toggle Permanent Notification card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-screentime-notif-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400" aria-label="Toggle Permanent Notification card" aria-expanded="false" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-screentime-notif-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-screentime-notif-card')">
                             <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
@@ -248,7 +248,7 @@ export function renderSettingsView() {
                     </div>
 
                     <div class="flex items-center gap-2 shrink-0">
-                        <button id="faq-section-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle FAQs" onclick="ArcSettingsAccordion.toggle('settings-additional-faq-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
+                        <button id="faq-section-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-white border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle FAQs" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-additional-faq-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-additional-faq-card')">
                             <span>View FAQs</span>
                             <i id="faq-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                         </button>
@@ -334,7 +334,7 @@ export function renderSettingsView() {
                     </div>
 
                     <div class="flex items-center gap-2 shrink-0">
-                        <button id="founder-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle Founder Story" onclick="ArcSettingsAccordion.toggle('settings-about-founder-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
+                        <button id="founder-toggle-btn" type="button" class="settings-arrow-btn px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer" aria-expanded="false" aria-label="Toggle Founder Story" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-about-founder-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-about-founder-card')">
                             <span>Read Story</span>
                             <i id="founder-chevron-icon" class="settings-chevron-icon fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                         </button>
@@ -544,7 +544,7 @@ export function renderSettingsView() {
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Terms &amp; Conditions card" aria-expanded="false" onclick="ArcSettingsAccordion.toggle('settings-terms-legal-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Toggle Terms &amp; Conditions card" aria-expanded="false" onclick="event.stopPropagation(); ArcSettingsAccordion.toggle('settings-terms-legal-card')" onkeydown="ArcSettingsAccordion.handleKeyDown(event, 'settings-terms-legal-card')">
                             <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                         </button>
                     </div>
