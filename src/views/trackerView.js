@@ -169,6 +169,9 @@ export function renderTrackerView() {
                             </h2>
                             <p class="text-[11px] sm:text-xs text-slate-400">Check off daily habits to update Arc execution</p>
                         </div>
+                        <button role="button" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-2.5 py-1.5 text-xs rounded-lg bg-amber-500/15 hover:bg-amber-500/25 active:bg-amber-500/30 text-amber-300 transition border border-amber-500/30 flex items-center gap-1.5 shadow-sm" title="Open Homescreen Habit Widget (as seen in photo)">
+                            <i class="fa-solid fa-mobile-screen text-amber-400"></i> <span class="hidden sm:inline">Phone Widget</span>
+                        </button>
                         <button role="button" onclick="resetTodayHabits()" onmouseenter="playSfx('hover')" class="px-2.5 py-1.5 text-xs rounded-lg bg-slate-800 active:bg-slate-700 text-slate-300 transition border border-slate-700 flex items-center gap-1 shadow-sm hover:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                             <i class="fa-solid fa-rotate-left"></i> <span class="hidden sm:inline">Reset Today</span>
                         </button>

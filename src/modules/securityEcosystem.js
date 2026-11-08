@@ -2275,25 +2275,33 @@ window.ArcScreenTimeNotifier = (function() {
 
   function tick(seconds) {
     _lastSecs = seconds;
+    _desktopSecs = Math.max(_desktopSecs || 0, seconds);
+    _combinedSecs = _desktopSecs + (_mobileSecs || 0);
     const hudTimer = document.getElementById('arc-hud-timer');
     if (hudTimer) {
       const activeTotal = _combinedSecs > 0 ? _combinedSecs : seconds;
       hudTimer.textContent = formatTime(activeTotal);
     }
+    const pcEl = document.getElementById('arc-hud-pc-time');
+    if (pcEl) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
+    }
   }
 
   function syncTimes(desktopSecs, mobileSecs, combinedSecs) {
-    _desktopSecs = desktopSecs;
-    _mobileSecs = mobileSecs;
-    _combinedSecs = combinedSecs;
+    _desktopSecs = Math.max(_desktopSecs || 0, desktopSecs || 0);
+    _mobileSecs = mobileSecs || 0;
+    _combinedSecs = _desktopSecs + _mobileSecs;
 
     const pcEl = document.getElementById('arc-hud-pc-time');
     const mobEl = document.getElementById('arc-hud-mob-time');
     const shieldEl = document.getElementById('arc-hud-shield-score');
     const srcShield = document.getElementById('st-radar-shield-score');
 
-    if (pcEl) pcEl.textContent = formatTimeShort(desktopSecs);
-    if (mobEl) mobEl.textContent = formatTimeShort(mobileSecs);
+    if (pcEl) pcEl.textContent = formatTimeShort(_desktopSecs);
+    if (mobEl) mobEl.textContent = formatTimeShort(_mobileSecs);
     if (shieldEl && srcShield) shieldEl.textContent = srcShield.textContent;
   }
 
@@ -4877,10 +4885,41 @@ window.ArcBlackWhiteMode = (function() {
       }
     }
 
-    // 2. SettingsApp toggle
+    // 2. SettingsApp toggle & Settings View controls
     const sxToggle = document.getElementById('sx-bw-toggle');
     if (sxToggle) {
       sxToggle.checked = active;
+    }
+
+    const bwPill = document.getElementById('settings-bw-status-pill');
+    if (bwPill) {
+      bwPill.textContent = active ? 'ACTIVE' : 'DISABLED';
+      bwPill.className = active
+        ? 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 text-slate-950 font-bold border border-white shrink-0'
+        : 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0';
+    }
+
+    const setBwBtn = document.getElementById('btn-settings-toggle-bw');
+    const setBwBtnText = document.getElementById('btn-settings-toggle-bw-text');
+    if (setBwBtn) {
+      if (active) {
+        setBwBtn.className = 'px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-white/20';
+        if (setBwBtnText) setBwBtnText.textContent = 'Disable Black & White Mode (Alt+B)';
+      } else {
+        setBwBtn.className = 'px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 border border-slate-700 shadow-md';
+        if (setBwBtnText) setBwBtnText.textContent = 'Enable Black & White Mode (Alt+B)';
+      }
+    }
+
+    const themeBwBtn = document.getElementById('settings-theme-bw-btn');
+    const themeBwLabel = document.getElementById('settings-theme-bw-label');
+    if (themeBwLabel) {
+      themeBwLabel.textContent = active ? 'B&W Mode: Active' : 'B&W Mode: Off';
+    }
+    if (themeBwBtn) {
+      themeBwBtn.classList.toggle('border-zinc-300', active);
+      themeBwBtn.classList.toggle('bg-zinc-200', active && isLight);
+      themeBwBtn.classList.toggle('text-black', active && isLight);
     }
 
     // 3. PP12 drawer toggle

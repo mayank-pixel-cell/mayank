@@ -94,15 +94,6 @@ export function renderHeaderNav() {
                     <span id="header-switch-user-label" class="hidden lg:inline font-mono text-[11px]">@operative</span>
                 </button>
 
-
-                <!-- Black & White Mode Toggle (Arc Gold VIP) -->
-                <button role="button" id="btn-header-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Black & White Mode (Alt+B • 100% Free Forever)">
-                    <i id="header-bw-icon" class="fa-solid fa-circle-half-stroke text-xs"></i>
-                    <span class="hidden xl:inline text-[11px]">B&amp;W</span>
-                    
-                </button>
-
-
                 <!-- Share Tracker Button -->
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
                     <i class="fa-solid fa-share-nodes text-xs"></i>

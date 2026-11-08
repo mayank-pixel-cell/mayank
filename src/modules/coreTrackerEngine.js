@@ -1233,6 +1233,7 @@ if (typeof window !== 'undefined') {
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') window.ArcGoogleSync.renderUi();
                 if (window.ArcCustomBackground && typeof window.ArcCustomBackground.renderCard === 'function') window.ArcCustomBackground.renderCard();
                 if (window.ArcLiquidGlass && typeof window.ArcLiquidGlass.updateUI === 'function') window.ArcLiquidGlass.updateUI();
+                if (window.ArcBlackWhiteMode && typeof window.ArcBlackWhiteMode.updateUI === 'function') window.ArcBlackWhiteMode.updateUI();
             }
         }
 
@@ -1257,6 +1258,8 @@ if (typeof window !== 'undefined') {
             const customBgCard = document.getElementById('settings-custom-bg-card');
             const autoStartCard = document.getElementById('settings-autostart-card');
             const screenNotifCard = document.getElementById('settings-screentime-notif-card');
+            const bwCard = document.getElementById('settings-bw-mode-card');
+            const widgetsCard = document.getElementById('settings-widgets-card');
             const faqCard = document.getElementById('settings-additional-faq-card');
             const founderCard = document.getElementById('settings-about-founder-card');
             const goldCard = document.getElementById('settings-gold-card');
@@ -1264,7 +1267,7 @@ if (typeof window !== 'undefined') {
 
             const allCards = [
                 themeArcCard, hwCard, liquidGlassCard, customBgCard, autoStartCard,
-                screenNotifCard, p20Account, p20ServerSync, p20Day, sxRoot, axRoot,
+                screenNotifCard, bwCard, widgetsCard, p20Account, p20ServerSync, p20Day, sxRoot, axRoot,
                 faqCard, founderCard, goldCard, termsCard
             ];
 
@@ -1279,6 +1282,8 @@ if (typeof window !== 'undefined') {
                 if (customBgCard) customBgCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = '';
                 if (screenNotifCard) screenNotifCard.style.display = '';
+                if (bwCard) bwCard.style.display = '';
+                if (widgetsCard) widgetsCard.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
                 if (axRoot) axRoot.style.display = '';
@@ -1381,7 +1386,7 @@ if (typeof window !== 'undefined') {
                             </label>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
-                            <button type="button" onclick="ArcHabitAnalytics.openDrawer('${habit.id}'); event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-8 h-8 rounded-xl bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
+                            <button type="button" onclick="if(window.ArcHabitAnalytics)ArcHabitAnalytics.openDrawer('${habit.id}');if(typeof event!=='undefined'&&event)event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-8 h-8 rounded-xl bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
                                 <i class="fa-solid fa-chart-line text-xs"></i>
                             </button>
                             <button role="button" onclick="deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 p-2.5 sm:p-2 -mr-1 transition text-xs shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation rounded-xl active:bg-rose-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Delete ${habit.name}">
@@ -1605,9 +1610,12 @@ function toggleStreakFreezeFromRules(checked) {
                         <p class="text-xs text-slate-400 mb-3">${info.desc}</p>
                         <ul class="space-y-2">
                             ${list.length > 0 ? list.map(item => `
-                                <li class="text-xs text-slate-200 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
-                                    <span>${item.name}</span>
-                                    <span class="text-[10px] font-mono font-bold text-slate-400">${item.weight}x Priority</span>
+                                <li onclick="if(window.ArcHabitAnalytics)ArcHabitAnalytics.openDrawer('${item.id}');" class="text-xs text-slate-200 bg-slate-900/80 hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 hover:border-cyan-500/40 flex items-center justify-between cursor-pointer transition active:scale-98 group" title="Click to view deep analytics for ${item.name}">
+                                    <span class="group-hover:text-cyan-300 transition-colors">${item.name}</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-mono font-bold text-slate-400">${item.weight}x Priority</span>
+                                        <i class="fa-solid fa-chart-line text-[10px] text-slate-500 group-hover:text-cyan-400 transition-colors"></i>
+                                    </div>
                                 </li>
                             `).join('') : `<li class="text-xs text-slate-500 italic">No custom rules added yet.</li>`}
                         </ul>
@@ -1968,7 +1976,7 @@ function toggleStreakFreezeFromRules(checked) {
                     return `
                         <div ${rowClick} class="habit-row w-full flex items-center justify-between gap-1.5 p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs transition-all duration-300 ease-out hover:border-cyan-400/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.25)]">
                             ${actionHtml}
-                            <button type="button" onclick="ArcHabitAnalytics.openDrawer('${h.id}'); event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-7 h-7 rounded-lg bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
+                            <button type="button" onclick="if(window.ArcHabitAnalytics)ArcHabitAnalytics.openDrawer('${h.id}');if(typeof event!=='undefined'&&event)event.stopPropagation();" title="Inspect Habit Heatmap & Graphs" class="w-7 h-7 rounded-lg bg-slate-800/90 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400">
                                 <i class="fa-solid fa-chart-line text-[10px]"></i>
                             </button>
                         </div>
@@ -2225,17 +2233,68 @@ function toggleStreakFreezeFromRules(checked) {
             showToast(`${cat}: ${pct}% execution`);
         };
 
+        let _lastLaptopTick = Date.now();
+
+        function updateLaptopDisplays(secs) {
+            const formatted = formatDuration(secs);
+
+            // 1. Tracker view display
+            const display = document.getElementById('laptop-timer-display');
+            if (display) display.textContent = formatted;
+
+            // 2. Bottom HUD total timer & PC time
+            const hudTimer = document.getElementById('arc-hud-timer');
+            if (hudTimer) hudTimer.textContent = formatted;
+            const pcEl = document.getElementById('arc-hud-pc-time');
+            if (pcEl) {
+                const h = Math.floor(secs / 3600);
+                const m = Math.floor((secs % 3600) / 60);
+                pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
+            }
+
+            // 3. Screen Time view desktop card
+            const deskEl = document.getElementById('st-desktop-time-val');
+            if (deskEl) deskEl.textContent = formatted;
+
+            // 4. Combined time (Desktop + Mobile phone)
+            const combEl = document.getElementById('st-combined-time-val');
+            if (combEl) {
+                let phoneSecs = 0;
+                try {
+                    if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
+                        phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
+                    }
+                } catch(e) {}
+                combEl.textContent = formatDuration(secs + phoneSecs);
+            }
+
+            // 5. Screen time notifier tick
+            if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
+                window.ArcScreenTimeNotifier.tick(secs);
+            }
+        }
+
         function toggleLaptopTracker() {
             playSfx('click');
             state.laptop.isRunning = !state.laptop.isRunning;
+            _lastLaptopTick = Date.now();
             const btn = document.getElementById('btn-toggle-laptop');
             const badge = document.getElementById('laptop-status-badge');
+            const hudPauseBtn = document.getElementById('arc-hud-pause-btn');
 
             if (state.laptop.isRunning) {
                 if (btn) btn.innerHTML = `<i class="fa-solid fa-pause mr-1"></i> Pause Tracker`;
                 if (badge) {
                     badge.textContent = "AUTO-TRACKING";
                     badge.className = "text-[9px] sm:text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono animate-pulse";
+                }
+                if (hudPauseBtn) {
+                    hudPauseBtn.textContent = "Pause";
+                    const icon = hudPauseBtn.previousElementSibling;
+                    if (icon && icon.classList.contains('fa-play')) {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                    }
                 }
                 showToast("Laptop tracker active.");
             } else {
@@ -2244,70 +2303,71 @@ function toggleStreakFreezeFromRules(checked) {
                     badge.textContent = "PAUSED";
                     badge.className = "text-[9px] sm:text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono";
                 }
+                if (hudPauseBtn) {
+                    hudPauseBtn.textContent = "Resume";
+                    const icon = hudPauseBtn.previousElementSibling;
+                    if (icon && icon.classList.contains('fa-pause')) {
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
+                    }
+                }
                 showToast("Laptop tracker paused.");
             }
             renderScreenTime();
         }
 
+        function tickLaptop() {
+            if (!state.laptop || state.laptop.isRunning === false) {
+                _lastLaptopTick = Date.now();
+                return;
+            }
+            const now = Date.now();
+            const elapsed = Math.max(1, Math.floor((now - _lastLaptopTick) / 1000));
+            _lastLaptopTick = now;
+
+            state.laptop.totalSeconds = (state.laptop.totalSeconds || 0) + elapsed;
+            const secs = state.laptop.totalSeconds;
+
+            updateLaptopDisplays(secs);
+
+            // Keep cross-device desktop count in sync
+            if (window.state && window.state.deviceScreenTime && window.state.deviceScreenTime.desktop) {
+                window.state.deviceScreenTime.desktop.seconds = Math.max(window.state.deviceScreenTime.desktop.seconds || 0, secs);
+            }
+
+            // Persist to localStorage
+            if (typeof saveToLocalStorage === 'function') {
+                saveToLocalStorage();
+            } else {
+                try {
+                    localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
+                } catch(e) {}
+            }
+        }
+
         function startLaptopTracker() {
             if (state.laptop.interval) clearInterval(state.laptop.interval);
-            state.laptop.interval = setInterval(() => {
-                if (document.visibilityState === 'visible' && !state.laptop.isAutoPaused && state.laptop.isRunning !== false) {
-                    state.laptop.totalSeconds = (state.laptop.totalSeconds || 0) + 1;
-                    const secs = state.laptop.totalSeconds;
-                    const formatted = formatDuration(secs);
-
-                    // 1. Tracker view display
-                    const display = document.getElementById('laptop-timer-display');
-                    if (display) display.textContent = formatted;
-
-                    // 2. Bottom HUD total timer & PC time
-                    const hudTimer = document.getElementById('arc-hud-timer');
-                    if (hudTimer) hudTimer.textContent = formatted;
-                    const pcEl = document.getElementById('arc-hud-pc-time');
-                    if (pcEl) {
-                        const h = Math.floor(secs / 3600);
-                        const m = Math.floor((secs % 3600) / 60);
-                        pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
-                    }
-
-                    // 3. Screen Time view desktop card
-                    const deskEl = document.getElementById('st-desktop-time-val');
-                    if (deskEl) deskEl.textContent = formatted;
-
-                    // 4. Combined time (Desktop + Mobile phone)
-                    const combEl = document.getElementById('st-combined-time-val');
-                    if (combEl) {
-                        let phoneSecs = 0;
-                        try {
-                            if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
-                                phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
-                            }
-                        } catch(e) {}
-                        combEl.textContent = formatDuration(secs + phoneSecs);
-                    }
-
-                    // 5. Screen time notifier tick
-                    if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
-                        window.ArcScreenTimeNotifier.tick(secs);
-                    }
-
-                    // 6. Persist to localStorage
-                    if (typeof saveToLocalStorage === 'function') {
-                        saveToLocalStorage();
-                    } else {
-                        try {
-                            localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
-                        } catch(e) {}
-                    }
-                }
-            }, 1000);
+            _lastLaptopTick = Date.now();
+            updateLaptopDisplays(state.laptop.totalSeconds || 0);
+            state.laptop.interval = setInterval(tickLaptop, 1000);
         }
         function startLaptopTimer() {
             startLaptopTracker();
         }
         window.startLaptopTracker = startLaptopTracker;
         window.startLaptopTimer = startLaptopTimer;
+
+        // Keep timer ticking continuously across backgrounding and window focus
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && state.laptop && state.laptop.isRunning !== false) {
+                tickLaptop();
+            }
+        });
+        window.addEventListener('focus', () => {
+            if (state.laptop && state.laptop.isRunning !== false) {
+                tickLaptop();
+            }
+        });
 
         /* ==========================================================================
            6. INITIALIZATION ENTRY POINT

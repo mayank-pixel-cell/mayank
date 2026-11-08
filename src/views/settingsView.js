@@ -67,6 +67,50 @@ export function renderSettingsView() {
                                 <i id="header-arc-switch-icon" class="fa-solid fa-snowflake text-cyan-400 mr-2 text-sm"></i>
                                 <span id="arc-switch-btn-text">Switch to Winter Arc</span>
                             </button>
+                            <button role="button" id="settings-theme-bw-btn" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" onmouseenter="playSfx('hover')" class="px-4 py-2.5 rounded-xl bg-slate-800 active:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center justify-center transition hover:border-zinc-300 hover:text-white shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400" aria-label="Toggle Black & White Mode" title="Toggle Black & White Mode (Alt+B)">
+                                <i id="settings-theme-bw-icon" class="fa-solid fa-circle-half-stroke text-zinc-300 mr-2 text-sm"></i>
+                                <span id="settings-theme-bw-label">B&amp;W Mode: Off</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLACK & WHITE MODE (DOPAMINE DETOX) (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+            <div id="settings-bw-mode-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-zinc-300 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-bw-mode-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-bw-mode-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-zinc-500/20 border border-zinc-400/40 flex items-center justify-center text-zinc-300 shrink-0">
+                            <i class="fa-solid fa-circle-half-stroke text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Black &amp; White Mode (Monochrome)</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-zinc-500/20 text-zinc-300 border border-zinc-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">DOPAMINE DETOX</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">100% FREE</span>
+                            <span id="settings-bw-status-pill" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">DISABLED</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400" aria-label="Toggle Black & White Mode card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-bw-mode-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Converts the entire application interface into a high-contrast grayscale (E-Ink / Noir) display. Stripping away vibrant colors neutralizes algorithmic dopamine triggers, reducing screen addiction and sharpening deep focus.
+                        </p>
+                        <div class="flex items-center gap-3 flex-wrap pt-1">
+                            <button role="button" id="btn-settings-toggle-bw" onclick="if(window.ArcBlackWhiteMode)ArcBlackWhiteMode.toggle()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 border border-slate-700 shadow-md">
+                                <i class="fa-solid fa-circle-half-stroke"></i>
+                                <span id="btn-settings-toggle-bw-text">Enable Black &amp; White Mode (Alt+B)</span>
+                            </button>
+                            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-400 text-xs">
+                                <i class="fa-solid fa-keyboard text-slate-500"></i>
+                                <span>Hotkey:</span>
+                                <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[10px] text-cyan-300">Alt + B</kbd>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,6 +265,56 @@ export function renderSettingsView() {
                             <button role="button" id="btn-toggle-perm-notif" onclick="ArcScreenTimeNotifier.toggle()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/20">
                                 <i class="fa-solid fa-bell"></i>
                                 <span id="btn-toggle-perm-notif-text">Enable Permanent Notification</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INBUILT MOBILE & HOMESCREEN WIDGETS (RELOCATED FROM HEADER TO FREE UP SPACE) -->
+            <div id="settings-widgets-card" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-purple-500 bg-slate-900/80 mb-4 shadow-xl relative overflow-hidden transition-all duration-300" tabindex="0" onkeydown="window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, 'settings-widgets-card')">
+                <div class="flex items-center justify-between gap-3 cursor-pointer select-none" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-widgets-card')">
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0">
+                            <i class="fa-solid fa-mobile-screen text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-extrabold text-white truncate">Phone Homescreen &amp; Inbuilt Widgets</h3>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-bold uppercase tracking-wider shrink-0">MOBILE WIDGETS</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-purple-300 border border-purple-500/30 shrink-0">SIMULATOR READY</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" class="settings-arrow-btn p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white border border-slate-700/80 text-xs flex items-center justify-center transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400" aria-label="Toggle Phone Homescreen & Inbuilt Widgets card" aria-expanded="false" onclick="event.stopPropagation(); window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('settings-widgets-card')">
+                            <i class="settings-chevron-icon fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="arc-fluid-accordion hidden pt-3 border-t border-slate-800/80">
+                    <div class="space-y-3">
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed max-w-2xl">
+                            Simulate and interact with your Android / iOS homescreen widgets directly on your device. Check off daily habits, monitor live screen time telemetry, and trigger 1-click focus mode timers.
+                        </p>
+                        <div class="flex items-center gap-2.5 flex-wrap pt-1">
+                            <button role="button" id="btn-settings-open-widgets" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-95 shadow-md shadow-purple-600/30">
+                                <i class="fa-solid fa-mobile-screen text-cyan-300"></i>
+                                <span>Open Phone Widgets Simulator</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('habits'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-fire text-amber-400"></i>
+                                <span>Habits Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-hourglass-half text-purple-400"></i>
+                                <span>Screen Time Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.openSimulator(); ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-bullseye text-cyan-400"></i>
+                                <span>Focus Mode Widget</span>
+                            </button>
+                            <button role="button" onclick="ArcPhoneWidgets.refresh(); playSfx('click')" class="px-3 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 active:scale-95" title="Refresh widget telemetry">
+                                <i class="fa-solid fa-arrows-rotate text-slate-400"></i>
+                                <span>Refresh Telemetry</span>
                             </button>
                         </div>
                     </div>
