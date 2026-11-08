@@ -67,12 +67,6 @@ export function renderHeaderNav() {
 
             <!-- ACTION BUTTONS -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <!-- Offline Status Pill (Revealed when network is disconnected) -->
-                <div id="arc-offline-indicator" class="hidden px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold flex items-center gap-1.5 shadow-sm" title="Arc Tracker is running in 100% Offline Mode. All habits, screen time, and rank telemetry are persisted to local storage.">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    <span class="hidden sm:inline">OFFLINE MODE</span>
-                    <span class="sm:hidden">OFFLINE</span>
-                </div>
 
                 <!-- Dedicated Notifications & System Updates Bell Icon -->
                 <button type="button" id="btn-header-notifications" onclick="ArcNotifications.toggleDrawer(); if(window.playSfx)playSfx('click')" class="relative w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Notifications &amp; System Updates (Press N)" aria-label="Notifications &amp; Updates" aria-expanded="false" aria-controls="arc-notifications-drawer">
@@ -108,11 +102,6 @@ export function renderHeaderNav() {
                     <span class="hidden xl:inline text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
                 </button>
 
-                <!-- Discretion / Stealth Mode Toggle (Anti-Snoop Panic Switch) -->
-                <button role="button" id="btn-header-discretion" onclick="if(window.ArcSecurity)ArcSecurity.toggleDiscretionMode()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Discretion / Stealth Mode (Alt+S)">
-                    <i id="header-discretion-icon" class="fa-solid fa-eye-slash text-xs"></i>
-                    <span class="hidden xl:inline text-[11px]">Stealth</span>
-                </button>
 
                 <!-- Share Tracker Button -->
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">

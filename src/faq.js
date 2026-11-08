@@ -83,7 +83,7 @@ export const FAQ_ITEMS = [
     categoryLabel: 'Audio & Visuals',
     icon: 'fa-solid fa-keyboard',
     question: 'What keyboard shortcuts are supported on Desktop?',
-    answer: 'Press N to open Notifications & Updates, S to open Settings, M for Global Mute, P to start/pause the Focus Timer, Alt + S for Stealth/Discretion mode, Alt + B for Arc Gold B&W mode, Esc to close modals/drawers, and ? to reveal the full keyboard shortcuts cheat sheet.'
+    answer: 'Press N to open Notifications & Updates, S to open Settings, M for Global Mute, P to start/pause the Focus Timer, Alt + B for Arc Gold B&W mode, Esc to close modals/drawers, and ? to reveal the full keyboard shortcuts cheat sheet.'
   }
 ];
 

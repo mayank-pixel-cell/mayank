@@ -1560,12 +1560,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
 
             <!-- ACTION BUTTONS -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <!-- Offline Status Pill (Revealed when network is disconnected) -->
-                <div id="arc-offline-indicator" class="hidden px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold flex items-center gap-1.5 shadow-sm" title="Arc Tracker is running in 100% Offline Mode. All habits, screen time, and rank telemetry are persisted to local storage.">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    <span class="hidden sm:inline">OFFLINE MODE</span>
-                    <span class="sm:hidden">OFFLINE</span>
-                </div>
 
                 <!-- Dedicated Notifications & System Updates Bell Icon -->
                 <button type="button" id="btn-header-notifications" onclick="ArcNotifications.toggleDrawer(); if(window.playSfx)playSfx('click')" class="relative w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Notifications &amp; System Updates (Press N)" aria-label="Notifications &amp; Updates" aria-expanded="false" aria-controls="arc-notifications-drawer">
@@ -1595,11 +1589,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <span class="hidden xl:inline text-[9px] font-black font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">GOLD</span>
                 </button>
 
-                <!-- Discretion / Stealth Mode Toggle (Anti-Snoop Panic Switch) -->
-                <button role="button" id="btn-header-discretion" onclick="if(window.ArcSecurity)ArcSecurity.toggleDiscretionMode()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Toggle Discretion / Stealth Mode (Alt+S)">
-                    <i id="header-discretion-icon" class="fa-solid fa-eye-slash text-xs"></i>
-                    <span class="hidden xl:inline text-[11px]">Stealth</span>
-                </button>
 
                 <!-- Share Tracker Button -->
                 <button role="button" id="btn-share-tracker" onclick="ArcShare.openShareModal()" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" title="Share your Arc Tracker progress">
@@ -1991,9 +1980,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <button role="button" onclick="openArcModal(); playSfx('modalOpen')" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                         <i class="fa-solid fa-sun text-amber-400"></i> Transition Arc
                     </button>
-                    <button role="button" onclick="triggerPieChartAnimation()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 text-cyan-400 border border-cyan-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-play-circle text-sm"></i> Replay
-                    </button>
                 </div>
             </div>
 
@@ -2287,8 +2273,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                 </div>
             </div>
 
-            <!-- PER-HABIT DEEP ANALYTICS & VELOCITY PANEL (SURFACE B) -->
-            <div id="habit-deep-analytics-panel" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-5 border-t-2 border-t-emerald-400 glow-cyan transition-all duration-300"></div>
 
             <!-- CONSISTENCY MATRIX -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
@@ -7059,7 +7043,6 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
 
             const p20Account = document.getElementById('p20-google-account');
-            const p20ServerSync = document.getElementById('p20-server-sync');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
             const faqCard = document.getElementById('settings-additional-faq-card');
@@ -8085,13 +8068,6 @@ function toggleStreakFreezeFromRules(checked) {
             }
             showToast(`${cat}: ${pct}% execution`);
         };
-
-        function triggerPieChartAnimation() {
-            playSfx('fanfare');
-            triggerConfettiBurst();
-            renderSpiderWeb();
-            showToast("Radar Matrix Refreshed");
-        }
 
         function toggleLaptopTracker() {
             playSfx('click');
@@ -17887,35 +17863,20 @@ window.ArcSecurity = (function() {
     }
   }
 
-  /* ---------- DISCRETION / CAMOUFLAGE MODE ---------- */
+  /* ---------- DISCRETION / CAMOUFLAGE MODE (REMOVED) ---------- */
   function isDiscretionMode() {
-    return localStorage.getItem('arc_sec_discretion_mode') === 'true';
+    return false;
   }
 
   function setDiscretionMode(active) {
-    localStorage.setItem('arc_sec_discretion_mode', String(active));
-    document.body.classList.toggle('arc-discretion-mode', active);
-    const icon = document.getElementById('header-discretion-icon');
-    if (icon) {
-      icon.className = active ? 'fa-solid fa-eye text-cyan-300 text-xs' : 'fa-solid fa-eye-slash text-xs';
-    }
-    const btn = document.getElementById('btn-header-discretion');
-    if (btn) {
-      btn.classList.toggle('bg-cyan-500/20', active);
-      btn.classList.toggle('border-cyan-400/50', active);
-      btn.setAttribute('aria-pressed', String(active));
-    }
-    const toggleIn = document.getElementById('sec-discretion-toggle');
-    if (toggleIn) toggleIn.checked = active;
+    try {
+      localStorage.removeItem('arc_sec_discretion_mode');
+      document.body.classList.remove('arc-discretion-mode');
+    } catch (_) {}
   }
 
   function toggleDiscretionMode() {
-    const next = !isDiscretionMode();
-    setDiscretionMode(next);
-    if (window.playSfx) window.playSfx('click');
-    if (typeof showToast === 'function') {
-      showToast(next ? '🕶️ Discretion Mode Active (Habits & Notes Blurred)' : '👁️ Discretion Mode Disabled');
-    }
+    setDiscretionMode(false);
   }
 
   /* ---------- CLIPBOARD SENSITIVE AUTO-CLEAR ---------- */
@@ -18026,8 +17987,7 @@ window.ArcSecurity = (function() {
     if (sel) sel.value = String(getAutoLockMinutes());
     const shieldChk = document.getElementById('sec-privshield-toggle');
     if (shieldChk) shieldChk.checked = isPrivacyShieldEnabled();
-    const discChk = document.getElementById('sec-discretion-toggle');
-    if (discChk) discChk.checked = isDiscretionMode();
+    /* sec-discretion-toggle removed */
     const clipChk = document.getElementById('sec-clipautoclear-toggle');
     if (clipChk) clipChk.checked = isClipboardAutoClearEnabled();
     const scrambleChk = document.getElementById('sec-scramblepad-toggle');
@@ -18047,9 +18007,7 @@ window.ArcSecurity = (function() {
     updatePinBadge();
     initFirewall();
 
-    if (isDiscretionMode()) {
-      setDiscretionMode(true);
-    }
+    try { localStorage.removeItem('arc_sec_discretion_mode'); document.body.classList.remove('arc-discretion-mode'); } catch (_) {}
 
     ['pointerdown', 'mousemove', 'keydown', 'touchstart', 'scroll'].forEach(ev => {
       window.addEventListener(ev, resetInactivity, { passive: true });
@@ -18067,10 +18025,7 @@ window.ArcSecurity = (function() {
       }
     });
     window.addEventListener('keydown', e => {
-      if (e.altKey && (e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-        toggleDiscretionMode();
-      }
+      /* Alt+S discretion toggle removed */
     });
 
     const pad = document.getElementById('arc-pin-pad');
@@ -23940,7 +23895,7 @@ row('Anti-Spy Scrambled Keypad','keypad scramble shuffle spy shoulder surf pin',
 row('Two-Step Verification (2FA)','two step factor 2fa google authenticator sms phone backup codes security',`<div class="space-y-2"><div class="flex items-center justify-between text-xs"><span class="font-bold text-slate-300">Status:</span><span id="sec-2fa-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">OPTIONAL • DISABLED</span></div><div class="flex gap-2"><button role="button" class="pp-btn flex-1 text-cyan-300 border-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 font-bold" id="btn-sec-open-2fa"><i class="fa-solid fa-shield-halved mr-1"></i> Setup Two-Step Verification</button><button role="button" class="pp-btn text-rose-400 border-rose-500/30 hover:bg-rose-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 hidden" id="btn-sec-remove-2fa" title="Disable Two-Step Verification"><i class="fa-solid fa-trash-can mr-1"></i> Remove</button></div><div id="sec-2fa-info" class="text-[11px] text-slate-400 flex items-center justify-between"><span>Method: <b id="sec-2fa-method-text" class="text-slate-300 font-mono">None</b></span><span>Backup Codes: <b id="sec-2fa-codes-count" class="text-slate-300 font-mono">5 unused</b></span></div></div>`)+
 row('Inactivity Auto-Lock','auto lock timeout idle sleep timer leak security',`<div class="flex items-center justify-between gap-3"><div class="text-xs text-slate-400">Lock terminal when idle:</div><select id="sec-autolock-select" onchange="if(window.ArcSecurity)ArcSecurity.setAutoLockMinutes(parseInt(this.value,10))" class="pp-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 text-xs"><option value="0">Disabled</option><option value="1">1 Minute (Strict)</option><option value="3">3 Minutes</option><option value="5" selected>5 Minutes (Recommended)</option><option value="15">15 Minutes</option><option value="30">30 Minutes</option></select></div>`)+
 row('Privacy Shield (Anti-Snoop)','blur veil tab switch task switcher hide shoulder surf',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Veil screen on tab switch or window blur</span><input type="checkbox" id="sec-privshield-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setPrivacyShieldEnabled(this.checked)" checked class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div>`)+
-row('Discretion / Camouflage Mode','censor redact mask habits disguise stealth alt+s',`<div class="space-y-1.5"><div class="flex items-center justify-between"><span class="text-xs text-slate-300">Mask habit names and journal reflections</span><input type="checkbox" id="sec-discretion-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setDiscretionMode(this.checked)" class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div><div class="text-[11px] text-slate-400 flex items-center justify-between"><span>Hover or tap to reveal</span><span class="font-mono text-[10px] text-cyan-300 bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded">Alt + S</span></div></div>`)+
+
 row('Zero-Exfiltration Network Firewall','airgap network outbound leak block telemetry firewall',`<div class="space-y-2"><div class="flex items-center justify-between text-xs"><span class="text-slate-300">Outbound Data Protection:</span><span id="sec-firewall-status" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">ENFORCED (0 Leaks)</span></div><button role="button" class="pp-btn w-full text-cyan-300 border-cyan-500/40 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" id="btn-sec-test-firewall"><i class="fa-solid fa-shield-virus mr-1"></i> Test Outbound Interception</button></div>`)+
 row('Clipboard Self-Destruct','clipboard wipe auto clear timer 45s credential leak',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Auto-wipe clipboard 45s after copying sensitive codes</span><input type="checkbox" id="sec-clipautoclear-toggle" onchange="if(window.ArcSecurity)ArcSecurity.setClipboardAutoClearEnabled(this.checked)" checked class="habit-checkbox focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"></div>`)+
 row('Print Hardcopy DLP Shield','print export paper pdf physical leak redaction dlp',`<div class="flex items-center justify-between"><span class="text-xs text-slate-300">Enforce blank redaction shield against physical print and PDF leaks</span><span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">ENFORCED</span></div>`)+
@@ -23991,7 +23946,7 @@ function closeAll(){$$('.pp-modal.open, .pp-modal.active, .pp-modal[style*="disp
  const sv=$('#sa-vault');if(sv&&!sv.classList.contains('hidden')){try{SummerArc.closeVault()}catch(e){}}}
 function onKey(e){const t=e.target;
  if(e.key==='Escape'){closeAll();return}
- if(e.altKey&&(e.key==='s'||e.key==='S')){e.preventDefault();if(window.ArcSecurity)window.ArcSecurity.toggleDiscretionMode();return}
+ /* Alt+S discretion toggle removed */
  if(e.altKey&&(e.key==='b'||e.key==='B')){e.preventDefault();if(window.ArcBlackWhiteMode)window.ArcBlackWhiteMode.toggle();return}
  if(e.key==='Tab'){const c=$$('.pp-modal.open').pop()||(D.classList.contains('open')?D:null);if(!c)return;const f=foc(c);if(!f.length)return;
   if(!c.contains(document.activeElement)||(e.shiftKey&&document.activeElement===f[0])){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&document.activeElement===f[f.length-1]){e.preventDefault();f[0].focus()}return}
@@ -25669,7 +25624,6 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
-  '<section id="p20-server-sync" class="mb-2" aria-label="Live External Cloud Server Telemetry"></section>'+
   '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
  /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
@@ -29383,7 +29337,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
 
       appendOutput(`EXTERNAL CLOUD BACKEND TELEMETRY:
   Endpoint URL    : ${url}
-  Server Status   : ${online ? '🟢 ONLINE • CONNECTED' : '🟡 OFFLINE CACHE • RECONNECTING'}
+  Server Status   : ${online ? '🟢 ONLINE • CONNECTED' : '🟡 OFFLINE • RECONNECTING'}
   Total Operatives: ${users} registered accounts
   Active Today    : ${activeToday} operatives (last 24h)
   Arc Gold VIPs   : ${gold} active supporters
@@ -32310,7 +32264,7 @@ if (typeof window !== 'undefined') {
     updateOfflineIndicator(isOffline) {
       const ind = document.getElementById('arc-offline-indicator');
       if (ind) {
-        if (isOffline) {
+        if (isOffline && typeof navigator !== 'undefined' && navigator.onLine === false) {
           ind.classList.remove('hidden');
           ind.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>OFFLINE CACHE</span>';
         } else {
@@ -32691,162 +32645,9 @@ if (typeof window !== 'undefined') {
 
     renderSettingsCard() {
       const container = document.getElementById('p20-server-sync');
-      if (!container) return;
-
-      const tel = this.cachedTelemetry || {
-        totalUsers: 16,
-        activeTodayCount: 16,
-        totalGoldUsers: 11,
-        totalGroups: 4
-      };
-
-      const goldUsers = this.cachedGoldUsers || [];
-
-      const statusBadge = this.isOnline
-        ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE • Connected to External Server</span>`
-        : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> OFFLINE CACHE • Server Reconnecting</span>`;
-
-      container.innerHTML = `
-        <div class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/90 space-y-4 shadow-xl relative overflow-hidden">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <i class="fa-solid fa-server"></i> EXTERNAL CLOUD TELEMETRY
-                </span>
-                ${statusBadge}
-              </div>
-              <h3 class="text-sm sm:text-base font-black text-white flex items-center gap-2">
-                Live Server Telemetry &amp; Community Registry
-              </h3>
-              <p class="text-[11px] text-slate-400">
-                Synchronized tracking for global operatives, Gold VIP purchases, competitive ranks, and squads.
-              </p>
-            </div>
-
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="ArcServerSync.syncUserAndFetchTelemetry(); playSfx('click');" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 transition shadow-sm">
-                <i class="fa-solid fa-arrows-rotate ${this.isSyncing ? 'animate-spin' : ''}"></i>
-                <span>${this.isSyncing ? 'Syncing...' : 'Sync Now'}</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Server URL Configuration Bar -->
-          <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-            <label class="block text-[10px] font-mono uppercase text-slate-400 font-bold">
-              Configurable External Backend Endpoint
-            </label>
-            <div class="flex items-center gap-2">
-              <div class="relative flex-1">
-                <input id="arc-server-url-input" type="text" value="${this.serverUrl}" placeholder="http://localhost:4000" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400" />
-              </div>
-              <button type="button" onclick="const el = document.getElementById('arc-server-url-input'); if(el) ArcServerSync.setServerUrl(el.value); playSfx('click');" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs font-bold transition active:scale-95">
-                Save &amp; Test
-              </button>
-            </div>
-          </div>
-
-          <!-- 4 Live Server Metrics Counters -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-              <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                <i class="fa-solid fa-users text-cyan-400"></i> Registered
-              </div>
-              <div class="text-lg sm:text-xl font-black text-white font-mono">
-                ${Number(tel.totalUsers || 0).toLocaleString()}
-              </div>
-              <div class="text-[9px] text-slate-400">Total Operatives</div>
-            </div>
-
-            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-              <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                <i class="fa-solid fa-bolt"></i> Active Today
-              </div>
-              <div class="text-lg sm:text-xl font-black text-emerald-400 font-mono">
-                ${Number(tel.activeTodayCount || 0).toLocaleString()}
-              </div>
-              <div class="text-[9px] text-slate-400">In Last 24 Hours</div>
-            </div>
-
-            <div class="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30 text-center space-y-1">
-              <div class="text-[10px] font-mono text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1">
-                <i class="fa-solid fa-crown"></i> Arc Gold VIPs
-              </div>
-              <div class="text-lg sm:text-xl font-black text-amber-400 font-mono">
-                ${Number(tel.totalGoldUsers || 0).toLocaleString()}
-              </div>
-              <div class="text-[9px] text-amber-300/80">Active Supporters</div>
-            </div>
-
-            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-              <div class="text-[10px] font-mono text-purple-400 uppercase tracking-wider flex items-center justify-center gap-1">
-                <i class="fa-solid fa-shield-halved"></i> Squads
-              </div>
-              <div class="text-lg sm:text-xl font-black text-purple-300 font-mono">
-                ${Number(tel.totalGroups || 0).toLocaleString()}
-              </div>
-              <div class="text-[9px] text-slate-400">Accountability Units</div>
-            </div>
-          </div>
-
-          <!-- Collapsible Arc Gold VIP Supporters Roster -->
-          <div class="rounded-xl border border-amber-500/30 bg-slate-950/80 overflow-hidden">
-            <button type="button" onclick="const r = document.getElementById('arc-gold-roster-body'); const chevron = document.getElementById('arc-gold-roster-chevron'); if(r){ r.classList.toggle('hidden'); if(chevron){ chevron.classList.toggle('rotate-180'); } } playSfx('tab');" class="w-full p-3 flex items-center justify-between text-left hover:bg-amber-500/5 transition">
-              <div class="flex items-center gap-2">
-                <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/40 grid place-items-center text-xs">
-                  <i class="fa-solid fa-crown"></i>
-                </span>
-                <div>
-                  <h4 class="text-xs font-black text-white flex items-center gap-2">
-                    Arc Gold VIP Supporters Roster
-                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 font-bold">
-                      ${goldUsers.length} VIPs
-                    </span>
-                  </h4>
-                  <p class="text-[10px] text-slate-400">Operatives fueling independent development with Arc Gold licenses</p>
-                </div>
-              </div>
-              <i id="arc-gold-roster-chevron" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
-            </button>
-
-            <div id="arc-gold-roster-body" class="p-3 border-t border-slate-800 space-y-2 max-h-56 overflow-y-auto custom-scroll">
-              ${goldUsers.length === 0 ? '<div class="text-xs text-slate-400 text-center py-2 italic">Loading VIP supporters...</div>' : goldUsers.map(u => {
-                const planBadge = u.goldPlan === 'lifetime'
-                  ? '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-400/40">LIFETIME VIP</span>'
-                  : (u.goldPlan === 'annual'
-                    ? '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">ANNUAL</span>'
-                    : '<span class="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-700 text-slate-300 border border-slate-600">MONTHLY</span>');
-
-                const dateStr = u.goldPurchasedAt ? new Date(u.goldPurchasedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
-
-                return `
-                  <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/70 border border-slate-800/80 text-xs">
-                    <div class="flex items-center gap-2 min-w-0">
-                      <div class="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 font-bold grid place-items-center text-[10px] shrink-0">
-                        ${u.avatar || u.handle.charAt(1).toUpperCase()}
-                      </div>
-                      <div class="min-w-0">
-                        <div class="flex items-center gap-1.5">
-                          <span class="font-bold text-slate-200 truncate">${u.handle}</span>
-                          <span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[8px] font-mono font-black shrink-0"><i class="fa-solid fa-crown mr-0.5"></i>GOLD</span>
-                        </div>
-                        <div class="text-[10px] text-slate-400 font-mono">
-                          Level ${u.level} • ${typeof u.arcScore === 'number' ? u.arcScore.toFixed(1) : u.arcScore}% Score
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-right shrink-0 space-y-0.5">
-                      <div>${planBadge}</div>
-                      <div class="text-[9px] font-mono text-slate-400">${dateStr}</div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
-        </div>
-      `;
+      if (container) {
+        container.remove();
+      }
     }
   }
 
@@ -33774,7 +33575,7 @@ const FAQ_ITEMS = [
     categoryLabel: 'Audio & Visuals',
     icon: 'fa-solid fa-keyboard',
     question: 'What keyboard shortcuts are supported on Desktop?',
-    answer: 'Press N to open Notifications & Updates, S to open Settings, M for Global Mute, P to start/pause the Focus Timer, Alt + S for Stealth/Discretion mode, Alt + B for Arc Gold B&W mode, Esc to close modals/drawers, and ? to reveal the full keyboard shortcuts cheat sheet.'
+    answer: 'Press N to open Notifications & Updates, S to open Settings, M for Global Mute, P to start/pause the Focus Timer, Alt + B for Arc Gold B&W mode, Esc to close modals/drawers, and ? to reveal the full keyboard shortcuts cheat sheet.'
   }
 ];
 

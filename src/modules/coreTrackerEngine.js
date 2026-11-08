@@ -338,7 +338,6 @@ if (typeof window !== 'undefined') {
   window.renderMatrix = renderMatrix;
   window.renderSpiderWeb = renderSpiderWeb;
   window.showCategoryDetail = showCategoryDetail;
-  window.triggerPieChartAnimation = triggerPieChartAnimation;
   window.toggleLaptopTracker = toggleLaptopTracker;
   window.startLaptopTimer = startLaptopTimer;
   window.getTopProductiveDay = getTopProductiveDay;
@@ -2262,13 +2261,6 @@ function toggleStreakFreezeFromRules(checked) {
             showToast(`${cat}: ${pct}% execution`);
         };
 
-        function triggerPieChartAnimation() {
-            playSfx('fanfare');
-            triggerConfettiBurst();
-            renderSpiderWeb();
-            showToast("Radar Matrix Refreshed");
-        }
-
         function toggleLaptopTracker() {
             playSfx('click');
             state.laptop.isRunning = !state.laptop.isRunning;
@@ -2497,7 +2489,6 @@ function toggleStreakFreezeFromRules(checked) {
           window.renderMatrix = renderMatrix;
           window.renderSpiderWeb = renderSpiderWeb;
           window.showCategoryDetail = showCategoryDetail;
-          window.triggerPieChartAnimation = triggerPieChartAnimation;
           window.toggleLaptopTracker = toggleLaptopTracker;
           window.startLaptopTimer = startLaptopTimer;
           window.saveWhatHappenedText = saveWhatHappenedText;

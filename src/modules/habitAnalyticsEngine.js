@@ -411,10 +411,6 @@
           `}
 
           ${isDrawer ? `
-            <button type="button" onclick="ArcHabitAnalytics.openInResultsTab('${habit.id}')" title="Expand inside Results &amp; Analytics tab" class="px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 border border-slate-700 text-[10px] font-bold flex items-center gap-1 transition active:scale-95">
-              <i class="fa-solid fa-up-right-from-square text-[9px]"></i>
-              <span class="hidden sm:inline">Expand in Results</span>
-            </button>
             <button type="button" onclick="ArcHabitAnalytics.closeDrawer()" aria-label="Close Drawer" class="w-7 h-7 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-slate-800 flex items-center justify-center text-xs transition active:scale-95">
               <i class="fa-solid fa-xmark"></i>
             </button>

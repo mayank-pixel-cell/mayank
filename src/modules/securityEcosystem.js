@@ -940,35 +940,20 @@ window.ArcSecurity = (function() {
     }
   }
 
-  /* ---------- DISCRETION / CAMOUFLAGE MODE ---------- */
+  /* ---------- DISCRETION / CAMOUFLAGE MODE (REMOVED) ---------- */
   function isDiscretionMode() {
-    return localStorage.getItem('arc_sec_discretion_mode') === 'true';
+    return false;
   }
 
   function setDiscretionMode(active) {
-    localStorage.setItem('arc_sec_discretion_mode', String(active));
-    document.body.classList.toggle('arc-discretion-mode', active);
-    const icon = document.getElementById('header-discretion-icon');
-    if (icon) {
-      icon.className = active ? 'fa-solid fa-eye text-cyan-300 text-xs' : 'fa-solid fa-eye-slash text-xs';
-    }
-    const btn = document.getElementById('btn-header-discretion');
-    if (btn) {
-      btn.classList.toggle('bg-cyan-500/20', active);
-      btn.classList.toggle('border-cyan-400/50', active);
-      btn.setAttribute('aria-pressed', String(active));
-    }
-    const toggleIn = document.getElementById('sec-discretion-toggle');
-    if (toggleIn) toggleIn.checked = active;
+    try {
+      localStorage.removeItem('arc_sec_discretion_mode');
+      document.body.classList.remove('arc-discretion-mode');
+    } catch (_) {}
   }
 
   function toggleDiscretionMode() {
-    const next = !isDiscretionMode();
-    setDiscretionMode(next);
-    if (window.playSfx) window.playSfx('click');
-    if (typeof showToast === 'function') {
-      showToast(next ? '🕶️ Discretion Mode Active (Habits & Notes Blurred)' : '👁️ Discretion Mode Disabled');
-    }
+    setDiscretionMode(false);
   }
 
   /* ---------- CLIPBOARD SENSITIVE AUTO-CLEAR ---------- */
@@ -1079,8 +1064,7 @@ window.ArcSecurity = (function() {
     if (sel) sel.value = String(getAutoLockMinutes());
     const shieldChk = document.getElementById('sec-privshield-toggle');
     if (shieldChk) shieldChk.checked = isPrivacyShieldEnabled();
-    const discChk = document.getElementById('sec-discretion-toggle');
-    if (discChk) discChk.checked = isDiscretionMode();
+    /* sec-discretion-toggle removed */
     const clipChk = document.getElementById('sec-clipautoclear-toggle');
     if (clipChk) clipChk.checked = isClipboardAutoClearEnabled();
     const scrambleChk = document.getElementById('sec-scramblepad-toggle');
@@ -1100,9 +1084,7 @@ window.ArcSecurity = (function() {
     updatePinBadge();
     initFirewall();
 
-    if (isDiscretionMode()) {
-      setDiscretionMode(true);
-    }
+    try { localStorage.removeItem('arc_sec_discretion_mode'); document.body.classList.remove('arc-discretion-mode'); } catch (_) {}
 
     ['pointerdown', 'mousemove', 'keydown', 'touchstart', 'scroll'].forEach(ev => {
       window.addEventListener(ev, resetInactivity, { passive: true });
@@ -1119,12 +1101,7 @@ window.ArcSecurity = (function() {
         hidePrivacyShield();
       }
     });
-    window.addEventListener('keydown', e => {
-      if (e.altKey && (e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-        toggleDiscretionMode();
-      }
-    });
+    /* Alt+S discretion toggle removed */
 
     const pad = document.getElementById('arc-pin-pad');
     if (pad) {

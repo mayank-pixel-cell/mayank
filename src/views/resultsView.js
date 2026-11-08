@@ -12,9 +12,6 @@ export function renderResultsView() {
                     <button role="button" onclick="openArcModal(); playSfx('modalOpen')" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-amber-500/20 active:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition hover:bg-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                         <i class="fa-solid fa-sun text-amber-400"></i> Transition Arc
                     </button>
-                    <button role="button" onclick="triggerPieChartAnimation()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-slate-800 active:bg-slate-700 text-cyan-400 border border-cyan-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <i class="fa-solid fa-play-circle text-sm"></i> Replay
-                    </button>
                 </div>
             </div>
 
@@ -308,8 +305,6 @@ export function renderResultsView() {
                 </div>
             </div>
 
-            <!-- PER-HABIT DEEP ANALYTICS & VELOCITY PANEL (SURFACE B) -->
-            <div id="habit-deep-analytics-panel" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-5 border-t-2 border-t-emerald-400 glow-cyan transition-all duration-300"></div>
 
             <!-- CONSISTENCY MATRIX -->
             <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">

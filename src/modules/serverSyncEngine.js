@@ -905,7 +905,7 @@ class ArcServerSyncEngine {
 
     const statusBadge = this.isOnline
       ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE • Connected to Supabase Cloud</span>`
-      : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> OFFLINE CACHE • Cloud Reconnecting</span>`;
+      : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> OFFLINE • Cloud Reconnecting</span>`;
 
     const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
       ? window.ArcSettingsAccordion.isExpanded('p20-server-sync')
