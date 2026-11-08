@@ -1190,6 +1190,31 @@ html[data-mode=light] .phone-widget-card .text-white {
     display: flex;
     flex-direction: column;
 }
+
+/* Warm Terracotta Homescreen Wallpaper (Matching Attached Photo) */
+.arc-phone-screen.wallpaper-warm {
+    background-color: #3b170a !important;
+    background-image: radial-gradient(circle at 50% 28%, #783114 0%, #4f1e0c 45%, #2a0c04 100%) !important;
+}
+
+/* Habit Homescreen Widget (Modeled After User Image) */
+.habit-widget-card {
+    background-color: #fbf9f5;
+    color: #1c1917;
+    border-radius: 28px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(231, 229, 228, 0.8);
+}
+.habit-widget-row {
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.habit-widget-row:hover {
+    background-color: rgba(231, 229, 228, 0.45);
+}
+.habit-widget-row:active {
+    transform: scale(0.98);
+}
+
 .arc-phone-screen {
     flex: 1;
     position: relative;

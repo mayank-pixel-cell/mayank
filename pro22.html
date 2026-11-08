@@ -1572,6 +1572,12 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <!-- ACTION BUTTONS -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
+                <!-- Inbuilt Mobile Widgets Launcher -->
+                <button type="button" id="btn-header-phone-widgets" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="w-9 h-9 sm:w-auto px-0 sm:px-2.5 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 shrink-0" title="Open Phone Homescreen & Inbuilt Widgets">
+                    <i class="fa-solid fa-mobile-screen text-xs text-purple-400"></i>
+                    <span class="hidden xl:inline text-[11px]">Widgets</span>
+                </button>
+
                 <!-- Dedicated Notifications & System Updates Bell Icon -->
                 <button type="button" id="btn-header-notifications" onclick="ArcNotifications.toggleDrawer(); if(window.playSfx)playSfx('click')" class="relative w-9 h-9 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400/60 text-slate-300 hover:text-cyan-300 grid place-items-center transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 shrink-0" title="Notifications &amp; System Updates (Press N)" aria-label="Notifications &amp; Updates" aria-expanded="false" aria-controls="arc-notifications-drawer">
                     <i id="arc-notif-bell-icon" class="fa-solid fa-bell text-sm transition-transform duration-200 group-hover:rotate-12"></i>
@@ -1780,6 +1786,9 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                             </h2>
                             <p class="text-[11px] sm:text-xs text-slate-400">Check off daily habits to update Arc execution</p>
                         </div>
+                        <button role="button" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-2.5 py-1.5 text-xs rounded-lg bg-amber-500/15 hover:bg-amber-500/25 active:bg-amber-500/30 text-amber-300 transition border border-amber-500/30 flex items-center gap-1.5 shadow-sm" title="Open Homescreen Habit Widget (as seen in photo)">
+                            <i class="fa-solid fa-mobile-screen text-amber-400"></i> <span class="hidden sm:inline">Phone Widget</span>
+                        </button>
                         <button role="button" onclick="resetTodayHabits()" onmouseenter="playSfx('hover')" class="px-2.5 py-1.5 text-xs rounded-lg bg-slate-800 active:bg-slate-700 text-slate-300 transition border border-slate-700 flex items-center gap-1 shadow-sm hover:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                             <i class="fa-solid fa-rotate-left"></i> <span class="hidden sm:inline">Reset Today</span>
                         </button>
@@ -3421,183 +3430,36 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                  PHONE APPLICATION HOMESCREEN WIDGETS (SCREEN TIME USAGE & FOCUS CONTROLLER)
                  Modeled precisely after Android Homescreen Widgets as shown in user image
                  ========================================================================== -->
-            <div id="st-phone-widgets-section" class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-purple-500 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <!-- TOP HEADER & CONTROLS -->
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
-                    <div class="space-y-1">
+            <!-- ==========================================================================
+                 INBUILT MOBILE & HOMESCREEN WIDGETS
+                 ========================================================================== -->
+            <div id="st-inbuilt-widgets-banner" class="glass-card rounded-2xl p-4 sm:p-5 border border-purple-500/25 bg-gradient-to-r from-purple-950/20 via-slate-900/60 to-indigo-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg transition-all duration-300">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shrink-0 mt-0.5 shadow-sm">
+                        <i class="fa-solid fa-shapes"></i>
+                    </div>
+                    <div>
                         <div class="flex items-center gap-2 flex-wrap">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
-                                <i class="fa-solid fa-mobile-screen text-purple-400"></i>
-                                PHONE APPLICATION WIDGETS
-                            </span>
+                            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+                                Inbuilt Mobile &amp; Homescreen Widgets
+                            </h3>
                             <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold flex items-center gap-1 shadow-sm">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Live Sync Active
                             </span>
                         </div>
-                        <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-shapes text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"></i> Android Screen Time &amp; Focus Mode Widgets
-                        </h3>
-                        <p class="text-xs sm:text-sm text-slate-300">
-                            Real-time categorized usage breakdown (Distracting, Productive, Others) and 1-click Focus Mode activation for your phone application.
+                        <p class="text-xs text-slate-300 mt-0.5">
+                            Real-time Screen Time Spent, 1-Click Focus Mode, and Daily Habit Check-In widgets for your phone homescreen.
                         </p>
                     </div>
                 </div>
 
-                <!-- 2 SPECIAL WIDGETS SIDE-BY-SIDE (MATCHING IMAGE EXACTLY) -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
-                    <!-- 1. SCREEN TIME SPENT WIDGET (IMAGE MATCH) -->
-                    <div id="phone-widget-screentime-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group">
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                                <i class="fa-solid fa-chart-pie text-orange-400"></i> Screen Time Spent
-                            </span>
-                            <span class="text-[10px] font-mono text-slate-500 flex items-center gap-1">
-                                <i class="fa-brands fa-android text-emerald-400"></i> 4x2 Launcher Widget
-                            </span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <!-- Left: Circular Segmented Gauge (Total Usage + Subtitle) -->
-                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
-                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
-                                    <!-- Background Track -->
-                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
-                                    <!-- Segment 1: Distracting (Orange) -->
-                                    <circle id="phone-widget-svg-distracting" cx="80" cy="80" r="56" stroke="#f97316" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="134 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
-                                    <!-- Segment 2: Productive (Green) -->
-                                    <circle id="phone-widget-svg-productive" cx="80" cy="80" r="56" stroke="#22c55e" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="31 352" stroke-dashoffset="-138" class="transition-all duration-700 ease-out" />
-                                    <!-- Segment 3: Others (Grey) -->
-                                    <circle id="phone-widget-svg-others" cx="80" cy="80" r="56" stroke="#94a3b8" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="175 352" stroke-dashoffset="-173" class="transition-all duration-700 ease-out" />
-                                </svg>
-                                <!-- Center Text Readout -->
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                                    <span id="phone-widget-total-val" class="text-3xl font-black font-sans text-white tracking-tight leading-none drop-shadow">51m</span>
-                                    <span class="text-[11px] font-medium text-slate-400 mt-1">Today's usage</span>
-                                </div>
-                            </div>
-
-                            <!-- Right: Categorized Breakdown with Colored Dots -->
-                            <div class="w-full sm:flex-1 space-y-3.5 sm:pl-2">
-                                <!-- Distracting -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316] shrink-0 mt-1 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-distracting-time" class="text-lg font-black text-white font-sans">20m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Distracting</div>
-                                    </div>
-                                </div>
-
-                                <!-- Productive -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e] shrink-0 mt-1 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-productive-time" class="text-lg font-black text-white font-sans">5m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Productive</div>
-                                    </div>
-                                </div>
-
-                                <!-- Others -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#94a3b8] shrink-0 mt-1"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-others-time" class="text-lg font-black text-white font-sans">25m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Others</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer Quick Action -->
-                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
-                            <span id="phone-widget-category-summary">🎮 YouTube, Social &amp; Games</span>
-                            <button role="button" onclick="switchTab('screentime'); openFocusBlocklistModal(); playSfx('click')" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline">
-                                Configure Limits &rarr;
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 2. TURN ON FOCUS MODE WIDGET (IMAGE COMPANION) -->
-                    <div id="phone-widget-focus-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group border-purple-500/30">
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <span class="text-purple-300 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                                <i class="fa-solid fa-moon text-purple-400"></i> Turn On Focus Mode
-                            </span>
-                            <span id="phone-widget-focus-badge" class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">
-                                STANDBY
-                            </span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <!-- Left: Circular Focus Ring Gauge -->
-                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
-                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
-                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
-                                    <circle id="phone-widget-svg-focus" cx="80" cy="80" r="56" stroke="#a855f7" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
-                                </svg>
-                                <!-- Center Readout: OFF or Timer countdown -->
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                                    <span id="phone-widget-focus-val" class="text-2xl sm:text-3xl font-black font-sans text-purple-200 tracking-tight leading-none drop-shadow">OFF</span>
-                                    <span id="phone-widget-focus-sub" class="text-[11px] font-medium text-slate-400 mt-1">Focus Mode</span>
-                                </div>
-                            </div>
-
-                            <!-- Right: Focus Status & Preset Selector -->
-                            <div class="w-full sm:flex-1 space-y-3 sm:pl-2">
-                                <div class="flex items-start gap-2.5">
-                                    <span id="phone-widget-focus-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1 transition-colors"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-focus-status" class="text-base font-black text-white">Focus Standby</div>
-                                        <div id="phone-widget-focus-desc" class="text-xs text-slate-400">Blocks 8 distracting apps</div>
-                                    </div>
-                                </div>
-
-                                <!-- Duration Presets Chips -->
-                                <div>
-                                    <span class="text-[10px] font-mono text-slate-400 block mb-1.5 uppercase font-bold">Session Target:</span>
-                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(25); playSfx('click')" class="phone-focus-chip active" data-mins="25">25m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(45); playSfx('click')" class="phone-focus-chip" data-mins="45">45m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(60); playSfx('click')" class="phone-focus-chip" data-mins="60">60m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(90); playSfx('click')" class="phone-focus-chip" data-mins="90">90m</button>
-                                    </div>
-                                </div>
-
-                                <!-- Strict Mode (Unconditional Free Core Feature) -->
-                                <div id="phone-widget-strict-container" class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-amber-500/40 transition flex items-center justify-between gap-2">
-                                    <div class="flex items-center gap-2 min-w-0">
-                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/30 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.2)]">
-                                            <i class="fa-solid fa-lock" id="phone-widget-strict-icon"></i>
-                                        </div>
-                                        <div class="min-w-0 leading-tight">
-                                            <div class="flex items-center gap-1.5 flex-wrap">
-                                                <span class="text-xs font-bold text-white">Strict Mode</span>
-                                                <span class="text-[9px] font-mono font-black px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 flex items-center gap-1 shadow-sm">
-                                                    <i class="fa-solid fa-shield-halved text-[8px] text-emerald-400"></i> FREE
-                                                </span>
-                                            </div>
-                                            <span class="text-[10px] text-slate-400 block truncate" id="phone-widget-strict-desc">Disables early exit until timer ends</span>
-                                        </div>
-                                    </div>
-                                    <label for="phone-widget-strict-toggle" class="relative inline-flex items-center cursor-pointer shrink-0" onclick="handleFocusStrictModeToggle(event)">
-                                        <span class="sr-only">Toggle Focus Strict Mode</span>
-                                        <input type="checkbox" id="phone-widget-strict-toggle" title="Toggle Focus Strict Mode" aria-label="Toggle Focus Strict Mode" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-amber-400 peer-checked:to-yellow-500"></div>
-                                    </label>
-                                </div>
-
-                                <!-- 1-Click Action Button -->
-                                <button role="button" id="phone-widget-toggle-focus-btn" onclick="ArcPhoneWidgets.toggleFocus()" class="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95">
-                                    <i class="fa-solid fa-bolt text-amber-300"></i> Turn On Focus Mode
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Footer Status -->
-                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
-                            <span id="phone-widget-active-app-state">🛡️ Lockout Shield Armed</span>
-                            <span class="text-purple-300 font-mono text-[10px]" id="phone-widget-focus-timer-pill">Idle</span>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button role="button" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-purple-600/30 transition active:scale-95" title="Open Phone Homescreen & Interactive Inbuilt Widgets">
+                        <i class="fa-solid fa-mobile-screen-button text-cyan-300"></i> Open Phone Widgets
+                    </button>
+                    <button role="button" onclick="ArcPhoneWidgets.refresh(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5" title="Refresh widget telemetry">
+                        <i class="fa-solid fa-arrows-rotate text-purple-400"></i> Refresh
+                    </button>
                 </div>
             </div>
 
@@ -13288,6 +13150,31 @@ html[data-mode=light] .phone-widget-card .text-white {
     display: flex;
     flex-direction: column;
 }
+
+/* Warm Terracotta Homescreen Wallpaper (Matching Attached Photo) */
+.arc-phone-screen.wallpaper-warm {
+    background-color: #3b170a !important;
+    background-image: radial-gradient(circle at 50% 28%, #783114 0%, #4f1e0c 45%, #2a0c04 100%) !important;
+}
+
+/* Habit Homescreen Widget (Modeled After User Image) */
+.habit-widget-card {
+    background-color: #fbf9f5;
+    color: #1c1917;
+    border-radius: 28px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(231, 229, 228, 0.8);
+}
+.habit-widget-row {
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.habit-widget-row:hover {
+    background-color: rgba(231, 229, 228, 0.45);
+}
+.habit-widget-row:active {
+    transform: scale(0.98);
+}
+
 .arc-phone-screen {
     flex: 1;
     position: relative;
@@ -15654,7 +15541,7 @@ html[data-mode=light] .phone-widget-card .text-white {
       <div class="arc-phone-notch"></div>
 
       <!-- Phone Screen with Mountain Wallpaper -->
-      <div class="arc-phone-screen p-4 flex flex-col justify-between" id="arc-phone-sim-screen">
+      <div class="arc-phone-screen wallpaper-warm p-4 flex flex-col justify-between" id="arc-phone-sim-screen">
         <!-- 1. Android Status Bar -->
         <div class="flex items-center justify-between text-white text-[11px] font-sans px-1 pt-1 select-none z-10">
           <div class="flex items-center gap-1.5">
@@ -15674,17 +15561,123 @@ html[data-mode=light] .phone-widget-card .text-white {
         <!-- 2. Phone Homescreen Widgets Area -->
         <div class="pt-3 space-y-2 z-10">
           <!-- Widget Switcher Tabs -->
-          <div class="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-mono">
-            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" id="sim-tab-screentime" class="px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition">
+          <!-- Homescreen Header (Clock, Date & Tagline as in Photo 2) -->
+        <div id="sim-homescreen-header" class="text-center pt-1 pb-1 z-10 select-none transition-all duration-300">
+          <div id="sim-homescreen-clock" class="text-4xl sm:text-5xl font-light text-white tracking-tight drop-shadow-sm font-sans">9:41</div>
+          <div id="sim-homescreen-date" class="text-xs text-white/90 font-medium mt-0.5 drop-shadow-sm">Wednesday, June 4</div>
+          <div class="text-[9px] uppercase tracking-[0.18em] text-amber-200/90 font-bold mt-2 drop-shadow-sm">
+            ONE TAP TO LOG &mdash; RIGHT FROM YOUR HOME SCREEN
+          </div>
+        </div>
+
+        <!-- 2. Phone Homescreen Widgets Area -->
+        <div class="pt-1.5 space-y-2 z-10 flex-1 flex flex-col justify-center">
+          <!-- Widget Switcher Tabs -->
+          <div class="flex items-center justify-center gap-1 bg-black/50 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-mono">
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('habits'); playSfx('click')" id="sim-tab-habits" class="px-2.5 py-1 rounded-lg bg-amber-600 text-white font-bold transition shadow-sm">
+              📋 Habits
+            </button>
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" id="sim-tab-screentime" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition">
               📊 Screen Time
             </button>
-            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" id="sim-tab-focus" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition">
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" id="sim-tab-focus" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition">
               ⚡ Focus Mode
             </button>
           </div>
 
+          <!-- Embedded Widget 3: Daily Habits (MATCHING ATTACHED PHOTO 2 EXACTLY!) -->
+          <div id="sim-widget-habits-container" class="transition-all duration-300">
+            <div id="habit-homescreen-widget" class="habit-widget-card p-4 sm:p-5 select-none transition-all duration-300">
+              <!-- Widget Header: Circular Progress + Day Title + Remaining Subtitle -->
+              <div class="flex items-center gap-3 pb-3 border-b border-stone-200/70">
+                <!-- Left: Terracotta Circular Gauge with Fraction Inside -->
+                <div class="relative w-12 h-12 shrink-0 flex items-center justify-center">
+                  <svg class="w-12 h-12 -rotate-90 transform" viewBox="0 0 48 48">
+                    <!-- Background Track -->
+                    <circle cx="24" cy="24" r="18" stroke="#f0eae1" stroke-width="4.5" fill="none" />
+                    <!-- Progress Arc in Terracotta (#a64a1d) -->
+                    <circle class="habit-widget-ring-circle" cx="24" cy="24" r="18" stroke="#a64a1d" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-dasharray="67.9 113.1" stroke-dashoffset="0" style="transition: stroke-dasharray 0.5s ease-out;" />
+                  </svg>
+                  <!-- Center Text: 3/5 -->
+                  <span class="habit-widget-ratio-val absolute inset-0 flex items-center justify-center text-xs font-black font-sans text-[#292524] tracking-tight">3/5</span>
+                </div>
+
+                <!-- Right: Day of Week & Remaining Counter -->
+                <div class="leading-tight">
+                  <div class="habit-widget-day-title text-base sm:text-lg font-black text-[#1c1917] tracking-tight font-sans">Wednesday</div>
+                  <div class="habit-widget-left-sub text-xs font-semibold text-[#78716c] mt-0.5">2 left today</div>
+                </div>
+              </div>
+
+              <!-- Habit Items List (Matching Photo 2) -->
+              <div class="pt-2.5 space-y-2">
+                <!-- Item 0: Morning workout -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(0)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-0 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">💪</span>
+                    <span class="habit-name-0 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Morning workout</span>
+                  </div>
+                  <div class="habit-streak-0 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>14</span>
+                  </div>
+                </div>
+
+                <!-- Item 1: Read 20 pages -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(1)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-1 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">📚</span>
+                    <span class="habit-name-1 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Read 20 pages</span>
+                  </div>
+                  <div class="habit-streak-1 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>7</span>
+                  </div>
+                </div>
+
+                <!-- Item 2: Drink water -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(2)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-2 w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200"></div>
+                    <span class="text-base shrink-0 select-none">💧</span>
+                    <span class="habit-name-2 text-xs sm:text-sm font-medium text-[#44403c] truncate">Drink water</span>
+                  </div>
+                  <div class="habit-streak-2 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>3</span>
+                  </div>
+                </div>
+
+                <!-- Item 3: Meditate -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(3)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-3 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">🧘</span>
+                    <span class="habit-name-3 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Meditate</span>
+                  </div>
+                  <div class="habit-streak-3 hidden"></div>
+                </div>
+
+                <!-- Item 4: Eat veg -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(4)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-4 w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200"></div>
+                    <span class="text-base shrink-0 select-none">🥗</span>
+                    <span class="habit-name-4 text-xs sm:text-sm font-medium text-[#44403c] truncate">Eat veg</span>
+                  </div>
+                  <div class="habit-streak-4 hidden"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Embedded Widget 1: Screen Time Spent (on phone) -->
-          <div id="sim-widget-screentime-container" class="phone-widget-card p-4 space-y-2.5">
+          <div id="sim-widget-screentime-container" class="phone-widget-card p-4 space-y-2.5 hidden">
             <div class="flex items-center justify-between gap-2">
               <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
                 <svg class="w-28 h-28 -rotate-90 transform" viewBox="0 0 160 160">
@@ -15847,12 +15840,19 @@ html[data-mode=light] .phone-widget-card .text-white {
           </div>
 
           <!-- Dock (Chrome, Camera) -->
-          <div class="flex items-center justify-center gap-6 py-1">
-            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-105 transition" onclick="ArcPhoneWidgets.handlePhoneAppClick('chrome')">
-              <i class="fa-brands fa-chrome text-2xl text-blue-500"></i>
+          <!-- Phone Dock (Matching Photo 2) -->
+          <div class="grid grid-cols-4 gap-3 text-center px-2 py-1" id="sim-homescreen-dock">
+            <div class="w-11 h-11 mx-auto rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-emerald-400 shadow-md hover:scale-105 transition cursor-pointer" onclick="playSfx('click')">
+              <i class="fa-solid fa-phone text-base"></i>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-b from-slate-700 to-slate-900 border border-slate-600 flex items-center justify-center text-white shadow-lg cursor-pointer hover:scale-105 transition" onclick="ArcPhoneWidgets.handlePhoneAppClick('camera')">
-              <i class="fa-solid fa-camera text-xl"></i>
+            <div class="w-11 h-11 mx-auto rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-md hover:scale-105 transition cursor-pointer" onclick="playSfx('click')">
+              <i class="fa-solid fa-comment-dots text-base"></i>
+            </div>
+            <div class="w-11 h-11 mx-auto rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-slate-200 shadow-md hover:scale-105 transition cursor-pointer" onclick="playSfx('click')">
+              <i class="fa-solid fa-camera text-base"></i>
+            </div>
+            <div class="w-11 h-11 mx-auto rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-cyan-300 shadow-md hover:scale-105 transition cursor-pointer" onclick="playSfx('click')">
+              <i class="fa-solid fa-globe text-base"></i>
             </div>
           </div>
 
@@ -19472,7 +19472,143 @@ window.ArcScreenTimeNotifier = (function() {
 window.ArcPhoneWidgets = (function() {
   'use strict';
   let _selectedFocusMinutes = 25;
-  let _simTab = 'screentime';
+  let _simTab = 'habits';
+
+  // 5 Baseline Habit Items matching Photo 2
+  const DEFAULT_HABITS = [
+    { id: 'w1', emoji: '💪', name: 'Morning workout', streak: 14, completed: true },
+    { id: 'w2', emoji: '📚', name: 'Read 20 pages', streak: 7, completed: true },
+    { id: 'w3', emoji: '💧', name: 'Drink water', streak: 3, completed: false },
+    { id: 'w4', emoji: '🧘', name: 'Meditate', streak: 0, completed: true },
+    { id: 'w5', emoji: '🥗', name: 'Eat veg', streak: 0, completed: false }
+  ];
+
+  function getHabitItems() {
+    try {
+      const saved = localStorage.getItem('arc_phone_widget_habits');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= 5) return parsed;
+      }
+    } catch(_) {}
+    return JSON.parse(JSON.stringify(DEFAULT_HABITS));
+  }
+
+  function saveHabitItems(items) {
+    try {
+      localStorage.setItem('arc_phone_widget_habits', JSON.stringify(items));
+    } catch(_) {}
+  }
+
+  function toggleHabitItem(index) {
+    const items = getHabitItems();
+    if (!items[index]) return;
+    items[index].completed = !items[index].completed;
+    saveHabitItems(items);
+
+    if (window.playSfx) {
+      window.playSfx(items[index].completed ? 'check' : 'click');
+    }
+
+    try {
+      if (window.state && Array.isArray(window.state.habits)) {
+        const match = window.state.habits.find(h =>
+          (h.name || '').toLowerCase().includes(items[index].name.toLowerCase().split(' ')[0]) ||
+          items[index].name.toLowerCase().includes((h.name || '').toLowerCase().split(' ')[0])
+        );
+        if (match && match.id && typeof window.toggleHabit === 'function') {
+          if (match.completed !== items[index].completed) {
+            window.toggleHabit(match.id);
+          }
+        }
+      }
+    } catch(_) {}
+
+    updateHabitWidget();
+
+    if (typeof showToast === 'function') {
+      showToast(`${items[index].emoji} ${items[index].name} marked ${items[index].completed ? 'completed ✓' : 'pending'}`);
+    }
+  }
+
+  function updateHabitWidget() {
+    const items = getHabitItems();
+    const total = items.length;
+    const completed = items.filter(i => i.completed).length;
+    const remaining = total - completed;
+
+    const now = new Date();
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+    const ratioEls = document.querySelectorAll('.habit-widget-ratio-val');
+    ratioEls.forEach(el => el.textContent = `${completed}/${total}`);
+
+    const dayEls = document.querySelectorAll('.habit-widget-day-title');
+    dayEls.forEach(el => el.textContent = dayName || 'Wednesday');
+
+    const simClock = document.getElementById('sim-homescreen-clock');
+    if (simClock) {
+      const hours = String(now.getHours() % 12 || 12);
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      simClock.textContent = `${hours}:${mins}`;
+    }
+    const simDate = document.getElementById('sim-homescreen-date');
+    if (simDate) simDate.textContent = fullDate;
+
+    const leftEls = document.querySelectorAll('.habit-widget-left-sub');
+    leftEls.forEach(el => {
+      if (remaining === 0) {
+        el.textContent = 'All completed! 🎉';
+        el.className = 'habit-widget-left-sub text-xs font-bold text-emerald-600 mt-0.5';
+      } else {
+        el.textContent = `${remaining} left today`;
+        el.className = 'habit-widget-left-sub text-xs font-semibold text-[#78716c] mt-0.5';
+      }
+    });
+
+    const C = 2 * Math.PI * 18;
+    const dashLen = total > 0 ? (completed / total) * C : 0;
+    const ringEls = document.querySelectorAll('.habit-widget-ring-circle');
+    ringEls.forEach(ring => {
+      ring.setAttribute('stroke-dasharray', `${dashLen.toFixed(1)} ${C.toFixed(1)}`);
+      ring.setAttribute('stroke-dashoffset', '0');
+    });
+
+    items.forEach((item, idx) => {
+      const checkEls = document.querySelectorAll(`.habit-check-${idx}`);
+      checkEls.forEach(chk => {
+        if (item.completed) {
+          chk.className = `habit-check-${idx} w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200`;
+          chk.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i>';
+        } else {
+          chk.className = `habit-check-${idx} w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200`;
+          chk.innerHTML = '';
+        }
+      });
+
+      const nameEls = document.querySelectorAll(`.habit-name-${idx}`);
+      nameEls.forEach(nm => {
+        nm.textContent = item.name;
+        if (item.completed) {
+          nm.className = `habit-name-${idx} text-xs sm:text-sm font-semibold text-[#1c1917] truncate`;
+        } else {
+          nm.className = `habit-name-${idx} text-xs sm:text-sm font-medium text-[#44403c] truncate`;
+        }
+      });
+
+      const streakEls = document.querySelectorAll(`.habit-streak-${idx}`);
+      streakEls.forEach(st => {
+        if (item.streak > 0) {
+          st.innerHTML = `<span class="text-xs">🔥</span> <span>${item.streak}</span>`;
+          st.className = `habit-streak-${idx} flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2`;
+        } else {
+          st.innerHTML = '';
+          st.className = `habit-streak-${idx} hidden`;
+        }
+      });
+    });
+  }
 
   function getBreakdown() {
     let distractingSecs = 0;
@@ -19496,7 +19632,6 @@ window.ArcPhoneWidgets = (function() {
 
     let totalSecs = distractingSecs + productiveSecs + othersSecs;
 
-    // If zero or fresh session, check mobile / device screentime or provide baseline matching screenshot (20m, 5m, 25m = 50m / 51m)
     if (totalSecs < 60) {
       let mobSecs = 0;
       try {
@@ -19510,7 +19645,6 @@ window.ArcPhoneWidgets = (function() {
         othersSecs = mobSecs - distractingSecs - productiveSecs;
         totalSecs = mobSecs;
       } else {
-        // Screenshot baseline (20m distracting, 5m productive, 26m others = 51m total)
         distractingSecs = 20 * 60;
         productiveSecs = 5 * 60;
         othersSecs = 26 * 60;
@@ -19532,6 +19666,8 @@ window.ArcPhoneWidgets = (function() {
   }
 
   function updateWidgets() {
+    updateHabitWidget();
+
     const b = getBreakdown();
     const C = 2 * Math.PI * 56; // 351.858
 
@@ -19553,7 +19689,7 @@ window.ArcPhoneWidgets = (function() {
       ? `${Math.floor(b.totalMins / 60)}h ${b.totalMins % 60}m`
       : `${b.totalMins}m`;
 
-    // 1. Update In-View Screentime Widget
+    // 1. In-View elements (if present)
     const totEl = document.getElementById('phone-widget-total-val');
     const distEl = document.getElementById('phone-widget-distracting-time');
     const prodEl = document.getElementById('phone-widget-productive-time');
@@ -19581,7 +19717,7 @@ window.ArcPhoneWidgets = (function() {
       svgOth.setAttribute('stroke-dashoffset', off3.toFixed(1));
     }
 
-    // 2. Update Simulator Screentime Widget
+    // 2. Simulator Screentime Widget
     const simTotEl = document.getElementById('sim-widget-total-val');
     const simDistEl = document.getElementById('sim-widget-distracting-time');
     const simProdEl = document.getElementById('sim-widget-productive-time');
@@ -19609,7 +19745,7 @@ window.ArcPhoneWidgets = (function() {
       simSvgOth.setAttribute('stroke-dashoffset', off3.toFixed(1));
     }
 
-    // 3. Update Focus Widgets (Both In-View & Simulator)
+    // 3. Focus Widgets
     const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
     const focusValEl = document.getElementById('phone-widget-focus-val');
     const focusSubEl = document.getElementById('phone-widget-focus-sub');
@@ -19621,7 +19757,6 @@ window.ArcPhoneWidgets = (function() {
     const focusTimerPill = document.getElementById('phone-widget-focus-timer-pill');
     const svgFocus = document.getElementById('phone-widget-svg-focus');
 
-    // Simulator elements
     const simFocusValEl = document.getElementById('sim-widget-focus-val');
     const simFocusSubEl = document.getElementById('sim-widget-focus-sub');
     const simFocusStatusEl = document.getElementById('sim-widget-focus-status');
@@ -19658,23 +19793,17 @@ window.ArcPhoneWidgets = (function() {
           ? 'w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-pulse'
           : 'w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-1 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse';
       }
-      if (focusStatusEl) {
-        focusStatusEl.textContent = isStrict ? 'Strict Focus Active' : 'Focus Mode Active';
-      }
-      if (focusDescEl) {
-        focusDescEl.textContent = isStrict ? 'Early exit forbidden • Apps locked' : '8 distracting apps currently locked';
-      }
+      if (focusStatusEl) focusStatusEl.textContent = isStrict ? 'Strict Focus Active' : 'Focus Mode Active';
+      if (focusDescEl) focusDescEl.textContent = isStrict ? 'Early exit forbidden • Apps locked' : '8 distracting apps currently locked';
       if (focusTimerPill) focusTimerPill.textContent = `${timeRemaining} Left`;
 
       if (focusBtn) {
         if (isStrict) {
           focusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1.5 animate-pulse"></i> Locked In Sprint (' + timeRemaining + ')';
           focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 hover:from-amber-500 hover:to-rose-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 border border-amber-400/50 transition transform active:scale-95 cursor-pointer';
-          focusBtn.title = 'Strict Mode Active: Cannot exit early';
         } else {
           focusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1.5"></i> End Focus Session';
           focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 transition transform active:scale-95';
-          focusBtn.title = 'End focus session early';
         }
       }
 
@@ -19695,19 +19824,15 @@ window.ArcPhoneWidgets = (function() {
           ? '<span class="text-amber-400 font-bold">🔒 STRICT</span>'
           : '<span class="text-emerald-400 font-bold">ACTIVE</span>';
       }
-      if (simFocusStatusEl) {
-        simFocusStatusEl.textContent = isStrict ? 'Strict Focus' : 'Active Focus';
-      }
-      if (simFocusDescEl) {
-        simFocusDescEl.textContent = isStrict ? 'Locked Sprint' : 'Apps Locked';
-      }
+      if (simFocusStatusEl) simFocusStatusEl.textContent = isStrict ? 'Strict Focus' : 'Focus Active';
+      if (simFocusDescEl) simFocusDescEl.textContent = isStrict ? 'Strict Mode Lock' : `${timeRemaining} Left`;
       if (simFocusBtn) {
         if (isStrict) {
-          simFocusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1"></i> Locked (' + timeRemaining + ')';
-          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-amber-400/40';
+          simFocusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1 animate-pulse"></i> Locked';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 transition shadow-md border border-amber-400/40 cursor-pointer';
         } else {
           simFocusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1"></i> End Focus';
-          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 transition shadow-md';
         }
       }
       if (simSvgFocus) {
@@ -19715,8 +19840,7 @@ window.ArcPhoneWidgets = (function() {
         simSvgFocus.setAttribute('stroke-dasharray', '240 352');
       }
 
-      lockBadges.forEach(b => { if (b && b.classList) b.classList.remove('hidden'); });
-
+      lockBadges.forEach(b => b.classList.remove('hidden'));
     } else {
       if (focusValEl) {
         focusValEl.textContent = 'OFF';
@@ -19727,13 +19851,13 @@ window.ArcPhoneWidgets = (function() {
         focusBadgeEl.textContent = 'STANDBY';
         focusBadgeEl.className = 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold';
       }
-      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1';
+      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1 transition-colors';
       if (focusStatusEl) focusStatusEl.textContent = 'Focus Standby';
       if (focusDescEl) focusDescEl.textContent = 'Tap below to block distracting apps';
       if (focusTimerPill) focusTimerPill.textContent = 'Idle';
 
       if (focusBtn) {
-        focusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1.5"></i> Turn On Focus Mode';
+        focusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300"></i> Turn On Focus Mode';
         focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95';
       }
 
@@ -19742,7 +19866,7 @@ window.ArcPhoneWidgets = (function() {
         svgFocus.setAttribute('stroke-dasharray', '90 352');
       }
 
-      // Simulator Focus
+      // Simulator Focus Standby
       if (simFocusValEl) {
         simFocusValEl.textContent = 'OFF';
         simFocusValEl.className = 'text-xl font-black font-sans text-purple-200 tracking-tight leading-none';
@@ -19759,35 +19883,24 @@ window.ArcPhoneWidgets = (function() {
         simSvgFocus.setAttribute('stroke-dasharray', '90 352');
       }
 
-      lockBadges.forEach(b => { if (b && b.classList) b.classList.add('hidden'); });
-    }
-
-    // Update status bar clock on simulator
-    const clockEl = document.getElementById('phone-sim-status-time');
-    if (clockEl) {
-      const d = new Date();
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mm = String(d.getMinutes()).padStart(2, '0');
-      clockEl.textContent = `${hh}:${mm}`;
+      lockBadges.forEach(b => b.classList.add('hidden'));
     }
   }
 
   function selectFocusDuration(mins) {
     _selectedFocusMinutes = Number(mins) || 25;
-    document.querySelectorAll('.phone-focus-chip').forEach(chip => {
-      if (chip && chip.classList) {
-        if (Number(chip.getAttribute('data-mins')) === _selectedFocusMinutes) {
-          chip.classList.add('active');
-        } else {
-          chip.classList.remove('active');
-        }
+    const chips = document.querySelectorAll('.phone-focus-chip');
+    chips.forEach(chip => {
+      if (Number(chip.dataset.mins) === _selectedFocusMinutes) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
       }
     });
-    updateWidgets();
   }
 
-  function toggleFocus(customMins) {
-    const mins = customMins || _selectedFocusMinutes || 25;
+  function toggleFocus() {
+    const mins = _selectedFocusMinutes || 25;
     const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
 
     if (active) {
@@ -19829,6 +19942,7 @@ window.ArcPhoneWidgets = (function() {
     if (!modal) return;
     if (modal.classList) modal.classList.add('open');
     if (window.playSfx) window.playSfx('modalOpen');
+    setSimWidgetTab(_simTab || 'habits');
     updateWidgets();
   }
 
@@ -19841,22 +19955,45 @@ window.ArcPhoneWidgets = (function() {
 
   function setSimWidgetTab(tab) {
     _simTab = tab;
+    const haEl = document.getElementById('sim-widget-habits-container');
     const scEl = document.getElementById('sim-widget-screentime-container');
     const foEl = document.getElementById('sim-widget-focus-container');
+    const tabHa = document.getElementById('sim-tab-habits');
     const tabSc = document.getElementById('sim-tab-screentime');
     const tabFo = document.getElementById('sim-tab-focus');
+    const screenEl = document.getElementById('arc-phone-sim-screen');
+    const hsHeader = document.getElementById('sim-homescreen-header');
 
-    if (tab === 'focus') {
-      if (scEl && scEl.classList) scEl.classList.add('hidden');
-      if (foEl && foEl.classList) foEl.classList.remove('hidden');
-      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
-      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold transition'; }
+    if (tab === 'screentime') {
+      if (haEl) haEl.classList.add('hidden');
+      if (scEl) scEl.classList.remove('hidden');
+      if (foEl) foEl.classList.add('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (screenEl) screenEl.classList.remove('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.add('hidden');
+    } else if (tab === 'focus') {
+      if (haEl) haEl.classList.add('hidden');
+      if (scEl) scEl.classList.add('hidden');
+      if (foEl) foEl.classList.remove('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold transition';
+      if (screenEl) screenEl.classList.remove('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.add('hidden');
     } else {
-      if (scEl && scEl.classList) scEl.classList.remove('hidden');
-      if (foEl && foEl.classList) foEl.classList.add('hidden');
-      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition'; }
-      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
+      // Default: 'habits' matching Photo 2
+      if (haEl) haEl.classList.remove('hidden');
+      if (scEl) scEl.classList.add('hidden');
+      if (foEl) foEl.classList.add('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg bg-amber-600 text-white font-bold transition shadow-sm';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (screenEl) screenEl.classList.add('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.remove('hidden');
     }
+    updateWidgets();
   }
 
   function handlePhoneAppClick(appKey) {
@@ -19878,21 +20015,9 @@ window.ArcPhoneWidgets = (function() {
       return;
     }
 
-    if (appKey === 'settings') {
-      closeSimulator();
-      if (typeof switchTab === 'function') switchTab('settings');
-      return;
-    }
-
-    if (appKey === 'music') {
-      if (window.playSfx) window.playSfx('fanfare');
-      if (typeof showToast === 'function') showToast('🎵 Ambient focus audio active');
-      return;
-    }
-
     if (window.playSfx) window.playSfx('click');
     if (typeof showToast === 'function') {
-      showToast(`📱 Opened ${appKey.charAt(0).toUpperCase() + appKey.slice(1)} on phone tracker`);
+      showToast(`📱 Launching ${appKey.charAt(0).toUpperCase() + appKey.slice(1)}...`);
     }
   }
 
@@ -19910,7 +20035,9 @@ window.ArcPhoneWidgets = (function() {
     openSimulator,
     closeSimulator,
     setSimWidgetTab,
-    handlePhoneAppClick
+    handlePhoneAppClick,
+    toggleHabitItem,
+    getHabitItems
   };
 })();
 

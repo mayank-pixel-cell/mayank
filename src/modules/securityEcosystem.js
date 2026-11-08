@@ -2356,7 +2356,152 @@ window.ArcScreenTimeNotifier = (function() {
 window.ArcPhoneWidgets = (function() {
   'use strict';
   let _selectedFocusMinutes = 25;
-  let _simTab = 'screentime';
+  let _simTab = 'habits';
+
+  // 5 Baseline Habit Items matching Photo 2
+  const DEFAULT_HABITS = [
+    { id: 'w1', emoji: '💪', name: 'Morning workout', streak: 14, completed: true },
+    { id: 'w2', emoji: '📚', name: 'Read 20 pages', streak: 7, completed: true },
+    { id: 'w3', emoji: '💧', name: 'Drink water', streak: 3, completed: false },
+    { id: 'w4', emoji: '🧘', name: 'Meditate', streak: 0, completed: true },
+    { id: 'w5', emoji: '🥗', name: 'Eat veg', streak: 0, completed: false }
+  ];
+
+  function getHabitItems() {
+    try {
+      const saved = localStorage.getItem('arc_phone_widget_habits');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= 5) return parsed;
+      }
+    } catch(_) {}
+    return JSON.parse(JSON.stringify(DEFAULT_HABITS));
+  }
+
+  function saveHabitItems(items) {
+    try {
+      localStorage.setItem('arc_phone_widget_habits', JSON.stringify(items));
+    } catch(_) {}
+  }
+
+  function toggleHabitItem(index) {
+    const items = getHabitItems();
+    if (!items[index]) return;
+    items[index].completed = !items[index].completed;
+    saveHabitItems(items);
+
+    if (window.playSfx) {
+      window.playSfx(items[index].completed ? 'check' : 'click');
+    }
+
+    // Sync with real app state habits if matching name exists
+    try {
+      if (window.state && Array.isArray(window.state.habits)) {
+        const match = window.state.habits.find(h =>
+          (h.name || '').toLowerCase().includes(items[index].name.toLowerCase().split(' ')[0]) ||
+          items[index].name.toLowerCase().includes((h.name || '').toLowerCase().split(' ')[0])
+        );
+        if (match && match.id && typeof window.toggleHabit === 'function') {
+          if (match.completed !== items[index].completed) {
+            window.toggleHabit(match.id);
+          }
+        }
+      }
+    } catch(_) {}
+
+    updateHabitWidget();
+
+    if (typeof showToast === 'function') {
+      showToast(`${items[index].emoji} ${items[index].name} marked ${items[index].completed ? 'completed ✓' : 'pending'}`);
+    }
+  }
+
+  function updateHabitWidget() {
+    const items = getHabitItems();
+    const total = items.length;
+    const completed = items.filter(i => i.completed).length;
+    const remaining = total - completed;
+
+    // Date and Day
+    const now = new Date();
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+    // Update Ratio ("3/5")
+    const ratioEls = document.querySelectorAll('.habit-widget-ratio-val');
+    ratioEls.forEach(el => el.textContent = `${completed}/${total}`);
+
+    // Update Day title
+    const dayEls = document.querySelectorAll('.habit-widget-day-title');
+    dayEls.forEach(el => el.textContent = dayName || 'Wednesday');
+
+    // Update Clock & Date in phone simulator
+    const simClock = document.getElementById('sim-homescreen-clock');
+    if (simClock) {
+      const hours = String(now.getHours() % 12 || 12);
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      simClock.textContent = `${hours}:${mins}`;
+    }
+    const simDate = document.getElementById('sim-homescreen-date');
+    if (simDate) simDate.textContent = fullDate;
+
+    // Update "2 left today"
+    const leftEls = document.querySelectorAll('.habit-widget-left-sub');
+    leftEls.forEach(el => {
+      if (remaining === 0) {
+        el.textContent = 'All completed! 🎉';
+        el.className = 'habit-widget-left-sub text-xs font-bold text-emerald-600 mt-0.5';
+      } else {
+        el.textContent = `${remaining} left today`;
+        el.className = 'habit-widget-left-sub text-xs font-semibold text-[#78716c] mt-0.5';
+      }
+    });
+
+    // Update Circular Ring Gauge:
+    // Radius = 18 => Circumference = 2 * PI * 18 = 113.1
+    const C = 2 * Math.PI * 18; // ~113.097
+    const dashLen = total > 0 ? (completed / total) * C : 0;
+    const ringEls = document.querySelectorAll('.habit-widget-ring-circle');
+    ringEls.forEach(ring => {
+      ring.setAttribute('stroke-dasharray', `${dashLen.toFixed(1)} ${C.toFixed(1)}`);
+      ring.setAttribute('stroke-dashoffset', '0');
+    });
+
+    // Update Each Habit Row
+    items.forEach((item, idx) => {
+      const checkEls = document.querySelectorAll(`.habit-check-${idx}`);
+      checkEls.forEach(chk => {
+        if (item.completed) {
+          chk.className = `habit-check-${idx} w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200`;
+          chk.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i>';
+        } else {
+          chk.className = `habit-check-${idx} w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200`;
+          chk.innerHTML = '';
+        }
+      });
+
+      const nameEls = document.querySelectorAll(`.habit-name-${idx}`);
+      nameEls.forEach(nm => {
+        nm.textContent = item.name;
+        if (item.completed) {
+          nm.className = `habit-name-${idx} text-xs sm:text-sm font-semibold text-[#1c1917] truncate`;
+        } else {
+          nm.className = `habit-name-${idx} text-xs sm:text-sm font-medium text-[#44403c] truncate`;
+        }
+      });
+
+      const streakEls = document.querySelectorAll(`.habit-streak-${idx}`);
+      streakEls.forEach(st => {
+        if (item.streak > 0) {
+          st.innerHTML = `<span class="text-xs">🔥</span> <span>${item.streak}</span>`;
+          st.className = `habit-streak-${idx} flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2`;
+        } else {
+          st.innerHTML = '';
+          st.className = `habit-streak-${idx} hidden`;
+        }
+      });
+    });
+  }
 
   function getBreakdown() {
     let distractingSecs = 0;
@@ -2380,7 +2525,6 @@ window.ArcPhoneWidgets = (function() {
 
     let totalSecs = distractingSecs + productiveSecs + othersSecs;
 
-    // If zero or fresh session, check mobile / device screentime or provide baseline matching screenshot (20m, 5m, 25m = 50m / 51m)
     if (totalSecs < 60) {
       let mobSecs = 0;
       try {
@@ -2394,7 +2538,6 @@ window.ArcPhoneWidgets = (function() {
         othersSecs = mobSecs - distractingSecs - productiveSecs;
         totalSecs = mobSecs;
       } else {
-        // Screenshot baseline (20m distracting, 5m productive, 26m others = 51m total)
         distractingSecs = 20 * 60;
         productiveSecs = 5 * 60;
         othersSecs = 26 * 60;
@@ -2416,6 +2559,8 @@ window.ArcPhoneWidgets = (function() {
   }
 
   function updateWidgets() {
+    updateHabitWidget();
+
     const b = getBreakdown();
     const C = 2 * Math.PI * 56; // 351.858
 
@@ -2437,7 +2582,7 @@ window.ArcPhoneWidgets = (function() {
       ? `${Math.floor(b.totalMins / 60)}h ${b.totalMins % 60}m`
       : `${b.totalMins}m`;
 
-    // 1. Update In-View Screentime Widget
+    // 1. Update In-View Screentime Widget (if present)
     const totEl = document.getElementById('phone-widget-total-val');
     const distEl = document.getElementById('phone-widget-distracting-time');
     const prodEl = document.getElementById('phone-widget-productive-time');
@@ -2580,18 +2725,18 @@ window.ArcPhoneWidgets = (function() {
           : '<span class="text-emerald-400 font-bold">ACTIVE</span>';
       }
       if (simFocusStatusEl) {
-        simFocusStatusEl.textContent = isStrict ? 'Strict Focus' : 'Active Focus';
+        simFocusStatusEl.textContent = isStrict ? 'Strict Focus' : 'Focus Active';
       }
       if (simFocusDescEl) {
-        simFocusDescEl.textContent = isStrict ? 'Locked Sprint' : 'Apps Locked';
+        simFocusDescEl.textContent = isStrict ? 'Strict Mode Lock' : `${timeRemaining} Left`;
       }
       if (simFocusBtn) {
         if (isStrict) {
-          simFocusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1"></i> Locked (' + timeRemaining + ')';
-          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-amber-400/40';
+          simFocusBtn.innerHTML = '<i class="fa-solid fa-lock text-amber-300 mr-1 animate-pulse"></i> Locked';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 transition shadow-md border border-amber-400/40 cursor-pointer';
         } else {
           simFocusBtn.innerHTML = '<i class="fa-solid fa-stop text-white mr-1"></i> End Focus';
-          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition';
+          simFocusBtn.className = 'w-full py-2 px-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 transition shadow-md';
         }
       }
       if (simSvgFocus) {
@@ -2599,26 +2744,30 @@ window.ArcPhoneWidgets = (function() {
         simSvgFocus.setAttribute('stroke-dasharray', '240 352');
       }
 
-      lockBadges.forEach(b => { if (b && b.classList) b.classList.remove('hidden'); });
-
+      lockBadges.forEach(b => b.classList.remove('hidden'));
     } else {
       if (focusValEl) {
         focusValEl.textContent = 'OFF';
         focusValEl.className = 'text-2xl sm:text-3xl font-black font-sans text-purple-200 tracking-tight leading-none drop-shadow';
       }
-      if (focusSubEl) focusSubEl.textContent = 'Focus Mode';
+      if (focusSubEl) {
+        focusSubEl.textContent = 'Focus Mode';
+      }
       if (focusBadgeEl) {
         focusBadgeEl.textContent = 'STANDBY';
         focusBadgeEl.className = 'text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold';
       }
-      if (focusDotEl) focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1';
+      if (focusDotEl) {
+        focusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1 transition-colors';
+      }
       if (focusStatusEl) focusStatusEl.textContent = 'Focus Standby';
       if (focusDescEl) focusDescEl.textContent = 'Tap below to block distracting apps';
       if (focusTimerPill) focusTimerPill.textContent = 'Idle';
 
       if (focusBtn) {
-        focusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300 mr-1.5"></i> Turn On Focus Mode';
+        focusBtn.innerHTML = '<i class="fa-solid fa-bolt text-amber-300"></i> Turn On Focus Mode';
         focusBtn.className = 'w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95';
+        focusBtn.title = 'Start Focus Mode';
       }
 
       if (svgFocus) {
@@ -2626,12 +2775,14 @@ window.ArcPhoneWidgets = (function() {
         svgFocus.setAttribute('stroke-dasharray', '90 352');
       }
 
-      // Simulator Focus
+      // Simulator Focus Standby
       if (simFocusValEl) {
         simFocusValEl.textContent = 'OFF';
         simFocusValEl.className = 'text-xl font-black font-sans text-purple-200 tracking-tight leading-none';
       }
-      if (simFocusSubEl) simFocusSubEl.textContent = 'Focus Mode';
+      if (simFocusSubEl) {
+        simFocusSubEl.textContent = 'Focus Mode';
+      }
       if (simFocusStatusEl) simFocusStatusEl.textContent = 'Focus Standby';
       if (simFocusDescEl) simFocusDescEl.textContent = '8 Apps Blocked';
       if (simFocusBtn) {
@@ -2643,35 +2794,24 @@ window.ArcPhoneWidgets = (function() {
         simSvgFocus.setAttribute('stroke-dasharray', '90 352');
       }
 
-      lockBadges.forEach(b => { if (b && b.classList) b.classList.add('hidden'); });
-    }
-
-    // Update status bar clock on simulator
-    const clockEl = document.getElementById('phone-sim-status-time');
-    if (clockEl) {
-      const d = new Date();
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mm = String(d.getMinutes()).padStart(2, '0');
-      clockEl.textContent = `${hh}:${mm}`;
+      lockBadges.forEach(b => b.classList.add('hidden'));
     }
   }
 
   function selectFocusDuration(mins) {
     _selectedFocusMinutes = Number(mins) || 25;
-    document.querySelectorAll('.phone-focus-chip').forEach(chip => {
-      if (chip && chip.classList) {
-        if (Number(chip.getAttribute('data-mins')) === _selectedFocusMinutes) {
-          chip.classList.add('active');
-        } else {
-          chip.classList.remove('active');
-        }
+    const chips = document.querySelectorAll('.phone-focus-chip');
+    chips.forEach(chip => {
+      if (Number(chip.dataset.mins) === _selectedFocusMinutes) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
       }
     });
-    updateWidgets();
   }
 
-  function toggleFocus(customMins) {
-    const mins = customMins || _selectedFocusMinutes || 25;
+  function toggleFocus() {
+    const mins = _selectedFocusMinutes || 25;
     const active = (typeof isFocusActive === 'function') ? isFocusActive() : (window.appTrackerState && window.appTrackerState.focusActive);
 
     if (active) {
@@ -2713,6 +2853,7 @@ window.ArcPhoneWidgets = (function() {
     if (!modal) return;
     if (modal.classList) modal.classList.add('open');
     if (window.playSfx) window.playSfx('modalOpen');
+    setSimWidgetTab(_simTab || 'habits');
     updateWidgets();
   }
 
@@ -2725,22 +2866,45 @@ window.ArcPhoneWidgets = (function() {
 
   function setSimWidgetTab(tab) {
     _simTab = tab;
+    const haEl = document.getElementById('sim-widget-habits-container');
     const scEl = document.getElementById('sim-widget-screentime-container');
     const foEl = document.getElementById('sim-widget-focus-container');
+    const tabHa = document.getElementById('sim-tab-habits');
     const tabSc = document.getElementById('sim-tab-screentime');
     const tabFo = document.getElementById('sim-tab-focus');
+    const screenEl = document.getElementById('arc-phone-sim-screen');
+    const hsHeader = document.getElementById('sim-homescreen-header');
 
-    if (tab === 'focus') {
-      if (scEl && scEl.classList) scEl.classList.add('hidden');
-      if (foEl && foEl.classList) foEl.classList.remove('hidden');
-      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
-      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold transition'; }
+    if (tab === 'screentime') {
+      if (haEl) haEl.classList.add('hidden');
+      if (scEl) scEl.classList.remove('hidden');
+      if (foEl) foEl.classList.add('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (screenEl) screenEl.classList.remove('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.add('hidden');
+    } else if (tab === 'focus') {
+      if (haEl) haEl.classList.add('hidden');
+      if (scEl) scEl.classList.add('hidden');
+      if (foEl) foEl.classList.remove('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold transition';
+      if (screenEl) screenEl.classList.remove('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.add('hidden');
     } else {
-      if (scEl && scEl.classList) scEl.classList.remove('hidden');
-      if (foEl && foEl.classList) foEl.classList.add('hidden');
-      if (tabSc) { tabSc.className = 'px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition'; }
-      if (tabFo) { tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition'; }
+      // Default: 'habits' matching Photo 2
+      if (haEl) haEl.classList.remove('hidden');
+      if (scEl) scEl.classList.add('hidden');
+      if (foEl) foEl.classList.add('hidden');
+      if (tabHa) tabHa.className = 'px-2.5 py-1 rounded-lg bg-amber-600 text-white font-bold transition shadow-sm';
+      if (tabSc) tabSc.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (tabFo) tabFo.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition';
+      if (screenEl) screenEl.classList.add('wallpaper-warm');
+      if (hsHeader) hsHeader.classList.remove('hidden');
     }
+    updateWidgets();
   }
 
   function handlePhoneAppClick(appKey) {
@@ -2762,21 +2926,9 @@ window.ArcPhoneWidgets = (function() {
       return;
     }
 
-    if (appKey === 'settings') {
-      closeSimulator();
-      if (typeof switchTab === 'function') switchTab('settings');
-      return;
-    }
-
-    if (appKey === 'music') {
-      if (window.playSfx) window.playSfx('fanfare');
-      if (typeof showToast === 'function') showToast('🎵 Ambient focus audio active');
-      return;
-    }
-
     if (window.playSfx) window.playSfx('click');
     if (typeof showToast === 'function') {
-      showToast(`📱 Opened ${appKey.charAt(0).toUpperCase() + appKey.slice(1)} on phone tracker`);
+      showToast(`📱 Launching ${appKey.charAt(0).toUpperCase() + appKey.slice(1)}...`);
     }
   }
 
@@ -2794,7 +2946,9 @@ window.ArcPhoneWidgets = (function() {
     openSimulator,
     closeSimulator,
     setSimWidgetTab,
-    handlePhoneAppClick
+    handlePhoneAppClick,
+    toggleHabitItem,
+    getHabitItems
   };
 })();
 

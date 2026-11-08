@@ -2305,7 +2305,7 @@ export function renderSystemModals() {
       <div class="arc-phone-notch"></div>
 
       <!-- Phone Screen with Mountain Wallpaper -->
-      <div class="arc-phone-screen p-4 flex flex-col justify-between" id="arc-phone-sim-screen">
+      <div class="arc-phone-screen wallpaper-warm p-4 flex flex-col justify-between" id="arc-phone-sim-screen">
         <!-- 1. Android Status Bar -->
         <div class="flex items-center justify-between text-white text-[11px] font-sans px-1 pt-1 select-none z-10">
           <div class="flex items-center gap-1.5">
@@ -2325,17 +2325,123 @@ export function renderSystemModals() {
         <!-- 2. Phone Homescreen Widgets Area -->
         <div class="pt-3 space-y-2 z-10">
           <!-- Widget Switcher Tabs -->
-          <div class="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-mono">
-            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" id="sim-tab-screentime" class="px-2.5 py-1 rounded-lg bg-white/20 text-white font-bold transition">
+          <!-- Homescreen Header (Clock, Date & Tagline as in Photo 2) -->
+        <div id="sim-homescreen-header" class="text-center pt-1 pb-1 z-10 select-none transition-all duration-300">
+          <div id="sim-homescreen-clock" class="text-4xl sm:text-5xl font-light text-white tracking-tight drop-shadow-sm font-sans">9:41</div>
+          <div id="sim-homescreen-date" class="text-xs text-white/90 font-medium mt-0.5 drop-shadow-sm">Wednesday, June 4</div>
+          <div class="text-[9px] uppercase tracking-[0.18em] text-amber-200/90 font-bold mt-2 drop-shadow-sm">
+            ONE TAP TO LOG &mdash; RIGHT FROM YOUR HOME SCREEN
+          </div>
+        </div>
+
+        <!-- 2. Phone Homescreen Widgets Area -->
+        <div class="pt-1.5 space-y-2 z-10 flex-1 flex flex-col justify-center">
+          <!-- Widget Switcher Tabs -->
+          <div class="flex items-center justify-center gap-1 bg-black/50 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[10px] font-mono">
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('habits'); playSfx('click')" id="sim-tab-habits" class="px-2.5 py-1 rounded-lg bg-amber-600 text-white font-bold transition shadow-sm">
+              📋 Habits
+            </button>
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('screentime'); playSfx('click')" id="sim-tab-screentime" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition">
               📊 Screen Time
             </button>
-            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" id="sim-tab-focus" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition">
+            <button role="button" onclick="ArcPhoneWidgets.setSimWidgetTab('focus'); playSfx('click')" id="sim-tab-focus" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition">
               ⚡ Focus Mode
             </button>
           </div>
 
+          <!-- Embedded Widget 3: Daily Habits (MATCHING ATTACHED PHOTO 2 EXACTLY!) -->
+          <div id="sim-widget-habits-container" class="transition-all duration-300">
+            <div id="habit-homescreen-widget" class="habit-widget-card p-4 sm:p-5 select-none transition-all duration-300">
+              <!-- Widget Header: Circular Progress + Day Title + Remaining Subtitle -->
+              <div class="flex items-center gap-3 pb-3 border-b border-stone-200/70">
+                <!-- Left: Terracotta Circular Gauge with Fraction Inside -->
+                <div class="relative w-12 h-12 shrink-0 flex items-center justify-center">
+                  <svg class="w-12 h-12 -rotate-90 transform" viewBox="0 0 48 48">
+                    <!-- Background Track -->
+                    <circle cx="24" cy="24" r="18" stroke="#f0eae1" stroke-width="4.5" fill="none" />
+                    <!-- Progress Arc in Terracotta (#a64a1d) -->
+                    <circle class="habit-widget-ring-circle" cx="24" cy="24" r="18" stroke="#a64a1d" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-dasharray="67.9 113.1" stroke-dashoffset="0" style="transition: stroke-dasharray 0.5s ease-out;" />
+                  </svg>
+                  <!-- Center Text: 3/5 -->
+                  <span class="habit-widget-ratio-val absolute inset-0 flex items-center justify-center text-xs font-black font-sans text-[#292524] tracking-tight">3/5</span>
+                </div>
+
+                <!-- Right: Day of Week & Remaining Counter -->
+                <div class="leading-tight">
+                  <div class="habit-widget-day-title text-base sm:text-lg font-black text-[#1c1917] tracking-tight font-sans">Wednesday</div>
+                  <div class="habit-widget-left-sub text-xs font-semibold text-[#78716c] mt-0.5">2 left today</div>
+                </div>
+              </div>
+
+              <!-- Habit Items List (Matching Photo 2) -->
+              <div class="pt-2.5 space-y-2">
+                <!-- Item 0: Morning workout -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(0)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-0 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">💪</span>
+                    <span class="habit-name-0 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Morning workout</span>
+                  </div>
+                  <div class="habit-streak-0 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>14</span>
+                  </div>
+                </div>
+
+                <!-- Item 1: Read 20 pages -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(1)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-1 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">📚</span>
+                    <span class="habit-name-1 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Read 20 pages</span>
+                  </div>
+                  <div class="habit-streak-1 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>7</span>
+                  </div>
+                </div>
+
+                <!-- Item 2: Drink water -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(2)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-2 w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200"></div>
+                    <span class="text-base shrink-0 select-none">💧</span>
+                    <span class="habit-name-2 text-xs sm:text-sm font-medium text-[#44403c] truncate">Drink water</span>
+                  </div>
+                  <div class="habit-streak-2 flex items-center gap-1 text-[11px] font-bold text-[#a64a1d] shrink-0 font-sans ml-2">
+                    <span class="text-xs">🔥</span> <span>3</span>
+                  </div>
+                </div>
+
+                <!-- Item 3: Meditate -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(3)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-3 w-5 h-5 rounded-full bg-[#a64a1d] text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-200">
+                      <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <span class="text-base shrink-0 select-none">🧘</span>
+                    <span class="habit-name-3 text-xs sm:text-sm font-semibold text-[#1c1917] truncate">Meditate</span>
+                  </div>
+                  <div class="habit-streak-3 hidden"></div>
+                </div>
+
+                <!-- Item 4: Eat veg -->
+                <div class="habit-widget-row flex items-center justify-between py-1 px-1.5 rounded-xl cursor-pointer select-none" onclick="ArcPhoneWidgets.toggleHabitItem(4)">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="habit-check-4 w-5 h-5 rounded-full border-2 border-stone-300 bg-white/60 flex items-center justify-center shrink-0 shadow-sm transition-all duration-200"></div>
+                    <span class="text-base shrink-0 select-none">🥗</span>
+                    <span class="habit-name-4 text-xs sm:text-sm font-medium text-[#44403c] truncate">Eat veg</span>
+                  </div>
+                  <div class="habit-streak-4 hidden"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Embedded Widget 1: Screen Time Spent (on phone) -->
-          <div id="sim-widget-screentime-container" class="phone-widget-card p-4 space-y-2.5">
+          <div id="sim-widget-screentime-container" class="phone-widget-card p-4 space-y-2.5 hidden">
             <div class="flex items-center justify-between gap-2">
               <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
                 <svg class="w-28 h-28 -rotate-90 transform" viewBox="0 0 160 160">

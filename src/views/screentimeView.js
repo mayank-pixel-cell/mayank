@@ -502,183 +502,36 @@ export function renderScreentimeView() {
                  PHONE APPLICATION HOMESCREEN WIDGETS (SCREEN TIME USAGE & FOCUS CONTROLLER)
                  Modeled precisely after Android Homescreen Widgets as shown in user image
                  ========================================================================== -->
-            <div id="st-phone-widgets-section" class="glass-card st-cyber-ambient rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-l-4 border-l-purple-500 space-y-4 shadow-xl relative overflow-hidden transition-all duration-300">
-                <!-- TOP HEADER & CONTROLS -->
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
-                    <div class="space-y-1">
+            <!-- ==========================================================================
+                 INBUILT MOBILE & HOMESCREEN WIDGETS
+                 ========================================================================== -->
+            <div id="st-inbuilt-widgets-banner" class="glass-card rounded-2xl p-4 sm:p-5 border border-purple-500/25 bg-gradient-to-r from-purple-950/20 via-slate-900/60 to-indigo-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg transition-all duration-300">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg shrink-0 mt-0.5 shadow-sm">
+                        <i class="fa-solid fa-shapes"></i>
+                    </div>
+                    <div>
                         <div class="flex items-center gap-2 flex-wrap">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
-                                <i class="fa-solid fa-mobile-screen text-purple-400"></i>
-                                PHONE APPLICATION WIDGETS
-                            </span>
+                            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+                                Inbuilt Mobile &amp; Homescreen Widgets
+                            </h3>
                             <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold flex items-center gap-1 shadow-sm">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Live Sync Active
                             </span>
                         </div>
-                        <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-shapes text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"></i> Android Screen Time &amp; Focus Mode Widgets
-                        </h3>
-                        <p class="text-xs sm:text-sm text-slate-300">
-                            Real-time categorized usage breakdown (Distracting, Productive, Others) and 1-click Focus Mode activation for your phone application.
+                        <p class="text-xs text-slate-300 mt-0.5">
+                            Real-time Screen Time Spent, 1-Click Focus Mode, and Daily Habit Check-In widgets for your phone homescreen.
                         </p>
                     </div>
                 </div>
 
-                <!-- 2 SPECIAL WIDGETS SIDE-BY-SIDE (MATCHING IMAGE EXACTLY) -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
-                    <!-- 1. SCREEN TIME SPENT WIDGET (IMAGE MATCH) -->
-                    <div id="phone-widget-screentime-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group">
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                                <i class="fa-solid fa-chart-pie text-orange-400"></i> Screen Time Spent
-                            </span>
-                            <span class="text-[10px] font-mono text-slate-500 flex items-center gap-1">
-                                <i class="fa-brands fa-android text-emerald-400"></i> 4x2 Launcher Widget
-                            </span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <!-- Left: Circular Segmented Gauge (Total Usage + Subtitle) -->
-                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
-                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
-                                    <!-- Background Track -->
-                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
-                                    <!-- Segment 1: Distracting (Orange) -->
-                                    <circle id="phone-widget-svg-distracting" cx="80" cy="80" r="56" stroke="#f97316" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="134 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
-                                    <!-- Segment 2: Productive (Green) -->
-                                    <circle id="phone-widget-svg-productive" cx="80" cy="80" r="56" stroke="#22c55e" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="31 352" stroke-dashoffset="-138" class="transition-all duration-700 ease-out" />
-                                    <!-- Segment 3: Others (Grey) -->
-                                    <circle id="phone-widget-svg-others" cx="80" cy="80" r="56" stroke="#94a3b8" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="175 352" stroke-dashoffset="-173" class="transition-all duration-700 ease-out" />
-                                </svg>
-                                <!-- Center Text Readout -->
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                                    <span id="phone-widget-total-val" class="text-3xl font-black font-sans text-white tracking-tight leading-none drop-shadow">51m</span>
-                                    <span class="text-[11px] font-medium text-slate-400 mt-1">Today's usage</span>
-                                </div>
-                            </div>
-
-                            <!-- Right: Categorized Breakdown with Colored Dots -->
-                            <div class="w-full sm:flex-1 space-y-3.5 sm:pl-2">
-                                <!-- Distracting -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316] shrink-0 mt-1 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-distracting-time" class="text-lg font-black text-white font-sans">20m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Distracting</div>
-                                    </div>
-                                </div>
-
-                                <!-- Productive -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e] shrink-0 mt-1 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-productive-time" class="text-lg font-black text-white font-sans">5m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Productive</div>
-                                    </div>
-                                </div>
-
-                                <!-- Others -->
-                                <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#94a3b8] shrink-0 mt-1"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-others-time" class="text-lg font-black text-white font-sans">25m</div>
-                                        <div class="text-xs text-slate-400 font-medium">Others</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer Quick Action -->
-                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
-                            <span id="phone-widget-category-summary">🎮 YouTube, Social &amp; Games</span>
-                            <button role="button" onclick="switchTab('screentime'); openFocusBlocklistModal(); playSfx('click')" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline">
-                                Configure Limits &rarr;
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 2. TURN ON FOCUS MODE WIDGET (IMAGE COMPANION) -->
-                    <div id="phone-widget-focus-card" class="phone-widget-card p-5 sm:p-6 space-y-3 relative overflow-hidden group border-purple-500/30">
-                        <div class="flex items-center justify-between text-xs mb-1">
-                            <span class="text-purple-300 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                                <i class="fa-solid fa-moon text-purple-400"></i> Turn On Focus Mode
-                            </span>
-                            <span id="phone-widget-focus-badge" class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">
-                                STANDBY
-                            </span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <!-- Left: Circular Focus Ring Gauge -->
-                            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
-                                <svg class="w-36 h-36 -rotate-90 transform" viewBox="0 0 160 160">
-                                    <circle cx="80" cy="80" r="56" stroke="#27272a" stroke-width="14" fill="none" />
-                                    <circle id="phone-widget-svg-focus" cx="80" cy="80" r="56" stroke="#a855f7" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="90 352" stroke-dashoffset="0" class="transition-all duration-700 ease-out" />
-                                </svg>
-                                <!-- Center Readout: OFF or Timer countdown -->
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                                    <span id="phone-widget-focus-val" class="text-2xl sm:text-3xl font-black font-sans text-purple-200 tracking-tight leading-none drop-shadow">OFF</span>
-                                    <span id="phone-widget-focus-sub" class="text-[11px] font-medium text-slate-400 mt-1">Focus Mode</span>
-                                </div>
-                            </div>
-
-                            <!-- Right: Focus Status & Preset Selector -->
-                            <div class="w-full sm:flex-1 space-y-3 sm:pl-2">
-                                <div class="flex items-start gap-2.5">
-                                    <span id="phone-widget-focus-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0 mt-1 transition-colors"></span>
-                                    <div class="leading-tight">
-                                        <div id="phone-widget-focus-status" class="text-base font-black text-white">Focus Standby</div>
-                                        <div id="phone-widget-focus-desc" class="text-xs text-slate-400">Blocks 8 distracting apps</div>
-                                    </div>
-                                </div>
-
-                                <!-- Duration Presets Chips -->
-                                <div>
-                                    <span class="text-[10px] font-mono text-slate-400 block mb-1.5 uppercase font-bold">Session Target:</span>
-                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(25); playSfx('click')" class="phone-focus-chip active" data-mins="25">25m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(45); playSfx('click')" class="phone-focus-chip" data-mins="45">45m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(60); playSfx('click')" class="phone-focus-chip" data-mins="60">60m</button>
-                                        <button role="button" onclick="ArcPhoneWidgets.selectFocusDuration(90); playSfx('click')" class="phone-focus-chip" data-mins="90">90m</button>
-                                    </div>
-                                </div>
-
-                                <!-- Strict Mode (Arc Gold Feature) -->
-                                <div id="phone-widget-strict-container" class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-amber-500/40 transition flex items-center justify-between gap-2">
-                                    <div class="flex items-center gap-2 min-w-0">
-                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/30 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.2)]">
-                                            <i class="fa-solid fa-lock" id="phone-widget-strict-icon"></i>
-                                        </div>
-                                        <div class="min-w-0 leading-tight">
-                                            <div class="flex items-center gap-1.5 flex-wrap">
-                                                <span class="text-xs font-bold text-white">Strict Mode</span>
-                                                <span class="text-[9px] font-mono font-black px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center gap-1 shadow-sm">
-                                                    <i class="fa-solid fa-lock text-[8px] text-emerald-400"></i> FREE
-                                                </span>
-                                            </div>
-                                            <span class="text-[10px] text-slate-400 block truncate" id="phone-widget-strict-desc">Disables early exit until timer ends</span>
-                                        </div>
-                                    </div>
-                                    <label for="phone-widget-strict-toggle" class="relative inline-flex items-center cursor-pointer shrink-0" onclick="handleFocusStrictModeToggle(event)">
-                                        <span class="sr-only">Toggle Focus Strict Mode</span>
-                                        <input type="checkbox" id="phone-widget-strict-toggle" title="Toggle Focus Strict Mode" aria-label="Toggle Focus Strict Mode" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-amber-400 peer-checked:to-yellow-500"></div>
-                                    </label>
-                                </div>
-
-                                <!-- 1-Click Action Button -->
-                                <button role="button" id="phone-widget-toggle-focus-btn" onclick="ArcPhoneWidgets.toggleFocus()" class="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition transform active:scale-95">
-                                    <i class="fa-solid fa-bolt text-amber-300"></i> Turn On Focus Mode
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Footer Status -->
-                        <div class="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
-                            <span id="phone-widget-active-app-state">🛡️ Lockout Shield Armed</span>
-                            <span class="text-purple-300 font-mono text-[10px]" id="phone-widget-focus-timer-pill">Idle</span>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button role="button" onclick="ArcPhoneWidgets.openSimulator(); playSfx('modalOpen')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-purple-600/30 transition active:scale-95" title="Open Phone Homescreen & Interactive Inbuilt Widgets">
+                        <i class="fa-solid fa-mobile-screen-button text-cyan-300"></i> Open Phone Widgets
+                    </button>
+                    <button role="button" onclick="ArcPhoneWidgets.refresh(); playSfx('click')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5" title="Refresh widget telemetry">
+                        <i class="fa-solid fa-arrows-rotate text-purple-400"></i> Refresh
+                    </button>
                 </div>
             </div>
 
