@@ -18,7 +18,8 @@ export default defineConfig({
     sourcemap: !!process.env.TAURI_ENV_DEBUG || !!process.env.TAURI_DEBUG,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html")
+        main: resolve(__dirname, "index.html"),
+        landing: resolve(__dirname, "landing.html")
       },
       output: {
         manualChunks: {

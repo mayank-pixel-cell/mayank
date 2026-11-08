@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Arc Tracker — The Unbreakable Discipline &amp; Screen Time Ecosystem</title>
+  <meta name="description" content="Official website for Arc Tracker: 100% offline-first habit grading, continuous device screen time telemetry, app focus lockouts, and YouTube distraction shields for Windows, Android, and iOS.">
+  <meta name="theme-color" content="#050811">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Arc Tracker — Discipline &amp; Screen Time Ecosystem">
+  <meta property="og:description" content="100% offline-first habit tracking, automatic screen time telemetry, focus lockouts, and air-gapped privacy.">
+  <meta property="og:image" content="./icons/icon.png">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/32x32.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="./icons/128x128.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Offline / Bundled Fonts & Icons with Fallbacks -->
+  <link rel="stylesheet" href="./assets/fonts/inter.css">
+  <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
+
+  <style>
+    /* Modern CSS Design Tokens */
+    :root {
+      --bg: #050811;
+      --bg-card: rgba(13, 20, 36, 0.72);
+      --bg-card-hover: rgba(20, 30, 54, 0.88);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(6, 182, 212, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.28);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --amber: #f59e0b;
+      --purple: #8b5cf6;
+      --crimson: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(6, 182, 212, 0.15), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 90% 40%, rgba(139, 92, 246, 0.08), transparent 60%),
+        radial-gradient(ellipse 50% 30% at 10% 80%, rgba(16, 185, 129, 0.08), transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* Accessibility Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -999px;
+      left: 1rem;
+      background: var(--cyan);
+      color: #000;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      z-index: 9999;
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+      top: 1rem;
+      outline: 3px solid #fff;
+    }
+
+    /* Focus visible standard */
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+    }
+
+    /* Glassmorphic Navbar */
+    .header-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5, 8, 17, 0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4.5rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    /* Modern Scrollspy Navigation */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      scroll-target-group: auto;
+    }
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.925rem;
+      font-weight: 600;
+      padding: 0.5rem 0.25rem;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      border-bottom: 2px solid transparent;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav-link:hover {
+      color: #fff;
+    }
+    .nav-link:is(:target-current, .target-current) {
+      color: var(--cyan);
+      border-bottom-color: var(--cyan);
+      font-weight: 700;
+    }
+
+    /* CTA Header Buttons */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+      min-height: 44px;
+    }
+    .btn-ghost:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #050811;
+      text-decoration: none;
+      background: linear-gradient(135deg, #06b6d4, #38bdf8);
+      box-shadow: 0 4px 18px var(--cyan-glow);
+      transition: all 0.2s ease;
+      min-height: 44px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(6, 182, 212, 0.45);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-block: 5rem 3.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid var(--border-accent);
+      color: var(--cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .badge-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 65%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 740px;
+      margin-inline: auto;
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .btn-large {
+      padding: 0.9rem 1.8rem;
+      font-size: 1rem;
+      border-radius: 14px;
+    }
+
+    /* Mockup Showcase Card */
+    .mockup-wrapper {
+      position: relative;
+      max-width: 960px;
+      margin-inline: auto;
+      border-radius: 24px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), rgba(255, 255, 255, 0.05), rgba(139, 92, 246, 0.3));
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 50px -10px var(--cyan-glow);
+    }
+    .mockup-inner {
+      background: #090e1b;
+      border-radius: 23px;
+      padding: 1.75rem;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      text-align: left;
+    }
+    .preview-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .preview-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .rank-s-badge {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #10b981;
+      text-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    }
+    .timer-display {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--cyan);
+      text-shadow: 0 0 15px var(--cyan-glow);
+      margin-block: 0.5rem;
+    }
+    .shield-box {
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      background: rgba(244, 63, 94, 0.08);
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: #fda4af;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* Metric Counters Banner */
+    .metrics-bar {
+      margin-top: 4rem;
+      padding-block: 2rem;
+      border-block: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 2.25rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+    .metric-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Features Section */
+    .section {
+      padding-block: 6rem 3rem;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin-inline: auto;
+      margin-bottom: 4rem;
+    }
+    .section-eyebrow {
+      color: var(--cyan);
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Cards Grid */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid var(--border-accent);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Platform Downloads Matrix */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .platform-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .platform-card:hover {
+      border-color: var(--cyan);
+      background: var(--bg-card-hover);
+    }
+    .platform-icon {
+      font-size: 2.75rem;
+      margin-bottom: 1.25rem;
+      color: var(--cyan);
+    }
+    .platform-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.4rem;
+    }
+    .platform-spec {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .platform-btn {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* FAQ Section Accordion */
+    .faq-container {
+      max-width: 800px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    details.faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    details.faq-item[open] {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+    }
+    summary.faq-summary {
+      padding: 1.25rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffffff;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 48px;
+    }
+    summary.faq-summary::-webkit-details-marker {
+      display: none;
+    }
+    summary.faq-summary::after {
+      content: '+';
+      font-size: 1.4rem;
+      color: var(--cyan);
+      transition: transform 0.2s ease;
+    }
+    details.faq-item[open] summary.faq-summary::after {
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      padding: 0 1.5rem 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Final CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.12));
+      border: 1px solid var(--border-accent);
+      border-radius: 28px;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin-block: 5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-block: 3.5rem 2rem;
+      background: rgba(3, 5, 12, 0.95);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+    .copyright {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      .hero-section {
+        padding-block: 3.5rem 2rem;
+      }
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header Navigation -->
+  <header class="header-bar">
+    <div class="container nav-container">
+      <a href="#" class="brand" aria-label="Arc Tracker Home">
+        <div class="brand-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <span>Arc Tracker</span>
+      </a>
+
+      <!-- Primary Navigation with Scrollspy Target Group -->
+      <nav class="nav-menu" aria-label="Primary">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#platforms" class="nav-link">Platforms</a>
+        <a href="#security" class="nav-link">Airgap Security</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/mayank-pixel-cell/mayank" target="_blank" rel="noopener noreferrer" class="btn-ghost" aria-label="GitHub Repository">
+          <i class="fa-brands fa-github"></i>
+          <span>GitHub</span>
+        </a>
+        <a href="./index.html" class="btn-primary" title="Launch Interactive Web App">
+          <i class="fa-solid fa-play"></i>
+          <span>Launch Web App</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" tabindex="-1">
+
+    <!-- Hero Section -->
+    <section class="hero-section container" id="hero">
+      <div class="badge-pill">
+        <span class="badge-pulse"></span>
+        <span>Version 2.6.0 Available • 100% Offline-First</span>
+      </div>
+
+      <h1 class="hero-title">
+        Master Your Arc with <br>
+        <span class="hero-gradient">Unbreakable Discipline.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        The ultimate air-gapped discipline tracker. Gamified S-to-F habit grading, continuous background screen time telemetry, automatic app &amp; YouTube lockouts, and client-encrypted cloud syncing.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#platforms" class="btn-primary btn-large">
+          <i class="fa-solid fa-download"></i>
+          <span>Download App Free</span>
+        </a>
+        <a href="./index.html" class="btn-ghost btn-large">
+          <i class="fa-solid fa-desktop"></i>
+          <span>Try Web Simulator</span>
+        </a>
+        <a href="https://github.com/mayank-pixel-cell/mayank/wiki" target="_blank" rel="noopener noreferrer" class="btn-ghost btn-large">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Read Wiki</span>
+        </a>
+      </div>
+
+      <!-- High-Fidelity UI Showcase Mockup -->
+      <div class="mockup-wrapper">
+        <div class="mockup-inner">
+          <!-- Widget 1: Habit Rank -->
+          <div class="preview-card">
+            <div class="preview-header">
+              <span class="preview-title">Daily Discipline Grade</span>
+              <span class="text-xs text-emerald-400 font-mono">100% PERFECT</span>
+            </div>
+            <div class="flex items-center gap-4 my-2">
+              <div class="rank-s-badge">RANK S</div>
+              <div style="font-size:0.85rem; color:var(--text-muted);">
+                <p>⚡ All 12 Daily Disciplines Met</p>
+                <p>🔥 42-Day Unbroken Streak</p>
+              </div>
+            </div>
+            <div style="height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden;">
+              <div style="width:100%; height:100%; background:var(--emerald);"></div>
+            </div>
+          </div>
+
+          <!-- Widget 2: Screen Time Telemetry -->
+          <div class="preview-card">
+            <div class="preview-header">
+              <span class="preview-title">Continuous Screen Time</span>
+              <span class="badge-pill" style="margin:0; padding:0.2rem 0.5rem; font-size:0.7rem;">AUTO-SYNC</span>
+            </div>
+            <div class="timer-display">03h 48m 12s</div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">
+              <i class="fa-solid fa-moon text-cyan-400"></i> Hardware sleep watchdog paused during lid shut
+            </p>
+          </div>
+
+          <!-- Widget 3: Blocker Cyber Shield -->
+          <div class="preview-card">
+            <div class="preview-header">
+              <span class="preview-title">Focus Lockout Shield</span>
+              <span class="text-xs text-rose-400 font-mono">ACTIVE</span>
+            </div>
+            <div class="shield-box">
+              <i class="fa-solid fa-shield-halved text-rose-400 text-lg"></i>
+              <span>High-dopamine apps &amp; YouTube feeds blocked during focus sprint.</span>
+            </div>
+            <p style="font-size:0.75rem; color:#94a3b8; margin-top:0.75rem;">
+              Educational channels (Chai aur Code, FreeCodeCamp) whitelisted.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics Bar -->
+      <div class="metrics-bar">
+        <div>
+          <div class="metric-value">100%</div>
+          <div class="metric-label">Air-Gapped &amp; Offline-Ready</div>
+        </div>
+        <div>
+          <div class="metric-value">60 FPS</div>
+          <div class="metric-label">Hardware-Optimized Smoothness</div>
+        </div>
+        <div>
+          <div class="metric-value">0</div>
+          <div class="metric-label">Cloud Ads or Data Telemetry</div>
+        </div>
+        <div>
+          <div class="metric-value">4</div>
+          <div class="metric-label">Operating Systems Supported</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section container" id="features">
+      <div class="section-header">
+        <div class="section-eyebrow">Engineered for Transformation</div>
+        <h2 class="section-title">Built for Serious Discipline</h2>
+        <p class="section-desc">
+          Everything you need to conquer your Winter Arc and Summer Arc without subscriptions, accounts, or corporate surveillance.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <!-- Feature 1 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-medal"></i></div>
+          <h3>RPG Habit Grading</h3>
+          <p>
+            Dynamic evaluation from Rank S to Rank F. Multi-axis radar charts evaluate your consistency across physical, mental, focus, and lifestyle disciplines.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-stopwatch"></i></div>
+          <h3>Continuous Screen Time</h3>
+          <p>
+            An unthrottled Web Worker and Tauri hardware bridge tracks exact active time across Windows, macOS, and Android. Automatically pauses when sleeping or locked.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-ban"></i></div>
+          <h3>App &amp; YouTube Blocker</h3>
+          <p>
+            Locks out distracting apps and brainrot video feeds. Whitelists premier educational channels like Chai aur Code, CodeWithHarry, and FreeCodeCamp.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-microchip"></i></div>
+          <h3>60 FPS Hardware Profiler</h3>
+          <p>
+            Intelligent device gatekeeper tests live frametimes. Automatically dials down heavy canvas shaders on lower-spec hardware for buttery performance.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <h3>Google Drive Private Sync</h3>
+          <p>
+            Optional peerless multi-device cloud sync stored directly in your own Google Drive isolated AppData container. Zero centralized database servers.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card">
+          <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+          <h3>In-App PIN Keypad</h3>
+          <p>
+            4-digit PIN lock with tamper-resistant local encryption protects your personal journals and habit streaks from unauthorized eyes on shared devices.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Downloads Section -->
+    <section class="section container" id="platforms">
+      <div class="section-header">
+        <div class="section-eyebrow">Available Everywhere</div>
+        <h2 class="section-title">Install on All Your Devices</h2>
+        <p class="section-desc">
+          Native installers with offline binaries for Desktop and Mobile, or launch instantly in your browser.
+        </p>
+      </div>
+
+      <div class="platform-grid">
+        <!-- Windows -->
+        <div class="platform-card">
+          <i class="fa-brands fa-windows platform-icon"></i>
+          <h3 class="platform-name">Windows</h3>
+          <p class="platform-spec">Windows 10 &amp; 11 (64-bit)</p>
+          <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" class="btn-primary platform-btn">
+            <i class="fa-solid fa-download mr-1"></i> Download .exe
+          </a>
+        </div>
+
+        <!-- Android -->
+        <div class="platform-card">
+          <i class="fa-brands fa-android platform-icon"></i>
+          <h3 class="platform-name">Android</h3>
+          <p class="platform-spec">Android 8.0 Oreo+ (APK)</p>
+          <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" class="btn-primary platform-btn">
+            <i class="fa-solid fa-mobile-screen mr-1"></i> Download APK
+          </a>
+        </div>
+
+        <!-- macOS -->
+        <div class="platform-card">
+          <i class="fa-brands fa-apple platform-icon"></i>
+          <h3 class="platform-name">macOS</h3>
+          <p class="platform-spec">Apple Silicon &amp; Intel DMG</p>
+          <a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer" class="btn-ghost platform-btn">
+            <i class="fa-solid fa-download mr-1"></i> Download .dmg
+          </a>
+        </div>
+
+        <!-- iOS -->
+        <div class="platform-card">
+          <i class="fa-solid fa-mobile platform-icon"></i>
+          <h3 class="platform-name">iOS &amp; iPadOS</h3>
+          <p class="platform-spec">Safari Zero-Install PWA</p>
+          <a href="./index.html" class="btn-ghost platform-btn">
+            <i class="fa-solid fa-arrow-up-from-bracket mr-1"></i> Add to Home
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Airgap Security Section -->
+    <section class="section container" id="security">
+      <div class="section-header">
+        <div class="section-eyebrow">Zero Compromises</div>
+        <h2 class="section-title">100% Air-Gapped Privacy</h2>
+        <p class="section-desc">
+          Your personal habits, routines, and screen time metrics belong solely to you.
+        </p>
+      </div>
+
+      <div class="card" style="max-width: 860px; margin-inline: auto; padding: 2.5rem;">
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem;">
+          <div class="badge-pill" style="margin: 0;">
+            <i class="fa-solid fa-shield-cat"></i> Zero Ad Networks
+          </div>
+          <div class="badge-pill" style="margin: 0;">
+            <i class="fa-solid fa-database"></i> No Cloud Databases
+          </div>
+          <div class="badge-pill" style="margin: 0;">
+            <i class="fa-solid fa-lock"></i> Client Encrypted
+          </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem;">
+          Unlike typical habit trackers that harvest your daily routines and sell them to advertising partners, Arc Tracker operates 100% locally. All assets, webfonts, and styling engines are bundled directly inside the application binary.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="./privacy-policy.html" class="btn-ghost">
+            <i class="fa-solid fa-shield-halved mr-1"></i> Read Privacy Policy
+          </a>
+          <a href="./terms-and-conditions.html" class="btn-ghost">
+            <i class="fa-solid fa-file-contract mr-1"></i> Terms &amp; Conditions
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="section container" id="faq">
+      <div class="section-header">
+        <div class="section-eyebrow">Frequently Asked Questions</div>
+        <h2 class="section-title">Got Questions?</h2>
+      </div>
+
+      <div class="faq-container">
+        <details class="faq-item">
+          <summary class="faq-summary">Do I need an account or subscription to use Arc Tracker?</summary>
+          <div class="faq-answer">
+            No. Arc Tracker is 100% free and open-source. There are no subscriptions, paywalls, or mandatory accounts. You can use all features offline right out of the box.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-summary">How does the YouTube &amp; App Blocker work?</summary>
+          <div class="faq-answer">
+            During deep focus sprints and Pomodoro sessions, the app blocker restricts high-dopamine social apps and entertainment YouTube channels. It actively whitelists learning creators (e.g. Chai aur Code, CodeWithHarry, FreeCodeCamp) so your study sessions remain productive.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-summary">How does multi-device synchronization work without servers?</summary>
+          <div class="faq-answer">
+            Arc Tracker uses Google Drive's isolated private <code>appDataFolder</code>. Data is encrypted and merged via a non-destructive union algorithm so your streaks and accomplishments are never overwritten, while remaining completely private to your Google account.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-summary">How do I install Arc Tracker on iPhone or iPad?</summary>
+          <div class="faq-answer">
+            Open the web app in Safari, tap the Share icon at the bottom, and select "Add to Home Screen". The app will install with custom icons and launch full-screen with offline support.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="container">
+      <div class="cta-banner">
+        <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: #fff; margin-bottom: 1rem;">
+          Ready to Start Your Arc?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin-inline: auto; margin-bottom: 2rem;">
+          Join thousands tracking their discipline, breaking screen addiction, and building an unbreakable habit streak today.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="./index.html" class="btn-primary btn-large">
+            <i class="fa-solid fa-play"></i> Launch App Online
+          </a>
+          <a href="https://github.com/mayank-pixel-cell/mayank" target="_blank" rel="noopener noreferrer" class="btn-ghost btn-large">
+            <i class="fa-brands fa-github"></i> Star on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Semantic Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div class="brand-icon" style="width:32px; height:32px; font-size:0.9rem;">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <span style="font-weight: 800; color: #fff; font-size: 1.1rem;">Arc Tracker</span>
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="https://github.com/mayank-pixel-cell/mayank" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://github.com/mayank-pixel-cell/mayank/releases" target="_blank" rel="noopener noreferrer">Releases</a></li>
+          <li><a href="https://github.com/mayank-pixel-cell/mayank/wiki" target="_blank" rel="noopener noreferrer">Wiki</a></li>
+          <li><a href="./privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="./terms-and-conditions.html">Terms</a></li>
+        </ul>
+      </div>
+
+      <div class="copyright">
+        &copy; 2026 Arc Tracker Ecosystem • Open-Source &amp; Air-Gapped.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scrollspy & Accessibility Script -->
+  <script type="module">
+    // Feature detection for native modern scroll-target-group
+    const supportsScrollTargetGroup = CSS.supports('scroll-target-group: auto');
+
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    const sections = document.querySelectorAll('main section[id]');
+
+    if (supportsScrollTargetGroup) {
+      // Sync aria-current with native target-current
+      const syncAriaCurrent = () => {
+        const currentLink = document.querySelector('.nav-menu a:target-current');
+        navLinks.forEach(link => {
+          link.setAttribute('aria-current', link === currentLink ? 'true' : 'false');
+        });
+      };
+      syncAriaCurrent();
+      document.addEventListener('scrollend', syncAriaCurrent);
+    } else {
+      // IntersectionObserver Fallback for browser compatibility
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach(link => {
+              const isActive = link.getAttribute('href') === `#${id}`;
+              link.classList.toggle('target-current', isActive);
+              link.setAttribute('aria-current', isActive ? 'true' : 'false');
+            });
+          }
+        });
+      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+      sections.forEach(section => observer.observe(section));
+    }
+  </script>
+</body>
+</html>
