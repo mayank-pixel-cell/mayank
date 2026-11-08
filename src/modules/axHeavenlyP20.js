@@ -232,7 +232,6 @@ window.HeavenlyBodies={enable:(b)=>{const t=b||'Sun';setOn(true,t);if(ctx)setBod
 
  const root=$('p20-settings');
  if(root)root.innerHTML=
-  '<section id="p20-server-sync" class="mb-2" aria-label="Live External Cloud Server Telemetry"></section>'+
   '<section id="p20-google-account" class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-cyan-400 relative" aria-label="Google Account & Cloud Sync"></section>'+
   '<section id="p20-day" class="glass-card rounded-2xl p-4 border-l-4 border-l-cyan-400" aria-label="Day counter"></section>';
  /* the existing "Add Custom Habit" form moves here, so all habit customization lives in Rules & Master Blueprint */
