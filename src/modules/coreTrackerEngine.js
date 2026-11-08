@@ -1234,7 +1234,6 @@ if (typeof window !== 'undefined') {
             if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-black shadow-sm transition";
 
             const p20Account = document.getElementById('p20-google-account');
-            const p20ServerSync = document.getElementById('p20-server-sync');
             const p20Day = document.getElementById('p20-day');
             const sxRoot = document.getElementById('sx-root');
             const faqCard = document.getElementById('settings-additional-faq-card');
@@ -1259,7 +1258,6 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = '';
                 if (screenNotifCard) screenNotifCard.style.display = '';
-                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
@@ -1267,9 +1265,6 @@ if (typeof window !== 'undefined') {
                 if (founderCard) founderCard.style.display = '';
                 if (goldCard) goldCard.style.display = '';
                 if (termsCard) termsCard.style.display = '';
-                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
-                    window.ArcServerSync.renderSettingsCard();
-                }
             } else if (category === 'habits') {
                 if (themeArcCard) themeArcCard.style.display = '';
                 if (liquidGlassCard) liquidGlassCard.style.display = '';
@@ -1277,7 +1272,6 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = '';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = '';
                 if (sxRoot) sxRoot.style.display = '';
@@ -1292,7 +1286,6 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = '';
                 if (p20Account) p20Account.style.display = '';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';
@@ -1303,9 +1296,6 @@ if (typeof window !== 'undefined') {
                 if (window.ArcGoogleSync && typeof window.ArcGoogleSync.renderUi === 'function') {
                     window.ArcGoogleSync.renderUi();
                 }
-                if (window.ArcServerSync && typeof window.ArcServerSync.renderSettingsCard === 'function') {
-                    window.ArcServerSync.renderSettingsCard();
-                }
             } else if (category === 'faq') {
                 if (themeArcCard) themeArcCard.style.display = 'none';
                 if (liquidGlassCard) liquidGlassCard.style.display = 'none';
@@ -1313,7 +1303,6 @@ if (typeof window !== 'undefined') {
                 if (hwCard) hwCard.style.display = 'none';
                 if (autoStartCard) autoStartCard.style.display = 'none';
                 if (screenNotifCard) screenNotifCard.style.display = 'none';
-                if (p20ServerSync) p20ServerSync.style.display = 'none';
                 if (p20Account) p20Account.style.display = 'none';
                 if (p20Day) p20Day.style.display = 'none';
                 if (sxRoot) sxRoot.style.display = 'none';

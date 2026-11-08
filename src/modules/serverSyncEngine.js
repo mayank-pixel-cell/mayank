@@ -281,7 +281,7 @@ class ArcServerSyncEngine {
     if (typeof document === 'undefined') return;
     const ind = document.getElementById('arc-offline-indicator');
     if (ind) {
-      if (isOffline) {
+      if (isOffline && typeof navigator !== 'undefined' && navigator.onLine === false) {
         ind.classList.remove('hidden');
         ind.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>OFFLINE CACHE</span>';
       } else {
@@ -892,63 +892,9 @@ class ArcServerSyncEngine {
   renderSettingsCard() {
     if (typeof document === 'undefined') return;
     const container = document.getElementById('p20-server-sync');
-    if (!container) return;
-
-    const tel = this.cachedTelemetry || {
-      totalUsers: 16,
-      activeTodayCount: 16,
-      totalGoldUsers: 11,
-      totalGroups: 4
-    };
-
-    const goldUsers = this.cachedGoldUsers || [];
-
-    const statusBadge = this.isOnline
-      ? `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ONLINE • Connected to Supabase Cloud</span>`
-      : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-[10px] font-black flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> OFFLINE • Cloud Reconnecting</span>`;
-
-    const isExp = (window.ArcSettingsAccordion && typeof window.ArcSettingsAccordion.isExpanded === 'function')
-      ? window.ArcSettingsAccordion.isExpanded('p20-server-sync')
-      : false;
-
-    container.setAttribute('onkeydown', 'window.ArcSettingsAccordion && window.ArcSettingsAccordion.handleKeyDown(event, "p20-server-sync")');
-
-    container.innerHTML = `
-      <div class="glass-card rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-400 bg-slate-900/90 shadow-xl relative overflow-hidden settings-card-item">
-        <div class="flex items-center justify-between gap-3 select-none">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-              <i class="fa-solid fa-server text-base"></i>
-            </div>
-            <div class="min-w-0 flex items-center gap-2 flex-wrap">
-              <h3 class="text-sm sm:text-base font-black text-white truncate">Supabase Cloud Telemetry</h3>
-              ${statusBadge}
-            </div>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <button type="button" class="settings-arrow-btn p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition" aria-label="Expand settings card" aria-expanded="${isExp}" onclick="window.ArcSettingsAccordion && window.ArcSettingsAccordion.toggle('p20-server-sync')">
-              <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 settings-chevron-icon ${isExp ? 'rotate-180' : ''}"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="arc-fluid-accordion ${isExp ? 'expanded' : 'hidden'} pt-3 border-t border-slate-800/80 mt-3">
-          <div class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-              <div>
-                <h4 class="text-xs font-bold text-slate-200">Live Supabase Telemetry &amp; Community Registry</h4>
-                <p class="text-[11px] text-slate-400">Synchronized tracking for global operatives, Gold VIP purchases, competitive ranks, and squads.</p>
-              </div>
-              <button type="button" onclick="ArcServerSync.syncUserAndFetchTelemetry(); playSfx('click');" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 transition shadow-sm shrink-0">
-                <i class="fa-solid fa-arrows-rotate ${this.isSyncing ? 'animate-spin' : ''}"></i>
-                <span>${this.isSyncing ? 'Syncing...' : 'Sync Now'}</span>
-              </button>
-            </div>
-${detailedBody}
-          </div>
-        </div>
-      </div>
-    `;
+    if (container) {
+      container.remove();
+    }
   }
 }
 
