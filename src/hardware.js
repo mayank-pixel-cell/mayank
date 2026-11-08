@@ -460,7 +460,66 @@ export class ArcHardwareGatekeeper {
             </button>
           </div>
 
-          ${detailedContent}
+          <!-- LIVE HARDWARE SPECS PILLS -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+            <div class="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block font-mono">RAM</span>
+              <span class="font-bold text-white font-mono">${ramText}</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block font-mono">CPU</span>
+              <span class="font-bold text-white font-mono">${coresText}</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800 col-span-2">
+              <span class="text-[10px] text-slate-400 block font-mono">GPU / WebGL</span>
+              <span class="font-bold text-cyan-300 font-mono truncate block">${gpuText}</span>
+            </div>
+          </div>
+
+          <!-- 3 CONTROLS ROW -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-800/80">
+            <!-- FORCE SMOOTH MODE -->
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
+              <div>
+                <div class="font-bold text-xs text-white">Force Smooth Mode</div>
+                <div class="text-[10px] text-slate-400">Lock to 60 FPS optimizations</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="hw-toggle-force-smooth" ${this.overrides.forceSmoothMode ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleForceSmooth(this.checked)" class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+              </label>
+            </div>
+
+            <!-- PARTICLES MOVING TOGGLE -->
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
+              <div>
+                <div class="font-bold text-xs text-white flex items-center gap-1.5">
+                  Moving Particles
+                  ${isParticlesOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
+                </div>
+                <div class="text-[10px] text-slate-400">Snow &amp; ember physics</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="hw-toggle-particles" ${!isParticlesOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleParticlesManual(this.checked)" class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+              </label>
+            </div>
+
+            <!-- CELESTIAL BODIES SOUND TOGGLE -->
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70">
+              <div>
+                <div class="font-bold text-xs text-white flex items-center gap-1.5">
+                  Celestial Audio
+                  ${isCelestialOff ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">OFF</span>' : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">ON</span>'}
+                </div>
+                <div class="text-[10px] text-slate-400">Multi-oscillator drones</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="hw-toggle-celestial" ${!isCelestialOff ? 'checked' : ''} onchange="window.ArcHardwareGatekeeper.toggleCelestialManual(this.checked)" class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     `;
