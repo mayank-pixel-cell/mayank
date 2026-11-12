@@ -2273,9 +2273,22 @@ window.ArcScreenTimeNotifier = (function() {
     }
   }
 
+  function reset() {
+    _lastSecs = 0;
+    _desktopSecs = 0;
+    _mobileSecs = 0;
+    _combinedSecs = 0;
+    const hudTimer = document.getElementById('arc-hud-timer');
+    if (hudTimer) hudTimer.textContent = formatTime(0);
+    const pcEl = document.getElementById('arc-hud-pc-time');
+    if (pcEl) pcEl.textContent = '00h 00m';
+    const mobEl = document.getElementById('arc-hud-mob-time');
+    if (mobEl) mobEl.textContent = '00h 00m';
+  }
+
   function tick(seconds) {
     _lastSecs = seconds;
-    _desktopSecs = Math.max(_desktopSecs || 0, seconds);
+    _desktopSecs = seconds;
     _combinedSecs = _desktopSecs + (_mobileSecs || 0);
     const hudTimer = document.getElementById('arc-hud-timer');
     if (hudTimer) {
@@ -2291,9 +2304,14 @@ window.ArcScreenTimeNotifier = (function() {
   }
 
   function syncTimes(desktopSecs, mobileSecs, combinedSecs) {
-    _desktopSecs = Math.max(_desktopSecs || 0, desktopSecs || 0);
+    _desktopSecs = desktopSecs || 0;
     _mobileSecs = mobileSecs || 0;
     _combinedSecs = _desktopSecs + _mobileSecs;
+
+    const hudTimer = document.getElementById('arc-hud-timer');
+    if (hudTimer) {
+      hudTimer.textContent = formatTime(_combinedSecs > 0 ? _combinedSecs : (_desktopSecs || 0));
+    }
 
     const pcEl = document.getElementById('arc-hud-pc-time');
     const mobEl = document.getElementById('arc-hud-mob-time');
@@ -2345,6 +2363,7 @@ window.ArcScreenTimeNotifier = (function() {
 
   return {
     init,
+    reset,
     isEnabled,
     toggle,
     requestPermission,
@@ -6227,7 +6246,7 @@ window.ArcScreenTimeStore = (function() {
 
     // 2. Clear cross-device screentime state
     try {
-      const todayKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
+      const todayKey = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
       const devRaw = localStorage.getItem('arc_cross_device_screentime');
       let dev = {};
       if (devRaw) dev = JSON.parse(devRaw);
@@ -6324,13 +6343,27 @@ window.ArcScreenTimeStore = (function() {
     return hist;
   }
 
+  function getTodayTotalSecs() {
+    if (!isPhoneLinked()) return 0;
+    try {
+      const devRaw = localStorage.getItem('arc_cross_device_screentime');
+      if (devRaw) {
+        const d = JSON.parse(devRaw);
+        if (d && d.mobile && typeof d.mobile.seconds === 'number') {
+          return Math.min(86400, Math.max(0, d.mobile.seconds));
+        }
+      }
+    } catch (_) {}
+    return 0;
+  }
+
   function seedDefaultHistory() {
     const days = {};
     const now = new Date();
     for (let i = 0; i < 65; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const key = d.toISOString().split('T')[0];
+      const key = getLocalDayKey(d);
 
       // Preceding month (days 31-60) had slightly higher usage (~3.6h - 4.1h),
       // making Last Month (days 1-30, ~2.8h - 3.4h) show an authentic reduction (green),
@@ -6364,7 +6397,7 @@ window.ArcScreenTimeStore = (function() {
   }
 
   function saveCurrentDay(laptopSecs, phoneSecs) {
-    const todayKey = new Date().toISOString().split('T')[0];
+    const todayKey = getLocalDayKey();
     const hist = getHistory();
     const existing = hist.days[todayKey] || {
       date: todayKey,
@@ -6375,8 +6408,8 @@ window.ArcScreenTimeStore = (function() {
     };
 
     const linked = isPhoneLinked();
-    const lSecs = Math.max(existing.laptopSecs || 0, laptopSecs || 0);
-    const pSecs = linked ? Math.max(existing.phoneSecs || 0, phoneSecs || 0) : 0;
+    const lSecs = Math.min(86400, Math.max(existing.laptopSecs || 0, laptopSecs || 0));
+    const pSecs = linked ? Math.min(86400, Math.max(existing.phoneSecs || 0, phoneSecs || 0)) : 0;
 
     hist.days[todayKey] = {
       date: todayKey,
@@ -6405,13 +6438,13 @@ window.ArcScreenTimeStore = (function() {
     const hist = getHistory();
     const now = new Date();
     
-    // Yesterday
+    // Yesterday in local time
     const yDate = new Date(now);
     yDate.setDate(yDate.getDate() - 1);
-    const yKey = yDate.toISOString().split('T')[0];
-    const yesterday = hist.days[yKey] || { laptopSecs: 7200, phoneSecs: 3600, combinedSecs: 10800 };
+    const yKey = getLocalDayKey(yDate);
+    const yesterday = hist.days[yKey] || { laptopSecs: 0, phoneSecs: 0, combinedSecs: 0 };
 
-    // Last 7 Days
+    // Last 7 Days in local time
     let weekLaptop = 0;
     let weekPhone = 0;
     let weekCombined = 0;
@@ -6433,7 +6466,7 @@ window.ArcScreenTimeStore = (function() {
     for (let i = 1; i <= 7; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const k = d.toISOString().split('T')[0];
+      const k = getLocalDayKey(d);
       const hasGenuineEntry = hist && hist.days && !!hist.days[k];
       const entry = hasGenuineEntry ? hist.days[k] : { laptopSecs: 6800, phoneSecs: 3600, combinedSecs: 10400 };
 
@@ -6486,7 +6519,7 @@ window.ArcScreenTimeStore = (function() {
       }
     }
 
-    // Monthly usage (last 30 days)
+    // Monthly usage (last 30 days) in local time
     let monthLaptop = 0;
     let monthPhone = 0;
     let monthCombined = 0;
@@ -6495,19 +6528,19 @@ window.ArcScreenTimeStore = (function() {
     for (let i = 1; i <= 30; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const k = d.toISOString().split('T')[0];
-      const entry = hist.days[k] || { laptopSecs: 6800, phoneSecs: 3200, combinedSecs: 10000 };
-      monthLaptop += entry.laptopSecs;
-      monthPhone += entry.phoneSecs;
-      monthCombined += entry.combinedSecs;
+      const k = getLocalDayKey(d);
+      const entry = (hist.days && hist.days[k]) ? hist.days[k] : { laptopSecs: 6800, phoneSecs: 3200, combinedSecs: 10000 };
+      monthLaptop += entry.laptopSecs || 0;
+      monthPhone += entry.phoneSecs || 0;
+      monthCombined += entry.combinedSecs || 0;
       monthDaysCount++;
     }
 
     return {
       yesterday: {
-        laptopSecs: yesterday.laptopSecs,
-        phoneSecs: yesterday.phoneSecs,
-        combinedSecs: yesterday.combinedSecs
+        laptopSecs: yesterday.laptopSecs || 0,
+        phoneSecs: yesterday.phoneSecs || 0,
+        combinedSecs: yesterday.combinedSecs || 0
       },
       lastWeek: {
         laptopSecs: weekLaptop,
@@ -6545,7 +6578,7 @@ window.ArcScreenTimeStore = (function() {
           if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
           if (typeof playSfx === 'function') playSfx('victory');
           if (typeof showToast === 'function') {
-            showToast('🏆 Achievement Unlocked: Digital Ascetic (Verified < 4h screen time for all 7 days)!');
+            showToast('🏆 Achievement Unlocked: Digital Ascetic (< 4h screen time for entire week)!');
           }
         }
       }
@@ -6751,14 +6784,14 @@ window.ArcScreenTimeStore = (function() {
   function serializeScreenTimeData() {
     const hist = getHistory();
     const now = new Date();
-    const todayKey = now.toISOString().split('T')[0];
+    const todayKey = getLocalDayKey(now);
     const pairs = [];
     
     // Serialize last 65 days into compact pairs [laptopMins, phoneMins]
     for (let i = 0; i < 65; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const k = d.toISOString().split('T')[0];
+      const k = getLocalDayKey(d);
       const entry = (hist.days && hist.days[k]) ? hist.days[k] : null;
       const lapMins = entry ? Math.round((entry.laptopSecs || 0) / 60) : Math.floor((2 + Math.sin(i * 0.5) * 0.5) * 60);
       const phoMins = entry ? Math.round((entry.phoneSecs || 0) / 60) : Math.floor((1.1 + Math.cos(i * 0.4) * 0.3) * 60);
@@ -6775,7 +6808,7 @@ window.ArcScreenTimeStore = (function() {
     const todayKey = parts[0];
     const pairs = parts[1].split(';');
     const days = {};
-    const baseDate = new Date(todayKey + 'T12:00:00Z');
+    const baseDate = new Date(todayKey + 'T12:00:00');
     
     pairs.forEach((pair, i) => {
       const [lStr, pStr] = pair.split(',');
@@ -6787,7 +6820,7 @@ window.ArcScreenTimeStore = (function() {
       
       const curD = new Date(baseDate);
       curD.setDate(curD.getDate() - i);
-      const dateKey = curD.toISOString().split('T')[0];
+      const dateKey = getLocalDayKey(curD);
       
       days[dateKey] = {
         date: dateKey,
@@ -7262,27 +7295,16 @@ window.ArcScreenTimeStore = (function() {
   };
 
   function checkDailyRollover(force = false) {
-    const todayKey = new Date().toISOString().split('T')[0];
-    const lastDate = localStorage.getItem('arc_screentime_last_active_date');
+    const todayKey = getLocalDayKey();
+    const lastDate = localStorage.getItem('arc_screentime_last_active_date') || localStorage.getItem('arc_screentime_current_date');
     if (!lastDate || lastDate !== todayKey || force) {
-      localStorage.setItem('arc_screentime_last_active_date', todayKey);
-      // Auto-refresh today's session in ArcTracker if cross-device or timer exists
-      if (window.state && window.state.deviceScreenTime) {
-        if (!force && lastDate && lastDate !== todayKey) {
-          // Day has naturally rolled over at midnight: preserve previous day into history
-          const hist = getHistory();
-          if (!hist.days[todayKey]) {
-            hist.days[todayKey] = {
-              date: todayKey,
-              laptopSecs: 0,
-              phoneSecs: 0,
-              combinedSecs: 0,
-              phoneLinked: isPhoneLinked(),
-              apps: {}
-            };
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); } catch(e) {}
-          }
+      if (lastDate && lastDate !== todayKey) {
+        if (typeof handleDailyScreenTimeRollover === 'function') {
+          handleDailyScreenTimeRollover(lastDate, todayKey, 0);
         }
+      } else {
+        localStorage.setItem('arc_screentime_current_date', todayKey);
+        localStorage.setItem('arc_screentime_last_active_date', todayKey);
       }
       renderAnalytics();
     }
@@ -7677,6 +7699,7 @@ window.ArcScreenTimeStore = (function() {
   return {
     isPhoneLinked,
     setPhoneLinked,
+    getTodayTotalSecs,
     connectDemoPhone,
     disconnectPhone,
     openDisconnectModal,

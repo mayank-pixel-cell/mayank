@@ -1,0 +1,2 @@
+﻿window.__ARC_DESKTOP_TELEMETRY__ = {"date":"2026-11-13","timestamp":1794520190497,"totalSeconds":20,"activeApp":"Desktop","activeTitle":"","appsMap":{"Desktop":20},"appsList":{"name":"Desktop","seconds":20,"category":"Other","icon":"fa-solid fa-window-maximize","color":"#94a3b8"}};
+if(typeof window.__onArcDesktopTelemetry === 'function') window.__onArcDesktopTelemetry(window.__ARC_DESKTOP_TELEMETRY__);

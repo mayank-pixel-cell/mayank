@@ -144,7 +144,7 @@ class ArcScreenTimeEngine {
       const storageKey = `arc_screentime_${this.todayKey}`;
       const savedSecs = await arcStorage.getItem(storageKey);
       if (savedSecs !== null && !isNaN(Number(savedSecs))) {
-        this.activeSeconds = parseInt(savedSecs, 10);
+        this.activeSeconds = Math.min(86400, parseInt(savedSecs, 10));
       }
 
       const historyRaw = await arcStorage.getItem('arc_screentime_history');
@@ -389,6 +389,9 @@ class ArcScreenTimeEngine {
     // 1. Midnight rollover
     const currentDay = this.getTodayDateString();
     if (currentDay !== this.todayKey) {
+      if (typeof window !== 'undefined' && typeof window.handleDailyScreenTimeRollover === 'function') {
+        window.handleDailyScreenTimeRollover(this.todayKey, currentDay, 0);
+      }
       this.persistNow();
       this.todayKey = currentDay;
       this.activeSeconds = 0;
@@ -435,6 +438,8 @@ class ArcScreenTimeEngine {
       this.activeSeconds += 1;
       this.idleFilteredSeconds += Math.round(deltaSecs - 1);
     }
+
+    this.activeSeconds = Math.min(86400, this.activeSeconds);
 
     this.updateDomElements();
 
@@ -519,11 +524,13 @@ class ArcScreenTimeEngine {
     };
 
     if (isMobile) {
-      this.deviceScreenTime.mobile.seconds = Math.max(Number(this.deviceScreenTime.mobile.seconds) || 0, this.activeSeconds);
+      this.deviceScreenTime.mobile.seconds = this.activeSeconds;
+      this.deviceScreenTime.mobile.todayKey = this.todayKey;
       this.deviceScreenTime.mobile.deviceName = this.platform.category;
       this.deviceScreenTime.mobile.lastUpdated = Date.now();
     } else {
-      this.deviceScreenTime.desktop.seconds = Math.max(Number(this.deviceScreenTime.desktop.seconds) || 0, this.activeSeconds);
+      this.deviceScreenTime.desktop.seconds = this.activeSeconds;
+      this.deviceScreenTime.desktop.todayKey = this.todayKey;
       this.deviceScreenTime.desktop.deviceName = this.platform.category;
       this.deviceScreenTime.desktop.lastUpdated = Date.now();
     }
@@ -564,6 +571,28 @@ class ArcScreenTimeEngine {
     if (splitPill) {
       splitPill.textContent = `💻 Desktop: ${this.formatShort(desktopSecs)} (${deskPct}%) • 📱 Mobile: ${this.formatShort(mobileSecs)} (${mobPct}%)`;
     }
+
+    const statusSub = document.getElementById('st-desktop-status-sub');
+    if (statusSub) {
+      if (!this.isRunning) {
+        statusSub.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block mr-1"></span>Paused';
+      } else if (this.isIdle) {
+        statusSub.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block mr-1"></span>Idle (Paused)';
+      } else {
+        statusSub.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1"></span>Active desktop session running';
+      }
+    }
+
+    const hudEl = document.getElementById('arc-screentime-hud');
+    if (hudEl && hudEl.classList.contains('hidden')) {
+      hudEl.classList.remove('hidden');
+    }
+    const hudTimer = document.getElementById('arc-hud-timer');
+    if (hudTimer) hudTimer.textContent = this.formatTime(combinedSecs);
+    const hudPc = document.getElementById('arc-hud-pc-time');
+    if (hudPc) hudPc.textContent = this.formatShort(desktopSecs);
+    const hudMob = document.getElementById('arc-hud-mob-time');
+    if (hudMob) hudMob.textContent = this.formatShort(mobileSecs);
 
     const sideMob = document.getElementById('sidebar-mobile-time');
     const sideComb = document.getElementById('sidebar-combined-time');

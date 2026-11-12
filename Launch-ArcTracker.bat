@@ -13,15 +13,22 @@ if not exist "%EDGE_PATH%" set "EDGE_PATH=C:\Program Files\Microsoft\Edge\Applic
 set "CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe"
 if not exist "%CHROME_PATH%" set "CHROME_PATH=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 
-:: Ensure Start-PreviewServer.vbs exists for completely hidden background execution
+:: 1. Start Windows Desktop & App Screen Time Telemetry Service in background if not already running
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$p = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like '*track-desktop.ps1*' }; if (-not $p) { Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""%~dp0track-desktop.ps1""' -WorkingDirectory '%~dp0' -WindowStyle Hidden }" >nul 2>&1
+
+:: 2. Ensure Start-PreviewServer.vbs exists for completely hidden background execution
 if not exist "%~dp0Start-PreviewServer.vbs" (
     (
         echo Option Explicit
-        echo Dim WshShell, fso, scriptDir, viteBin, cmd
+        echo Dim WshShell, fso, scriptDir, viteBin, cmd, teleScript
         echo Set WshShell = CreateObject^("WScript.Shell"^)
         echo Set fso = CreateObject^("Scripting.FileSystemObject"^)
         echo scriptDir = fso.GetParentFolderName^(WScript.ScriptFullName^)
         echo WshShell.CurrentDirectory = scriptDir
+        echo teleScript = scriptDir ^& "\track-desktop.ps1"
+        echo If fso.FileExists^(teleScript^) Then
+        echo     WshShell.Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File """ ^& teleScript ^& """", 0, False
+        echo End If
         echo viteBin = scriptDir ^& "\node_modules\vite\bin\vite.js"
         echo If fso.FileExists^(viteBin^) Then
         echo     cmd = "cmd.exe /c node """ ^& viteBin ^& """ preview --port 1420 --strictPort"
@@ -34,7 +41,7 @@ if not exist "%~dp0Start-PreviewServer.vbs" (
     ) > "%~dp0Start-PreviewServer.vbs"
 )
 
-REM Check if local preview server is already responding
+REM 3. Check if local preview server is already responding
 powershell.exe -NoProfile -Command "try { $r = [System.Net.WebRequest]::Create('http://localhost:1420'); $r.Timeout = 1000; $resp = $r.GetResponse(); $resp.Close(); exit 0 } catch { exit 1 }" >nul 2>&1
 if %ERRORLEVEL% neq 0 (
     echo Starting Arc Tracker local server silently in background...

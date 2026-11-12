@@ -209,17 +209,19 @@
       );
     }
 
-    // 5. Laptop / Screen Time Seconds (Maximum of cumulative seconds)
+    // 5. Laptop / Screen Time Seconds
+    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
     local.laptop = local.laptop || {};
     if (cloud.laptop) {
-      local.laptop.totalSeconds = Math.max(
-        Number(local.laptop.totalSeconds) || 0,
-        Number(cloud.laptop.totalSeconds) || 0
-      );
+      if (!cloud.laptop.dateKey || cloud.laptop.dateKey === todayDateKey) {
+        local.laptop.totalSeconds = Math.min(86400, Math.max(
+          Number(local.laptop.totalSeconds) || 0,
+          Number(cloud.laptop.totalSeconds) || 0
+        ));
+      }
     }
 
     // 5b. Cross-Device Linked Screen Time Matrix (Desktop + Mobile)
-    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
     const isLocalMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     local.deviceScreenTime = local.deviceScreenTime || {
@@ -302,8 +304,8 @@
     } catch(e) {}
 
     const isLocalMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-    const activeSecs = (window.ArcScreenTime ? window.ArcScreenTime.activeSeconds : (window.state?.laptop?.totalSeconds || 0));
+    const todayDateKey = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
+    const activeSecs = Math.min(86400, (window.ArcScreenTime ? window.ArcScreenTime.activeSeconds : (window.state?.laptop?.totalSeconds || 0)));
 
     window.state = window.state || {};
     window.state.deviceScreenTime = window.state.deviceScreenTime || {

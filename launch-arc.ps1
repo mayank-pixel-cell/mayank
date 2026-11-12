@@ -48,6 +48,13 @@ if ($Mode -eq "tauri-dev" -or $Mode -eq "tauri-build") {
     }
 }
 
+# 4b. Start Windows OS Desktop Telemetry Tracker in background if not already running
+$telemetryRunning = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -like "*track-desktop.ps1*" }
+if (-not $telemetryRunning) {
+    Write-Host "[Telemetry] Starting background Windows desktop active window tracker..." -ForegroundColor Cyan
+    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$WorkspaceRoot\track-desktop.ps1`"" -WorkingDirectory $WorkspaceRoot -WindowStyle Hidden
+}
+
 # 5. Launch Production Server + Native Frameless Desktop Window (Edge/Chrome --app mode)
 $isResponding = $false
 try {

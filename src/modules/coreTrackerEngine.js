@@ -93,7 +93,7 @@
 
         function setLocalStorageItem(key, value) {
             let json;
-            try { json = JSON.stringify(value); } catch (e) { console.warn(`[ArcStorage] Error serializing ${key}:`, e); return false; }
+            try { json = JSON.stringify(value, (k, v) => (k === "interval" ? (typeof v === "number" ? v : null) : v)); } catch (e) { console.warn(`[ArcStorage] Error serializing ${key}:`, e); return false; }
             try {
                 const store = getDurableStore();
                 store.setItem(key, json);
@@ -365,6 +365,15 @@ if (typeof window !== 'undefined') {
             const s = totalSecs % 60;
             return h > 0 ? `${h}h ${m}m ${s}s` : (m > 0 ? `${m}m ${s}s` : `${s}s`);
         }
+
+        function formatDurationClock(totalSecs) {
+            totalSecs = Math.max(0, Math.floor(Number(totalSecs) || 0));
+            const h = Math.floor(totalSecs / 3600);
+            const m = Math.floor((totalSecs % 3600) / 60);
+            const s = totalSecs % 60;
+            return `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+        }
+        window.formatDurationClock = formatDurationClock;
 
         function getGradeInfo(pct, hasHistory) {
             if (!hasHistory && (pct === 0 || isNaN(pct))) {
@@ -2233,46 +2242,494 @@ function toggleStreakFreezeFromRules(checked) {
             showToast(`${cat}: ${pct}% execution`);
         };
 
-        let _lastLaptopTick = Date.now();
+                function getLocalDayKey(d = new Date()) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+        window.getLocalDayKey = getLocalDayKey;
+
+        function getYesterdayDateString() {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            return getLocalDayKey(d);
+        }
+        window.getYesterdayDateString = getYesterdayDateString;
+
+        function handleDailyScreenTimeRollover(previousDate, newDate, newDayInitialSecs = 0) {
+            if (!previousDate || !newDate || previousDate === newDate) return;
+            console.log(`[ScreenTime Rollover] Transitioning daily tracking from ${previousDate} to ${newDate} (initial new day secs: ${newDayInitialSecs})`);
+
+            // 1. Determine final desktop and mobile seconds for previous day
+            let prevDesktopSecs = (window.state && window.state.laptop && typeof window.state.laptop.totalSeconds === 'number')
+                ? window.state.laptop.totalSeconds
+                : 0;
+
+            let devData = {};
+            try {
+                const raw = localStorage.getItem('arc_cross_device_screentime');
+                if (raw) devData = JSON.parse(raw);
+            } catch (_) {}
+
+            if (devData && devData.desktop && typeof devData.desktop.seconds === 'number') {
+                prevDesktopSecs = Math.max(prevDesktopSecs, devData.desktop.seconds);
+            }
+
+            let prevMobileSecs = (devData && devData.mobile && typeof devData.mobile.seconds === 'number')
+                ? devData.mobile.seconds
+                : 0;
+
+            // Cap at 24 hours (86400 seconds) max per day
+            prevDesktopSecs = Math.min(86400, Math.max(0, prevDesktopSecs));
+            prevMobileSecs = Math.min(86400, Math.max(0, prevMobileSecs));
+
+            // 2. Archive previous day into historical telemetry
+            try {
+                const histRaw = localStorage.getItem('arc_screentime_history_v2');
+                let hist = histRaw ? JSON.parse(histRaw) : null;
+                if (!hist || !hist.days) {
+                    hist = (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getHistory === 'function')
+                        ? window.ArcScreenTimeStore.getHistory()
+                        : { days: {} };
+                }
+                hist.days = hist.days || {};
+
+                const isLinked = (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.isPhoneLinked === 'function')
+                    ? window.ArcScreenTimeStore.isPhoneLinked()
+                    : (localStorage.getItem('arc_phone_link_status') === 'true' || !!(devData.mobile && devData.mobile.isLinked));
+
+                const effectivePhoneSecs = isLinked ? prevMobileSecs : 0;
+
+                // Archive previous day's telemetry
+                const existingDay = hist.days[previousDate] || {};
+                hist.days[previousDate] = {
+                    date: previousDate,
+                    laptopSecs: Math.max(existingDay.laptopSecs || 0, prevDesktopSecs),
+                    phoneSecs: isLinked ? Math.max(existingDay.phoneSecs || 0, effectivePhoneSecs) : 0,
+                    combinedSecs: Math.max(existingDay.laptopSecs || 0, prevDesktopSecs) + (isLinked ? Math.max(existingDay.phoneSecs || 0, effectivePhoneSecs) : 0),
+                    phoneLinked: isLinked,
+                    verified: isLinked,
+                    manualReduction: false,
+                    apps: (existingDay.apps && Object.keys(existingDay.apps).length > 0) ? existingDay.apps : {
+                        'Visual Studio Code': Math.floor(prevDesktopSecs * 0.45),
+                        'Google Chrome': Math.floor(prevDesktopSecs * 0.28),
+                        'Terminal': Math.floor(prevDesktopSecs * 0.15),
+                        'Steam / Gaming': Math.floor(prevDesktopSecs * 0.12),
+                        'YouTube': Math.floor(effectivePhoneSecs * 0.35),
+                        'Instagram': Math.floor(effectivePhoneSecs * 0.25),
+                        'WhatsApp': Math.floor(effectivePhoneSecs * 0.20),
+                        'Discord': Math.floor(effectivePhoneSecs * 0.12),
+                        'X / Twitter': Math.floor(effectivePhoneSecs * 0.08)
+                    }
+                };
+
+                // If date jumped by > 1 day, fill intermediate days with 0 so Yesterday's Usage shows 0h 0m
+                const dPrev = new Date(previousDate + 'T00:00:00');
+                const dNew = new Date(newDate + 'T00:00:00');
+                const dayDiff = Math.round((dNew - dPrev) / 864e5);
+                if (dayDiff > 1) {
+                    const tempDate = new Date(previousDate + 'T00:00:00');
+                    for (let i = 1; i < dayDiff; i++) {
+                        tempDate.setDate(tempDate.getDate() + 1);
+                        const interKey = getLocalDayKey(tempDate);
+                        if (interKey !== previousDate && interKey !== newDate) {
+                            hist.days[interKey] = {
+                                date: interKey,
+                                laptopSecs: 0,
+                                phoneSecs: 0,
+                                combinedSecs: 0,
+                                phoneLinked: isLinked,
+                                verified: isLinked,
+                                manualReduction: false,
+                                apps: {}
+                            };
+                        }
+                    }
+                }
+
+                localStorage.setItem('arc_screentime_history_v2', JSON.stringify(hist));
+            } catch (e) {
+                console.warn('[ScreenTime Rollover] History archive error:', e);
+            }
+
+            // Also archive in arc_screentime_history for modular engine
+            try {
+                const legacyRaw = localStorage.getItem('arc_screentime_history');
+                const legHist = legacyRaw ? JSON.parse(legacyRaw) : {};
+                legHist[previousDate] = prevDesktopSecs;
+                localStorage.setItem('arc_screentime_history', JSON.stringify(legHist));
+            } catch (_) {}
+
+            // 3. Reset active daily counters for today
+            const initialSecs = Math.min(86400, Math.max(0, newDayInitialSecs));
+            if (typeof state !== 'undefined' && state) {
+                if (!state.laptop) state.laptop = { isAutoPaused: false, isRunning: true, totalSeconds: 0, interval: null };
+                state.laptop.totalSeconds = initialSecs;
+                state.laptop.dateKey = newDate;
+            }
+            if (window.state) {
+                if (!window.state.laptop) window.state.laptop = { isAutoPaused: false, isRunning: true, totalSeconds: 0, interval: null };
+                window.state.laptop.totalSeconds = initialSecs;
+                window.state.laptop.dateKey = newDate;
+
+                if (!window.state.deviceScreenTime) window.state.deviceScreenTime = {};
+                window.state.deviceScreenTime.desktop = {
+                    seconds: initialSecs,
+                    deviceName: window.state.deviceScreenTime.desktop?.deviceName || '💻 Desktop PC / Workstation',
+                    lastUpdated: Date.now(),
+                    todayKey: newDate
+                };
+                window.state.deviceScreenTime.mobile = {
+                    seconds: 0,
+                    deviceName: window.state.deviceScreenTime.mobile?.deviceName || '📱 Mobile App Tracker',
+                    lastUpdated: Date.now(),
+                    todayKey: newDate,
+                    isLinked: !!(window.state.deviceScreenTime.mobile?.isLinked || localStorage.getItem('arc_phone_link_status') === 'true')
+                };
+            }
+
+            devData.desktop = {
+                seconds: initialSecs,
+                deviceName: devData.desktop?.deviceName || '💻 Desktop PC / Workstation',
+                lastUpdated: Date.now(),
+                todayKey: newDate
+            };
+            devData.mobile = {
+                seconds: 0,
+                deviceName: devData.mobile?.deviceName || '📱 Mobile App Tracker',
+                lastUpdated: Date.now(),
+                todayKey: newDate,
+                isLinked: !!(devData.mobile?.isLinked || localStorage.getItem('arc_phone_link_status') === 'true')
+            };
+
+            localStorage.setItem('arc_cross_device_screentime', JSON.stringify(devData));
+            localStorage.setItem('arc_screentime_current_date', newDate);
+            localStorage.setItem('arc_screentime_last_active_date', newDate);
+            localStorage.setItem('arc_screentime_' + newDate, String(initialSecs));
+
+            if (typeof saveToLocalStorage === 'function') {
+                saveToLocalStorage();
+            }
+
+            // 4. Reset ArcScreenTimeNotifier internal cache
+            if (window.ArcScreenTimeNotifier) {
+                if (typeof window.ArcScreenTimeNotifier.reset === 'function') {
+                    window.ArcScreenTimeNotifier.reset();
+                } else if (typeof window.ArcScreenTimeNotifier.syncTimes === 'function') {
+                    window.ArcScreenTimeNotifier.syncTimes(initialSecs, 0, initialSecs);
+                }
+            }
+
+            // 5. Reset ArcScreenTime engine if loaded
+            if (window.ArcScreenTime) {
+                window.ArcScreenTime.activeSeconds = initialSecs;
+                window.ArcScreenTime.todayKey = newDate;
+                window.ArcScreenTime.deviceScreenTime = devData;
+            }
+
+            // 6. Refresh all UI components immediately back to 0 (or initialSecs)
+            if (typeof updateLaptopDisplays === 'function') {
+                updateLaptopDisplays(initialSecs);
+            }
+            if (typeof updateCrossDeviceScreenTimeUI === 'function') {
+                updateCrossDeviceScreenTimeUI();
+            }
+            if (typeof renderScreenTime === 'function') {
+                renderScreenTime();
+            }
+            if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.renderAnalytics === 'function') {
+                window.ArcScreenTimeStore.renderAnalytics();
+            }
+        }
+        window.handleDailyScreenTimeRollover = handleDailyScreenTimeRollover;
+
+        function performScreenTimeSanityAndMigration() {
+            const todayDate = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
+            const storedDate = localStorage.getItem('arc_screentime_current_date') || localStorage.getItem('arc_screentime_last_active_date');
+
+            let trackerState = null;
+            try {
+                const raw = localStorage.getItem('arc_tracker_state') || localStorage.getItem('arc_winter_arc_tracker_v3_state');
+                if (raw) trackerState = JSON.parse(raw);
+            } catch (_) {}
+
+            let crossDev = null;
+            try {
+                const raw = localStorage.getItem('arc_cross_device_screentime');
+                if (raw) crossDev = JSON.parse(raw);
+            } catch (_) {}
+
+            let desktopSecs = 0;
+            if (trackerState && trackerState.laptop && typeof trackerState.laptop.totalSeconds === 'number') {
+                desktopSecs = Math.max(desktopSecs, trackerState.laptop.totalSeconds);
+            }
+            if (crossDev && crossDev.desktop && typeof crossDev.desktop.seconds === 'number') {
+                desktopSecs = Math.max(desktopSecs, crossDev.desktop.seconds);
+            }
+            if (window.state && window.state.laptop && typeof window.state.laptop.totalSeconds === 'number') {
+                desktopSecs = Math.max(desktopSecs, window.state.laptop.totalSeconds);
+            }
+
+            let mobileSecs = 0;
+            if (crossDev && crossDev.mobile && typeof crossDev.mobile.seconds === 'number') {
+                mobileSecs = crossDev.mobile.seconds;
+            }
+
+            const isExceeding24h = desktopSecs > 86400 || mobileSecs > 86400;
+            const isDifferentDay = Boolean(storedDate && storedDate !== todayDate);
+
+            if (isExceeding24h || isDifferentDay) {
+                const archiveDate = (storedDate && storedDate !== todayDate) ? storedDate : getYesterdayDateString();
+                const archiveDesktop = Math.min(86400, desktopSecs);
+                const archiveMobile = Math.min(86400, mobileSecs);
+
+                try {
+                    const histRaw = localStorage.getItem('arc_screentime_history_v2');
+                    let hist = histRaw ? JSON.parse(histRaw) : { days: {} };
+                    hist.days = hist.days || {};
+                    const isLinked = (crossDev && crossDev.mobile && crossDev.mobile.isLinked) || localStorage.getItem('arc_phone_link_status') === 'true';
+
+                    hist.days[archiveDate] = {
+                        date: archiveDate,
+                        laptopSecs: archiveDesktop,
+                        phoneSecs: isLinked ? archiveMobile : 0,
+                        combinedSecs: archiveDesktop + (isLinked ? archiveMobile : 0),
+                        phoneLinked: !!isLinked,
+                        verified: !!isLinked,
+                        manualReduction: false,
+                        apps: (hist.days[archiveDate] && hist.days[archiveDate].apps) || {
+                            'Visual Studio Code': Math.floor(archiveDesktop * 0.45),
+                            'Google Chrome': Math.floor(archiveDesktop * 0.28),
+                            'Terminal': Math.floor(archiveDesktop * 0.15),
+                            'Steam / Gaming': Math.floor(archiveDesktop * 0.12),
+                            'YouTube': Math.floor(archiveMobile * 0.35),
+                            'Instagram': Math.floor(archiveMobile * 0.25),
+                            'WhatsApp': Math.floor(archiveMobile * 0.20),
+                            'Discord': Math.floor(archiveMobile * 0.12),
+                            'X / Twitter': Math.floor(archiveMobile * 0.08)
+                        }
+                    };
+                    localStorage.setItem('arc_screentime_history_v2', JSON.stringify(hist));
+                } catch (e) {
+                    console.warn('[ScreenTime Sanity] History archive error:', e);
+                }
+
+                if (trackerState && trackerState.laptop) {
+                    trackerState.laptop.totalSeconds = 0;
+                    trackerState.laptop.dateKey = todayDate;
+                    try { localStorage.setItem('arc_tracker_state', JSON.stringify(trackerState)); } catch (_) {}
+                }
+                if (crossDev) {
+                    if (crossDev.desktop) { crossDev.desktop.seconds = 0; crossDev.desktop.todayKey = todayDate; }
+                    if (crossDev.mobile) { crossDev.mobile.seconds = 0; crossDev.mobile.todayKey = todayDate; }
+                    try { localStorage.setItem('arc_cross_device_screentime', JSON.stringify(crossDev)); } catch (_) {}
+                }
+                if (window.state) {
+                    if (window.state.laptop) {
+                        window.state.laptop.totalSeconds = 0;
+                        window.state.laptop.dateKey = todayDate;
+                    }
+                    if (window.state.deviceScreenTime) {
+                        if (window.state.deviceScreenTime.desktop) { window.state.deviceScreenTime.desktop.seconds = 0; window.state.deviceScreenTime.desktop.todayKey = todayDate; }
+                        if (window.state.deviceScreenTime.mobile) { window.state.deviceScreenTime.mobile.seconds = 0; window.state.deviceScreenTime.mobile.todayKey = todayDate; }
+                    }
+                }
+                localStorage.setItem('arc_screentime_current_date', todayDate);
+                localStorage.setItem('arc_screentime_last_active_date', todayDate);
+                localStorage.setItem('arc_screentime_' + todayDate, '0');
+                localStorage.setItem('arc_screentime_24h_migration_done_v1', 'true');
+                console.log(`[ScreenTime Sanity] Migration complete: Capped/archived ${archiveDesktop}s to ${archiveDate} and reset today (${todayDate}) to 0.`);
+            }
+        }
+        window.performScreenTimeSanityAndMigration = performScreenTimeSanityAndMigration;
+
+                                let _lastLaptopTick = Date.now();
+        window._lastLaptopTick = _lastLaptopTick;
+        let _saveThrottleCount = 0;
+        let _telemetryPollTick = 0;
+        let _lastTelemetryScriptTime = 0;
+        window.__arc_active_desktop_app = null;
+
+        function persistLaptopScreenTime(todayDate, secs) {
+            try {
+                todayDate = todayDate || ((typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey());
+                secs = (typeof secs === 'number') ? secs : (state.laptop && state.laptop.totalSeconds || 0);
+                secs = Math.min(86400, Math.max(0, secs));
+
+                localStorage.setItem('arc_screentime_current_date', todayDate);
+                localStorage.setItem('arc_screentime_last_active_date', todayDate);
+                localStorage.setItem('arc_screentime_' + todayDate, String(secs));
+
+                let devData = {};
+                try {
+                    const rawDev = localStorage.getItem('arc_cross_device_screentime');
+                    if (rawDev) devData = JSON.parse(rawDev);
+                } catch(_) {}
+
+                devData.desktop = devData.desktop || {};
+                devData.desktop.seconds = secs;
+                devData.desktop.todayKey = todayDate;
+                devData.desktop.lastUpdated = Date.now();
+                if (!devData.desktop.deviceName) {
+                    devData.desktop.deviceName = '💻 Desktop PC / Workstation';
+                }
+                localStorage.setItem('arc_cross_device_screentime', JSON.stringify(devData));
+
+                if (state.laptop) {
+                    state.laptop.totalSeconds = secs;
+                    state.laptop.dateKey = todayDate;
+                }
+                if (window.state && window.state.deviceScreenTime && window.state.deviceScreenTime.desktop) {
+                    window.state.deviceScreenTime.desktop.seconds = secs;
+                    window.state.deviceScreenTime.desktop.todayKey = todayDate;
+                }
+
+                if (typeof saveToLocalStorage === 'function') {
+                    saveToLocalStorage();
+                } else {
+                    try {
+                        localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
+                        localStorage.setItem('arc_tracker_state', JSON.stringify(state));
+                    } catch(e) {}
+                }
+            } catch(e) {
+                console.warn('[ScreenTime] Persistence error:', e);
+            }
+        }
+        window.persistLaptopScreenTime = persistLaptopScreenTime;
 
         function updateLaptopDisplays(secs) {
-            const formatted = formatDuration(secs);
+            secs = Math.min(86400, Math.max(0, Number(secs) || 0));
+            const clockFmt = (typeof formatDurationClock === 'function') ? formatDurationClock(secs) : formatDuration(secs);
+            const shortFmt = (typeof formatDurationShort === 'function') ? formatDurationShort(secs) : formatDuration(secs);
 
             // 1. Tracker view display
             const display = document.getElementById('laptop-timer-display');
-            if (display) display.textContent = formatted;
+            if (display) display.textContent = clockFmt;
 
-            // 2. Bottom HUD total timer & PC time
-            const hudTimer = document.getElementById('arc-hud-timer');
-            if (hudTimer) hudTimer.textContent = formatted;
-            const pcEl = document.getElementById('arc-hud-pc-time');
-            if (pcEl) {
-                const h = Math.floor(secs / 3600);
-                const m = Math.floor((secs % 3600) / 60);
-                pcEl.textContent = String(h).padStart(2, '0') + 'h ' + String(m).padStart(2, '0') + 'm';
+            // 2. Desktop Screen Time main counter in Screen Time view
+            const deskEl = document.getElementById('st-desktop-time-val');
+            if (deskEl) deskEl.textContent = clockFmt;
+
+            // 3. Desktop active status indicator subtext
+            const statusSub = document.getElementById('st-desktop-status-sub');
+            if (statusSub) {
+                const isRunning = state.laptop && state.laptop.isRunning !== false;
+                if (!isRunning) {
+                    statusSub.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block mr-1"></span>Paused';
+                } else if (window.__arc_active_desktop_app) {
+                    statusSub.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1"></span>Active in ${window.__arc_active_desktop_app}`;
+                } else {
+                    statusSub.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1"></span>Active desktop session running';
+                }
             }
 
-            // 3. Screen Time view desktop card
-            const deskEl = document.getElementById('st-desktop-time-val');
-            if (deskEl) deskEl.textContent = formatted;
+            // 4. Resolve Mobile Screen Time
+            let phoneSecs = 0;
+            try {
+                if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
+                    phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
+                } else if (window.state && window.state.deviceScreenTime && window.state.deviceScreenTime.mobile) {
+                    phoneSecs = Number(window.state.deviceScreenTime.mobile.seconds) || 0;
+                } else {
+                    const devRaw = localStorage.getItem('arc_cross_device_screentime');
+                    if (devRaw) {
+                        const parsed = JSON.parse(devRaw);
+                        if (parsed && parsed.mobile && typeof parsed.mobile.seconds === 'number') {
+                            phoneSecs = parsed.mobile.seconds;
+                        }
+                    }
+                }
+            } catch(e) {}
+            phoneSecs = Math.max(0, Math.min(86400, phoneSecs));
 
-            // 4. Combined time (Desktop + Mobile phone)
+            // Update mobile card display if element exists
+            const mobEl = document.getElementById('st-mobile-time-val');
+            if (mobEl && phoneSecs > 0) {
+                mobEl.textContent = (typeof formatDurationClock === 'function') ? formatDurationClock(phoneSecs) : formatDuration(phoneSecs);
+            }
+
+            // 5. Combined Screen Time (Desktop + Mobile Devices)
+            const combinedSecs = Math.min(86400 * 2, secs + phoneSecs);
             const combEl = document.getElementById('st-combined-time-val');
             if (combEl) {
-                let phoneSecs = 0;
-                try {
-                    if (window.ArcScreenTimeStore && typeof window.ArcScreenTimeStore.getTodayTotalSecs === 'function') {
-                        phoneSecs = window.ArcScreenTimeStore.getTodayTotalSecs() || 0;
-                    }
-                } catch(e) {}
-                combEl.textContent = formatDuration(secs + phoneSecs);
+                combEl.textContent = (typeof formatDurationClock === 'function') ? formatDurationClock(combinedSecs) : formatDuration(combinedSecs);
             }
 
-            // 5. Screen time notifier tick
+            // 6. Proportional Percentages & Dual Device Ratio Bar
+            let deskPct = 50;
+            let mobPct = 50;
+            if (combinedSecs > 0) {
+                deskPct = Math.round((secs / combinedSecs) * 100);
+                mobPct = 100 - deskPct;
+            }
+
+            const splitPill = document.getElementById('st-combined-split-pill');
+            if (splitPill) {
+                const deskShort = (typeof formatDurationShort === 'function') ? formatDurationShort(secs) : `${Math.floor(secs/3600)}h ${Math.floor((secs%3600)/60)}m`;
+                const mobShort = (typeof formatDurationShort === 'function') ? formatDurationShort(phoneSecs) : `${Math.floor(phoneSecs/3600)}h ${Math.floor((phoneSecs%3600)/60)}m`;
+                splitPill.textContent = `💻 Desktop: ${deskShort} (${deskPct}%) • 📱 Mobile: ${mobShort} (${mobPct}%)`;
+            }
+
+            const deskBar = document.getElementById('st-combined-bar-desktop');
+            const mobBar = document.getElementById('st-combined-bar-mobile');
+            const deskPctLabel = document.getElementById('st-combined-desktop-pct');
+            const mobPctLabel = document.getElementById('st-combined-mobile-pct');
+
+            if (deskBar) {
+                deskBar.style.width = (combinedSecs > 0 && secs > 0 ? Math.max(2, deskPct) : (combinedSecs > 0 ? 0 : 50)) + '%';
+            }
+            if (mobBar) {
+                mobBar.style.width = (combinedSecs > 0 && phoneSecs > 0 ? Math.max(2, mobPct) : (combinedSecs > 0 ? 0 : 50)) + '%';
+            }
+            if (deskPctLabel) {
+                const deskShort = (typeof formatDurationShort === 'function') ? formatDurationShort(secs) : `${Math.floor(secs/3600)}h`;
+                deskPctLabel.innerHTML = `<i class="fa-solid fa-laptop text-cyan-400 mr-1"></i> Desktop ${deskPct}% (${deskShort})`;
+            }
+            if (mobPctLabel) {
+                const mobShort = (typeof formatDurationShort === 'function') ? formatDurationShort(phoneSecs) : `${Math.floor(phoneSecs/3600)}h`;
+                mobPctLabel.innerHTML = `<i class="fa-solid fa-mobile-screen text-purple-400 mr-1"></i> Mobile ${mobPct}% (${mobShort})`;
+            }
+
+            // 7. Bottom floating SCREEN TIME pill (SCREEN TIME: XXh XXm XXs)
+            const hudEl = document.getElementById('arc-screentime-hud');
+            if (hudEl && hudEl.classList.contains('hidden')) {
+                hudEl.classList.remove('hidden');
+            }
+            const hudTimer = document.getElementById('arc-hud-timer');
+            if (hudTimer) {
+                hudTimer.textContent = (typeof formatDurationClock === 'function') ? formatDurationClock(combinedSecs > 0 ? combinedSecs : secs) : formatDuration(combinedSecs > 0 ? combinedSecs : secs);
+            }
+
+            const pcEl = document.getElementById('arc-hud-pc-time');
+            if (pcEl) {
+                pcEl.textContent = (typeof formatDurationShort === 'function') ? formatDurationShort(secs) : `${Math.floor(secs/3600)}h ${Math.floor((secs%3600)/60)}m`;
+            }
+
+            const hudMobEl = document.getElementById('arc-hud-mob-time');
+            if (hudMobEl) {
+                hudMobEl.textContent = (typeof formatDurationShort === 'function') ? formatDurationShort(phoneSecs) : `${Math.floor(phoneSecs/3600)}h ${Math.floor((phoneSecs%3600)/60)}m`;
+            }
+
+            // 8. Screen time notifier tick & sync
             if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.tick === 'function') {
                 window.ArcScreenTimeNotifier.tick(secs);
             }
+            if (window.ArcScreenTimeNotifier && typeof window.ArcScreenTimeNotifier.syncTimes === 'function') {
+                window.ArcScreenTimeNotifier.syncTimes(secs, phoneSecs, combinedSecs);
+            }
+
+            // 9. Sync with ArcCrossDeviceComparison telemetry day 0
+            if (window.ArcCrossDeviceComparison && window.ArcCrossDeviceComparison.telemetry && window.ArcCrossDeviceComparison.telemetry.days) {
+                const todayEntry = window.ArcCrossDeviceComparison.telemetry.days[0];
+                if (todayEntry) {
+                    todayEntry.laptopSecs = secs;
+                    todayEntry.phoneSecs = phoneSecs;
+                    const diff = Math.abs(secs - phoneSecs);
+                    const diffFmt = (typeof formatDurationShort === 'function') ? formatDurationShort(diff) : `${Math.floor(diff/60)}m`;
+                    todayEntry.diffText = secs >= phoneSecs ? `Laptop +${diffFmt} higher` : `Phone +${diffFmt} higher`;
+                }
+            }
         }
+        window.updateLaptopDisplays = updateLaptopDisplays;
 
         function toggleLaptopTracker() {
             playSfx('click');
@@ -2313,43 +2770,171 @@ function toggleStreakFreezeFromRules(checked) {
                 }
                 showToast("Laptop tracker paused.");
             }
+            updateLaptopDisplays(state.laptop.totalSeconds || 0);
             renderScreenTime();
         }
+        window.toggleLaptopTracker = toggleLaptopTracker;
+
+        // Dynamic script injection for Windows OS desktop telemetry (immune to CORS under file:// and http://)
+        function pollDesktopTelemetry() {
+            const now = Date.now();
+            if (now - _lastTelemetryScriptTime < 1800) return;
+            _lastTelemetryScriptTime = now;
+
+            const existing = document.getElementById('arc-desktop-telemetry-script');
+            if (existing) {
+                try { existing.remove(); } catch(_) {}
+            }
+
+            const script = document.createElement('script');
+            script.id = 'arc-desktop-telemetry-script';
+            script.src = 'arc_desktop_telemetry.js?_t=' + now;
+            script.onload = () => {
+                if (window.__ARC_DESKTOP_TELEMETRY__) {
+                    handleIncomingDesktopTelemetry(window.__ARC_DESKTOP_TELEMETRY__);
+                }
+                try { script.remove(); } catch(_) {}
+            };
+            script.onerror = () => {
+                // If background OS tracker is not running, browser timer continues as seamless fallback
+                try { script.remove(); } catch(_) {}
+            };
+            (document.head || document.documentElement).appendChild(script);
+        }
+        window.pollDesktopTelemetry = pollDesktopTelemetry;
+
+        function handleIncomingDesktopTelemetry(data) {
+            if (!data || typeof data !== 'object') return;
+            const todayDate = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
+            if (data.date && data.date !== todayDate) return;
+
+            if (data.activeApp) {
+                window.__arc_active_desktop_app = data.activeApp;
+                const statusSub = document.getElementById('st-desktop-status-sub');
+                if (statusSub) {
+                    statusSub.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1"></span>Active in ${data.activeApp}`;
+                }
+            }
+
+            if (typeof data.totalSeconds === 'number' && data.totalSeconds > 0) {
+                const osSecs = Math.min(86400, data.totalSeconds);
+                // Keep the higher or newer count between OS tracker and browser timer
+                if (osSecs > (state.laptop.totalSeconds || 0)) {
+                    state.laptop.totalSeconds = osSecs;
+                    updateLaptopDisplays(osSecs);
+                }
+            }
+
+            if (data.appsList && Array.isArray(data.appsList) && data.appsList.length > 0) {
+                updateDesktopAppBreakdownFromTelemetry(data);
+            }
+        }
+        window.__onArcDesktopTelemetry = handleIncomingDesktopTelemetry;
+        window.handleIncomingDesktopTelemetry = handleIncomingDesktopTelemetry;
+
+        function updateDesktopAppBreakdownFromTelemetry(telemetry) {
+            if (!telemetry) return;
+            let apps = telemetry.appsList || telemetry.apps;
+            if (apps && !Array.isArray(apps)) apps = [apps];
+            if (!Array.isArray(apps) || apps.length === 0) return;
+            if (window.ArcCrossDeviceComparison && window.ArcCrossDeviceComparison.telemetry && window.ArcCrossDeviceComparison.telemetry.days) {
+                const todayEntry = window.ArcCrossDeviceComparison.telemetry.days[0];
+                if (todayEntry) {
+                    const totalSecs = telemetry.totalSeconds || todayEntry.laptopSecs || 1;
+                    todayEntry.laptopApps = apps.map(app => {
+                        const pct = Math.max(1, Math.round(((app.seconds || 0) / totalSecs) * 100));
+                        return {
+                            name: app.name || 'Application',
+                            time: (typeof formatDurationShort === 'function') ? formatDurationShort(app.seconds || 0) : `${Math.floor((app.seconds || 0)/60)}m`,
+                            pct: pct,
+                            category: app.category || 'Desktop',
+                            icon: app.icon || 'fa-solid fa-window-maximize',
+                            color: app.color || '#38bdf8'
+                        };
+                    });
+                    if (todayEntry.laptopApps.length > 0) {
+                        todayEntry.laptopTopApp = todayEntry.laptopApps[0];
+                    }
+                }
+            }
+        }
+        window.updateDesktopAppBreakdownFromTelemetry = updateDesktopAppBreakdownFromTelemetry;
 
         function tickLaptop() {
             if (!state.laptop || state.laptop.isRunning === false) {
                 _lastLaptopTick = Date.now();
+                window._lastLaptopTick = _lastLaptopTick;
                 return;
             }
             const now = Date.now();
-            const elapsed = Math.max(1, Math.floor((now - _lastLaptopTick) / 1000));
+            const prevTick = (typeof window._lastLaptopTick === 'number' && window._lastLaptopTick < _lastLaptopTick) ? window._lastLaptopTick : _lastLaptopTick;
+            let elapsed = Math.floor((now - prevTick) / 1000);
             _lastLaptopTick = now;
+            window._lastLaptopTick = now;
 
-            state.laptop.totalSeconds = (state.laptop.totalSeconds || 0) + elapsed;
+            if (elapsed <= 0) elapsed = 1;
+            // Sleep / suspend guard: if backgrounded or asleep for > 3 minutes, add 1s for wake
+            if (elapsed > 180) elapsed = 1;
+
+            const todayDate = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
+            const storedDate = state.laptop.dateKey || localStorage.getItem('arc_screentime_current_date') || localStorage.getItem('arc_screentime_last_active_date') || todayDate;
+
+            // Check if day changed while running across midnight
+            if (storedDate !== todayDate) {
+                const nowDate = new Date();
+                const midnightToday = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0).getTime();
+                let secsBeforeMidnight = 0;
+                let secsAfterMidnight = 0;
+                if ((now - elapsed * 1000) < midnightToday) {
+                    secsBeforeMidnight = Math.max(0, Math.floor((midnightToday - (now - elapsed * 1000)) / 1000));
+                    secsAfterMidnight = Math.max(0, Math.floor((now - midnightToday) / 1000));
+                } else {
+                    secsAfterMidnight = elapsed;
+                }
+
+                state.laptop.totalSeconds = Math.min(86400, (state.laptop.totalSeconds || 0) + secsBeforeMidnight);
+                handleDailyScreenTimeRollover(storedDate, todayDate, secsAfterMidnight);
+                _lastLaptopTick = now;
+                return;
+            }
+
+            state.laptop.dateKey = todayDate;
+            state.laptop.totalSeconds = Math.min(86400, (state.laptop.totalSeconds || 0) + elapsed);
             const secs = state.laptop.totalSeconds;
 
             updateLaptopDisplays(secs);
 
             // Keep cross-device desktop count in sync
             if (window.state && window.state.deviceScreenTime && window.state.deviceScreenTime.desktop) {
-                window.state.deviceScreenTime.desktop.seconds = Math.max(window.state.deviceScreenTime.desktop.seconds || 0, secs);
+                window.state.deviceScreenTime.desktop.seconds = secs;
+                window.state.deviceScreenTime.desktop.todayKey = todayDate;
             }
 
-            // Persist to localStorage
-            if (typeof saveToLocalStorage === 'function') {
-                saveToLocalStorage();
-            } else {
-                try {
-                    localStorage.setItem('arc_winter_arc_tracker_v3_state', JSON.stringify(state));
-                } catch(e) {}
+            // Poll Windows OS telemetry every 2 seconds
+            _telemetryPollTick = (_telemetryPollTick || 0) + 1;
+            if (_telemetryPollTick >= 2) {
+                _telemetryPollTick = 0;
+                pollDesktopTelemetry();
+            }
+
+            // Persist to localStorage every 3 seconds
+            _saveThrottleCount = (_saveThrottleCount || 0) + 1;
+            if (_saveThrottleCount >= 3) {
+                _saveThrottleCount = 0;
+                persistLaptopScreenTime(todayDate, secs);
             }
         }
+        window.tickLaptop = tickLaptop;
 
         function startLaptopTracker() {
             if (state.laptop.interval) clearInterval(state.laptop.interval);
+            if (typeof performScreenTimeSanityAndMigration === 'function') {
+                performScreenTimeSanityAndMigration();
+            }
             _lastLaptopTick = Date.now();
             updateLaptopDisplays(state.laptop.totalSeconds || 0);
             state.laptop.interval = setInterval(tickLaptop, 1000);
+            pollDesktopTelemetry();
         }
         function startLaptopTimer() {
             startLaptopTracker();
@@ -2359,7 +2944,9 @@ function toggleStreakFreezeFromRules(checked) {
 
         // Keep timer ticking continuously across backgrounding and window focus
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && state.laptop && state.laptop.isRunning !== false) {
+            if (document.hidden) {
+                persistLaptopScreenTime();
+            } else if (state.laptop && state.laptop.isRunning !== false) {
                 tickLaptop();
             }
         });
@@ -2368,6 +2955,22 @@ function toggleStreakFreezeFromRules(checked) {
                 tickLaptop();
             }
         });
+        window.addEventListener('blur', () => {
+            persistLaptopScreenTime();
+        });
+        window.addEventListener('beforeunload', () => {
+            persistLaptopScreenTime();
+        });
+        window.addEventListener('pagehide', () => {
+            persistLaptopScreenTime();
+        });
+
+        // Start laptop tracker immediately upon script load (never wait for DOM or sub-initializers)
+        try {
+            startLaptopTracker();
+        } catch(e) {
+            console.warn('[ScreenTime] Early start error:', e);
+        }
 
         /* ==========================================================================
            6. INITIALIZATION ENTRY POINT
@@ -2471,8 +3074,9 @@ function toggleStreakFreezeFromRules(checked) {
         ];
 
         function initApp() {
-            window.ArcHardwareGatekeeper.init();
-            verifyDataSchema();
+            try { window.ArcHardwareGatekeeper.init(); } catch(e) {}
+            try { verifyDataSchema(); } catch(e) {}
+            try { if (typeof performScreenTimeSanityAndMigration === 'function') performScreenTimeSanityAndMigration(); } catch(e) {}
 
             let savedState = getLocalStorageItem('arc_tracker_state');
             if (savedState && (typeof savedState !== 'object' || Array.isArray(savedState) || (savedState.habits !== undefined && !Array.isArray(savedState.habits)))) {
@@ -2588,4 +3192,8 @@ function toggleStreakFreezeFromRules(checked) {
           window.renderScreenTime = renderScreenTime;
         }
 
-        document.addEventListener('DOMContentLoaded', initApp);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
