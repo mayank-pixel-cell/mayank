@@ -402,13 +402,7 @@
               <i class="fa-solid fa-rotate-left text-[9px]"></i>
               <span>Restore My Data</span>
             </button>
-          ` : `
-            <button type="button" onclick="ArcHabitAnalytics.simulateTelemetry()" title="Preview rich analytics with realistic 60-day telemetry" class="px-2.5 py-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 transition active:scale-95">
-              <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
-              <span class="hidden sm:inline">Simulate 60d History</span>
-              <span class="sm:hidden">Simulate</span>
-            </button>
-          `}
+          ` : ''}
 
           ${isDrawer ? `
             <button type="button" onclick="ArcHabitAnalytics.closeDrawer()" aria-label="Close Drawer" class="w-7 h-7 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-slate-800 flex items-center justify-center text-xs transition active:scale-95">

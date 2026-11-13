@@ -3080,6 +3080,19 @@ function toggleStreakFreezeFromRules(checked) {
         ];
 
         function initApp() {
+            // Startup cleanup: automatically purge any legacy demo or mock sessions
+            try {
+                const userKey = 'arc_google_user';
+                const rawUser = localStorage.getItem(userKey);
+                if (rawUser) {
+                    const u = JSON.parse(rawUser);
+                    if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+                        localStorage.removeItem(userKey);
+                        localStorage.removeItem('arc_cloud_mock_storage');
+                    }
+                }
+            } catch (e) {}
+
             try { window.ArcHardwareGatekeeper.init(); } catch(e) {}
             try { verifyDataSchema(); } catch(e) {}
             try { if (typeof performScreenTimeSanityAndMigration === 'function') performScreenTimeSanityAndMigration(); } catch(e) {}

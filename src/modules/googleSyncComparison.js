@@ -63,7 +63,14 @@
   function getUser() {
     try {
       const raw = localStorage.getItem(USER_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const u = JSON.parse(raw);
+      if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(MOCK_CLOUD_KEY);
+        return null;
+      }
+      return u;
     } catch(e) {
       return null;
     }
@@ -534,30 +541,9 @@
     renderUi();
 
     try {
-      if (user.accessToken && !user.isDemo) {
+      if (user.accessToken) {
         // Authenticated Real Google Cloud OAuth Sync
         await syncWithGoogleDrive(user.accessToken);
-      } else {
-        // Fast Instant Cloud Sync Mode (BroadcastChannel + Local Storage Simulation)
-        let mockCloud = null;
-        try {
-          const raw = localStorage.getItem(MOCK_CLOUD_KEY);
-          if (raw) mockCloud = JSON.parse(raw);
-        } catch(e) {}
-
-        // Only merge mockCloud if it originated from a different sender/tab and has newer changes
-        if (mockCloud && mockCloud.state && mockCloud.senderId && mockCloud.senderId !== getDeviceId()) {
-          const lastSync = getLastSyncTime();
-          if ((mockCloud.updatedAt || 0) > lastSync) {
-            applyCloudState(mockCloud, false);
-          }
-        }
-
-        const payload = createCloudPayload();
-        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
-        if (syncBus) {
-          syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
-        }
       }
 
       setLastSyncTime(Date.now());
@@ -570,7 +556,6 @@
       // Fallback: don't break local progress, sync via local bus
       try {
         const payload = createCloudPayload();
-        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
         if (syncBus) {
           syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
         }
@@ -600,16 +585,17 @@
   function loginWithGoogle() {
     const clientId = getClientId();
     if (!clientId) {
-      // If client ID is missing, provide a friendly modal or prompt
       const entered = prompt(
-        "Enter your Google Cloud OAuth 2.0 Client ID:\n(e.g., 123456789-abc.apps.googleusercontent.com)\n\nOr click Cancel to use Instant 1-Click Demo Cloud Mode:",
+        "Enter your Google Cloud OAuth 2.0 Client ID:\n(e.g., 123456789-abc.apps.googleusercontent.com)",
         ""
       );
       if (entered && entered.trim()) {
         setClientId(entered.trim());
         renderUi();
       } else {
-        loginDemoAccount();
+        if (typeof showToast === 'function') {
+          showToast('Google OAuth 2.0 Client ID is required to connect your account.');
+        }
         return;
       }
     }
@@ -617,9 +603,8 @@
     const currentClientId = getClientId();
     if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
       if (typeof showToast === 'function') {
-        showToast('Google Identity library loading... using instant cloud connect.');
+        showToast('Google Identity Services SDK is not loaded. Please verify your connection.');
       }
-      loginDemoAccount();
       return;
     }
 
@@ -634,8 +619,7 @@
               email: 'synced.user@gmail.com',
               picture: '',
               accessToken: tokenResponse.access_token,
-              expiresAt: Date.now() + (tokenResponse.expires_in || 3600) * 1000,
-              isDemo: false
+              expiresAt: Date.now() + (tokenResponse.expires_in || 3600) * 1000
             };
 
             // Fetch user profile info
@@ -671,35 +655,10 @@
       tokenClient.requestAccessToken();
     } catch(err) {
       console.warn('[ArcGoogleSync] Google Sign-In error:', err);
-      loginDemoAccount();
+      if (typeof showToast === 'function') {
+        showToast('Google Sign-In failed. Please check your credentials and try again.');
+      }
     }
-  }
-
-  function loginDemoAccount(customName, customEmail) {
-    const demoUser = {
-      name: customName || 'Google Account User',
-      email: customEmail || 'user.arc.tracker@gmail.com',
-      picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
-      accessToken: 'demo_token_' + Date.now(),
-      isDemo: true,
-      connectedAt: Date.now()
-    };
-    setUser(demoUser);
-    if (window.ArcMobilePermissions && typeof window.ArcMobilePermissions.checkOnLogin === 'function') {
-      window.ArcMobilePermissions.checkOnLogin(demoUser);
-    }
-    if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
-      window.ArcProfile.onLoginSuccess(demoUser);
-    }
-    if (window.ArcGold && typeof window.ArcGold.claimFirstMonthTrial === 'function') {
-      window.ArcGold.claimFirstMonthTrial(demoUser);
-    }
-    if (typeof playSfx === 'function') playSfx('victory');
-    if (typeof showToast === 'function') {
-      showToast('🟢 Google Account Connected! Multi-device sync enabled.');
-    }
-    renderUi();
-    performSync(false);
   }
 
   function disconnect() {
@@ -711,36 +670,6 @@
     if (typeof playSfx === 'function') playSfx('modalClose');
     if (typeof showToast === 'function') showToast('Google Account disconnected. All local progress preserved.');
     renderUi();
-  }
-
-  // Cross-device simulation test
-  function simulateSecondDeviceSync() {
-    const habits = (window.state && window.state.habits) ? window.state.habits : [];
-    if (!habits.length) {
-      if (typeof showToast === 'function') showToast('Add at least one habit first to test sync!');
-      return;
-    }
-
-    const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-    const targetHabit = habits[0];
-
-    // Simulate an action done on a phone or tablet
-    const simulatedCloudState = JSON.parse(JSON.stringify(window.state || {}));
-    simulatedCloudState.dailyHabits = simulatedCloudState.dailyHabits || {};
-    simulatedCloudState.dailyHabits[today] = simulatedCloudState.dailyHabits[today] || {};
-    simulatedCloudState.dailyHabits[today][targetHabit.id] = true;
-    simulatedCloudState.streak = Math.max(Number(simulatedCloudState.streak) || 0, 5) + 1;
-
-    const simulatedPayload = {
-      app: 'ArcTracker',
-      updatedAt: Date.now(),
-      senderId: 'dev_simulated_pixel9_pro',
-      deviceName: '📱 Pixel 9 Pro (Second Device)',
-      user: getUser() ? getUser().email : 'demo@gmail.com',
-      state: simulatedCloudState
-    };
-
-    applyCloudState(simulatedPayload, true);
   }
 
   /* ----------------------------------------------------
@@ -811,7 +740,7 @@
                 <div class="min-w-0">
                   <div class="font-bold text-xs text-white truncate flex items-center gap-1.5">
                     ${escapeHtml(user.name)}
-                    ${user.isDemo ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">DEMO MODE</span>' : '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>'}
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>
                   </div>
                   <div class="text-[11px] text-slate-400 truncate">${escapeHtml(user.email)}</div>
                   <div class="text-[10px] text-cyan-400/90 font-mono mt-0.5">
@@ -841,14 +770,6 @@
                 ${escapeHtml(deviceName)} • ID: ${escapeHtml(deviceId)}
               </span>
             </div>
-
-            <!-- Multi-Device Test Action -->
-            <div class="pt-2 flex items-center justify-between gap-2">
-              <button type="button" onclick="ArcGoogleSync.simulateSecondDeviceSync()" class="w-full py-1.5 px-3 rounded-lg border border-slate-700 hover:border-cyan-400/50 bg-slate-950/60 hover:bg-slate-900 text-slate-300 hover:text-cyan-300 text-xs font-medium flex items-center justify-center gap-2 transition active:scale-95">
-                <i class="fa-solid fa-mobile-screen"></i>
-                <span>Simulate 2nd Device Action &amp; Verify Union Merge</span>
-              </button>
-            </div>
           ` : `
             <!-- Logged Out Action Card -->
             <div class="space-y-3 pt-1">
@@ -856,15 +777,10 @@
                 Sign in with Google to automatically track your habits across all devices without losing any check-in streaks or XP.
               </p>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <button type="button" onclick="ArcGoogleSync.loginWithGoogle()" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+              <div class="space-y-2">
+                <button type="button" onclick="ArcGoogleSync.loginWithGoogle()" class="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
                   ${googleIconSvg}
                   <span>Sign in with Google</span>
-                </button>
-
-                <button type="button" onclick="ArcGoogleSync.loginDemoAccount()" class="py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
-                  <i class="fa-solid fa-bolt text-cyan-400"></i>
-                  <span>1-Click Test Connect</span>
                 </button>
               </div>
             </div>
@@ -936,6 +852,21 @@
   // Public Interface
   window.ArcGoogleSync = {
     init: function() {
+      // Startup cleanup: automatically purge any legacy demo or mock sessions
+      try {
+        const raw = localStorage.getItem(USER_KEY);
+        if (raw) {
+          const u = JSON.parse(raw);
+          if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+            localStorage.removeItem(USER_KEY);
+            localStorage.removeItem(MOCK_CLOUD_KEY);
+            if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+              window.ArcProfile.renderHeaderProfile();
+            }
+          }
+        }
+      } catch(e) {}
+
       // Auto-trigger sync on launch if logged in
       if (getUser()) {
         setTimeout(() => performSync(true), 1200);
@@ -955,11 +886,9 @@
       });
     },
     loginWithGoogle: loginWithGoogle,
-    loginDemoAccount: loginDemoAccount,
     disconnect: disconnect,
     syncNow: () => performSync(false),
     triggerAutoSync: triggerAutoSync,
-    simulateSecondDeviceSync: simulateSecondDeviceSync,
     formatTimeAgo: formatTimeAgo,
     toggleAutoSync: function(checked) {
       setAutoSyncEnabled(checked);

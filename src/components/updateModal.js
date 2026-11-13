@@ -34,14 +34,14 @@ export function renderUpdateModal() {
             <div class="p-3 rounded-xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 border border-slate-800/80 flex items-center justify-between gap-3">
                 <div>
                     <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Current Version</div>
-                    <div id="arc-update-cur-ver" class="font-mono text-xs font-bold text-slate-300 mt-0.5">v2.6.0</div>
+                    <div id="arc-update-cur-ver" class="font-mono text-xs font-bold text-slate-300 mt-0.5">v2.7.2</div>
                 </div>
                 <div class="flex items-center gap-1.5 text-cyan-400">
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </div>
                 <div class="text-right">
                     <div class="text-[10px] uppercase tracking-wider text-cyan-400 font-bold">New Version</div>
-                    <div id="arc-update-new-ver" class="font-mono text-sm font-black text-cyan-300 mt-0.5 animate-pulse">v2.7.0</div>
+                    <div id="arc-update-new-ver" class="font-mono text-sm font-black text-cyan-300 mt-0.5 animate-pulse">v2.7.2</div>
                 </div>
             </div>
 

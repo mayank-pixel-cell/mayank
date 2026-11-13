@@ -1291,35 +1291,6 @@ import { arcStorage } from './storage.js';
             renderScreenTimeView();
         }
 
-        function simulateAddUsage(appId, secs = 600) {
-            const app = appTrackerState.apps.find(a => a.id === appId);
-            if (!app) return;
-
-            appTrackerState.usage[appId] = (appTrackerState.usage[appId] || 0) + secs;
-            saveAppTrackerData();
-            playSfx('click');
-
-            if (app.blockEnabled && appTrackerState.usage[appId] >= app.dailyLimitSecs) {
-                triggerAppLockout(appId);
-            } else {
-                showToast(`Added ${formatDuration(secs)} testing time to ${app.name}`);
-                renderScreenTimeView();
-            }
-        }
-
-        function resetAppUsage(appId) {
-            const app = appTrackerState.apps.find(a => a.id === appId);
-            if (!app) return;
-
-            appTrackerState.usage[appId] = 0;
-            saveAppTrackerData();
-            if (appTrackerState.blockedShieldAppId === appId) {
-                closeBlockerShield();
-            }
-            renderScreenTimeView();
-            showToast(`Reset today's usage for ${app.name}.`);
-        }
-
         function isFocusStrictModeActive() {
             const stateObj = (typeof appTrackerState !== 'undefined') ? appTrackerState : (window.appTrackerState || null);
             return !!(stateObj && stateObj.strictMode);
@@ -1871,6 +1842,7 @@ import { arcStorage } from './storage.js';
                                             <h4 class="text-sm font-bold text-white truncate flex items-center gap-1.5">
                                                 <span>${app.name}</span>
                                                 ${app.isCustom ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">Custom</span>' : ''}
+                                                ${app.isCustom ? `<button role="button" onclick="deleteCustomApp('${app.id}')" title="Delete custom app" class="hover:text-rose-400 text-slate-500 transition ml-1 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
                                             </h4>
                                             <span class="text-[10px] text-slate-400 font-medium">${app.category}</span>
                                         </div>
@@ -1956,23 +1928,6 @@ import { arcStorage } from './storage.js';
                                             <i class="fa-solid fa-play text-[11px]"></i> Launch
                                         </button>
                                     `))}
-                                </div>
-
-                                <!-- EXTRA QUICK CONTROLS (TEST +10M & RESET) -->
-                                <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
-                                    <button role="button" onclick="simulateAddUsage('${app.id}', 600)" title="Add 10 mins testing usage" class="hover:text-cyan-400 transition font-mono flex items-center gap-1">
-                                        <i class="fa-solid fa-forward-step"></i> +10m Test
-                                    </button>
-                                    <div class="flex items-center gap-2">
-                                        <button role="button" onclick="resetAppUsage('${app.id}')" title="Reset today's time" class="hover:text-amber-400 transition">
-                                            <i class="fa-solid fa-rotate-left"></i> Reset
-                                        </button>
-                                        ${app.isCustom ? `
-                                            <button role="button" onclick="deleteCustomApp('${app.id}')" title="Delete custom app" class="hover:text-rose-400 transition">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        ` : ''}
-                                    </div>
                                 </div>
                             </div>
                         `;
@@ -2075,7 +2030,7 @@ window.formatDurationShort = formatDurationShort;
                         : (deviceData.mobile?.lastUpdated ? 'Live Synced' : 'Synced via Account');
                     mobStatusEl.innerHTML = `<span class="text-emerald-400 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Synced via Account (${timeAgo})</span>`;
                 } else {
-                    mobStatusEl.innerHTML = `<span class="text-slate-400"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Awaiting mobile check-in • Tap 'Simulate Mobile Data' to test</span>`;
+                    mobStatusEl.innerHTML = `<span class="text-slate-400"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Waiting for mobile sync</span>`;
                 }
             }
 
@@ -2123,9 +2078,6 @@ window.formatDurationShort = formatDurationShort;
                             <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginWithGoogle();}else{alert('Google sync ready');}; playSfx('click')" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] uppercase tracking-wider transition">
                                 Link Account
                             </button>
-                            <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginDemoAccount();}else{alert('Demo sync ready');}; playSfx('click')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-[10px] transition" title="1-Click Demo Account">
-                                Demo
-                            </button>
                         </div>
                     `;
                 }
@@ -2163,70 +2115,11 @@ window.formatDurationShort = formatDurationShort;
             } catch(e) {}
         }
 
-        function simulateMobileTime(customMinutes = 225) {
-            const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
-            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
-            const targetSecs = Math.max(60, Number(customMinutes) * 60);
-
-            if (targetSecs < currentMobileSecs) {
-                if (typeof showToast === 'function') {
-                    showToast(`Monotonic rule: Logged mobile time cannot be reduced below current total (${Math.ceil(currentMobileSecs/60)}m).`);
-                }
-                return;
-            }
-
-            if (window.ArcGoogleSync && typeof window.ArcGoogleSync.simulateMobileTrackerSync === 'function') {
-                window.ArcGoogleSync.simulateMobileTrackerSync(customMinutes);
-            } else {
-                if (!window.state) window.state = {};
-                if (!window.state.deviceScreenTime) window.state.deviceScreenTime = {};
-                window.state.deviceScreenTime.mobile = {
-                    seconds: targetSecs,
-                    deviceName: '📱 Mobile App Tracker',
-                    lastUpdated: Date.now(),
-                    todayKey: today,
-                    isLinked: true
-                };
-                try {
-                    localStorage.setItem('arc_cross_device_screentime', JSON.stringify(window.state.deviceScreenTime));
-                } catch(e) {}
-                if (typeof updateCrossDeviceScreenTimeUI === 'function') updateCrossDeviceScreenTimeUI();
-                if (typeof showToast === 'function') {
-                    showToast(`📱 Mobile time updated to ${formatDuration(targetSecs)}`);
-                }
-            }
-        }
-
-        function promptSetMobileTime() {
-            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
-            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
-            const currentMobileMins = Math.ceil(currentMobileSecs / 60);
-
-            const entered = prompt(`Enter Mobile App Tracker screen time in minutes:\n(Current logged: ${currentMobileMins} mins. Monotonic rule: Entries can only increase today's total):`, `${Math.max(currentMobileMins, 225)}`);
-            if (entered !== null) {
-                const num = parseInt(entered, 10);
-                if (isNaN(num)) return;
-                if (num < currentMobileMins) {
-                    if (typeof showToast === 'function') {
-                        showToast(`Monotonic screen time rule: Entered time (${num}m) cannot reduce today's duration below ${currentMobileMins}m.`);
-                    }
-                    return;
-                }
-                simulateMobileTime(num);
-            }
-        }
-
-        window.promptSetMobileTime = promptSetMobileTime;
-        window.simulateMobileTime = simulateMobileTime;
-
         // Expose to window for global access
         window.ArcAppTracker = {
             init: initAppTracker,
             renderScreenTimeView,
             updateCrossDeviceScreenTimeUI,
-            simulateMobileTime,
-            promptSetMobileTime,
             setActiveApp,
             pauseActiveApp,
             isAppBlocked,
@@ -2271,8 +2164,6 @@ window.formatDurationShort = formatDurationShort;
             closeAddCustomAppModal,
             saveCustomApp,
             deleteCustomApp,
-            simulateAddUsage,
-            resetAppUsage,
             toggleStrictMode,
             setFilter: setAppFilter,
             setSearch: setAppSearch

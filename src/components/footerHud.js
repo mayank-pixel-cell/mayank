@@ -125,7 +125,7 @@ export function renderFooterHud() {
                     <i class="fa-solid fa-bell"></i>
                 </div>
                 <span class="font-extrabold text-xs text-white">Notifications &amp; Updates</span>
-                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.6.0</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.7.2</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn text-slate-400 hover:text-cyan-300 text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Check for updates">

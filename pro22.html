@@ -4403,7 +4403,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                         <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">
                             <i class="fa-solid fa-bell mr-1"></i> Notification Center
                         </span>
-                        <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">v2.6.0 Stable</span>
+                        <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">v2.7.2 Stable</span>
                     </div>
                     <h2 class="text-lg sm:text-2xl font-black text-white">System Updates & Live Alert Feed</h2>
                     <p class="text-xs text-slate-300">Stay informed on new features, system performance releases, dopamine lockouts, and sync telemetry.</p>
@@ -4425,7 +4425,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-cyan-400">
                     <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Total Releases</div>
-                    <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.6.0</div>
+                    <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.7.2</div>
                     <div class="text-[10px] text-cyan-400 mt-0.5">Latest Engine Version</div>
                 </div>
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-amber-400">
@@ -4609,7 +4609,7 @@ button,[role=tab],nav a{transition-timing-function:var(--ease-hr);touch-action:m
                     <i class="fa-solid fa-bell"></i>
                 </div>
                 <span class="font-extrabold text-xs text-white">Notifications &amp; Updates</span>
-                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.6.0</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v2.7.2</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <button type="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn text-slate-400 hover:text-cyan-300 text-xs p-1 rounded-lg hover:bg-slate-900 transition" title="Check for updates">
@@ -10131,35 +10131,6 @@ function toggleStreakFreezeFromRules(checked) {
             renderScreenTimeView();
         }
 
-        function simulateAddUsage(appId, secs = 600) {
-            const app = appTrackerState.apps.find(a => a.id === appId);
-            if (!app) return;
-
-            appTrackerState.usage[appId] = (appTrackerState.usage[appId] || 0) + secs;
-            saveAppTrackerData();
-            playSfx('click');
-
-            if (app.blockEnabled && appTrackerState.usage[appId] >= app.dailyLimitSecs) {
-                triggerAppLockout(appId);
-            } else {
-                showToast(`Added ${formatDuration(secs)} testing time to ${app.name}`);
-                renderScreenTimeView();
-            }
-        }
-
-        function resetAppUsage(appId) {
-            const app = appTrackerState.apps.find(a => a.id === appId);
-            if (!app) return;
-
-            appTrackerState.usage[appId] = 0;
-            saveAppTrackerData();
-            if (appTrackerState.blockedShieldAppId === appId) {
-                closeBlockerShield();
-            }
-            renderScreenTimeView();
-            showToast(`Reset today's usage for ${app.name}.`);
-        }
-
         function isFocusStrictModeActive() {
             const stateObj = (typeof appTrackerState !== 'undefined') ? appTrackerState : (window.appTrackerState || null);
             return !!(stateObj && stateObj.strictMode);
@@ -10711,6 +10682,7 @@ function toggleStreakFreezeFromRules(checked) {
                                             <h4 class="text-sm font-bold text-white truncate flex items-center gap-1.5">
                                                 <span>${app.name}</span>
                                                 ${app.isCustom ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">Custom</span>' : ''}
+                                                ${app.isCustom ? `<button role="button" onclick="deleteCustomApp('${app.id}')" title="Delete custom app" class="hover:text-rose-400 text-slate-500 transition ml-1 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
                                             </h4>
                                             <span class="text-[10px] text-slate-400 font-medium">${app.category}</span>
                                         </div>
@@ -10796,23 +10768,6 @@ function toggleStreakFreezeFromRules(checked) {
                                             <i class="fa-solid fa-play text-[11px]"></i> Launch
                                         </button>
                                     `))}
-                                </div>
-
-                                <!-- EXTRA QUICK CONTROLS (TEST +10M & RESET) -->
-                                <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
-                                    <button role="button" onclick="simulateAddUsage('${app.id}', 600)" title="Add 10 mins testing usage" class="hover:text-cyan-400 transition font-mono flex items-center gap-1">
-                                        <i class="fa-solid fa-forward-step"></i> +10m Test
-                                    </button>
-                                    <div class="flex items-center gap-2">
-                                        <button role="button" onclick="resetAppUsage('${app.id}')" title="Reset today's time" class="hover:text-amber-400 transition">
-                                            <i class="fa-solid fa-rotate-left"></i> Reset
-                                        </button>
-                                        ${app.isCustom ? `
-                                            <button role="button" onclick="deleteCustomApp('${app.id}')" title="Delete custom app" class="hover:text-rose-400 transition">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        ` : ''}
-                                    </div>
                                 </div>
                             </div>
                         `;
@@ -10970,9 +10925,6 @@ function toggleStreakFreezeFromRules(checked) {
                             <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginWithGoogle();}else{alert('Google sync ready');}; playSfx('click')" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] uppercase tracking-wider transition">
                                 Link Account
                             </button>
-                            <button role="button" onclick="if(window.ArcGoogleSync){ArcGoogleSync.loginDemoAccount();}else{alert('Demo sync ready');}; playSfx('click')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-[10px] transition" title="1-Click Demo Account">
-                                Demo
-                            </button>
                         </div>
                     `;
                 }
@@ -11010,67 +10962,8 @@ function toggleStreakFreezeFromRules(checked) {
             } catch(e) {}
         }
 
-        function simulateMobileTime(customMinutes = 225) {
-            const today = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
-            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
-            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
-            const targetSecs = Math.max(60, Number(customMinutes) * 60);
-
-            if (targetSecs < currentMobileSecs) {
-                if (typeof showToast === 'function') {
-                    showToast(`Monotonic rule: Logged mobile time cannot be reduced below current total (${Math.ceil(currentMobileSecs/60)}m).`);
-                }
-                return;
-            }
-
-            if (window.ArcGoogleSync && typeof window.ArcGoogleSync.simulateMobileTrackerSync === 'function') {
-                window.ArcGoogleSync.simulateMobileTrackerSync(customMinutes);
-            } else {
-                if (!window.state) window.state = {};
-                if (!window.state.deviceScreenTime) window.state.deviceScreenTime = {};
-                window.state.deviceScreenTime.mobile = {
-                    seconds: targetSecs,
-                    deviceName: '📱 Mobile App Tracker',
-                    lastUpdated: Date.now(),
-                    todayKey: today,
-                    isLinked: true
-                };
-                try {
-                    localStorage.setItem('arc_cross_device_screentime', JSON.stringify(window.state.deviceScreenTime));
-                } catch(e) {}
-                if (typeof updateCrossDeviceScreenTimeUI === 'function') updateCrossDeviceScreenTimeUI();
-                if (typeof showToast === 'function') {
-                    showToast(`📱 Mobile time updated to ${formatDuration(targetSecs)}`);
-                }
-            }
-        }
-
-        function promptSetMobileTime() {
-            const deviceData = (window.state && window.state.deviceScreenTime) ? window.state.deviceScreenTime : (JSON.parse(localStorage.getItem('arc_cross_device_screentime') || '{}'));
-            const currentMobileSecs = Math.max(0, Number(deviceData.mobile?.seconds) || 0);
-            const currentMobileMins = Math.ceil(currentMobileSecs / 60);
-
-            const entered = prompt(`Enter Mobile App Tracker screen time in minutes:\n(Current logged: ${currentMobileMins} mins. Monotonic rule: Entries can only increase today's total):`, `${Math.max(currentMobileMins, 225)}`);
-            if (entered !== null) {
-                const num = parseInt(entered, 10);
-                if (isNaN(num)) return;
-                if (num < currentMobileMins) {
-                    if (typeof showToast === 'function') {
-                        showToast(`Monotonic screen time rule: Entered time (${num}m) cannot reduce today's duration below ${currentMobileMins}m.`);
-                    }
-                    return;
-                }
-                simulateMobileTime(num);
-            }
-        }
-
-        window.promptSetMobileTime = promptSetMobileTime;
-        window.simulateMobileTime = simulateMobileTime;
-
         // Expose to window for global access
         window.ArcAppTracker = {
-            simulateMobileTime,
-            promptSetMobileTime,
             init: initAppTracker,
             renderScreenTimeView,
             updateCrossDeviceScreenTimeUI,
@@ -11118,8 +11011,6 @@ function toggleStreakFreezeFromRules(checked) {
             closeAddCustomAppModal,
             saveCustomApp,
             deleteCustomApp,
-            simulateAddUsage,
-            resetAppUsage,
             toggleStrictMode,
             setFilter: setAppFilter,
             setSearch: setAppSearch
@@ -11801,6 +11692,19 @@ class ArcHardwareGatekeeper {
         window.ArcHardwareGatekeeper = arcHardwareGatekeeper;
   
         function initApp() {
+            // Startup cleanup: automatically purge any legacy demo or mock sessions
+            try {
+                const userKey = 'arc_google_user';
+                const rawUser = localStorage.getItem(userKey);
+                if (rawUser) {
+                    const u = JSON.parse(rawUser);
+                    if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+                        localStorage.removeItem(userKey);
+                        localStorage.removeItem('arc_cloud_mock_storage');
+                    }
+                }
+            } catch (e) {}
+
             window.ArcHardwareGatekeeper.init();
             verifyDataSchema();
 
@@ -14197,23 +14101,13 @@ html[data-mode=light] .phone-widget-card .text-white {
 
         <!-- ACTIONS -->
         <div class="space-y-2 pt-1">
-          <!-- COPY LINK & TEST SCAN BUTTONS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button type="button" onclick="ArcScreenTimeStore.copyPairingLink()" class="py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Copy redirect link to send via messaging">
+          <!-- COPY LINK BUTTON -->
+          <div>
+            <button type="button" onclick="ArcScreenTimeStore.copyPairingLink()" class="w-full py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Copy redirect link to send via messaging">
               <i class="fa-solid fa-copy text-purple-300"></i>
               <span>Copy Web Link</span>
             </button>
-
-            <button type="button" onclick="ArcScreenTimeStore.simulatePhoneLink('web_browser')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate scanning when app is not downloaded">
-              <i class="fa-solid fa-globe text-cyan-400"></i>
-              <span>Simulate Browser Scan</span>
-            </button>
           </div>
-
-          <!-- 1-CLICK PRESET LINK BUTTON -->
-          <button type="button" onclick="ArcScreenTimeStore.connectDemoPhone('📱 Pixel 9 Pro (Android)'); playSfx('victory')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition">
-            <i class="fa-solid fa-mobile-screen-button"></i> 1-Click Link Phone (Pixel 9 Pro)
-          </button>
 
           <div class="pt-1 flex items-center justify-between text-xs">
             <button type="button" onclick="ArcScreenTimeStore.disconnectPhone(); playSfx('click')" class="text-slate-400 hover:text-rose-400 transition font-mono text-[11px] flex items-center gap-1.5">
@@ -14475,10 +14369,6 @@ html[data-mode=light] .phone-widget-card .text-white {
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" onclick="ArcScreenTimeStore.toggleLastMonthTrendDemo()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Test Red vs Green trend state">
-          <i class="fa-solid fa-arrows-split-up-and-left text-cyan-400"></i>
-          <span class="hidden md:inline">Toggle Trend Demo</span>
-        </button>
         <button type="button" onclick="ArcScreenTimeStore.forceDailyRefresh(); playSfx('click')" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Recalculate today's counter">
           <i class="fa-solid fa-rotate text-emerald-400"></i>
           <span class="hidden md:inline">Refresh Data</span>
@@ -24116,14 +24006,6 @@ window.ArcScreenTimeStore = (function() {
     renderAnalytics();
   }
 
-  function connectDemoPhone(deviceName = '📱 Pixel 9 Pro (Android)') {
-    setPhoneLinked(true, deviceName);
-    closePhoneLinkPage();
-    if (typeof showToast === 'function') {
-      showToast('📱 Linked phone successfully: ' + deviceName);
-    }
-  }
-
   function disconnectPhone(force = false) {
     if (force) {
       executeDisconnectAndPurge();
@@ -24843,23 +24725,6 @@ window.ArcScreenTimeStore = (function() {
     }
   }
 
-  function simulatePhoneLink(mode = 'web_browser') {
-    const { uid, pairingCode, profileName } = getUniqueUserPairingInfo();
-    const payload = serializeScreenTimeData();
-    pendingPairingData = {
-      uid,
-      code: pairingCode,
-      name: profileName,
-      p: payload,
-      isWebBrowser: mode === 'web_browser',
-      receivedAt: Date.now()
-    };
-    closePhoneLinkPage();
-    setTimeout(() => {
-      openConfirmModal(pendingPairingData);
-    }, 200);
-  }
-
   function downloadMobileApp() {
     if (window.deferredInstallPrompt) {
       window.deferredInstallPrompt.prompt();
@@ -25185,7 +25050,6 @@ window.ArcScreenTimeStore = (function() {
   // ==========================================================================
   // LAST MONTH DEEP-DIVE ANALYTICS ENGINE & DAILY REFRESH AUTOMATION
   // ==========================================================================
-  let lastMonthTrendDemoState = null; // null = dynamic, 'increased' | 'decreased'
 
   const APP_PALETTES = {
     'Visual Studio Code': { color: '#38bdf8', icon: 'fa-code', tag: 'Dev' },
@@ -25224,20 +25088,7 @@ window.ArcScreenTimeStore = (function() {
     renderLastMonthModal();
   }
 
-  function toggleLastMonthTrendDemo() {
-    if (lastMonthTrendDemoState === null) {
-      lastMonthTrendDemoState = 'increased'; // switch to RED
-    } else if (lastMonthTrendDemoState === 'increased') {
-      lastMonthTrendDemoState = 'decreased'; // switch to GREEN
-    } else {
-      lastMonthTrendDemoState = null; // back to dynamic
-    }
-    const stateLabel = lastMonthTrendDemoState === 'increased' ? '🔴 Increased (Red Trend)' : lastMonthTrendDemoState === 'decreased' ? '🟢 Decreased (Green Trend)' : '⚡ Dynamic Live Trend';
-    if (typeof showToast === 'function') {
-      showToast('Trend state switched to: ' + stateLabel);
-    }
-    renderLastMonthModal();
-  }
+
 
   function getLastMonthAnalytics() {
     const hist = getHistory();
@@ -25278,16 +25129,7 @@ window.ArcScreenTimeStore = (function() {
     let isIncreased = diffSecs > 0;
     let pctChange = Math.abs((diffSecs / (totalPrevMonthSecs || 1)) * 100);
 
-    // Apply demo toggle if user clicked "Toggle Red/Green Demo"
-    if (lastMonthTrendDemoState === 'increased') {
-      isIncreased = true;
-      pctChange = 18.4;
-      diffSecs = Math.abs(Math.floor(totalLastMonthSecs * 0.184));
-    } else if (lastMonthTrendDemoState === 'decreased') {
-      isIncreased = false;
-      pctChange = 14.2;
-      diffSecs = -Math.abs(Math.floor(totalLastMonthSecs * 0.142));
-    }
+
 
     // Process every single app with percentages
     const appEntries = Object.entries(appsMap).map(([name, secs]) => {
@@ -25605,7 +25447,6 @@ window.ArcScreenTimeStore = (function() {
     isPhoneLinked,
     setPhoneLinked,
     getTodayTotalSecs,
-    connectDemoPhone,
     disconnectPhone,
     openDisconnectModal,
     closeDisconnectModal,
@@ -25628,12 +25469,10 @@ window.ArcScreenTimeStore = (function() {
     closeLastMonthModal,
     hoverAppSlice,
     resetAppSlice,
-    toggleLastMonthTrendDemo,
     getUniqueUserPairingInfo,
     generatePairingUrl,
     renderUniqueQrCode,
     copyPairingLink,
-    simulatePhoneLink,
     setPairingHost,
     downloadMobileApp,
     checkIncomingPairingRequest,
@@ -31848,7 +31687,14 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
   function getUser() {
     try {
       const raw = localStorage.getItem(USER_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      const u = JSON.parse(raw);
+      if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(MOCK_CLOUD_KEY);
+        return null;
+      }
+      return u;
     } catch(e) {
       return null;
     }
@@ -32319,30 +32165,9 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     renderUi();
 
     try {
-      if (user.accessToken && !user.isDemo) {
+      if (user.accessToken) {
         // Authenticated Real Google Cloud OAuth Sync
         await syncWithGoogleDrive(user.accessToken);
-      } else {
-        // Fast Instant Cloud Sync Mode (BroadcastChannel + Local Storage Simulation)
-        let mockCloud = null;
-        try {
-          const raw = localStorage.getItem(MOCK_CLOUD_KEY);
-          if (raw) mockCloud = JSON.parse(raw);
-        } catch(e) {}
-
-        // Only merge mockCloud if it originated from a different sender/tab and has newer changes
-        if (mockCloud && mockCloud.state && mockCloud.senderId && mockCloud.senderId !== getDeviceId()) {
-          const lastSync = getLastSyncTime();
-          if ((mockCloud.updatedAt || 0) > lastSync) {
-            applyCloudState(mockCloud, false);
-          }
-        }
-
-        const payload = createCloudPayload();
-        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
-        if (syncBus) {
-          syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
-        }
       }
 
       setLastSyncTime(Date.now());
@@ -32355,7 +32180,6 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
       // Fallback: don't break local progress, sync via local bus
       try {
         const payload = createCloudPayload();
-        localStorage.setItem(MOCK_CLOUD_KEY, JSON.stringify(payload));
         if (syncBus) {
           syncBus.postMessage({ type: 'ARC_CLOUD_SYNC', senderId: getDeviceId(), payload: payload });
         }
@@ -32385,16 +32209,17 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
   function loginWithGoogle() {
     const clientId = getClientId();
     if (!clientId) {
-      // If client ID is missing, provide a friendly modal or prompt
       const entered = prompt(
-        "Enter your Google Cloud OAuth 2.0 Client ID:\n(e.g., 123456789-abc.apps.googleusercontent.com)\n\nOr click Cancel to use Instant 1-Click Demo Cloud Mode:",
+        "Enter your Google Cloud OAuth 2.0 Client ID:\n(e.g., 123456789-abc.apps.googleusercontent.com)",
         ""
       );
       if (entered && entered.trim()) {
         setClientId(entered.trim());
         renderUi();
       } else {
-        loginDemoAccount();
+        if (typeof showToast === 'function') {
+          showToast('Google OAuth 2.0 Client ID is required to connect your account.');
+        }
         return;
       }
     }
@@ -32402,9 +32227,8 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     const currentClientId = getClientId();
     if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
       if (typeof showToast === 'function') {
-        showToast('Google Identity library loading... using instant cloud connect.');
+        showToast('Google Identity Services SDK is not loaded. Please verify your connection.');
       }
-      loginDemoAccount();
       return;
     }
 
@@ -32419,8 +32243,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
               email: 'synced.user@gmail.com',
               picture: '',
               accessToken: tokenResponse.access_token,
-              expiresAt: Date.now() + (tokenResponse.expires_in || 3600) * 1000,
-              isDemo: false
+              expiresAt: Date.now() + (tokenResponse.expires_in || 3600) * 1000
             };
 
             // Fetch user profile info
@@ -32456,35 +32279,10 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
       tokenClient.requestAccessToken();
     } catch(err) {
       console.warn('[ArcGoogleSync] Google Sign-In error:', err);
-      loginDemoAccount();
+      if (typeof showToast === 'function') {
+        showToast('Google Sign-In failed. Please check your credentials and try again.');
+      }
     }
-  }
-
-  function loginDemoAccount(customName, customEmail) {
-    const demoUser = {
-      name: customName || 'Google Account User',
-      email: customEmail || 'user.arc.tracker@gmail.com',
-      picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
-      accessToken: 'demo_token_' + Date.now(),
-      isDemo: true,
-      connectedAt: Date.now()
-    };
-    setUser(demoUser);
-    if (window.ArcMobilePermissions && typeof window.ArcMobilePermissions.checkOnLogin === 'function') {
-      window.ArcMobilePermissions.checkOnLogin(demoUser);
-    }
-    if (window.ArcProfile && typeof window.ArcProfile.onLoginSuccess === 'function') {
-      window.ArcProfile.onLoginSuccess(demoUser);
-    }
-    if (window.ArcGold && typeof window.ArcGold.claimFirstMonthTrial === 'function') {
-      window.ArcGold.claimFirstMonthTrial(demoUser);
-    }
-    if (typeof playSfx === 'function') playSfx('victory');
-    if (typeof showToast === 'function') {
-      showToast('🟢 Google Account Connected! Multi-device sync enabled.');
-    }
-    renderUi();
-    performSync(false);
   }
 
   function disconnect() {
@@ -32498,35 +32296,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
     renderUi();
   }
 
-  // Cross-device simulation test
-  function simulateSecondDeviceSync() {
-    const habits = (window.state && window.state.habits) ? window.state.habits : [];
-    if (!habits.length) {
-      if (typeof showToast === 'function') showToast('Add at least one habit first to test sync!');
-      return;
-    }
 
-    const today = (typeof getTodayKey === 'function') ? getTodayKey() : new Date().toISOString().split('T')[0];
-    const targetHabit = habits[0];
-
-    // Simulate an action done on a phone or tablet
-    const simulatedCloudState = JSON.parse(JSON.stringify(window.state || {}));
-    simulatedCloudState.dailyHabits = simulatedCloudState.dailyHabits || {};
-    simulatedCloudState.dailyHabits[today] = simulatedCloudState.dailyHabits[today] || {};
-    simulatedCloudState.dailyHabits[today][targetHabit.id] = true;
-    simulatedCloudState.streak = Math.max(Number(simulatedCloudState.streak) || 0, 5) + 1;
-
-    const simulatedPayload = {
-      app: 'ArcTracker',
-      updatedAt: Date.now(),
-      senderId: 'dev_simulated_pixel9_pro',
-      deviceName: '📱 Pixel 9 Pro (Second Device)',
-      user: getUser() ? getUser().email : 'demo@gmail.com',
-      state: simulatedCloudState
-    };
-
-    applyCloudState(simulatedPayload, true);
-  }
 
   /* ----------------------------------------------------
    * UI RENDERER (Supports Drawer and Full Settings View)
@@ -32595,8 +32365,8 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
                 `}
                 <div class="min-w-0">
                   <div class="font-bold text-xs text-white truncate flex items-center gap-1.5">
-                    ${user.name}
-                    ${user.isDemo ? '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">DEMO MODE</span>' : '<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>'}
+                    ${escapeHtml(user.name)}
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">GOOGLE CLOUD</span>
                   </div>
                   <div class="text-[11px] text-slate-400 truncate">${user.email}</div>
                   <div class="text-[10px] text-cyan-400/90 font-mono mt-0.5">
@@ -32627,13 +32397,7 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
               </span>
             </div>
 
-            <!-- Multi-Device Test Action -->
-            <div class="pt-2 flex items-center justify-between gap-2">
-              <button type="button" onclick="ArcGoogleSync.simulateSecondDeviceSync()" class="w-full py-1.5 px-3 rounded-lg border border-slate-700 hover:border-cyan-400/50 bg-slate-950/60 hover:bg-slate-900 text-slate-300 hover:text-cyan-300 text-xs font-medium flex items-center justify-center gap-2 transition active:scale-95">
-                <i class="fa-solid fa-mobile-screen"></i>
-                <span>Simulate 2nd Device Action &amp; Verify Union Merge</span>
-              </button>
-            </div>
+
           ` : `
             <!-- Logged Out Action Card -->
             <div class="space-y-3 pt-1">
@@ -32641,15 +32405,10 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
                 Sign in with Google to automatically track your habits across all devices without losing any check-in streaks or XP.
               </p>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <button type="button" onclick="ArcGoogleSync.loginWithGoogle()" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+              <div class="space-y-2">
+                <button type="button" onclick="ArcGoogleSync.loginWithGoogle()" class="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
                   ${googleIconSvg}
                   <span>Sign in with Google</span>
-                </button>
-
-                <button type="button" onclick="ArcGoogleSync.loginDemoAccount()" class="py-2.5 px-3 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
-                  <i class="fa-solid fa-bolt text-cyan-400"></i>
-                  <span>1-Click Test Connect</span>
                 </button>
               </div>
             </div>
@@ -32721,6 +32480,21 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
   // Public Interface
   window.ArcGoogleSync = {
     init: function() {
+      // Startup cleanup: automatically purge any legacy demo or mock sessions
+      try {
+        const raw = localStorage.getItem(USER_KEY);
+        if (raw) {
+          const u = JSON.parse(raw);
+          if (u && (u.isDemo || u.email === 'user.arc.tracker@gmail.com' || (u.accessToken && String(u.accessToken).startsWith('demo_token_')))) {
+            localStorage.removeItem(USER_KEY);
+            localStorage.removeItem(MOCK_CLOUD_KEY);
+            if (window.ArcProfile && typeof window.ArcProfile.renderHeaderProfile === 'function') {
+              window.ArcProfile.renderHeaderProfile();
+            }
+          }
+        }
+      } catch(e) {}
+
       // Auto-trigger sync on launch if logged in
       if (getUser()) {
         setTimeout(() => performSync(true), 1200);
@@ -32740,11 +32514,9 @@ html[data-mode="light"].arc-bw-mode.arc-liquid-glass .pp-modal > div {
       });
     },
     loginWithGoogle: loginWithGoogle,
-    loginDemoAccount: loginDemoAccount,
     disconnect: disconnect,
     syncNow: () => performSync(false),
     triggerAutoSync: triggerAutoSync,
-    simulateSecondDeviceSync: simulateSecondDeviceSync,
     formatTimeAgo: formatTimeAgo,
     toggleAutoSync: function(checked) {
       setAutoSyncEnabled(checked);
@@ -37319,13 +37091,7 @@ window.ArcMobilePermissions = (function() {
               <i class="fa-solid fa-rotate-left text-[9px]"></i>
               <span>Restore My Data</span>
             </button>
-          ` : `
-            <button type="button" onclick="ArcHabitAnalytics.simulateTelemetry()" title="Preview rich analytics with realistic 60-day telemetry" class="px-2.5 py-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 transition active:scale-95">
-              <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
-              <span class="hidden sm:inline">Simulate 60d History</span>
-              <span class="sm:hidden">Simulate</span>
-            </button>
-          `}
+          ` : ''}
 
           ${isDrawer ? `
             <button type="button" onclick="ArcHabitAnalytics.closeDrawer()" aria-label="Close Drawer" class="w-7 h-7 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-slate-800 flex items-center justify-center text-xs transition active:scale-95">

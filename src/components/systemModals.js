@@ -139,23 +139,13 @@ export function renderSystemModals() {
 
         <!-- ACTIONS -->
         <div class="space-y-2 pt-1">
-          <!-- COPY LINK & TEST SCAN BUTTONS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button type="button" onclick="ArcScreenTimeStore.copyPairingLink()" class="py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Copy redirect link to send via messaging">
+          <!-- COPY LINK BUTTON -->
+          <div>
+            <button type="button" onclick="ArcScreenTimeStore.copyPairingLink()" class="w-full py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Copy redirect link to send via messaging">
               <i class="fa-solid fa-copy text-purple-300"></i>
               <span>Copy Web Link</span>
             </button>
-
-            <button type="button" onclick="ArcScreenTimeStore.simulatePhoneLink('web_browser')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate scanning when app is not downloaded">
-              <i class="fa-solid fa-globe text-cyan-400"></i>
-              <span>Simulate Browser Scan</span>
-            </button>
           </div>
-
-          <!-- 1-CLICK PRESET LINK BUTTON -->
-          <button type="button" onclick="ArcScreenTimeStore.connectDemoPhone('📱 Pixel 9 Pro (Android)'); playSfx('victory')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition">
-            <i class="fa-solid fa-mobile-screen-button"></i> 1-Click Link Phone (Pixel 9 Pro)
-          </button>
 
           <div class="pt-1 flex items-center justify-between text-xs">
             <button type="button" onclick="ArcScreenTimeStore.disconnectPhone(); playSfx('click')" class="text-slate-400 hover:text-rose-400 transition font-mono text-[11px] flex items-center gap-1.5">
@@ -417,10 +407,6 @@ export function renderSystemModals() {
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" onclick="ArcScreenTimeStore.toggleLastMonthTrendDemo()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Test Red vs Green trend state">
-          <i class="fa-solid fa-arrows-split-up-and-left text-cyan-400"></i>
-          <span class="hidden md:inline">Toggle Trend Demo</span>
-        </button>
         <button type="button" onclick="ArcScreenTimeStore.forceDailyRefresh(); playSfx('click')" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Recalculate today's counter">
           <i class="fa-solid fa-rotate text-emerald-400"></i>
           <span class="hidden md:inline">Refresh Data</span>

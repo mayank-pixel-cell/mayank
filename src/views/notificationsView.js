@@ -7,7 +7,7 @@ export function renderNotificationsView() {
                         <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">
                             <i class="fa-solid fa-bell mr-1"></i> Notification Center
                         </span>
-                        <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">v2.6.0 Stable</span>
+                        <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">v2.7.2 Stable</span>
                     </div>
                     <h2 class="text-lg sm:text-2xl font-black text-white">System Updates & Live Alert Feed</h2>
                     <p class="text-xs text-slate-300">Stay informed on new features, system performance releases, dopamine lockouts, and sync telemetry.</p>
@@ -17,10 +17,6 @@ export function renderNotificationsView() {
                     <button role="button" onclick="ArcNotifications.checkForUpdates(true)" class="arc-check-updates-btn px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
                         <i class="fa-solid fa-arrows-rotate text-xs"></i>
                         <span>Check for Updates</span>
-                    </button>
-                    <button role="button" onclick="if(window.ArcUpdateEngine)ArcUpdateEngine.simulateUpdate(); else ArcNotifications.simulateUpdate?.(); if(window.playSfx)playSfx('click')" class="px-3 py-2 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/40 text-indigo-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Simulate a new update arrival to test notifications, top banner, and the startup update modal">
-                        <i class="fa-solid fa-vial text-xs"></i>
-                        <span>Test Update Alert</span>
                     </button>
                     <button role="button" onclick="ArcNotifications.markAllAsRead()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm" title="Mark all notifications as read">
                         <i class="fa-solid fa-check-double text-xs"></i>
@@ -33,7 +29,7 @@ export function renderNotificationsView() {
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-cyan-400">
                     <div class="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold">Current Version</div>
-                    <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.6.0</div>
+                    <div class="text-lg sm:text-2xl font-black text-white font-mono mt-1">v2.7.2</div>
                     <div class="text-[10px] text-cyan-400 mt-0.5">Installed Engine</div>
                 </div>
                 <div class="glass-card glass-card-hover rounded-2xl p-3.5 sm:p-5 border-l-4 border-l-amber-400">

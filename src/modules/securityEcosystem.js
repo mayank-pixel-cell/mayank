@@ -6211,14 +6211,6 @@ window.ArcScreenTimeStore = (function() {
     renderAnalytics();
   }
 
-  function connectDemoPhone(deviceName = '📱 Pixel 9 Pro (Android)') {
-    setPhoneLinked(true, deviceName);
-    closePhoneLinkPage();
-    if (typeof showToast === 'function') {
-      showToast('📱 Linked phone successfully: ' + deviceName);
-    }
-  }
-
   function disconnectPhone(force = false) {
     if (force) {
       executeDisconnectAndPurge();
@@ -6938,23 +6930,6 @@ window.ArcScreenTimeStore = (function() {
     }
   }
 
-  function simulatePhoneLink(mode = 'web_browser') {
-    const { uid, pairingCode, profileName } = getUniqueUserPairingInfo();
-    const payload = serializeScreenTimeData();
-    pendingPairingData = {
-      uid,
-      code: pairingCode,
-      name: profileName,
-      p: payload,
-      isWebBrowser: mode === 'web_browser',
-      receivedAt: Date.now()
-    };
-    closePhoneLinkPage();
-    setTimeout(() => {
-      openConfirmModal(pendingPairingData);
-    }, 200);
-  }
-
   function downloadMobileApp() {
     if (window.deferredInstallPrompt) {
       window.deferredInstallPrompt.prompt();
@@ -7280,7 +7255,6 @@ window.ArcScreenTimeStore = (function() {
   // ==========================================================================
   // LAST MONTH DEEP-DIVE ANALYTICS ENGINE & DAILY REFRESH AUTOMATION
   // ==========================================================================
-  let lastMonthTrendDemoState = null; // null = dynamic, 'increased' | 'decreased'
 
   const APP_PALETTES = {
     'Visual Studio Code': { color: '#38bdf8', icon: 'fa-code', tag: 'Dev' },
@@ -7315,21 +7289,6 @@ window.ArcScreenTimeStore = (function() {
     if (typeof showToast === 'function') {
       const todayFormatted = new Date().toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
       showToast('🔄 Daily screentime counter refreshed for ' + todayFormatted);
-    }
-    renderLastMonthModal();
-  }
-
-  function toggleLastMonthTrendDemo() {
-    if (lastMonthTrendDemoState === null) {
-      lastMonthTrendDemoState = 'increased'; // switch to RED
-    } else if (lastMonthTrendDemoState === 'increased') {
-      lastMonthTrendDemoState = 'decreased'; // switch to GREEN
-    } else {
-      lastMonthTrendDemoState = null; // back to dynamic
-    }
-    const stateLabel = lastMonthTrendDemoState === 'increased' ? '🔴 Increased (Red Trend)' : lastMonthTrendDemoState === 'decreased' ? '🟢 Decreased (Green Trend)' : '⚡ Dynamic Live Trend';
-    if (typeof showToast === 'function') {
-      showToast('Trend state switched to: ' + stateLabel);
     }
     renderLastMonthModal();
   }
@@ -7372,17 +7331,6 @@ window.ArcScreenTimeStore = (function() {
     let diffSecs = totalLastMonthSecs - totalPrevMonthSecs;
     let isIncreased = diffSecs > 0;
     let pctChange = Math.abs((diffSecs / (totalPrevMonthSecs || 1)) * 100);
-
-    // Apply demo toggle if user clicked "Toggle Red/Green Demo"
-    if (lastMonthTrendDemoState === 'increased') {
-      isIncreased = true;
-      pctChange = 18.4;
-      diffSecs = Math.abs(Math.floor(totalLastMonthSecs * 0.184));
-    } else if (lastMonthTrendDemoState === 'decreased') {
-      isIncreased = false;
-      pctChange = 14.2;
-      diffSecs = -Math.abs(Math.floor(totalLastMonthSecs * 0.142));
-    }
 
     // Process every single app with percentages
     const appEntries = Object.entries(appsMap).map(([name, secs]) => {
@@ -7700,7 +7648,6 @@ window.ArcScreenTimeStore = (function() {
     isPhoneLinked,
     setPhoneLinked,
     getTodayTotalSecs,
-    connectDemoPhone,
     disconnectPhone,
     openDisconnectModal,
     closeDisconnectModal,
@@ -7723,12 +7670,10 @@ window.ArcScreenTimeStore = (function() {
     closeLastMonthModal,
     hoverAppSlice,
     resetAppSlice,
-    toggleLastMonthTrendDemo,
     getUniqueUserPairingInfo,
     generatePairingUrl,
     renderUniqueQrCode,
     copyPairingLink,
-    simulatePhoneLink,
     setPairingHost,
     downloadMobileApp,
     checkIncomingPairingRequest,

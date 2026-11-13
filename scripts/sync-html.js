@@ -3,40 +3,26 @@ import path from 'path';
 
 const rootDir = process.cwd();
 const pro22Path = path.join(rootDir, 'pro22.html');
-// const pro222Path = path.join(rootDir, 'pro22_2.html');
-const serverSyncPath = path.join(rootDir, 'src', 'modules', 'serverSyncEngine.js');
-const lbPath = path.join(rootDir, 'src', 'modules', 'leaderboardGroups.js');
+const docsIndex = path.join(rootDir, 'docs', 'index.html');
 
-let pro22Html = fs.readFileSync(pro22Path, 'utf-8');
-const serverSyncJs = fs.readFileSync(serverSyncPath, 'utf-8');
-const lbJs = fs.readFileSync(lbPath, 'utf-8');
+console.log('[Sync-HTML] Synchronizing pro22.html to docs/index.html...');
 
-// Find marker
-const lbMarker = '// === ARC LEADERBOARD & GROUPS ENGINE ===';
-const faqMarker = '// === ARC FAQ ENGINE ===';
+fs.mkdirSync(path.join(rootDir, 'docs'), { recursive: true });
+fs.copyFileSync(pro22Path, docsIndex);
 
-const startIdx = pro22Html.indexOf(lbMarker);
-const endIdx = pro22Html.indexOf(faqMarker);
+const optionalCopies = [
+  'privacy-policy.html',
+  'terms-and-conditions.html',
+  'terms-and-services.html',
+  'terms-of-service.html',
+  'site page.html'
+];
 
-if (startIdx === -1 || endIdx === -1) {
-  console.error('Markers not found! startIdx:', startIdx, 'endIdx:', endIdx);
-  process.exit(1);
+for (const f of optionalCopies) {
+  const src = path.join(rootDir, f);
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, path.join(rootDir, 'docs', f));
+  }
 }
 
-const combinedNewBlock = `// ============================================================================
-// ARC EXTERNAL SERVER SYNC ENGINE & LEADERBOARD/GROUPS HYBRID ENGINE
-// ============================================================================
-
-${serverSyncJs}
-
-${lbJs}
-
-`;
-
-pro22Html = pro22Html.slice(0, startIdx) + combinedNewBlock + pro22Html.slice(endIdx);
-
-fs.writeFileSync(pro22Path, pro22Html, 'utf-8');
-console.log('Successfully updated pro22.html');
-
-// fs.writeFileSync(pro222Path, pro22Html, 'utf-8');
-console.log('Successfully created/updated pro22_2.html');
+console.log('[Sync-HTML] Successfully synced pro22.html -> docs/index.html (' + fs.statSync(docsIndex).size + ' bytes)');

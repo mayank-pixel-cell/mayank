@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arc Tracker: build your arc, keep your focus</title>
+<meta name="description" content="Arc Tracker turns 30-, 60- and 90-day goals into a daily system of habits, focus sprints and screen-time limits, synced across your phone and laptop.">
+<meta name="theme-color" content="#4F46E5">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Arc Tracker: build your arc, keep your focus">
+<meta property="og:description" content="30-, 60- and 90-day arcs, focus sprints and screen-time limits. Synced across your phone and laptop.">
+<script>if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600;1,9..144,700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{--bg:#FAFAFA;--fg:#0A0A0A;--muted:#64748B;--line:rgba(10,10,10,.1);--card:#fff;--accent:#4F46E5;--glass:rgba(250,250,250,.72);--shadow:0 12px 40px -14px rgba(10,10,10,.14);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A0A0A;--fg:#FAFAFA;--muted:#94A3B8;--line:rgba(250,250,250,.1);--card:#111114;--accent:#6366F1;--glass:rgba(10,10,10,.7);--shadow:0 12px 40px -14px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A0A0A;--fg:#FAFAFA;--muted:#94A3B8;--line:rgba(250,250,250,.1);--card:#111114;--accent:#6366F1;--glass:rgba(10,10,10,.7);--shadow:0 12px 40px -14px rgba(0,0,0,.7);color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{background:var(--bg);color:var(--fg);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:60}
+:root{--c1:#4F46E5;--c2:#06B6D4;--c3:#F59E0B;--c4:#10B981;--c5:#F43F5E;--c6:#8B5CF6}
+h1,h2{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-weight:700;letter-spacing:-.03em;line-height:1.05}
+h3{letter-spacing:-.03em;line-height:1.15}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.grad{background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;padding-right:.08em}
+.mark{background:linear-gradient(transparent 60%,color-mix(in srgb,var(--c3) 55%,transparent) 60%);padding:0 .1em;border-radius:2px}
+.glow{position:absolute;inset:0 0 auto;height:900px;z-index:-1;pointer-events:none;background:radial-gradient(40rem 22rem at 18% 0%,color-mix(in srgb,var(--c1) 24%,transparent),transparent 70%),radial-gradient(34rem 20rem at 86% 8%,color-mix(in srgb,var(--c2) 20%,transparent),transparent 70%),radial-gradient(30rem 18rem at 52% 38%,color-mix(in srgb,var(--c3) 11%,transparent),transparent 70%)}
+.tint{position:relative;overflow:hidden;isolation:isolate}
+.tint::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--t)}
+.tint::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(color-mix(in srgb,var(--t) 26%,transparent),transparent 70%);pointer-events:none;z-index:-1}
+.chip{display:inline-block;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.7rem;font-weight:600;padding:.2rem .65rem;border-radius:999px;color:var(--t);background:color-mix(in srgb,var(--t) 14%,transparent)}
+.cta{background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 16%,var(--card)),color-mix(in srgb,var(--c2) 12%,var(--card)) 60%,color-mix(in srgb,var(--c3) 12%,var(--card)))}
+.cmp thead th{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem}
+section[aria-label="Highlights"] li::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:.6rem;vertical-align:middle;background:var(--d)}
+section[aria-label="Highlights"] li:nth-child(1){--d:var(--c1)}section[aria-label="Highlights"] li:nth-child(2){--d:var(--c2)}section[aria-label="Highlights"] li:nth-child(3){--d:var(--c4)}section[aria-label="Highlights"] li:nth-child(4){--d:var(--c3)}section[aria-label="Highlights"] li:nth-child(5){--d:var(--c5)}
+.muted{color:var(--muted)}
+.glass{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.bd{border:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:1.5rem;transition:transform .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.btn{display:inline-flex;align-items:center;gap:.6rem;border-radius:.9rem;padding:.8rem 1.25rem;font-weight:600;font-size:.95rem;transition:transform .2s,opacity .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{background:var(--card);border:1px solid var(--line)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:.6rem}
+.phone{--pa:var(--accent);width:min(270px,78vw);aspect-ratio:9/18;border-radius:2.6rem;padding:10px;background:var(--card);border:1px solid var(--line);box-shadow:0 40px 80px -30px color-mix(in srgb,var(--pa) 45%,transparent),var(--shadow);animation:float 6s ease-in-out infinite}
+.screen{height:100%;border-radius:2rem;background:var(--bg);border:1px solid var(--line);padding:1.1rem;overflow:hidden}
+@keyframes float{50%{transform:translateY(-12px)}}
+.phone.summer{--pa:#F59E0B}
+.phone,.phone *{transition:background-color .3s,border-color .3s,color .3s}
+#ring{transition:stroke-dashoffset .5s ease,stroke .3s}
+.row{cursor:pointer;min-height:44px}
+.row[aria-pressed="true"]{border-color:color-mix(in srgb,var(--pa) 55%,var(--line))}
+.row[aria-pressed="true"] .st{color:var(--pa);font-weight:700}
+.row[aria-pressed="false"] .st{color:var(--muted)}
+.arc{min-height:24px}
+.arc[aria-pressed="true"]{background:var(--pa);color:#fff}
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.js .rv.in{opacity:1;transform:none}
+.hc{display:block;aspect-ratio:1;border-radius:3px;background:var(--c4)}
+header div.hidden a[aria-current="true"]{color:var(--fg)}
+#sprint[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.cmp td{padding:1rem;border-top:1px solid var(--line)}
+.vw[aria-pressed="true"]{background:var(--c1);color:#fff}
+.bar{position:relative;height:10px;border-radius:999px;background:var(--line)}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:999px;transition:width .5s ease}
+.goal{position:absolute;top:-5px;bottom:-5px;left:72.7%;width:2px;background:var(--fg);opacity:.45}
+.dot{display:block;width:14px;height:14px;border-radius:50%;margin:auto;background:var(--line)}
+.dot.on{background:var(--c1)}
+.lt[aria-pressed="true"]{background:var(--c3);color:#0A0A0A}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+.js main>section:first-of-type>*{animation:rise .9s cubic-bezier(.16,1,.3,1) backwards}
+.js main>section:first-of-type>:nth-child(2){animation-delay:.08s}
+.js main>section:first-of-type>:nth-child(3){animation-delay:.16s}
+.js main>section:first-of-type>:nth-child(4){animation-delay:.24s}
+.js main>section:first-of-type>:nth-child(5){animation-delay:.34s}
+@keyframes shift{to{background-position:100% 0}}
+.grad{background-image:linear-gradient(100deg,var(--c1),var(--c2),var(--c1));background-size:200% auto;animation:shift 9s ease-in-out infinite alternate}
+@keyframes drift{50%{transform:translate3d(0,-16px,0) scale(1.04)}}
+.glow{animation:drift 16s ease-in-out infinite}
+.btn:active{transform:scale(.97)}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s ease}
+.btn-primary:hover::after{transform:translateX(120%)}
+header{transition:box-shadow .3s ease}
+header.sc{box-shadow:0 10px 30px -20px rgba(0,0,0,.45)}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.fade{animation:fade .4s cubic-bezier(.16,1,.3,1) both}
+#lb li:nth-child(2){animation-delay:.06s}#lb li:nth-child(3){animation-delay:.12s}#lb li:nth-child(4){animation-delay:.18s}
+.js #hm .hc,.js #heat .hc{transform:scale(.2);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.js #hm.go .hc,.js #heat.go .hc{transform:none}
+.fm[aria-pressed="true"]{background:var(--c5);color:#fff}
+#phr:focus-visible{outline:2px solid var(--c5);outline-offset:2px}
+.tm[aria-pressed="true"]{background:var(--c1);color:#fff}
+#pring{transition:stroke-dashoffset 1s linear,stroke .3s ease}
+.am{cursor:pointer;min-height:36px}
+.am[aria-pressed="true"]{background:var(--c2);color:#0A0A0A;border-color:transparent}
+#snd .w{opacity:.3;transition:opacity .2s}
+#snd[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+#snd[aria-pressed="true"] .w{opacity:1}
+body{overflow-x:clip}
+.bgx{position:relative;isolation:isolate}
+.bgx::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:100vw;margin-left:-50vw;z-index:-1;pointer-events:none;background:radial-gradient(34rem 18rem at 12% 25%,color-mix(in srgb,var(--bg-c) 17%,transparent),transparent 70%),radial-gradient(30rem 16rem at 90% 80%,color-mix(in srgb,var(--bg-c) 11%,transparent),transparent 70%),linear-gradient(180deg,transparent,color-mix(in srgb,var(--bg-c) 8%,transparent) 18%,color-mix(in srgb,var(--bg-c) 8%,transparent) 82%,transparent)}
+section[aria-label="Highlights"]{background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 8%,transparent),color-mix(in srgb,var(--c2) 8%,transparent),color-mix(in srgb,var(--c4) 8%,transparent),color-mix(in srgb,var(--c3) 8%,transparent))}
+#ftr{background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--c1) 9%,transparent))}
+.ans{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .35s ease,opacity .3s ease}
+.ans.open{grid-template-rows:1fr;opacity:1}
+.ans>div{overflow:hidden}
+.pm{position:relative;width:18px;height:18px;flex:none;transition:transform .35s ease}
+.pm::before,.pm::after{content:"";position:absolute;left:0;right:0;top:8px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s ease}
+.pm::after{transform:rotate(90deg)}
+[aria-expanded="true"] .pm{transform:rotate(180deg)}
+[aria-expanded="true"] .pm::after{transform:rotate(0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<a href="#top" class="sr-only focus:not-sr-only fixed left-3 top-3 z-[70] rounded-lg px-3 py-2 text-sm font-semibold text-white" style="background:var(--accent)">Skip to content</a>
+<header class="glass sticky z-50 border-b" style="top:env(safe-area-inset-top,0px);border-color:var(--line)">
+  <div id="prog" class="absolute bottom-0 left-0 h-[2px] w-full origin-left" style="transform:scaleX(0);background:linear-gradient(90deg,var(--c2),var(--c1),var(--c3))" aria-hidden="true"></div>
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3" aria-label="Main">
+    <a href="#top" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 20a10 10 0 0 1 20 0" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/><circle cx="13" cy="20" r="2.4" fill="var(--fg)"/></svg>
+      <span data-app>Arc Tracker</span>
+    </a>
+    <div class="hidden items-center gap-6 text-sm font-medium lg:flex muted">
+      <a href="#features" class="hover:opacity-70">Features</a>
+      <a href="#sync" class="hover:opacity-70">Sync</a>
+      <a href="#insights" class="hover:opacity-70">Insights</a>
+      <a href="#how" class="hover:opacity-70">How it works</a>
+      <a href="#pricing" class="hover:opacity-70">Pricing</a>
+      <a href="#faq" class="hover:opacity-70">FAQ</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="mbtn" type="button" class="bd grid h-9 w-9 place-items-center rounded-full lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.500h12M2 8h12M2 11.500h12" stroke="currentColor" stroke-width="1.600" stroke-linecap="round"/></svg></button>
+      <button id="snd" type="button" class="bd grid h-9 w-9 place-items-center rounded-full" aria-label="Turn sound effects on" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor"/><path class="w" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.5 6.5 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+      <button id="theme" type="button" class="bd grid h-9 w-9 place-items-center rounded-full" aria-label="Switch between light and dark theme"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.500a6.500 6.500 0 0 1 0 13z" fill="currentColor"/></svg></button>
+      <a href="#download" class="btn btn-primary !py-2 !text-sm">Download app</a>
+    </div>
+  </nav>
+  <div id="mnav" class="hidden border-t px-5 py-2 lg:hidden" style="border-color:var(--line)">
+    <div class="mx-auto flex max-w-6xl flex-col text-base font-medium">
+      <a href="#features" class="py-3">Features</a><a href="#sync" class="py-3">Sync</a><a href="#insights" class="py-3">Insights</a><a href="#how" class="py-3">How it works</a><a href="#pricing" class="py-3">Pricing</a><a href="#faq" class="py-3">FAQ</a><a href="./privacy-policy.html" class="py-3">Privacy Policy</a><a href="./terms-and-conditions.html" class="py-3">Terms of Service</a>
+    </div>
+  </div>
+</header>
+
+<main id="top" class="relative isolate"><div class="glow" aria-hidden="true"></div>
+  <section class="mx-auto max-w-6xl px-5 pb-16 pt-16 text-center md:pt-24">
+    <a href="#features" class="bd glass mono mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium muted">
+      <span class="h-2 w-2 rounded-full" style="background:var(--c4);box-shadow:0 0 0 4px color-mix(in srgb,var(--c4) 25%,transparent)"></span>
+      Winter and Summer Arcs for iOS, Android and desktop
+    </a>
+    <h1 class="mx-auto mt-7 max-w-3xl text-5xl font-extrabold md:text-7xl">Build your <span class="grad">arc.</span> Protect your <span class="mark">focus.</span></h1>
+    <p class="muted mx-auto mt-6 max-w-xl text-lg">
+      <span data-app>Arc Tracker</span> turns 30-, 60- and 90-day goals into a daily system of habits, focus sprints and screen-time limits. It works offline, and encrypted sync keeps your phone and laptop screen time in one place.
+    </p>
+    <div id="download" class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href="#" class="btn btn-primary" aria-label="Download on the App Store, coming soon">
+        App Store <span class="text-xs opacity-75">Coming soon</span>
+      </a>
+      <a href="#" class="btn btn-ghost" aria-label="Get it on Google Play, coming soon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.800v18.400c0 .5.600.8 1 .5l15-9.200c.4-.2.400-.8 0-1L5 2.300c-.4-.3-1 0-1 .5z"/></svg>
+        Google Play <span class="text-xs opacity-60">Coming soon</span>
+      </a>
+    </div>
+
+    <div class="mt-16 flex justify-center">
+      <div class="phone" role="img" aria-label="App preview showing a Winter Arc progress ring and a list of daily habits">
+        <div class="screen text-left">
+          <div class="flex items-center justify-between text-xs muted"><span id="arcname">Winter Arc</span><div class="bd flex rounded-full p-0.5" role="group" aria-label="Choose season"><button type="button" class="arc rounded-full px-2.5" aria-pressed="true" data-arc="winter">Winter</button><button type="button" class="arc rounded-full px-2.5" aria-pressed="false" data-arc="summer">Summer</button></div></div>
+          <div class="mt-4 flex justify-center">
+            <svg width="130" height="130" viewBox="0 0 130 130" aria-hidden="true"><circle cx="65" cy="65" r="54" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="65" cy="65" r="54" fill="none" id="ring" stroke="var(--pa)" stroke-width="10" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="169" transform="rotate(-90 65 65)"/><text id="pct" x="65" y="63" text-anchor="middle" font-size="26" font-weight="800" fill="var(--fg)">50%</text><text x="65" y="82" text-anchor="middle" font-size="10" fill="var(--muted)">done today</text></svg>
+          </div>
+          <div class="mt-4 space-y-2 text-xs font-medium">
+            <button type="button" class="row bd flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left" aria-pressed="true"><span>Workout</span><span class="st">Done</span></button>
+            <button type="button" class="row bd flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left" aria-pressed="true"><span>Deep work, 2 hours</span><span class="st">Done</span></button>
+            <button type="button" class="row bd flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left" aria-pressed="false"><span>Read 20 pages</span><span class="st">Open</span></button>
+            <button type="button" class="row bd flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left" aria-pressed="false"><span>Screen time under 2h</span><span class="st">Open</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y" style="border-color:var(--line)" aria-label="Highlights">
+    <ul class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 py-6 text-sm font-medium muted">
+      <li>Works offline</li><li>Phone and laptop in sync</li><li>Encrypted sync</li><li>iOS and Android</li><li>Windows and macOS</li>
+    </ul>
+  </section>
+
+  <section id="features" class="mx-auto max-w-6xl px-5 py-24">
+    <h2 class="max-w-2xl text-4xl font-extrabold md:text-5xl">A system for the days you <span class="grad">don’t feel like it.</span></h2>
+    <p class="muted mt-4 max-w-xl">Four tools that work together, so one good week becomes a finished arc.</p>
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      <article class="card p-7 md:col-span-2">
+        <h3 class="text-2xl font-bold">Arcs instead of streaks</h3>
+        <p class="muted mt-3 max-w-md">Pick a 30-, 60- or 90-day arc with your own start and end dates. Weight the habits that matter most, and use one free miss a month so a bad day doesn’t erase your progress.</p>
+        <div class="mt-7 space-y-3" aria-hidden="true">
+          <div class="flex items-center gap-3 text-xs muted"><span class="w-10">30 days</span><div class="h-2 flex-1 rounded-full" style="background:var(--line)"><div class="h-2 rounded-full" style="width:82%;background:var(--accent)"></div></div></div>
+          <div class="flex items-center gap-3 text-xs muted"><span class="w-10">60 days</span><div class="h-2 flex-1 rounded-full" style="background:var(--line)"><div class="h-2 rounded-full" style="width:54%;background:var(--accent)"></div></div></div>
+          <div class="flex items-center gap-3 text-xs muted"><span class="w-10">90 days</span><div class="h-2 flex-1 rounded-full" style="background:var(--line)"><div class="h-2 rounded-full" style="width:27%;background:var(--accent)"></div></div></div>
+        </div>
+      </article>
+      <article class="card p-7">
+        <h3 class="text-2xl font-bold">Screen time that tracks itself</h3>
+        <p class="muted mt-3">See where your day went, app by app, and set daily limits. When a limit is reached, the app locks until midnight.</p>
+        <div class="mt-7 flex h-16 items-end gap-1.5" aria-hidden="true"><i class="w-full rounded-sm" style="height:40%;background:var(--line)"></i><i class="w-full rounded-sm" style="height:65%;background:var(--line)"></i><i class="w-full rounded-sm" style="height:50%;background:var(--line)"></i><i class="w-full rounded-sm" style="height:90%;background:var(--accent)"></i><i class="w-full rounded-sm" style="height:35%;background:var(--line)"></i><i class="w-full rounded-sm" style="height:55%;background:var(--line)"></i></div>
+      </article>
+      <article class="card p-7">
+        <h3 class="text-2xl font-bold">Focus sprints that hold</h3>
+        <p class="muted mt-3">Start a Pomodoro and distracting apps and websites are blocked until it ends. Choose your own blocklist, or turn on strict mode to remove every override.</p>
+        <div class="mt-6 space-y-2 text-xs font-medium"><div class="bd flex items-center justify-between rounded-xl px-3 py-2"><span>Instagram</span><span id="igst" class="muted">Allowed</span></div><div class="bd flex items-center justify-between rounded-xl px-3 py-2"><span>GitHub</span><span class="muted">Allowed</span></div><button id="sprint" type="button" class="btn btn-ghost !w-full !justify-center !py-2 !text-xs" aria-pressed="false">Start a 25-minute sprint</button></div>
+      </article>
+      <article class="card p-7 md:col-span-2">
+        <h3 class="text-2xl font-bold">Offline-first and encrypted</h3>
+        <p class="muted mt-3 max-w-md">Your data is stored on your device first, so everything works offline. Sync between your phone and laptop is encrypted, and you can export a backup or clear everything whenever you like.</p>
+        <div class="mt-7 flex flex-wrap gap-2 text-xs font-medium" aria-hidden="true"><span class="bd rounded-full px-3 py-1.5">On-device storage</span><span class="bd rounded-full px-3 py-1.5">Encrypted sync</span><span class="bd rounded-full px-3 py-1.5">JSON backup</span><span class="bd rounded-full px-3 py-1.5">Works in airplane mode</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="pomo" class="mx-auto max-w-6xl px-5 pb-24">
+    <div class="grid items-center gap-10 md:grid-cols-2">
+      <div>
+        <span class="chip" style="--t:var(--c1)">Focus timer</span>
+        <h2 class="mt-5 text-4xl font-extrabold md:text-5xl">Work in sprints. <span class="grad">Rest on purpose.</span></h2>
+        <p class="muted mt-5 max-w-md">Start a Pomodoro and the app handles the rest: distracting apps are locked, optional ambient sound sets the mood, and every minute of real focus is logged to your day.</p>
+        <ul class="mt-6 space-y-3 text-sm">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c1)"></span>Focus sprints and breaks in one clean timer.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c2)"></span>Optional ambient sound, from rain and white noise to deep-space tones, generated on your device.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c4)"></span>Total focus time added to your daily stats.</li>
+        </ul>
+      </div>
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <div class="bd flex rounded-full p-0.5 text-xs font-semibold" role="group" aria-label="Timer mode"><button type="button" class="tm rounded-full px-3 py-1.5" data-m="f" aria-pressed="true">Focus</button><button type="button" class="tm rounded-full px-3 py-1.5" data-m="s" aria-pressed="false">Short break</button><button type="button" class="tm rounded-full px-3 py-1.5" data-m="l" aria-pressed="false">Long break</button></div>
+          <span class="mono muted text-xs">Demo</span>
+        </div>
+        <div class="mt-6 flex justify-center" role="timer" aria-label="Pomodoro timer demo">
+          <svg width="190" height="190" viewBox="0 0 180 180"><circle cx="90" cy="90" r="80" fill="none" stroke="var(--line)" stroke-width="10"/><circle id="pring" cx="90" cy="90" r="80" fill="none" stroke="var(--c1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="0" transform="rotate(-90 90 90)"/><text id="ptime" x="90" y="98" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="34" font-weight="600" fill="var(--fg)">25:00</text><text id="plabel" x="90" y="122" text-anchor="middle" font-size="12" fill="var(--muted)">Focus</text></svg>
+        </div>
+        <div class="mt-5 flex justify-center gap-3"><button id="pgo" type="button" class="btn btn-primary !py-2.5 !text-sm">Start</button><button id="prs" type="button" class="btn btn-ghost !py-2.5 !text-sm">Reset</button></div>
+        <div class="mt-6 flex items-center justify-between text-xs"><span class="muted">Focus logged in this demo</span><span id="plog" class="mono font-semibold">0m 00s</span></div>
+        <div id="pdots" class="mt-3 flex gap-1.5" aria-hidden="true"><i class="h-1.5 w-full rounded-full" style="background:var(--line)"></i><i class="h-1.5 w-full rounded-full" style="background:var(--line)"></i><i class="h-1.5 w-full rounded-full" style="background:var(--line)"></i><i class="h-1.5 w-full rounded-full" style="background:var(--line)"></i></div>
+        <div class="mt-5 border-t pt-4" style="border-color:var(--line)">
+          <p class="mono muted text-xs">Ambience</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Ambience sounds"><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="rain" aria-pressed="false">Rain</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="wind" aria-pressed="false">Wind</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="drone" aria-pressed="false">Focus drone</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="white" aria-pressed="false">White noise</button></div>
+          <p class="mono muted mt-4 text-xs">Heavenly bodies</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Heavenly bodies sounds"><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="sun" aria-pressed="false">Sun</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="jupiter" aria-pressed="false">Jupiter</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="saturn" aria-pressed="false">Saturn</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="neptune" aria-pressed="false">Neptune</button><button type="button" class="am bd rounded-full px-3 py-1.5 text-xs font-semibold" data-a="void" aria-pressed="false">Deep space</button></div>
+          <label class="mono muted mt-4 flex items-center gap-3 text-xs">Volume<input id="vol" type="range" min="0" max="100" value="50" class="w-full" style="accent-color:var(--accent)"></label>
+          <p class="muted mt-3 text-[11px]">Sounds are synthesized in your browser. Use the speaker icon in the menu bar to turn on interface sounds.</p>
+        </div>
+        <p class="muted mt-4 text-xs">Distracting apps are locked while a focus sprint runs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="focus" class="mx-auto max-w-6xl px-5 pb-24">
+    <div class="grid items-center gap-10 md:grid-cols-2">
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <div class="bd flex rounded-full p-0.5 text-xs font-semibold" role="group" aria-label="Lock mode"><button type="button" class="fm rounded-full px-3 py-1.5" data-m="n" aria-pressed="true">Normal</button><button type="button" class="fm rounded-full px-3 py-1.5" data-m="s" aria-pressed="false">Strict</button></div>
+          <span class="mono muted text-xs">Demo</span>
+        </div>
+        <div class="bd mt-6 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium"><span>Instagram</span><span class="mono muted text-xs">Blocked during focus</span></div>
+        <button id="tryb" type="button" class="btn btn-ghost mt-4 !w-full !justify-center !text-sm">Try opening Instagram</button>
+        <div id="shield" class="mt-4 hidden rounded-2xl p-5 text-center" style="background:color-mix(in srgb,var(--c5) 14%,var(--card));border:1px solid color-mix(in srgb,var(--c5) 40%,transparent)" role="status" aria-live="polite">
+          <p class="font-bold" style="color:var(--c5)">Instagram is locked</p>
+          <p id="cd" class="mono mt-2 text-3xl font-semibold">18:42</p>
+          <p class="muted mt-1 text-xs">left in your focus sprint</p>
+          <div id="ovr" class="mt-5 text-left">
+            <label class="muted block text-xs" for="phr">Type UNBREAKABLE to earn a 5-minute emergency extension</label>
+            <div class="mt-2 flex gap-2"><input id="phr" class="bd min-w-0 flex-1 rounded-lg bg-transparent px-3 py-2" style="font-size:16px" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="phb" type="button" class="btn btn-primary !py-2 !text-sm">Unlock</button></div>
+            <p id="phm" class="mt-2 min-h-[1rem] text-xs font-semibold"></p>
+          </div>
+          <p id="strictmsg" class="mt-4 hidden text-xs font-semibold">Strict mode is on. There are no overrides until the sprint ends.</p>
+        </div>
+      </div>
+      <div>
+        <span class="chip" style="--t:var(--c5)">Focus lockdown</span>
+        <h2 class="mt-5 text-4xl font-extrabold md:text-5xl">When the urge hits, <span class="grad">the shield holds.</span></h2>
+        <p class="muted mt-5 max-w-md">During a focus sprint, or after you reach a daily limit, blocked apps and sites are covered by a shield with a live countdown. Pick a normal mode with a deliberate override, or strict mode with none.</p>
+        <ul class="mt-6 space-y-3 text-sm">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c5)"></span>Block lists you control, with one-click presets.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c3)"></span>Daily time limits per app that reset at midnight.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c1)"></span>Strict mode removes every override.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="sync" class="mx-auto max-w-6xl px-5 pb-24">
+    <div class="grid items-center gap-10 md:grid-cols-2">
+      <div>
+        <span class="chip" style="--t:var(--c2)">The big idea</span>
+        <h2 class="mt-5 text-4xl font-extrabold md:text-5xl">One day. <span class="grad">Two devices.</span> One honest number.</h2>
+        <p class="muted mt-5 max-w-md">Most trackers only see the device they’re on. <span data-app>Arc Tracker</span> syncs your phone and laptop over an encrypted connection, so your screen time reflects your whole day.</p>
+        <ul class="mt-6 space-y-3 text-sm">
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c2)"></span>See your phone and laptop totals side by side, then combined.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c1)"></span>Compare your real total with your daily goal.</li>
+          <li class="flex gap-3"><span class="mt-2 h-2 w-2 flex-none rounded-full" style="background:var(--c4)"></span>Each device keeps working offline.</li>
+        </ul>
+      </div>
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <div class="bd flex rounded-full p-0.5 text-xs font-semibold" role="group" aria-label="Choose view"><button type="button" class="vw rounded-full px-3 py-1.5" data-v="dev" aria-pressed="true">Per device</button><button type="button" class="vw rounded-full px-3 py-1.5" data-v="all" aria-pressed="false">Combined</button></div>
+          <span class="mono flex items-center gap-2 text-xs muted"><span class="h-2 w-2 rounded-full" style="background:var(--c4)"></span>Synced</span>
+        </div>
+        <div id="vdev" class="mt-7 space-y-6">
+          <div><div class="flex justify-between text-sm font-semibold"><span>Phone</span><span>2h 20m</span></div><div class="bar mt-2"><i style="width:42%;background:var(--c2)"></i><b class="goal"></b></div></div>
+          <div><div class="flex justify-between text-sm font-semibold"><span>Laptop</span><span>2h 45m</span></div><div class="bar mt-2"><i style="width:50%;background:var(--c1)"></i><b class="goal"></b></div></div>
+          <p class="muted text-xs">Each device looks fine against a 4h goal on its own.</p>
+        </div>
+        <div id="vall" class="mt-7 hidden">
+          <div class="flex justify-between text-sm font-semibold"><span>Phone + laptop</span><span style="color:var(--c5)">5h 05m</span></div>
+          <div class="bar mt-2"><i style="width:92%;background:linear-gradient(90deg,var(--c2),var(--c1),var(--c5))"></i><b class="goal"></b></div>
+          <p class="mt-6 text-xs font-semibold" style="color:var(--c5)">1h 05m over your 4h goal. This is the number that was hidden before.</p>
+        </div>
+        <div class="mt-6 flex items-center text-xs font-semibold" role="img" aria-label="Phone and laptop sync through an encrypted connection to our server"><span class="bd rounded-xl px-3 py-2" style="border-color:var(--c2)">Phone</span><span class="mono flex-1 px-2 text-center text-[10px] muted"><span class="mb-1 block border-t-2 border-dashed" style="border-color:var(--c2)"></span>encrypted</span><span class="bd rounded-xl px-3 py-2">Server</span><span class="mono flex-1 px-2 text-center text-[10px] muted"><span class="mb-1 block border-t-2 border-dashed" style="border-color:var(--c1)"></span>encrypted</span><span class="bd rounded-xl px-3 py-2" style="border-color:var(--c1)">Laptop</span></div>
+        <p class="muted mono mt-6 text-xs">Sample data for illustration</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare" class="mx-auto max-w-4xl px-5 pb-24">
+    <h2 class="max-w-xl text-4xl font-extrabold md:text-5xl">Built for people who are <span class="mark">serious</span> about it.</h2>
+    <div class="card mt-10 overflow-x-auto"><table class="cmp w-full min-w-[520px] text-left text-sm">
+      <thead><tr class="muted"><th class="p-4 font-medium"><span class="sr-only">Feature</span></th><th class="p-4 font-medium">Most habit apps</th><th class="p-4 font-bold" style="color:var(--accent)"><span data-app>Arc Tracker</span></th></tr></thead>
+      <tbody>
+        <tr><td class="font-semibold">Season-long arcs with a vault</td><td class="muted">Streaks only</td><td class="font-semibold">Yes</td></tr>
+        <tr><td class="font-semibold">Screen-time limits that lock apps</td><td class="muted">Rarely</td><td class="font-semibold">Yes</td></tr>
+        <tr><td class="font-semibold">Focus sprints that block distractions</td><td class="muted">Rarely</td><td class="font-semibold">Yes</td></tr>
+        <tr><td class="font-semibold">Works fully offline</td><td class="muted">Often needs an account</td><td class="font-semibold">Yes</td></tr>
+        <tr><td class="font-semibold">Phone and laptop screen time in one view</td><td class="muted">Usually one device</td><td class="font-semibold">Yes</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section id="insights" class="mx-auto max-w-6xl px-5 pb-24">
+    <h2 class="max-w-2xl text-4xl font-extrabold md:text-5xl">Know how your arc is <span class="grad">really</span> going.</h2>
+    <p class="muted mt-4 max-w-xl">Reports, heatmaps and a little friendly competition, so progress is something you can see.</p>
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      <article class="card p-7">
+        <span class="chip mb-4" style="--t:var(--c1)">Reports</span>
+        <h3 class="text-2xl font-bold">Detailed analysis reports</h3>
+        <p class="muted mt-3">See your week as a matrix, spot patterns in a radar view, and look back through your reflection log and the Arc Vault when an arc ends.</p>
+        <div id="mx" class="mt-7 grid grid-cols-[auto_repeat(7,minmax(0,1fr))] items-center gap-x-2 gap-y-3" aria-hidden="true"></div>
+      </article>
+      <article class="card p-7">
+        <span class="chip mb-4" style="--t:var(--c4)">Heatmap</span>
+        <h3 class="text-2xl font-bold">A 90-day heatmap</h3>
+        <p class="muted mt-3">Every day of your arc, shaded by how much you got done. Streaks, gaps and your best weeks show up at a glance.</p>
+        <div id="hm" class="mt-7 grid grid-flow-col grid-rows-7 gap-1" aria-hidden="true"></div>
+        <div class="mono mt-3 flex items-center justify-end gap-2 text-[10px] muted"><span>Less</span><i class="hc" style="width:10px;opacity:.15"></i><i class="hc" style="width:10px;opacity:.4"></i><i class="hc" style="width:10px;opacity:.7"></i><i class="hc" style="width:10px"></i><span>More</span></div>
+      </article>
+      <article class="card p-7">
+        <div class="mb-4 flex items-center gap-2"><span class="chip" style="--t:var(--c3)">Leaderboards</span><span class="chip" style="--t:var(--c5)">Beta</span></div>
+        <h3 class="text-2xl font-bold">Climb the leaderboard</h3>
+        <p class="muted mt-3">Earn XP for the habits you finish and see how you rank. Leaderboards are in beta, so rankings may occasionally look off while we fix issues.</p>
+        <div class="bd mt-6 inline-flex rounded-full p-0.5 text-xs font-semibold" role="group" aria-label="Leaderboard period"><button type="button" class="lt rounded-full px-3 py-1.5" data-k="w" aria-pressed="true">This week</button><button type="button" class="lt rounded-full px-3 py-1.5" data-k="a" aria-pressed="false">All time</button></div>
+        <ol id="lb" class="mt-4 space-y-2" aria-live="polite"></ol>
+      </article>
+      <article class="card p-7">
+        <span class="chip mb-4" style="--t:var(--c2)">XP and levels</span>
+        <h3 class="text-2xl font-bold">Turn consistency into a game</h3>
+        <p class="muted mt-3">Every completed habit earns XP. Level up, unlock badges and keep your streak alive.</p>
+        <div class="mt-7" aria-hidden="true">
+          <div class="flex items-end justify-between"><span class="font-display text-3xl font-bold" style="font-family:'Fraunces',Georgia,serif">Level 7</span><span class="mono text-xs muted">1,240 / 1,500 XP</span></div>
+          <div class="bar mt-3"><i style="width:83%;background:linear-gradient(90deg,var(--c2),var(--c1))"></i></div>
+          <div class="mt-5 flex flex-wrap gap-2 text-xs font-semibold"><span class="chip" style="--t:var(--c4)">First arc</span><span class="chip" style="--t:var(--c3)">7-day run</span><span class="chip" style="--t:var(--c1)">Deep work</span></div>
+        </div>
+      </article>
+    </div>
+    <p class="muted mono mt-4 text-xs">Sample data shown for illustration.</p>
+    <div class="bd mt-8 flex flex-col gap-3 rounded-2xl p-5 text-sm sm:flex-row sm:items-start sm:gap-4" style="border-left:4px solid var(--c3)"><span class="chip self-start" style="--t:var(--c3)">Beta</span><p class="muted">Some features, including leaderboards, are still in beta. You may run into bugs, and things can change before launch. We label every beta feature, and you can <a href="https://github.com/mayank-pixel-cell/mayank/issues" class="underline" rel="noopener">report problems on GitHub</a>.</p></div>
+  </section>
+
+  <section id="how" class="border-y" style="border-color:var(--line)">
+    <div class="mx-auto max-w-6xl px-5 py-24">
+      <h2 class="max-w-xl text-4xl font-extrabold md:text-5xl">From download to <span class="grad">daily habit</span> in three steps.</h2>
+      <ol class="mt-12 grid gap-4 md:grid-cols-3">
+        <li class="card p-7"><span class="grid h-9 w-9 place-items-center rounded-full text-sm font-bold text-white" style="background:var(--accent)">1</span><h3 class="mt-5 text-xl font-bold">Choose your arc</h3><p class="muted mt-2">Set the length, the dates and the habits you want to keep.</p></li>
+        <li class="card p-7"><span class="grid h-9 w-9 place-items-center rounded-full text-sm font-bold text-white" style="background:var(--accent)">2</span><h3 class="mt-5 text-xl font-bold">Check in daily</h3><p class="muted mt-2">Tick off habits, run focus sprints, and watch your screen time stay under the limit.</p></li>
+        <li class="card p-7"><span class="grid h-9 w-9 place-items-center rounded-full text-sm font-bold text-white" style="background:var(--accent)">3</span><h3 class="mt-5 text-xl font-bold">Finish and start again</h3><p class="muted mt-2">Review your heatmap and badges, save the arc to your vault, then begin the next season.</p><div id="heat" class="mt-5 grid grid-flow-col grid-rows-7 gap-1" aria-hidden="true"></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="pricing" class="mx-auto max-w-6xl px-5 py-24">
+    <div class="card mx-auto max-w-md p-8 text-center">
+      <h2 class="text-3xl font-extrabold">Free to <span class="mark">start</span></h2>
+      <p class="muted mt-3">All the features above, with no ads. Pricing details will be confirmed before launch.</p>
+      <a href="#download" class="btn btn-primary mt-6">Get early access</a>
+    </div>
+  </section>
+
+  <section id="faq" class="mx-auto max-w-3xl px-5 pb-24">
+    <h2 class="text-center text-4xl font-extrabold md:text-5xl">Questions, <span class="grad">answered.</span></h2>
+    <div class="faq mt-10 divide-y" style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);--tw-divide-opacity:1">
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a0" id="q0">How does phone and laptop sync work?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a0" role="region" aria-labelledby="q0"><div><p class="muted pb-5">Each device records its own screen time and syncs it through our server over an encrypted connection, so you can see your phone and laptop together in one place.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a1" id="q1">How much does it cost?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a1" role="region" aria-labelledby="q1"><div><p class="muted pb-5">You can start for free, with no ads. Final pricing will be shared before launch.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a2" id="q2">What happens to my data?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a2" role="region" aria-labelledby="q2"><div><p class="muted pb-5">Your habits, streaks and screen-time history are stored on your device first. To keep your phone and laptop in step, screen-time data is synced through our server over an encrypted connection. You can export or clear everything from Settings. Read our <a href="./privacy-policy.html" class="underline hover:opacity-75">Privacy Policy</a> and <a href="./terms-and-conditions.html" class="underline hover:opacity-75">Terms of Service</a> for complete transparency.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a3" id="q3">Which devices are supported?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a3" role="region" aria-labelledby="q3"><div><p class="muted pb-5">The app is built for Android 8.0 and later, iOS 15 and later, Windows and macOS. Very old devices with less than 2 GB of RAM may not be supported.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a4" id="q4">Does it work without internet?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a4" role="region" aria-labelledby="q4"><div><p class="muted pb-5">Yes. Fonts, icons and storage are all bundled with the app, so every feature works offline, including on a flight. Syncing between devices needs an internet connection.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a6" id="q6">Are all features finished?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a6" role="region" aria-labelledby="q6"><div><p class="muted pb-5">Not yet. Some features, including leaderboards, are in beta. They may have bugs or change before launch, and we mark them clearly so you know what to expect.</p></div></div></div>
+      <div style="border-color:var(--line)"><button class="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold" aria-expanded="false" aria-controls="a5" id="q5">How do I get help?<span class="pm" aria-hidden="true"></span></button><div class="ans" id="a5" role="region" aria-labelledby="q5"><div><p class="muted pb-5">Open an issue on our GitHub page and we’ll reply there. A dedicated support email will be added at launch.</p></div></div></div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-24">
+    <div id="platforms" class="mb-16">
+      <h2 class="max-w-xl text-4xl font-extrabold md:text-5xl">Every screen you <span class="grad">use.</span></h2>
+      <p class="muted mt-4 max-w-xl">One view of your day, from your pocket to your desk. All platforms are coming soon.</p>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="bd rounded-2xl p-5" style="background:var(--card);border-top:3px solid var(--c2)"><h3 class="text-lg font-bold">iPhone and iPad</h3><p class="muted mt-1 text-sm">iOS 15 and later</p><span class="chip mt-4" style="--t:var(--c3)">Coming soon</span></div>
+        <div class="bd rounded-2xl p-5" style="background:var(--card);border-top:3px solid var(--c4)"><h3 class="text-lg font-bold">Android</h3><p class="muted mt-1 text-sm">Android 8.0 and later</p><span class="chip mt-4" style="--t:var(--c3)">Coming soon</span></div>
+        <div class="bd rounded-2xl p-5" style="background:var(--card);border-top:3px solid var(--c1)"><h3 class="text-lg font-bold">Windows</h3><p class="muted mt-1 text-sm">Desktop installer</p><span class="chip mt-4" style="--t:var(--c3)">Coming soon</span></div>
+        <div class="bd rounded-2xl p-5" style="background:var(--card);border-top:3px solid var(--c5)"><h3 class="text-lg font-bold">macOS</h3><p class="muted mt-1 text-sm">Intel and Apple Silicon</p><span class="chip mt-4" style="--t:var(--c3)">Coming soon</span></div>
+      </div>
+    </div>
+    <div class="card px-6 py-16 text-center">
+      <h2 class="mx-auto max-w-xl text-4xl font-extrabold md:text-5xl">Your next 60 days start with <span class="mark">one decision.</span></h2>
+      <p class="muted mx-auto mt-4 max-w-md">Download <span data-app>Arc Tracker</span> and set your first arc today.</p>
+      <a href="#download" class="btn btn-primary mt-8">Download app</a>
+    </div>
+  </section>
+</main>
+
+<div id="sbar" class="fixed inset-x-0 bottom-0 z-40 translate-y-full px-4 transition-transform duration-300 sm:hidden" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + .75rem);visibility:hidden"><div class="glass bd mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl p-3"><span class="text-sm font-semibold"><span data-app>Arc Tracker</span> <span class="muted font-medium">is coming soon</span></span><a href="#platforms" class="btn btn-primary !py-2 !text-sm">Download app</a></div></div>
+
+<footer id="ftr" class="border-t" style="border-color:var(--line)">
+  <div class="mx-auto grid max-w-6xl gap-8 border-b px-5 py-12 sm:grid-cols-3" style="border-color:var(--line)">
+    <div><p class="font-extrabold tracking-tight"><span data-app>Arc Tracker</span></p><p class="muted mt-3 max-w-xs text-sm">Build your arc, protect your focus, and see your whole day across phone and laptop.</p></div>
+    <nav aria-label="Product" class="text-sm"><p class="mono muted mb-3 text-xs">Product</p><div class="flex flex-col gap-2"><a href="#features" class="hover:opacity-70">Features</a><a href="#sync" class="hover:opacity-70">Sync</a><a href="#insights" class="hover:opacity-70">Insights</a><a href="#faq" class="hover:opacity-70">FAQ</a></div></nav>
+    <nav aria-label="Project &amp; Legal" class="text-sm"><p class="mono muted mb-3 text-xs">Project &amp; Legal</p><div class="flex flex-col gap-2"><a href="https://github.com/mayank-pixel-cell/mayank" class="hover:opacity-70" rel="noopener">GitHub</a><a href="https://github.com/mayank-pixel-cell/mayank/issues" class="hover:opacity-70" rel="noopener">Report an issue</a><a href="./privacy-policy.html" class="hover:opacity-70">Privacy Policy</a><a href="./terms-and-conditions.html" class="hover:opacity-70">Terms of Service</a></div></nav>
+  </div>
+  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm muted sm:flex-row">
+    <p>© 2026 <span data-app>Arc Tracker</span>. All rights reserved.</p>
+    <div class="flex gap-6">
+      <a href="https://github.com/mayank-pixel-cell/mayank" class="hover:opacity-70" rel="noopener">GitHub</a>
+      <a href="./privacy-policy.html" class="hover:opacity-70">Privacy Policy</a>
+      <a href="./terms-and-conditions.html" class="hover:opacity-70">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const APP_NAME = 'Arc Tracker';
+document.querySelectorAll('[data-app]').forEach(function(e){ e.textContent = APP_NAME; });
+document.title = APP_NAME + ': build your arc, keep your focus';
+document.getElementById('theme').addEventListener('click', function(){
+  var r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+var rows = document.querySelectorAll('.row'), ring = document.getElementById('ring'), pct = document.getElementById('pct'), phone = document.querySelector('.phone');
+function upd(){
+  var d = 0; rows.forEach(function(r){ if (r.getAttribute('aria-pressed') === 'true') d++; });
+  ring.style.strokeDashoffset = 339 * (1 - d / rows.length);
+  pct.textContent = Math.round(d / rows.length * 100) + '%';
+}
+rows.forEach(function(r){ r.addEventListener('click', function(){
+  var on = r.getAttribute('aria-pressed') === 'true';
+  r.setAttribute('aria-pressed', String(!on));
+  r.querySelector('.st').textContent = on ? 'Open' : 'Done';
+  upd();
+}); });
+document.querySelectorAll('.arc').forEach(function(b){ b.addEventListener('click', function(){
+  var s = b.dataset.arc === 'summer';
+  phone.classList.toggle('summer', s);
+  document.querySelectorAll('.arc').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+  document.getElementById('arcname').textContent = s ? 'Summer Arc' : 'Winter Arc';
+}); });
+upd();
+
+var sprint = document.getElementById('sprint'), ig = document.getElementById('igst');
+sprint.addEventListener('click', function(){
+  var on = sprint.getAttribute('aria-pressed') === 'true';
+  sprint.setAttribute('aria-pressed', String(!on));
+  ig.textContent = on ? 'Allowed' : 'Blocked until sprint ends';
+  ig.style.color = on ? '' : 'var(--accent)';
+  ig.classList.toggle('muted', on);
+  sprint.textContent = on ? 'Start a 25-minute sprint' : 'End sprint';
+});
+
+var tints = ['--c1', '--c2', '--c5', '--c4'], labels = ['Arcs', 'Screen time', 'Focus', 'Privacy'];
+document.querySelectorAll('#features article').forEach(function(a, i){
+  a.classList.add('tint');
+  a.style.setProperty('--t', 'var(' + tints[i] + ')');
+  a.style.setProperty('--accent', 'var(' + tints[i] + ')');
+  var ch = document.createElement('span'); ch.className = 'chip mb-4'; ch.textContent = labels[i];
+  a.insertBefore(ch, a.firstChild);
+});
+document.querySelectorAll('#how ol li > span').forEach(function(s, i){
+  s.style.background = 'var(--c' + (i + 1) + ')'; s.classList.add('mono');
+  if (i === 2) s.style.color = '#0A0A0A';
+});
+document.querySelectorAll('.cmp td:last-child').forEach(function(td){
+  td.style.color = 'var(--c4)'; td.textContent = '✓ ' + td.textContent;
+});
+document.querySelector('main > section:last-child .card').classList.add('cta');
+
+document.querySelectorAll('.vw').forEach(function(b){ b.addEventListener('click', function(){
+  var all = b.dataset.v === 'all';
+  document.querySelectorAll('.vw').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+  document.getElementById('vdev').classList.toggle('hidden', all);
+  document.getElementById('vall').classList.toggle('hidden', !all);
+}); });
+
+(function(){
+  var names = ['Workout','Deep work','Reading','Screen time'], days = ['M','T','W','T','F','S','S'], h = '<span></span>';
+  days.forEach(function(d){ h += '<span class="mono text-center text-[10px] muted">' + d + '</span>'; });
+  names.forEach(function(n, r){ h += '<span class="text-xs font-medium">' + n + '</span>'; for (var k = 0; k < 7; k++) h += '<i class="dot' + (((r * 5 + k * 3) % 4) !== 0 ? ' on' : '') + '"></i>'; });
+  document.getElementById('mx').innerHTML = h;
+  var hm = document.getElementById('hm');
+  for (var j = 0; j < 91; j++) { var e = document.createElement('i'); e.className = 'hc'; e.style.opacity = (.1 + (((j * 4231) % 17) / 17 * .65 + j / 91 * .35) * .9).toFixed(2); e.title = 'Day ' + (j + 1); hm.appendChild(e); }
+  var data = { w: [['Aarav',1840],['You',1720],['Mei',1650],['Sam',1410]], a: [['Mei',9210],['Aarav',8870],['You',7640],['Sam',6120]] }, lb = document.getElementById('lb');
+  function draw(k){ var s = ''; data[k].forEach(function(p, i){ var me = p[0] === 'You';
+    s += '<li class="fade flex items-center justify-between rounded-xl px-3 py-2.5 text-sm' + (me ? ' font-bold' : '') + '" style="' + (me ? 'background:color-mix(in srgb,var(--c3) 18%,transparent)' : 'border:1px solid var(--line)') + '"><span class="flex items-center gap-3"><span class="mono w-4 text-xs muted">' + (i + 1) + '</span>' + p[0] + '</span><span class="mono text-xs">' + p[1].toLocaleString('en-US') + ' XP</span></li>'; }); lb.innerHTML = s; }
+  draw('w');
+  document.querySelectorAll('.lt').forEach(function(b){ b.addEventListener('click', function(){
+    document.querySelectorAll('.lt').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    draw(b.dataset.k);
+  }); });
+})();
+
+var mb = document.getElementById('mbtn'), mn = document.getElementById('mnav');
+function mset(o){ mn.classList.toggle('hidden', !o); mb.setAttribute('aria-expanded', String(o)); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); }
+mb.addEventListener('click', function(){ mset(mb.getAttribute('aria-expanded') !== 'true'); });
+mn.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mset(false); }); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') mset(false); });
+
+var sb = document.getElementById('sbar'), vis = {};
+var sbo = new IntersectionObserver(function(es){
+  es.forEach(function(e){ vis[e.target.id] = e.isIntersecting; });
+  var hide = vis.download || vis.platforms || vis.ftr;
+  sb.style.visibility = hide ? 'hidden' : 'visible';
+  sb.style.transform = hide ? '' : 'translateY(0)';
+});
+['download','platforms','ftr'].forEach(function(id){ sbo.observe(document.getElementById(id)); });
+
+(function(){
+  var prog = document.getElementById('prog'), hd = document.querySelector('header'), tk = false;
+  function onS(){ tk = false; var m = document.documentElement.scrollHeight - innerHeight; prog.style.transform = 'scaleX(' + (m > 0 ? Math.min(1, scrollY / m) : 0) + ')'; hd.classList.toggle('sc', scrollY > 8); }
+  addEventListener('scroll', function(){ if (!tk) { tk = true; requestAnimationFrame(onS); } }, { passive: true });
+  onS();
+})();
+
+if (document.documentElement.classList.contains('js')) {
+  ring.style.strokeDashoffset = 339;
+  requestAnimationFrame(function(){ requestAnimationFrame(upd); });
+  var gs = [];
+  document.querySelectorAll('#features .card, #sync .card, #insights .card').forEach(function(card){
+    var items = [];
+    card.querySelectorAll('div[style*="width:"], .bar i').forEach(function(el){ el.dataset.w = el.style.width; el.style.width = '0'; el.style.transition = 'width 1s cubic-bezier(.16,1,.3,1) .25s'; items.push(el); });
+    card.querySelectorAll('i[style*="height:"]').forEach(function(el, k){ el.style.transformOrigin = 'bottom'; el.style.transform = 'scaleY(0)'; el.style.transition = 'transform .7s cubic-bezier(.16,1,.3,1) ' + (.2 + k * .07) + 's'; items.push(el); });
+    if (items.length) gs.push([card, items]);
+  });
+  var go = new IntersectionObserver(function(es){ es.forEach(function(e){
+    if (!e.isIntersecting) return; go.unobserve(e.target);
+    gs.forEach(function(g){ if (g[0] === e.target) g[1].forEach(function(el){ if (el.dataset.w) el.style.width = el.dataset.w; else el.style.transform = 'scaleY(1)'; }); });
+  }); }, { threshold: .3 });
+  gs.forEach(function(g){ go.observe(g[0]); });
+  document.querySelectorAll('.vw').forEach(function(b){ b.addEventListener('click', function(){
+    document.getElementById(b.dataset.v === 'all' ? 'vall' : 'vdev').querySelectorAll('.bar i').forEach(function(el){
+      if (!el.dataset.w) return; el.style.width = '0'; void el.offsetWidth; el.style.width = el.dataset.w;
+    });
+  }); });
+  var po = new IntersectionObserver(function(es){ es.forEach(function(e){
+    if (!e.isIntersecting) return; po.unobserve(e.target);
+    e.target.querySelectorAll('.hc').forEach(function(c, k){ c.style.transitionDelay = (k * 7) + 'ms'; });
+    e.target.classList.add('go');
+  }); }, { threshold: .3 });
+  ['hm', 'heat'].forEach(function(id){ po.observe(document.getElementById(id)); });
+}
+
+(function(){
+  var strict = false, left = 18 * 60 + 42, tm = null, sh = document.getElementById('shield'), cd = document.getElementById('cd'), tb = document.getElementById('tryb');
+  function fmt(s){ var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
+  function mode(){ document.getElementById('ovr').classList.toggle('hidden', strict); document.getElementById('strictmsg').classList.toggle('hidden', !strict); }
+  function show(on){ sh.classList.toggle('hidden', !on); tb.textContent = on ? 'Close demo' : 'Try opening Instagram'; clearInterval(tm);
+    if (on) { cd.textContent = fmt(left); tm = setInterval(function(){ left = Math.max(0, left - 1); cd.textContent = fmt(left); }, 1000); } }
+  tb.addEventListener('click', function(){ show(sh.classList.contains('hidden')); });
+  document.querySelectorAll('.fm').forEach(function(b){ b.addEventListener('click', function(){
+    strict = b.dataset.m === 's';
+    document.querySelectorAll('.fm').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    mode();
+  }); });
+  var phr = document.getElementById('phr'), phm = document.getElementById('phm');
+  function unlock(){
+    if (phr.value.trim().toUpperCase() === 'UNBREAKABLE') { phm.textContent = 'Unlocked for 5 minutes (demo only).'; phm.style.color = 'var(--c4)'; }
+    else { phm.textContent = 'Not quite. Stay with your sprint.'; phm.style.color = 'var(--c5)'; }
+  }
+  document.getElementById('phb').addEventListener('click', unlock);
+  phr.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
+  mode();
+})();
+
+(function(){
+  if (!document.documentElement.classList.contains('js') || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  var hero = document.querySelector('main>section:first-of-type'), w = document.querySelector('.phone').parentElement;
+  w.style.transition = 'transform .25s ease-out';
+  hero.addEventListener('mousemove', function(e){
+    var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    w.style.transform = 'perspective(900px) rotateY(' + (x * 10).toFixed(2) + 'deg) rotateX(' + (-y * 8).toFixed(2) + 'deg)';
+  });
+  hero.addEventListener('mouseleave', function(){ w.style.transform = ''; });
+})();
+
+(function(){
+  var C = 502.65, modes = { f: 1500, s: 300, l: 900 }, names = { f: 'Focus', s: 'Short break', l: 'Long break' };
+  var cur = 'f', left = modes.f, tm = null, logged = 0, done = 0;
+  var ring = document.getElementById('pring'), t = document.getElementById('ptime'), lab = document.getElementById('plabel'), go = document.getElementById('pgo'), lg = document.getElementById('plog');
+  var tabs = document.querySelectorAll('.tm'), dots = document.querySelectorAll('#pdots i');
+  function two(n){ return (n < 10 ? '0' : '') + n; }
+  function draw(){
+    t.textContent = two(Math.floor(left / 60)) + ':' + two(left % 60);
+    ring.style.strokeDashoffset = C * (1 - left / modes[cur]);
+    ring.style.stroke = cur === 'f' ? 'var(--c1)' : 'var(--c4)';
+    lg.textContent = Math.floor(logged / 60) + 'm ' + two(logged % 60) + 's';
+    dots.forEach(function(d, i){ d.style.background = i < done ? 'var(--c1)' : 'var(--line)'; });
+  }
+  function stop(){ clearInterval(tm); tm = null; go.textContent = left === modes[cur] ? 'Start' : 'Resume'; }
+  function setMode(m){
+    stop(); cur = m; left = modes[m]; lab.textContent = names[m]; go.textContent = 'Start';
+    tabs.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.m === m)); });
+    draw();
+  }
+  function tick(){
+    left--; if (cur === 'f') logged++;
+    if (left <= 0) {
+      if (cur === 'f') done = Math.min(4, done + 1);
+      window.sfx && window.sfx(cur === 'f' ? 'fanfare' : 'chime');
+      setMode(cur === 'f' ? (done >= 4 ? 'l' : 's') : 'f'); return;
+    }
+    draw();
+  }
+  go.addEventListener('click', function(){
+    if (tm) { stop(); } else { tm = setInterval(tick, 1000); go.textContent = 'Pause'; }
+  });
+  document.getElementById('prs').addEventListener('click', function(){ setMode(cur); });
+  tabs.forEach(function(b){ b.addEventListener('click', function(){ setMode(b.dataset.m); }); });
+  draw();
+})();
+
+(function(){
+  var AC = null, master = null, sfxOn = false, amb = null, NB = {};
+  function ctx(){
+    if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); master = AC.createGain(); master.gain.value = .45; master.connect(AC.destination); }
+    if (AC.state === 'suspended') AC.resume();
+    return AC;
+  }
+  function tone(f, d, type, v, t0, f2){
+    var a = ctx(), o = a.createOscillator(), g = a.createGain(), t = a.currentTime + (t0 || 0);
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v || .12, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + d + .05);
+  }
+  var S = {
+    click: function(){ tone(720, .05, 'sine', .1); },
+    on: function(){ tone(660, .09, 'triangle', .12); tone(990, .12, 'triangle', .12, .07); },
+    off: function(){ tone(520, .1, 'triangle', .1, 0, 380); },
+    fanfare: function(){ [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i){ tone(f, .3, 'triangle', .12, i * .11); }); tone(1046.5, .7, 'sine', .1, .45); tone(1318.5, .7, 'sine', .07, .45); },
+    chime: function(){ tone(880, .5, 'sine', .1); tone(1320, .6, 'sine', .07, .12); },
+    ignite: function(){ [392, 493.88, 587.33, 783.99, 987.77, 1174.66].forEach(function(f, i){ tone(f, .35, 'sawtooth', .04, i * .07); tone(f, .4, 'sine', .08, i * .07); }); },
+    chill: function(){ [987.77, 783.99, 587.33, 493.88].forEach(function(f, i){ tone(f, .4, 'sine', .08, i * .08); }); },
+    lock: function(){ tone(150, .3, 'sine', .2, 0, 60); tone(90, .3, 'square', .04); },
+    deny: function(){ tone(190, .14, 'sawtooth', .07); tone(150, .18, 'sawtooth', .07, .12); },
+    ok: function(){ tone(660, .1, 'sine', .1); tone(880, .1, 'sine', .1, .09); tone(1175, .2, 'sine', .1, .18); }
+  };
+  window.sfx = function(n){ if (sfxOn && S[n]) S[n](); };
+
+  var AMB = {
+    rain: { n: { t: 'white', g: .5 }, hp: 900, lp: 7000 },
+    wind: { n: { t: 'white', g: .9 }, hp: 120, lp: 900, sw: 600 },
+    drone: { o: [['sine', 110, .5], ['sine', 110.7, .5], ['sine', 165, .3], ['sine', 220, .12]], lp: 700, trem: .06 },
+    white: { n: { t: 'white', g: .35 }, lp: 12000 },
+    sun: { o: [['sawtooth', 55, .4], ['sine', 110, .45], ['sine', 220.5, .14]], lp: 320, trem: .1 },
+    jupiter: { o: [['sine', 73.4, .6], ['sine', 110, .4], ['triangle', 146.8, .2], ['sine', 220, .1]], lp: 600, trem: .07 },
+    saturn: { o: [['sine', 130.8, .35], ['sine', 196, .3], ['sine', 261.6, .25], ['sine', 1046.5, .04]], lp: 2400, trem: .05 },
+    neptune: { o: [['sine', 98, .5], ['sine', 147, .35], ['sine', 196.5, .12]], n: { t: 'white', g: .08 }, lp: 1000, sw: 350, trem: .08 },
+    void: { o: [['sine', 40, .7], ['sine', 60.4, .4], ['sine', 120.8, .2]], n: { t: 'brown', g: .6 }, lp: 260, trem: .06 }
+  };
+  function noiseBuf(a, t){
+    if (NB[t]) return NB[t];
+    var n = a.sampleRate * 3, b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0), l = 0;
+    for (var i = 0; i < n; i++) { var w = Math.random() * 2 - 1; if (t === 'brown') { l = (l + .02 * w) / 1.02; d[i] = l * 3.5; } else d[i] = w; }
+    return (NB[t] = b);
+  }
+  function buildAmb(k){
+    var a = ctx(), c = AMB[k], out = a.createGain(), f = a.createBiquadFilter(), nodes = [];
+    out.gain.value = 0; f.type = 'lowpass'; f.frequency.value = c.lp; f.connect(out); out.connect(master);
+    (c.o || []).forEach(function(o){ var os = a.createOscillator(), g = a.createGain(); os.type = o[0]; os.frequency.value = o[1]; g.gain.value = o[2] * .5; os.connect(g); g.connect(f); os.start(); nodes.push(os); });
+    if (c.n) {
+      var s = a.createBufferSource(), ng = a.createGain(), last = s;
+      s.buffer = noiseBuf(a, c.n.t); s.loop = true; ng.gain.value = c.n.g * .5;
+      if (c.hp) { var h = a.createBiquadFilter(); h.type = 'highpass'; h.frequency.value = c.hp; s.connect(h); last = h; }
+      last.connect(ng); ng.connect(f); s.start(); nodes.push(s);
+    }
+    if (c.trem) { var l = a.createOscillator(), lg = a.createGain(); l.frequency.value = .11; lg.gain.value = c.trem; l.connect(lg); lg.connect(out.gain); l.start(); nodes.push(l); }
+    if (c.sw) { var l2 = a.createOscillator(), g2 = a.createGain(); l2.frequency.value = .07; g2.gain.value = c.sw; l2.connect(g2); g2.connect(f.frequency); l2.start(); nodes.push(l2); }
+    return { out: out, nodes: nodes };
+  }
+  function ambStop(){
+    if (!amb) return; var o = amb; amb = null;
+    o.out.gain.setTargetAtTime(0, AC.currentTime, .3);
+    setTimeout(function(){ o.nodes.forEach(function(n){ try { n.stop(); } catch (e) {} }); o.out.disconnect(); }, 1500);
+  }
+  function ambStart(k){ ambStop(); amb = buildAmb(k); amb.out.gain.setTargetAtTime(.9, AC.currentTime, .8); }
+
+  document.querySelectorAll('.am').forEach(function(b){ b.addEventListener('click', function(){
+    var on = b.getAttribute('aria-pressed') === 'true';
+    document.querySelectorAll('.am').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    if (on) { ambStop(); return; }
+    b.setAttribute('aria-pressed', 'true'); ctx(); ambStart(b.dataset.a);
+  }); });
+  document.getElementById('vol').addEventListener('input', function(){ ctx(); master.gain.setTargetAtTime(this.value / 100 * .9, AC.currentTime, .05); });
+  document.addEventListener('visibilitychange', function(){ if (!AC) return; if (document.hidden) AC.suspend(); else AC.resume(); });
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('button, a.btn'); if (!el || el.classList.contains('am')) return;
+    if (el.id === 'snd') {
+      sfxOn = !sfxOn; el.setAttribute('aria-pressed', String(sfxOn)); el.setAttribute('aria-label', sfxOn ? 'Turn sound effects off' : 'Turn sound effects on');
+      if (sfxOn) { ctx(); S.on(); } return;
+    }
+    if (!sfxOn) return;
+    var s = 'click';
+    if (el.classList.contains('row')) s = el.getAttribute('aria-pressed') === 'true' ? 'on' : 'off';
+    else if (el.classList.contains('arc')) s = el.dataset.arc === 'summer' ? 'ignite' : 'chill';
+    else if (el.id === 'tryb') s = document.getElementById('shield').classList.contains('hidden') ? 'click' : 'lock';
+    else if (el.id === 'phb') s = /Unlocked/.test(document.getElementById('phm').textContent) ? 'ok' : 'deny';
+    S[s]();
+  });
+})();
+
+[['pomo', '--c1'], ['focus', '--c5'], ['sync', '--c2'], ['compare', '--c3'], ['insights', '--c4'], ['how', '--c6'], ['pricing', '--c3']].forEach(function(p){
+  var s = document.getElementById(p[0]); s.classList.add('bgx'); s.style.setProperty('--bg-c', 'var(' + p[1] + ')');
+  if (['how', 'pricing'].indexOf(p[0]) < 0) s.style.paddingTop = '3rem';
+});
+
+var heat = document.getElementById('heat');
+for (var i = 0; i < 91; i++) {
+  var c = document.createElement('i'); c.className = 'hc';
+  c.style.opacity = (.12 + (((i * 7919) % 13) / 13 * .7 + i / 91 * .3) * .88).toFixed(2);
+  heat.appendChild(c);
+}
+
+var links = document.querySelectorAll('header div.hidden a');
+var so = new IntersectionObserver(function(es){ es.forEach(function(e){
+  if (e.isIntersecting) links.forEach(function(l){ l.setAttribute('aria-current', String(l.getAttribute('href') === '#' + e.target.id)); });
+}); }, { rootMargin: '-45% 0px -50% 0px' });
+['features','sync','insights','how','pricing','faq'].forEach(function(id){ so.observe(document.getElementById(id)); });
+
+if (document.documentElement.classList.contains('js')) {
+  var ro = new IntersectionObserver(function(es){ es.forEach(function(e){
+    if (!e.isIntersecting) return;
+    var t = e.target; t.classList.add('in'); ro.unobserve(t);
+    setTimeout(function(){ t.classList.remove('rv', 'in'); t.style.transitionDelay = ''; }, 900);
+  }); }, { threshold: .12 });
+  document.querySelectorAll('#features .card, #pomo .card, #focus .card, #sync .card, #insights .card, #compare .card, #how .card, #pricing .card, main section:not(:first-of-type) h2').forEach(function(t, i){
+    t.classList.add('rv'); t.style.transitionDelay = ((i % 3) * 90) + 'ms'; ro.observe(t);
+  });
+}
+document.querySelectorAll('.faq button').forEach(function(b){
+  b.addEventListener('click', function(){
+    var open = b.getAttribute('aria-expanded') === 'true';
+    b.setAttribute('aria-expanded', String(!open));
+    document.getElementById(b.getAttribute('aria-controls')).classList.toggle('open', !open);
+  });
+});
+</script>
+</body>
+</html>
