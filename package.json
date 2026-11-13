@@ -1,7 +1,7 @@
 {
   "name": "arc-tracker",
   "private": true,
-  "version": "2.6.0",
+  "version": "2.7.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,10 @@
     "tauri": "tauri",
     "tauri:ios:init": "tauri ios init",
     "tauri:ios:dev": "tauri ios dev",
-    "tauri:ios:build": "tauri ios build"
+    "tauri:ios:build": "tauri ios build",
+    "android:sync": "node scripts/sync-android-web.js",
+    "android:build": "node scripts/sync-android-web.js && cd android && ./gradlew assembleRelease",
+    "cap:sync": "node scripts/sync-android-web.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -22,6 +25,9 @@
     "qrcode-generator": "^2.0.4"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
     "@tauri-apps/cli": "^2.2.7",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

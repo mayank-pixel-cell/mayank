@@ -1,14 +1,22 @@
 Option Explicit
-Dim WshShell, fso, scriptDir, batPath
+Dim WshShell, fso, scriptDir, batPath, teleScript
 
 Set WshShell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 scriptDir = fso.GetParentFolderName(WScript.ScriptFullName)
+WshShell.CurrentDirectory = scriptDir
+
+' 1. Start Windows OS Desktop & App Telemetry Service silently in background
+teleScript = scriptDir & "\track-desktop.ps1"
+If fso.FileExists(teleScript) Then
+    WshShell.Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File """ & teleScript & """", 0, False
+End If
+
+' 2. Launch via .bat if it exists, otherwise direct browser launch
 batPath = scriptDir & "\Launch-ArcTracker.bat"
 
 If fso.FileExists(batPath) Then
-    WshShell.CurrentDirectory = scriptDir
     WshShell.Run "cmd.exe /c """ & batPath & """", 0, False
 Else
     ' Fallback to direct app launch if bat is missing

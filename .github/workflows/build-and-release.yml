@@ -3,6 +3,8 @@ name: Build and Release Arc Tracker (Desktop, Android & iOS)
 on:
   push:
     branches: [main, master]
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -123,7 +125,7 @@ jobs:
           node scripts/generate-icons.js
           npm run build
 
-      - name: Build Android APK (Tauri 2.0)
+      - name: Build Android APK (Capacitor pro22.html & Tauri)
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
           NDK_HOME: ${{ env.NDK_HOME }}
@@ -132,10 +134,21 @@ jobs:
           export NDK_HOME="${NDK_HOME:-$ANDROID_HOME/ndk/26.1.10909125}"
           export PATH="$ANDROID_HOME/build-tools/34.0.0:$PATH"
 
-          # 1. Initialize Android project automatically if src-tauri/gen/android is missing
+          # 1. Sync full pro22.html web bundle into Capacitor Android assets
+          echo "Syncing full pro22.html application into Android assets..."
+          node scripts/sync-android-web.js
+
+          # 2. Build Capacitor Android APK from pro22.html bundle
+          if [ -f "android/gradlew" ]; then
+            echo "Building Capacitor Android APK from pro22.html bundle..."
+            chmod +x android/gradlew
+            (cd android && ./gradlew assembleRelease || ./gradlew assembleDebug)
+          fi
+
+          # 3. Also build Tauri Android if configured
           if [ ! -d "src-tauri/gen/android" ]; then
             echo "src-tauri/gen/android is missing. Running npx tauri android init..."
-            npx tauri android init --ci
+            npx tauri android init --ci || true
           else
             echo "src-tauri/gen/android already initialized."
           fi
@@ -143,16 +156,8 @@ jobs:
           # Ensure gradlew executable permissions on Linux
           if [ -f "src-tauri/gen/android/gradlew" ]; then
             chmod +x src-tauri/gen/android/gradlew
-          fi
-
-          # 2. Build Android release AAB & APK
-          echo "Building Android App Bundle (.aab) for Google Play Store..."
-          npx tauri android build --aab || true
-
-          echo "Building Android release APK..."
-          npx tauri android build --apk
-          if [ -f "src-tauri/gen/android/gradlew" ]; then
-            echo "Ensuring universal release APK is assembled..."
+            npx tauri android build --aab || true
+            npx tauri android build --apk || true
             (cd src-tauri/gen/android && ./gradlew assembleUniversalRelease || ./gradlew assembleRelease || true)
           fi
 
@@ -186,8 +191,8 @@ jobs:
           OUTPUT_DIR="output/android"
           mkdir -p "$OUTPUT_DIR"
 
-          # 1. Sign APKs
-          FOUND_APKS=$(find src-tauri -type f -name "*.apk" ! -name "*signed*")
+          # 1. Sign APKs (searching Capacitor android and src-tauri outputs)
+          FOUND_APKS=$(find android/app/build/outputs/apk src-tauri -type f -name "*.apk" ! -name "*signed*" 2>/dev/null || true)
           echo "Found APK files to sign:"
           echo "$FOUND_APKS"
 
@@ -201,10 +206,12 @@ jobs:
               fi
             fi
 
-            SIGNED_OUT="$OUTPUT_DIR/Arc-Tracker-release-signed.apk"
+            SIGNED_OUT="$OUTPUT_DIR/ArcTracker.apk"
             echo "Signing $apk -> $SIGNED_OUT ..."
             "$APKSIGNER" sign --ks "$KEYSTORE" --ks-pass "pass:$PASSWORD" --ks-key-alias "$ALIAS" --out "$SIGNED_OUT" "$apk"
             "$APKSIGNER" verify "$SIGNED_OUT" && echo "Verified $SIGNED_OUT successfully"
+            cp "$SIGNED_OUT" "$OUTPUT_DIR/Arc-Tracker-release-signed.apk"
+            cp "$SIGNED_OUT" ./ArcTracker.apk
           done
 
           # 2. Sign Android App Bundle (.aab) for Google Play Console
@@ -226,6 +233,7 @@ jobs:
           path: |
             output/android/*.apk
             output/android/*.aab
+            ArcTracker.apk
           if-no-files-found: warn
 
       - name: Determine Release Tag
@@ -243,6 +251,7 @@ jobs:
           files: |
             output/android/*.apk
             output/android/*.aab
+            ArcTracker.apk
           fail_on_unmatched_files: false
         continue-on-error: true
         env:

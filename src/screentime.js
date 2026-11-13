@@ -428,13 +428,12 @@ class ArcScreenTimeEngine {
     if (deltaSecs >= 0.8 && deltaSecs <= 3) {
       // Normal continuous tick (1 second)
       this.activeSeconds += 1;
-    } else if (deltaSecs > 3 && deltaSecs <= 180) {
-      // Minor background throttling while user was in another app: add full elapsed time
+    } else if (deltaSecs > 3 && deltaSecs <= 14400) {
+      // Background throttling while user was in other desktop apps: credit full elapsed time
       this.activeSeconds += Math.round(deltaSecs);
       console.log(`[ArcScreenTime] Background delta +${Math.round(deltaSecs)}s processed.`);
-    } else if (deltaSecs > 180) {
-      // Laptop lid was closed or device was in deep sleep:
-      // Exclude sleep time, only add 1 second for wake
+    } else if (deltaSecs > 14400) {
+      // System was in deep hibernation for > 4 hours: exclude sleep time
       this.activeSeconds += 1;
       this.idleFilteredSeconds += Math.round(deltaSecs - 1);
     }

@@ -2807,6 +2807,8 @@ function toggleStreakFreezeFromRules(checked) {
             if (!data || typeof data !== 'object') return;
             const todayDate = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
             if (data.date && data.date !== todayDate) return;
+            // Guard: ignore stale telemetry file (> 15s old means track-desktop.ps1 is not running)
+            if (data.timestamp && (Date.now() - data.timestamp) > 15000) return;
 
             if (data.activeApp) {
                 window.__arc_active_desktop_app = data.activeApp;
@@ -2834,6 +2836,10 @@ function toggleStreakFreezeFromRules(checked) {
 
         function updateDesktopAppBreakdownFromTelemetry(telemetry) {
             if (!telemetry) return;
+            // Guard: ignore stale telemetry (> 15s old or wrong date)
+            const tAge = telemetry.timestamp ? (Date.now() - telemetry.timestamp) : Infinity;
+            const tDateOk = telemetry.date === ((typeof getLocalDayKey === 'function') ? getLocalDayKey() : (new Date().toISOString().slice(0, 10)));
+            if (tAge > 15000 || !tDateOk) return;
             let apps = telemetry.appsList || telemetry.apps;
             if (apps && !Array.isArray(apps)) apps = [apps];
             if (!Array.isArray(apps) || apps.length === 0) return;
@@ -2873,8 +2879,8 @@ function toggleStreakFreezeFromRules(checked) {
             window._lastLaptopTick = now;
 
             if (elapsed <= 0) elapsed = 1;
-            // Sleep / suspend guard: if backgrounded or asleep for > 3 minutes, add 1s for wake
-            if (elapsed > 180) elapsed = 1;
+            // Sleep / suspend guard: only discard time for very long hibernation (> 4 hours)
+            if (elapsed > 14400) elapsed = 1;
 
             const todayDate = (typeof getTodayKey === 'function') ? getTodayKey() : getLocalDayKey();
             const storedDate = state.laptop.dateKey || localStorage.getItem('arc_screentime_current_date') || localStorage.getItem('arc_screentime_last_active_date') || todayDate;
