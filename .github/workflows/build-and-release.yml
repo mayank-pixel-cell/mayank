@@ -268,7 +268,7 @@ jobs:
           echo "Detected tag: $TAG_NAME"
 
       - name: Upload APK and Google Play AAB to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
         with:
           tag_name: ${{ steps.release_tag.outputs.tag }}
@@ -352,7 +352,7 @@ jobs:
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
       - name: Upload iOS Project to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
         with:
           tag_name: ${{ steps.release_tag.outputs.tag }}
