@@ -19,7 +19,7 @@
     "cap:sync": "node scripts/sync-android-web.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.119.0",
+    "@supabase/supabase-js": "^2.119.2",
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-store": "^2.2.0",
     "qrcode-generator": "^2.0.4"
